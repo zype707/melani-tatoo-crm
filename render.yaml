@@ -1,4 +1,5 @@
-# Blueprint de Render · CRM del estudio de tatuaje
+# Blueprint de Render · CRM del estudio de tatuaje · PLAN DE PAGO (producción)
+# Guía paso a paso: DEPLOY_RENDER_PAGO.md  ·  Para probar gratis: render-free.yaml
 #
 # Crea: 1 web service con disco persistente (archivos privados y copias),
 #       1 base de datos Postgres solo accesible por red privada,
@@ -9,6 +10,7 @@
 #   SITE_URL        → la URL pública del servicio, p. ej. https://tinta-crm.onrender.com
 #                     (la misma en los tres servicios; necesaria para los enlaces de los mensajes)
 #   OPENAI_API_KEY  → opcional; vacío = asistente de IA desactivado
+#   CORREOS_PERMITIDOS → correos que pueden entrar, separados por comas (el primero es la propietaria)
 
 envVarGroups:
   - name: tinta-comun
@@ -19,6 +21,10 @@ envVarGroups:
         generateValue: true
       - key: TAREAS_SECRETO
         generateValue: true
+      # Idioma del contenido para clientes (mensajes, consentimiento, plantillas de partida): es | en.
+      # Va en el grupo porque el cron de la bandeja también lo necesita.
+      - key: IDIOMA
+        value: es
       - key: TIME_ZONE
         value: America/New_York
       - key: REGION_TELEFONO
@@ -71,6 +77,11 @@ services:
         sync: false
       - key: OPENAI_API_KEY
         sync: false
+      - key: CORREOS_PERMITIDOS
+        sync: false
+      # Código para crear las cuentas en el primer acceso (/acceso/alta/). Vacíalo después si quieres.
+      - key: CODIGO_ALTA
+        generateValue: true
 
   # Cada mañana (10:00 UTC = 5:00/6:00 en Orlando): prepara «Mensajes de hoy».
   - type: cron

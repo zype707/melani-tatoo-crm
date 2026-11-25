@@ -43,6 +43,12 @@ class TestTareasInternas:
         r = client.post(URL_TAREA, HTTP_AUTHORIZATION=f"Bearer {SECRETO}")
         assert r.status_code == 200 and r.json()["tarea"] == "limpiar_archivos"
 
+    def test_tareas_diarias_desde_cron_externo(self, client, settings):
+        """Plan gratis de Render: sin cron jobs, un cron externo puede preparar la bandeja."""
+        settings.TAREAS_SECRETO = SECRETO
+        r = client.post("/interno/tareas/tareas_diarias/", HTTP_AUTHORIZATION=f"Bearer {SECRETO}")
+        assert r.status_code == 200 and r.json()["tarea"] == "tareas_diarias"
+
 
 class TestArchivos:
     def test_borra_huerfanos_antiguos(self):

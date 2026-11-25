@@ -42,10 +42,10 @@ Más capturas en [`docs/capturas/`](docs/capturas/). Todos los datos que aparece
 
 | | |
 |---|---|
-| **Para quién** | Una tatuadora autónoma en Orlando, Florida (EE. UU.). La interfaz está en español. |
+| **Para quién** | Una tatuadora autónoma en Orlando, Florida (EE. UU.). Interfaz bilingüe **español / inglés** (selector ES/EN). |
 | **Stack** | Django 6.1 · PostgreSQL 17 · plantillas en servidor + HTMX 2 · CSS propio (sin Node ni build) |
 | **Servidor** | Gunicorn + WhiteNoise, desplegado en Render con Blueprint (`render.yaml`) |
-| **Seguridad** | Argon2, 2FA TOTP obligatorio, códigos de recuperación, bloqueo de accesos, CSP estricta sin scripts inline |
+| **Seguridad** | Solo correos autorizados (`CORREOS_PERMITIDOS`), Argon2, 2FA TOTP obligatorio, códigos de recuperación, bloqueo de accesos, CSP estricta sin scripts inline |
 | **Integraciones** | Solo la API de OpenAI, para el asistente (opcional) |
 | **Mensajes** | Enlaces `wa.me` y `sms:`, o copiar. Cada envío queda registrado. |
 | **Calidad** | 222 pruebas (pytest), ruff sin avisos, contraste WCAG AA verificado por script |
@@ -179,6 +179,7 @@ Atajos de teclado: <kbd>/</kbd> buscar · <kbd>n</kbd> nueva cita · <kbd>c</kbd
 | **Tareas de disco vía endpoint interno** | Los cron jobs de Render no pueden montar el disco. Las tareas que tocan archivos (copia, limpieza) las ejecuta el web service al recibir una petición autenticada del cron. |
 | **Tokens públicos guardados como hash** | Si alguien leyera la base de datos, no podría reconstruir los enlaces de las clientes. Solo los dos enlaces del estudio (reservas y catálogo) guardan el token visible, para que ella pueda copiarlos. |
 | **La IA propone, ella aprueba** | Ningún texto de la IA se envía ni se guarda solo. Siempre acaba en un campo editable. |
+| **Interfaz bilingüe, contenido en el idioma del estudio** | Cada persona elige ES/EN (cookie) y las páginas públicas siguen el idioma del navegador de la clienta. Lo que reciben las clientas (mensajes, variables como `{fecha_cita}`, PDF de consentimiento, textos legales) va siempre en el idioma de `IDIOMA`, para que un mensaje no mezcle idiomas aunque quien lo revisa use la interfaz en otro. Los textos en español son los `msgid` y el inglés vive en `locale/en`. |
 | **Edad mínima 18 por defecto** | En Florida, los menores de 16 no pueden tatuarse (salvo excepciones médicas) y los de 16–17 necesitan presencia y consentimiento notarial de un progenitor. Para simplificar y reducir riesgos, el valor por defecto es 18, configurable hasta un mínimo de 16. |
 
 ## 5. Arquitectura
@@ -205,6 +206,7 @@ scripts/            contraste.py (WCAG), generar_iconos.py, capturar.py (captura
 - **Servicios de dominio:** cada app tiene un `servicios.py` con la lógica. Las vistas son finas y las pruebas atacan los servicios directamente.
 - **HTMX:** fragmentos con `{% partialdef %}` de Django 6. Los eventos `HX-Trigger` (`aviso`, `bandeja-cambio`) disparan los avisos y los contadores. Las peticiones HTMX sin sesión reciben `401` + `HX-Redirect`.
 - **Formularios:** un renderizador propio (`apps/nucleo/formularios.py`) da un marcado accesible y uniforme: etiquetas, ayudas, errores con `aria-describedby`.
+- **Idiomas:** i18n estándar de Django (`{% translate %}`, `gettext`, `ngettext`) con `i18n` como builtin de plantillas; JS con `gettext` del catálogo `/jsi18n/`. Selector en `templates/componentes/idioma.html`, ayuda de contenido en `apps/nucleo/idioma.py`, plantillas de partida en inglés en `apps/mensajeria/predeterminados_en.py` y `apps/nucleo/textos_en.py`.
 
 ## 6. Modelo de datos
 
@@ -242,7 +244,8 @@ Restricciones importantes:
 ## 7. Seguridad
 
 **Acceso**
-- No hay registro público. La cuenta se crea por consola (`crear_cuenta`).
+- **Solo entran los correos de `CORREOS_PERMITIDOS`** (lista separada por comas; el primero es la propietaria, el resto ayudantes). El backend `apps/cuentas/backends.py` rechaza cualquier otro correo y quitar uno de la lista corta su sesión en la siguiente petición.
+- No hay registro público. Las cuentas se crean en `/acceso/alta/` con el código secreto `CODIGO_ALTA` (solo para correos de la lista; vacío = alta desactivada) o por consola (`crear_cuenta`, que también exige que el correo esté en la lista).
 - Contraseñas con **Argon2**, mínimo 12 caracteres y validadores de Django.
 - **Acceso en dos pasos:** la sesión solo existe después de verificar el 2FA. Hasta entonces hay un estado «pre-autenticado» que caduca a los 10 minutos.
 - **2FA TOTP obligatorio**, con QR en SVG generado en el servidor y la clave legible por si se prefiere teclearla. Los códigos usados no se aceptan dos veces y hay límite de intentos (throttling).
@@ -393,6 +396,9 @@ Abre http://localhost:8000, entra y escanea el QR con tu app de autenticación (
 | `ACCESO_VENTANA_MINUTOS` | no | `15` | Ventana del bloqueo por email + IP |
 | `SUBIDAS_MAX_MB` / `SUBIDAS_MAX_IMAGENES` | no | `8` / `5` | Límites de las subidas públicas |
 | `HSTS_SEGUNDOS` | no | `31536000` | |
+| `CORREOS_PERMITIDOS` | sí | vacío (nadie entra) | Correos que pueden iniciar sesión, separados por comas. El primero es la propietaria. |
+| `CODIGO_ALTA` | no | vacío (alta desactivada) | Código secreto (≥ 16 caracteres) para crear cuentas en `/acceso/alta/` |
+| `IDIOMA` | no | `es` | Idioma del contenido para clientes (mensajes, PDF de consentimiento, textos legales y plantillas de partida): `es` o `en`. La interfaz la elige cada persona. |
 | `OPENAI_API_KEY` | no | vacío | Sin clave, el asistente se desactiva y todo lo demás funciona igual |
 | `IA_MODELO` | no | `gpt-6-luna` | Modelo de OpenAI. **Verifica el ID vigente** antes de desplegar (ver §17). |
 | `IA_LIMITE_MENSUAL` | no | `300` | Peticiones de IA al mes (también ajustable en Ajustes, sin superar este tope) |
@@ -402,7 +408,14 @@ Ningún valor real va en el repositorio. `.env` está en `.gitignore`.
 
 ## 11. Despliegue en Render paso a paso
 
-El `render.yaml` crea todo:
+Hay dos Blueprints, cada uno con su guía:
+
+| Archivo | Para qué | Guía |
+|---|---|---|
+| `render-free.yaml` | Probar sin método de pago (base de datos que caduca a los 30 días, sin disco ni cron) | [DEPLOY_RENDER_FREE.md](DEPLOY_RENDER_FREE.md) |
+| `render.yaml` | Producción | [DEPLOY_RENDER_PAGO.md](DEPLOY_RENDER_PAGO.md) |
+
+Resumen del despliegue de producción. El `render.yaml` crea todo:
 
 | Recurso | Plan | Para qué |
 |---|---|---|
@@ -419,13 +432,14 @@ Los planes gratuitos no sirven aquí: el plan web gratuito no admite disco persi
 2. En Render: **New → Blueprint**, elige el repositorio y la rama. Render lee `render.yaml`.
 3. Render pide los valores marcados como `sync: false`:
    - `SITE_URL` en los **tres** servicios, con el mismo valor. Usa `https://tinta-crm.onrender.com` (o el nombre que asigne Render) o tu dominio propio.
+   - `CORREOS_PERMITIDOS` en el web service: los correos que podrán entrar.
    - `OPENAI_API_KEY` en el web service. Puedes dejarlo vacío.
 4. **Apply.** Render crea la base de datos y despliega el web service:
    - `build.sh` instala las dependencias con Python 3.13 (fijado en `.python-version`) y ejecuta `collectstatic`.
    - El pre-deploy aplica las migraciones, crea la tabla de caché y el contenido inicial.
    - Por último arranca Gunicorn. `SECRET_KEY` y `TAREAS_SECRETO` se generan solas y se comparten por el grupo `tinta-comun`.
 5. Si la URL final no coincide con la que pusiste, corrige `SITE_URL` en los tres servicios.
-6. Abre la **Shell** del web service y crea la cuenta (ver §12).
+6. Crea la cuenta en `/acceso/alta/` con `CODIGO_ALTA`, o desde la **Shell** (ver §12).
 7. Entra en `SITE_URL`, configura el 2FA y guarda los códigos de recuperación.
 8. **Dominio propio (opcional):**
    - Añádelo en *Settings → Custom Domains* del web service.
@@ -452,6 +466,8 @@ Los planes gratuitos no sirven aquí: el plan web gratuito no admite disco persi
 **Horario de los cron.** Están en UTC: la bandeja a las 10:00 UTC (5:00 en Orlando en invierno, 6:00 en verano) y el mantenimiento a las 8:30 UTC. Ajusta `schedule` en `render.yaml` si quieres otra hora.
 
 ## 12. Primera cuenta y 2FA
+
+La forma más sencilla es la web: abre `/acceso/alta/` con el valor de `CODIGO_ALTA` (Render lo genera; está en *Environment*) y un correo de `CORREOS_PERMITIDOS`. Desde la consola:
 
 ```bash
 # En la Shell del web service de Render (o en local)

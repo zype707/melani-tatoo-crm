@@ -5,7 +5,7 @@ import urllib.request
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
-TAREAS = ["limpiar_archivos", "copia_seguridad"]
+TAREAS = ["limpiar_archivos", "copia_seguridad", "tareas_diarias"]
 
 
 class Command(BaseCommand):

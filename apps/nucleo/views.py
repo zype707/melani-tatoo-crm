@@ -198,7 +198,8 @@ def auditoria(request):
 
 # --- Tareas internas (cron → web service) ---------------------------------------------------
 
-TAREAS_PERMITIDAS = {"limpiar_archivos", "copia_seguridad"}
+# tareas_diarias: en el plan gratis (sin cron jobs) se puede disparar desde un cron externo.
+TAREAS_PERMITIDAS = {"limpiar_archivos", "copia_seguridad", "tareas_diarias"}
 
 
 @vista_publica
