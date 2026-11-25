@@ -3,6 +3,9 @@ import time
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -15,9 +18,9 @@ from apps.nucleo.auditoria import Accion, registrar
 from apps.nucleo.decoradores import vista_publica
 from apps.nucleo.red import ip_cliente
 
-from . import servicios
-from .forms import FormularioAcceso, FormularioCodigo, FormularioPerfil, FormularioRecuperacion
-from .models import DispositivoRecuperacion, IntentoAcceso
+from . import permitidos, servicios
+from .forms import FormularioAcceso, FormularioAlta, FormularioCodigo, FormularioPerfil, FormularioRecuperacion
+from .models import DispositivoRecuperacion, IntentoAcceso, Usuario
 
 CLAVE_DISPOSITIVO_NUEVO = "_totp_nuevo"
 CLAVE_RECONFIGURAR = "_reconfigurar_ok"
@@ -55,7 +58,8 @@ def acceso(request):
             usuario = authenticate(request, email=email, password=form.cleaned_data["password"])
             if usuario is None:
                 servicios.registrar_intento(email, ip, False)
-                registrar(request, Accion.LOGIN_FALLO, f"Contraseña incorrecta: {email}")
+                motivo = "Contraseña incorrecta" if permitidos.esta_permitido(email) else "Correo no permitido"
+                registrar(request, Accion.LOGIN_FALLO, f"{motivo}: {email}")
                 form.add_error(None, "Email o contraseña incorrectos.")
             else:
                 servicios.registrar_intento(email, ip, True)
@@ -63,7 +67,54 @@ def acceso(request):
                 if servicios.tiene_2fa(usuario):
                     return redirect("cuentas:verificar")
                 return redirect("cuentas:configurar_2fa")
-    return render(request, "cuentas/acceso.html", {"form": form})
+    return render(request, "cuentas/acceso.html", {"form": form, "alta_habilitada": permitidos.alta_habilitada()})
+
+
+@vista_publica
+@never_cache
+@sensitive_post_parameters("password1", "password2", "codigo_alta")
+def alta(request):
+    """Primer acceso: una persona de CORREOS_PERMITIDOS crea su cuenta con el código de alta."""
+    if not permitidos.alta_habilitada():
+        raise Http404
+    if request.user.is_authenticated and request.user.is_verified():
+        return redirect("panel:inicio")
+    form = FormularioAlta(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        email = permitidos.normalizar(form.cleaned_data["email"])
+        ip = ip_cliente(request)
+        espera = servicios.segundos_bloqueo(email, ip)
+        if espera:
+            registrar(request, Accion.LOGIN_BLOQUEADO, f"Alta bloqueada: {email}")
+            form.add_error(None, _mensaje_bloqueo(espera))
+        elif not (
+            permitidos.codigo_alta_valido(form.cleaned_data["codigo_alta"])
+            and permitidos.esta_permitido(email)
+            and not Usuario.objects.filter(email__iexact=email).exists()
+        ):
+            # Mismo mensaje para código malo, correo no permitido o cuenta ya existente.
+            servicios.registrar_intento(email, ip, False)
+            registrar(request, Accion.LOGIN_FALLO, f"Alta rechazada: {email}")
+            form.add_error(None, "No se pudo crear la cuenta. Revisa el correo y el código de alta.")
+        else:
+            nombre = form.cleaned_data["nombre"].strip()
+            password = form.cleaned_data["password1"]
+            try:
+                validate_password(password, Usuario(email=email, nombre=nombre))
+            except ValidationError as exc:
+                form.add_error("password1", exc)
+            else:
+                usuario = Usuario.objects.create_user(
+                    email=email, password=password, nombre=nombre, rol=permitidos.rol_para(email)
+                )
+                usuario.backend = servicios.BACKEND
+                servicios.registrar_intento(email, ip, True)
+                registrar(
+                    request, Accion.LOGIN_OK, f"Cuenta creada en el primer acceso ({usuario.rol})", usuario=usuario
+                )
+                servicios.iniciar_preauth(request, usuario)
+                return redirect("cuentas:configurar_2fa")
+    return render(request, "cuentas/alta.html", {"form": form})
 
 
 @vista_publica

@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.cuentas.models import Usuario
+from apps.cuentas.permitidos import esta_permitido
 
 
 class Command(BaseCommand):
@@ -23,6 +24,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **opts):
         email = opts["email"].strip().lower()
+        if not esta_permitido(email):
+            raise CommandError(f"{email} no está en CORREOS_PERMITIDOS: añádelo antes de crear la cuenta.")
         if Usuario.objects.filter(email__iexact=email).exists():
             raise CommandError(f"Ya existe una cuenta con {email}.")
 

@@ -15,11 +15,13 @@ from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
 from .models import CodigoRecuperacion, DispositivoRecuperacion, IntentoAcceso, Usuario
+from .permitidos import esta_permitido
 
 ALFABETO = "abcdefghjkmnpqrstuvwxyz23456789"  # sin 0/o, 1/l/i
 NUM_CODIGOS = 8
 CLAVE_PREAUTH = "_preauth"
 CLAVE_CODIGOS = "_codigos_nuevos"
+BACKEND = "apps.cuentas.backends.BackendCorreosPermitidos"
 
 
 # --- Códigos de recuperación -----------------------------------------------------
@@ -130,7 +132,7 @@ def iniciar_preauth(request, usuario: Usuario, siguiente: str = "") -> None:
     request.session[CLAVE_PREAUTH] = {
         "uid": usuario.pk,
         "ts": time.time(),
-        "backend": getattr(usuario, "backend", "django.contrib.auth.backends.ModelBackend"),
+        "backend": getattr(usuario, "backend", BACKEND),
         "next": siguiente,
     }
 
@@ -142,7 +144,11 @@ def usuario_preauth(request) -> Usuario | None:
     if time.time() - datos.get("ts", 0) > settings.ACCESO_PREAUTH_MINUTOS * 60:
         request.session.pop(CLAVE_PREAUTH, None)
         return None
-    return Usuario.objects.filter(pk=datos["uid"], is_active=True).first()
+    usuario = Usuario.objects.filter(pk=datos["uid"], is_active=True).first()
+    if usuario is None or not esta_permitido(usuario.email):
+        request.session.pop(CLAVE_PREAUTH, None)
+        return None
+    return usuario
 
 
 def completar_login(request, usuario: Usuario, dispositivo) -> str:

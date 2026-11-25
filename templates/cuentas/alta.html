@@ -1,0 +1,22 @@
+{% extends "base_publica.html" %}
+{% block titulo %}Crear cuenta{% endblock %}
+{% block contenido %}
+<div class="acceso-caja pila-g">
+  <div>
+    <h1>Crear cuenta</h1>
+    <p class="texto-suave">Solo para los correos autorizados del estudio. Necesitas el código de alta.</p>
+  </div>
+  <form method="post" class="formulario bloque" novalidate>
+    {% csrf_token %}
+    {{ form }}
+    <div class="acciones-formulario">
+      <button type="submit" class="btn btn-primario btn-bloque">{% icono "candado" %} Crear cuenta</button>
+    </div>
+  </form>
+  <p class="texto-suave texto-peq">Después configurarás la app autenticadora (2FA obligatoria).</p>
+  <div class="fila-entre texto-peq">
+    <a href="{% url 'cuentas:login' %}">Ya tengo cuenta</a>
+  </div>
+</div>
+{% endblock %}
+{% block pie %}{{ ajustes.nombre }}{% endblock %}

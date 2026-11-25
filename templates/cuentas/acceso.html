@@ -14,6 +14,9 @@
     </div>
   </form>
   <p class="texto-suave texto-peq">Después te pediremos el código de tu app autenticadora.</p>
+  {% if alta_habilitada %}
+    <p class="texto-peq"><a href="{% url 'cuentas:alta' %}">¿Primer acceso? Crea tu cuenta</a></p>
+  {% endif %}
 </div>
 {% endblock %}
 {% block pie %}{{ ajustes.nombre }}{% endblock %}

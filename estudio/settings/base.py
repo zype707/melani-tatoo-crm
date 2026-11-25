@@ -144,7 +144,14 @@ CACHES = {
 # --- Autenticación ----------------------------------------------------------
 
 AUTH_USER_MODEL = "cuentas.Usuario"
+AUTHENTICATION_BACKENDS = ["apps.cuentas.backends.BackendCorreosPermitidos"]
 LOGIN_URL = "cuentas:login"
+
+# Solo estos correos pueden entrar (separados por comas). El primero es la propietaria.
+# Vacía = nadie puede entrar. Ver apps/cuentas/permitidos.py.
+CORREOS_PERMITIDOS = [c.lower() for c in env_lista("CORREOS_PERMITIDOS")]
+# Código secreto para crear la cuenta en el primer acceso (/acceso/alta/). Vacío = alta desactivada.
+CODIGO_ALTA = env("CODIGO_ALTA", "")
 LOGIN_REDIRECT_URL = "panel:inicio"
 
 PASSWORD_HASHERS = [

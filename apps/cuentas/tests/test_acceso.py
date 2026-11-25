@@ -226,3 +226,125 @@ class TestCodigosRecuperacion:
         assert servicios.normalizar_codigo(" ABCDE-fghjk ") == "abcdefghjk"
         assert servicios.normalizar_codigo("corto") == ""
         assert servicios.normalizar_codigo("abcde-fgh0k") == ""  # 0 no está en el alfabeto
+
+
+ALTA = reverse("cuentas:alta")
+CODIGO = "codigo-de-alta-de-tests-0123456789"
+
+
+def _datos_alta(**cambios):
+    datos = {
+        "email": "ayu@ejemplo.com",
+        "nombre": "Ayu Pérez",
+        "codigo_alta": CODIGO,
+        "password1": "Clave-de-alta-larga-2026",
+        "password2": "Clave-de-alta-larga-2026",
+    }
+    datos.update(cambios)
+    return datos
+
+
+class TestCorreosPermitidos:
+    def test_correo_fuera_de_la_lista_no_entra_aunque_la_clave_sea_buena(self, client, settings, usuaria):
+        settings.CORREOS_PERMITIDOS = ["otra@ejemplo.com"]
+        r = _entrar_con_password(client)
+        assert "Email o contraseña incorrectos" in r.content.decode()
+        assert servicios.CLAVE_PREAUTH not in client.session
+        assert RegistroAuditoria.objects.filter(descripcion__startswith="Correo no permitido").exists()
+
+    def test_quitar_el_correo_corta_la_sesion_abierta(self, cliente_verificado, settings):
+        assert _esta_dentro(cliente_verificado)
+        settings.CORREOS_PERMITIDOS = []
+        r = cliente_verificado.get("/")
+        assert r.status_code == 302 and r["Location"].startswith(LOGIN)
+
+    def test_preauth_caduca_si_sacan_el_correo(self, client, settings, usuaria, dispositivo):
+        _entrar_con_password(client)
+        settings.CORREOS_PERMITIDOS = []
+        r = client.get(VERIFICAR)
+        assert r.status_code == 302 and r["Location"] == LOGIN
+
+    def test_lista_vacia_nadie_entra(self, client, settings, usuaria):
+        settings.CORREOS_PERMITIDOS = []
+        _entrar_con_password(client)
+        assert servicios.CLAVE_PREAUTH not in client.session
+
+    def test_mayusculas_y_espacios_da_igual(self, settings):
+        from apps.cuentas.permitidos import esta_permitido
+
+        settings.CORREOS_PERMITIDOS = [" Vale@Ejemplo.com "]
+        assert esta_permitido("VALE@ejemplo.COM")
+        assert not esta_permitido("")
+
+    def test_crear_cuenta_rechaza_correo_no_permitido(self, monkeypatch):
+        from django.core.management import call_command
+        from django.core.management.base import CommandError
+
+        monkeypatch.setenv("CLAVE_PRUEBA", "Otra-clave-muy-larga-2026")
+        with pytest.raises(CommandError, match="CORREOS_PERMITIDOS"):
+            call_command("crear_cuenta", email="intrusa@ejemplo.com", password_env="CLAVE_PRUEBA")
+
+
+class TestAlta:
+    def test_alta_correcta_lleva_a_configurar_2fa(self, client):
+        from apps.cuentas.models import Usuario
+
+        r = client.post(ALTA, _datos_alta())
+        assert r.status_code == 302 and r["Location"] == CONFIGURAR
+        u = Usuario.objects.get(email="ayu@ejemplo.com")
+        assert u.rol == Usuario.Rol.AYUDANTE  # no es el primero de la lista
+        assert client.get(CONFIGURAR).status_code == 200
+        assert not _esta_dentro(client)  # sin 2FA no hay sesión
+
+    def test_primer_correo_de_la_lista_es_propietaria(self, client):
+        from apps.cuentas.models import Usuario
+
+        client.post(ALTA, _datos_alta(email="Vale@Ejemplo.com"))
+        assert Usuario.objects.get(email="vale@ejemplo.com").es_propietaria
+
+    @pytest.mark.parametrize(
+        "cambios",
+        [{"codigo_alta": "codigo-malo-0123456789"}, {"email": "intrusa@ejemplo.com"}],
+    )
+    def test_alta_rechazada_mismo_mensaje(self, client, cambios):
+        from apps.cuentas.models import Usuario
+
+        r = client.post(ALTA, _datos_alta(**cambios))
+        assert "No se pudo crear la cuenta" in r.content.decode()
+        assert not Usuario.objects.exists()
+        assert IntentoAcceso.objects.filter(exito=False).count() == 1
+
+    def test_no_se_puede_reclamar_una_cuenta_existente(self, client, usuaria):
+        r = client.post(ALTA, _datos_alta(email="vale@ejemplo.com"))
+        assert "No se pudo crear la cuenta" in r.content.decode()
+        usuaria.refresh_from_db()
+        assert usuaria.check_password(CLAVE)
+
+    def test_clave_debil(self, client):
+        from apps.cuentas.models import Usuario
+
+        r = client.post(ALTA, _datos_alta(password1="corta", password2="corta"))
+        assert r.status_code == 200
+        assert not Usuario.objects.exists()
+
+    def test_sin_codigo_configurado_no_existe(self, client, settings):
+        settings.CODIGO_ALTA = ""
+        assert client.get(ALTA).status_code == 404
+        assert "Crea tu cuenta" not in client.get(LOGIN).content.decode()
+
+    def test_alta_respeta_el_bloqueo(self, client, settings):
+        settings.ACCESO_MAX_FALLOS_EMAIL_IP = 2
+        for _ in range(2):
+            client.post(ALTA, _datos_alta(codigo_alta="codigo-malo-0123456789"))
+        r = client.post(ALTA, _datos_alta())
+        assert "Demasiados intentos" in r.content.decode()
+
+
+class TestChecks:
+    def test_avisos(self, settings):
+        from apps.cuentas.checks import revisar_acceso
+
+        settings.CORREOS_PERMITIDOS = []
+        settings.CODIGO_ALTA = "corto"
+        ids = {a.id for a in revisar_acceso(None)}
+        assert ids == {"cuentas.W001", "cuentas.E001"}
