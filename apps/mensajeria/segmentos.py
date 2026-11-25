@@ -6,6 +6,7 @@ from datetime import timedelta
 
 from django.db.models import Count, Exists, Max, OuterRef, Q, Subquery, Sum
 from django.utils import timezone
+from django.utils.translation import gettext_lazy
 
 from apps.clientes.models import Cliente
 from apps.nucleo.models import AjustesEstudio
@@ -96,12 +97,32 @@ def todos(ajustes=None):
 SEGMENTOS: dict[str, Segmento] = {
     s.clave: s
     for s in (
-        Segmento("marketing", "Todos los que aceptan promociones", "Toda tu base con consentimiento.", todos),
-        Segmento("inactivos", "No vuelven hace tiempo", "Sin visitas en los últimos meses y sin cita.", inactivos),
-        Segmento("proyectos", "Proyectos a medias", "Tatuaje en proceso y ninguna cita próxima.", proyectos_a_medias),
-        Segmento("vip", "VIP", "Etiqueta VIP o gasto acumulado alto.", vip),
-        Segmento("nuevos", "Nuevos del mes", "Fichas creadas este mes.", nuevos_del_mes),
-        Segmento("cumple_mes", "Cumplen años este mes", "Para una promo de cumpleaños.", cumplen_este_mes),
+        Segmento(
+            "marketing",
+            gettext_lazy("Todos los que aceptan promociones"),
+            gettext_lazy("Toda tu base con consentimiento."),
+            todos,
+        ),
+        Segmento(
+            "inactivos",
+            gettext_lazy("No vuelven hace tiempo"),
+            gettext_lazy("Sin visitas en los últimos meses y sin cita."),
+            inactivos,
+        ),
+        Segmento(
+            "proyectos",
+            gettext_lazy("Proyectos a medias"),
+            gettext_lazy("Tatuaje en proceso y ninguna cita próxima."),
+            proyectos_a_medias,
+        ),
+        Segmento("vip", gettext_lazy("VIP"), gettext_lazy("Etiqueta VIP o gasto acumulado alto."), vip),
+        Segmento("nuevos", gettext_lazy("Nuevos del mes"), gettext_lazy("Fichas creadas este mes."), nuevos_del_mes),
+        Segmento(
+            "cumple_mes",
+            gettext_lazy("Cumplen años este mes"),
+            gettext_lazy("Para una promo de cumpleaños."),
+            cumplen_este_mes,
+        ),
     )
 }
 OPCIONES = [(s.clave, s.nombre) for s in SEGMENTOS.values()]

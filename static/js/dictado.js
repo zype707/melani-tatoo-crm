@@ -2,6 +2,7 @@
    Si no está disponible, el botón no aparece: el teclado del móvil ya trae su propio micrófono. */
 (function () {
   "use strict";
+  var gettext = function (s) { return window.gettext ? window.gettext(s) : s; };
   var Reconocimiento = window.SpeechRecognition || window.webkitSpeechRecognition;
 
   function iniciar() {
@@ -11,7 +12,7 @@
       botones.forEach(function (b) {
         var nota = document.createElement("p");
         nota.className = "ayuda";
-        nota.textContent = "Consejo: usa el micrófono del teclado de tu móvil para dictar.";
+        nota.textContent = gettext("Consejo: usa el micrófono del teclado de tu móvil para dictar.");
         b.replaceWith(nota);
       });
       return;
@@ -24,14 +25,15 @@
         if (!area) return;
         if (activo) { activo.stop(); return; }
         var rec = new Reconocimiento();
-        rec.lang = document.documentElement.lang === "es" ? "es-US" : document.documentElement.lang;
+        var idioma = document.documentElement.lang;
+        rec.lang = idioma === "es" ? "es-US" : idioma === "en" ? "en-US" : idioma;
         rec.continuous = true;
         rec.interimResults = false;
         var etiqueta = boton.querySelector("span");
         rec.onstart = function () { activo = rec; boton.classList.add("grabando"); if (etiqueta) etiqueta.textContent = "Escuchando… (toca para parar)"; };
         rec.onend = function () { activo = null; boton.classList.remove("grabando"); if (etiqueta) etiqueta.textContent = "Dictar"; };
         rec.onerror = function (ev) {
-          if (window.estudioAvisar) window.estudioAvisar(ev.error === "not-allowed" ? "Permite el micrófono para dictar." : "No se pudo usar el dictado.", "error");
+          if (window.estudioAvisar) window.estudioAvisar(ev.error === "not-allowed" ? gettext("Permite el micrófono para dictar.") : gettext("No se pudo usar el dictado."), "error");
         };
         rec.onresult = function (ev) {
           for (var i = ev.resultIndex; i < ev.results.length; i++) {

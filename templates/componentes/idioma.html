@@ -1,0 +1,7 @@
+{% get_current_language as idioma_actual %}{% get_available_languages as idiomas %}
+<form method="post" action="{% url 'cambiar_idioma' %}" class="selector-idioma" aria-label="{% translate "Idioma" %}">{% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+  {% for codigo, nombre in idiomas %}
+    <button type="submit" name="language" value="{{ codigo }}" lang="{{ codigo }}" title="{{ nombre }}"{% if codigo == idioma_actual %} aria-pressed="true"{% else %} aria-pressed="false"{% endif %}>{{ codigo|upper }}</button>
+  {% endfor %}
+</form>

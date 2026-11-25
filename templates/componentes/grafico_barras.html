@@ -26,9 +26,9 @@
     {% endfor %}
   </svg>
   <details class="grafico-tabla">
-    <summary>Ver datos en tabla</summary>
+    <summary>{% translate "Ver datos en tabla" %}</summary>
     <table class="tabla">
-      <thead><tr><th scope="col">Periodo</th>{% for s in g.series %}<th scope="col" class="num">{{ s.nombre }}</th>{% endfor %}</tr></thead>
+      <thead><tr><th scope="col">{% translate "Periodo" %}</th>{% for s in g.series %}<th scope="col" class="num">{{ s.nombre }}</th>{% endfor %}</tr></thead>
       <tbody>{% for grupo in g.grupos %}<tr><th scope="row">{{ grupo.etiqueta }}</th>{% for b in grupo.barras %}<td class="num">{{ b.valor|dinero }}</td>{% endfor %}</tr>{% endfor %}</tbody>
     </table>
   </details>

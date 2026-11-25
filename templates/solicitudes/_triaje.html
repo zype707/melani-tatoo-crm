@@ -1,23 +1,23 @@
 <section class="bloque" id="triaje" aria-labelledby="t-triaje">
-  <div class="bloque-titulo"><h2 id="t-triaje">{% icono "ia" %} Análisis</h2>{% if s.triaje_en %}<span class="texto-peq texto-suave">{{ s.triaje_en|relativo }}</span>{% endif %}</div>
+  <div class="bloque-titulo"><h2 id="t-triaje">{% icono "ia" %} {% translate "Análisis" %}</h2>{% if s.triaje_en %}<span class="texto-peq texto-suave">{{ s.triaje_en|relativo }}</span>{% endif %}</div>
   {% if s.triaje %}
     <p><strong>{{ s.triaje.resumen }}</strong></p>
     <dl class="datos espacio-arriba">
-      <dt>Estilo</dt><dd>{{ s.triaje.estilo }}</dd>
-      <dt>Zona</dt><dd>{{ s.triaje.zona }}</dd>
-      <dt>Tamaño</dt><dd>{{ s.triaje.tamano }}</dd>
-      <dt>Estimación</dt><dd>{{ s.triaje.sesiones_estimadas }} sesión(es) · {{ s.triaje.horas_estimadas }} h · complejidad {{ s.triaje.complejidad }}</dd>
+      <dt>{% translate "Estilo" %}</dt><dd>{{ s.triaje.estilo }}</dd>
+      <dt>{% translate "Zona" %}</dt><dd>{{ s.triaje.zona }}</dd>
+      <dt>{% translate "Tamaño" %}</dt><dd>{{ s.triaje.tamano }}</dd>
+      <dt>{% translate "Estimación" %}</dt><dd>{% blocktranslate with sesiones_estimadas=s.triaje.sesiones_estimadas horas_estimadas=s.triaje.horas_estimadas complejidad=s.triaje.complejidad %}{{ sesiones_estimadas }} sesión(es) · {{ horas_estimadas }} h · complejidad {{ complejidad }}{% endblocktranslate %}</dd>
     </dl>
-    {% if s.triaje.preguntas %}<h3 class="titulo-seccion">Preguntas pendientes</h3><ul class="lista-ideas">{% for p in s.triaje.preguntas %}<li>{{ p }}</li>{% endfor %}</ul>{% endif %}
-    <p class="texto-peq texto-suave">Orientativo: lo propone la IA a partir del texto (no ve las imágenes).</p>
+    {% if s.triaje.preguntas %}<h3 class="titulo-seccion">{% translate "Preguntas pendientes" %}</h3><ul class="lista-ideas">{% for p in s.triaje.preguntas %}<li>{{ p }}</li>{% endfor %}</ul>{% endif %}
+    <p class="texto-peq texto-suave">{% translate "Orientativo: lo propone la IA a partir del texto (no ve las imágenes)." %}</p>
   {% elif ia %}
-    <p class="texto-suave texto-peq">Estructura la idea, estima sesiones y lista lo que falta preguntar. Solo se envía la descripción, sin datos de contacto ni imágenes.</p>
+    <p class="texto-suave texto-peq">{% translate "Estructura la idea, estima sesiones y lista lo que falta preguntar. Solo se envía la descripción, sin datos de contacto ni imágenes." %}</p>
   {% else %}
-    <p class="texto-suave texto-peq">Activa el asistente de IA (OPENAI_API_KEY) para analizar solicitudes automáticamente.</p>
+    <p class="texto-suave texto-peq">{% translate "Activa el asistente de IA (OPENAI_API_KEY) para analizar solicitudes automáticamente." %}</p>
   {% endif %}
   {% if ia %}
     <button type="button" class="btn btn-peq espacio-arriba" hx-post="{% url 'ia:triaje' s.pk %}" hx-target="#triaje" hx-disabled-elt="this">
-      {% icono "ia" %} {% if s.triaje %}Volver a analizar{% else %}Analizar con IA{% endif %} <span class="cargando htmx-indicator"><span></span></span>
+      {% icono "ia" %} {% if s.triaje %}{% translate "Volver a analizar" %}{% else %}{% translate "Analizar con IA" %}{% endif %} <span class="cargando htmx-indicator"><span></span></span>
     </button>
   {% endif %}
 </section>

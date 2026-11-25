@@ -88,6 +88,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -110,12 +111,13 @@ TEMPLATES = [
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
+                "django.template.context_processors.i18n",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.csp",
                 "apps.nucleo.context_processors.estudio",
             ],
-            "builtins": ["django.templatetags.static", "apps.nucleo.templatetags.ui"],
+            "builtins": ["django.templatetags.static", "django.templatetags.i18n", "apps.nucleo.templatetags.ui"],
         },
     }
 ]
@@ -233,7 +235,15 @@ TAREAS_SECRETO = env("TAREAS_SECRETO", "")
 
 # --- Internacionalización ------------------------------------------------------
 
-LANGUAGE_CODE = "es"
+# Idioma por defecto y del CONTENIDO para clientes (mensajes, consentimiento, plantillas de
+# partida). La interfaz la elige cada persona con el selector ES/EN (o la toma del navegador).
+LANGUAGES = [("es", "Español"), ("en", "English")]
+LANGUAGE_CODE = env("IDIOMA", "es") if env("IDIOMA", "es") in {"es", "en"} else "es"
+LOCALE_PATHS = [BASE_DIR / "locale"]
+LANGUAGE_COOKIE_NAME = "estudio_idioma"
+LANGUAGE_COOKIE_AGE = 365 * 24 * 3600
+LANGUAGE_COOKIE_SAMESITE = "Lax"
+LANGUAGE_COOKIE_HTTPONLY = True
 TIME_ZONE = env("TIME_ZONE", "America/New_York")
 USE_I18N = True
 USE_TZ = True

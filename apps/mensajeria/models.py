@@ -4,20 +4,21 @@ from datetime import date, timedelta
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class Categoria(models.TextChoices):
-    RECORDATORIO = "recordatorio", "Recordatorio de cita"
-    CUIDADO = "cuidado", "Cuidados posteriores"
-    RETOQUE = "retoque", "Oferta de retoque"
-    LISTA_ESPERA = "lista_espera", "Hueco libre"
-    SOLICITUD = "solicitud", "Respuesta a solicitud"
-    CUMPLEANOS = "cumpleanos", "Cumpleaños"
-    ANIVERSARIO = "aniversario", "Aniversario del tatuaje"
-    FECHA_DESTACADA = "fecha_destacada", "Fecha destacada"
-    CAMPANA = "campana", "Campaña"
-    REACTIVACION = "reactivacion", "Reactivación"
-    GENERAL = "general", "Mensaje libre"
+    RECORDATORIO = "recordatorio", _("Recordatorio de cita")
+    CUIDADO = "cuidado", _("Cuidados posteriores")
+    RETOQUE = "retoque", _("Oferta de retoque")
+    LISTA_ESPERA = "lista_espera", _("Hueco libre")
+    SOLICITUD = "solicitud", _("Respuesta a solicitud")
+    CUMPLEANOS = "cumpleanos", _("Cumpleaños")
+    ANIVERSARIO = "aniversario", _("Aniversario del tatuaje")
+    FECHA_DESTACADA = "fecha_destacada", _("Fecha destacada")
+    CAMPANA = "campana", _("Campaña")
+    REACTIVACION = "reactivacion", _("Reactivación")
+    GENERAL = "general", _("Mensaje libre")
 
 
 # Orden de la bandeja: primero lo que caduca antes o es de servicio.
@@ -45,25 +46,25 @@ PROMOCIONALES = {
 
 
 class Canal(models.TextChoices):
-    WHATSAPP = "whatsapp_link", "WhatsApp"
-    SMS = "sms_link", "SMS / RCS"
-    COPIA = "copia", "Copiado"
-    WHATSAPP_API = "whatsapp_api", "WhatsApp (API oficial)"
+    WHATSAPP = "whatsapp_link", _("WhatsApp")
+    SMS = "sms_link", _("SMS / RCS")
+    COPIA = "copia", _("Copiado")
+    WHATSAPP_API = "whatsapp_api", _("WhatsApp (API oficial)")
 
 
 class Plantilla(models.Model):
-    nombre = models.CharField("Nombre", max_length=80)
-    categoria = models.CharField("Para", max_length=20, choices=Categoria.choices, default=Categoria.GENERAL)
-    cuerpo = models.TextField("Texto")
+    nombre = models.CharField(_("Nombre"), max_length=80)
+    categoria = models.CharField(_("Para"), max_length=20, choices=Categoria.choices, default=Categoria.GENERAL)
+    cuerpo = models.TextField(_("Texto"))
     es_promocional = models.BooleanField(
-        "Es promocional",
+        _("Es promocional"),
         default=False,
-        help_text="Solo se preparará para clientes que aceptaron recibir promociones.",
+        help_text=_("Solo se preparará para clientes que aceptaron recibir promociones."),
     )
     predeterminada = models.BooleanField(
-        "Usar por defecto", default=False, help_text="La que se usa automáticamente para esta categoría."
+        _("Usar por defecto"), default=False, help_text=_("La que se usa automáticamente para esta categoría.")
     )
-    activa = models.BooleanField("Activa", default=True)
+    activa = models.BooleanField(_("Activa"), default=True)
     creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)
 
@@ -79,17 +80,19 @@ class Plantilla(models.Model):
 
 
 class PasoCuidado(models.Model):
-    nombre = models.CharField("Nombre", max_length=60, help_text="Ej.: Día 3")
-    dias_despues = models.PositiveSmallIntegerField("Días tras la sesión")
+    nombre = models.CharField(_("Nombre"), max_length=60, help_text=_("Ej.: Día 3"))
+    dias_despues = models.PositiveSmallIntegerField(_("Días tras la sesión"))
     plantilla = models.ForeignKey(Plantilla, on_delete=models.PROTECT, related_name="pasos_cuidado")
     es_oferta_retoque = models.BooleanField(
-        "Ofrece el retoque", default=False, help_text="No se envía si ya hubo retoque o quedan sesiones pendientes."
+        _("Ofrece el retoque"),
+        default=False,
+        help_text=_("No se envía si ya hubo retoque o quedan sesiones pendientes."),
     )
-    activo = models.BooleanField("Activo", default=True)
+    activo = models.BooleanField(_("Activo"), default=True)
 
     class Meta:
         ordering = ["dias_despues"]
-        verbose_name = "paso de cuidados"
+        verbose_name = _("paso de cuidados")
 
     def __str__(self):
         return f"{self.nombre} (+{self.dias_despues} d)"
@@ -97,42 +100,44 @@ class PasoCuidado(models.Model):
 
 class FechaDestacada(models.Model):
     class Regla(models.TextChoices):
-        FIJA = "fija", "Mismo día cada año"
-        NTH = "nth", "N-ésimo día de la semana del mes"
-        ULTIMO = "ultimo", "Último día de la semana del mes"
-        VIERNES13 = "viernes13", "Cada viernes 13"
-        UNICA = "unica", "Una fecha concreta"
+        FIJA = "fija", _("Mismo día cada año")
+        NTH = "nth", _("N-ésimo día de la semana del mes")
+        ULTIMO = "ultimo", _("Último día de la semana del mes")
+        VIERNES13 = "viernes13", _("Cada viernes 13")
+        UNICA = "unica", _("Una fecha concreta")
 
     class DiaSemana(models.IntegerChoices):
-        LUNES = 0, "lunes"
-        MARTES = 1, "martes"
-        MIERCOLES = 2, "miércoles"
-        JUEVES = 3, "jueves"
-        VIERNES = 4, "viernes"
-        SABADO = 5, "sábado"
-        DOMINGO = 6, "domingo"
+        LUNES = 0, _("lunes")
+        MARTES = 1, _("martes")
+        MIERCOLES = 2, _("miércoles")
+        JUEVES = 3, _("jueves")
+        VIERNES = 4, _("viernes")
+        SABADO = 5, _("sábado")
+        DOMINGO = 6, _("domingo")
 
-    nombre = models.CharField("Nombre", max_length=80)
-    regla = models.CharField("Se repite", max_length=10, choices=Regla.choices, default=Regla.FIJA)
-    mes = models.PositiveSmallIntegerField("Mes", null=True, blank=True)
-    dia = models.PositiveSmallIntegerField("Día", null=True, blank=True)
-    semana = models.PositiveSmallIntegerField("Semana del mes", null=True, blank=True, help_text="1 = primera")
-    dia_semana = models.PositiveSmallIntegerField("Día de la semana", choices=DiaSemana.choices, null=True, blank=True)
-    fecha = models.DateField("Fecha", null=True, blank=True)
+    nombre = models.CharField(_("Nombre"), max_length=80)
+    regla = models.CharField(_("Se repite"), max_length=10, choices=Regla.choices, default=Regla.FIJA)
+    mes = models.PositiveSmallIntegerField(_("Mes"), null=True, blank=True)
+    dia = models.PositiveSmallIntegerField(_("Día"), null=True, blank=True)
+    semana = models.PositiveSmallIntegerField(_("Semana del mes"), null=True, blank=True, help_text=_("1 = primera"))
+    dia_semana = models.PositiveSmallIntegerField(
+        _("Día de la semana"), choices=DiaSemana.choices, null=True, blank=True
+    )
+    fecha = models.DateField(_("Fecha"), null=True, blank=True)
     plantilla = models.ForeignKey(
         Plantilla, null=True, blank=True, on_delete=models.SET_NULL, related_name="fechas_destacadas"
     )
     dias_ventana = models.PositiveSmallIntegerField(
-        "Repartir en (días)", default=1, help_text="Los mensajes se reparten en estos días, terminando ese día."
+        _("Repartir en (días)"), default=1, help_text=_("Los mensajes se reparten en estos días, terminando ese día.")
     )
-    segmento = models.CharField("Para", max_length=20, default="marketing")
-    generar_campana = models.BooleanField("Preparar mensajes", default=True)
-    activa = models.BooleanField("Activa", default=True)
+    segmento = models.CharField(_("Para"), max_length=20, default="marketing")
+    generar_campana = models.BooleanField(_("Preparar mensajes"), default=True)
+    activa = models.BooleanField(_("Activa"), default=True)
 
     class Meta:
         ordering = ["mes", "dia", "nombre"]
-        verbose_name = "fecha destacada"
-        verbose_name_plural = "fechas destacadas"
+        verbose_name = _("fecha destacada")
+        verbose_name_plural = _("fechas destacadas")
 
     def __str__(self):
         return self.nombre
@@ -170,46 +175,38 @@ class FechaDestacada(models.Model):
         return None
 
     def descripcion_regla(self) -> str:
-        meses = [
-            "",
-            "enero",
-            "febrero",
-            "marzo",
-            "abril",
-            "mayo",
-            "junio",
-            "julio",
-            "agosto",
-            "septiembre",
-            "octubre",
-            "noviembre",
-            "diciembre",
-        ]
-        ordinales = {1: "1.er", 2: "2.º", 3: "3.er", 4: "4.º", 5: "5.º"}
+        from django.utils.dates import MONTHS
+        from django.utils.formats import date_format
+
+        ordinales = {1: _("1.er"), 2: _("2.º"), 3: _("3.er"), 4: _("4.º"), 5: _("5.º")}
         if self.regla == self.Regla.FIJA and self.mes:
-            return f"Cada {self.dia} de {meses[self.mes]}"
+            return _("Cada %(dia)s de %(mes)s") % {"dia": self.dia, "mes": MONTHS[self.mes]}
         if self.regla == self.Regla.NTH and self.mes:
-            return f"{ordinales.get(self.semana, '')} {self.get_dia_semana_display()} de {meses[self.mes]}"
+            return _("%(ordinal)s %(dia)s de %(mes)s") % {
+                "ordinal": ordinales.get(self.semana, ""),
+                "dia": self.get_dia_semana_display(),
+                "mes": MONTHS[self.mes],
+            }
         if self.regla == self.Regla.ULTIMO and self.mes:
-            return f"Último {self.get_dia_semana_display()} de {meses[self.mes]}"
+            return _("Último %(dia)s de %(mes)s") % {"dia": self.get_dia_semana_display(), "mes": MONTHS[self.mes]}
         if self.regla == self.Regla.UNICA and self.fecha:
-            return self.fecha.strftime("%d/%m/%Y")
+            return date_format(self.fecha, "SHORT_DATE_FORMAT")
         return self.get_regla_display()
 
 
 class Campana(models.Model):
     class Estado(models.TextChoices):
-        BORRADOR = "borrador", "Borrador"
-        ACTIVA = "activa", "En curso"
-        COMPLETADA = "completada", "Completada"
-        CANCELADA = "cancelada", "Cancelada"
+        BORRADOR = "borrador", _("Borrador")
+        ACTIVA = "activa", _("En curso")
+        COMPLETADA = "completada", _("Completada")
+        CANCELADA = "cancelada", _("Cancelada")
 
-    nombre = models.CharField("Nombre", max_length=100)
+    nombre = models.CharField(_("Nombre"), max_length=100)
     plantilla = models.ForeignKey(Plantilla, on_delete=models.PROTECT, related_name="campanas")
-    segmento = models.CharField("Segmento", max_length=20)
-    fecha_inicio = models.DateField("Empezar el", default=timezone.localdate)
+    segmento = models.CharField(_("Segmento"), max_length=20)
+    fecha_inicio = models.DateField(_("Empezar el"), default=timezone.localdate)
     fecha_limite = models.DateField(null=True, blank=True)
-    por_dia = models.PositiveSmallIntegerField("Mensajes por día", default=10)
+    por_dia = models.PositiveSmallIntegerField(_("Mensajes por día"), default=10)
     estado = models.CharField(max_length=12, choices=Estado.choices, default=Estado.BORRADOR)
     fecha_destacada = models.ForeignKey(
         FechaDestacada, null=True, blank=True, on_delete=models.SET_NULL, related_name="campanas"
@@ -251,10 +248,10 @@ class MensajeQuerySet(models.QuerySet):
 
 class MensajePreparado(models.Model):
     class Estado(models.TextChoices):
-        PENDIENTE = "pendiente", "Pendiente"
-        ENVIADO = "enviado", "Enviado"
-        DESCARTADO = "descartado", "Descartado"
-        CADUCADO = "caducado", "Caducado"
+        PENDIENTE = "pendiente", _("Pendiente")
+        ENVIADO = "enviado", _("Enviado")
+        DESCARTADO = "descartado", _("Descartado")
+        CADUCADO = "caducado", _("Caducado")
 
     cliente = models.ForeignKey("clientes.Cliente", on_delete=models.CASCADE, related_name="mensajes")
     tipo = models.CharField(max_length=20, choices=Categoria.choices)
@@ -290,8 +287,8 @@ class MensajePreparado(models.Model):
             models.Index(fields=["cliente", "estado"]),
             models.Index(fields=["enviado_en"]),
         ]
-        verbose_name = "mensaje preparado"
-        verbose_name_plural = "mensajes preparados"
+        verbose_name = _("mensaje preparado")
+        verbose_name_plural = _("mensajes preparados")
 
     def __str__(self):
         return f"{self.get_tipo_display()} · {self.cliente}"

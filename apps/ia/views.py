@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from apps.agenda.models import Cita, SolicitudReserva
@@ -40,7 +41,10 @@ def _buscar(request, q: str) -> dict:
             filtros = servicios.interpretar_busqueda(q, request.user)
             origen = "ia"
         except ErrorIA as exc:
-            filtros, aviso = busqueda.interpretar_local(q), f"{exc.mensaje} Uso la búsqueda básica."
+            filtros, aviso = (
+                busqueda.interpretar_local(q),
+                _("%(mensaje)s Uso la búsqueda básica.") % {"mensaje": exc.mensaje},
+            )
     else:
         filtros = busqueda.interpretar_local(q)
     qs, limpios = busqueda.aplicar(filtros)
@@ -60,14 +64,16 @@ def redactar(request):
     texto_actual = request.POST.get("texto", "")
     if cliente is None:
         return render(
-            request, "ia/_textarea.html", {"texto": texto_actual, "error": "Elige primero a quién va el mensaje."}
+            request, "ia/_textarea.html", {"texto": texto_actual, "error": _("Elige primero a quién va el mensaje.")}
         )
     if _limitado(request):
-        return render(request, "ia/_textarea.html", {"texto": texto_actual, "error": "Demasiadas peticiones seguidas."})
+        return render(
+            request, "ia/_textarea.html", {"texto": texto_actual, "error": _("Demasiadas peticiones seguidas.")}
+        )
     try:
         texto = servicios.redactar_mensaje(
             cliente,
-            request.POST.get("objetivo") or "mensaje personal",
+            request.POST.get("objetivo") or _("mensaje personal"),
             request.POST.get("indicaciones", ""),
             texto_actual,
             request.user,
@@ -85,7 +91,7 @@ def reescribir(request, pk):
 
     error = ""
     if _limitado(request):
-        error = "Demasiadas peticiones seguidas."
+        error = _("Demasiadas peticiones seguidas.")
     else:
         try:
             nuevo = servicios.redactar_mensaje(
@@ -105,7 +111,7 @@ def reescribir(request, pk):
 def triaje(request, pk):
     s = get_object_or_404(SolicitudReserva, pk=pk)
     if _limitado(request):
-        return _error(request, ErrorIA("Demasiadas peticiones seguidas."))
+        return _error(request, ErrorIA(_("Demasiadas peticiones seguidas.")))
     try:
         servicios.triaje_solicitud(s, request.user)
     except ErrorIA as exc:
@@ -117,19 +123,19 @@ def triaje(request, pk):
 def resumen(request, pk):
     cita = get_object_or_404(Cita.objects.select_related("cliente", "tipo", "tatuaje"), pk=pk)
     if _limitado(request):
-        return _error(request, ErrorIA("Demasiadas peticiones seguidas."))
+        return _error(request, ErrorIA(_("Demasiadas peticiones seguidas.")))
     try:
         texto = servicios.resumen_cita(cita, request.user)
     except ErrorIA as exc:
         return _error(request, exc)
-    return render(request, "ia/_texto.html", {"texto": texto, "titulo": "Resumen para la cita"})
+    return render(request, "ia/_texto.html", {"texto": texto, "titulo": _("Resumen para la cita")})
 
 
 @require_POST
 def retencion(request, pk):
     cliente = get_object_or_404(Cliente.objects.activos(), pk=pk)
     if _limitado(request):
-        return _error(request, ErrorIA("Demasiadas peticiones seguidas."))
+        return _error(request, ErrorIA(_("Demasiadas peticiones seguidas.")))
     try:
         datos = servicios.sugerencias_retencion(cliente, request.user)
     except ErrorIA as exc:
@@ -142,9 +148,9 @@ def respuesta(request):
     texto = request.POST.get("recibido", "").strip()
     cliente = Cliente.objects.activos().filter(pk=request.POST.get("cliente") or 0).first()
     if not texto:
-        return _error(request, ErrorIA("Pega primero el mensaje que has recibido."))
+        return _error(request, ErrorIA(_("Pega primero el mensaje que has recibido.")))
     if _limitado(request):
-        return _error(request, ErrorIA("Demasiadas peticiones seguidas."))
+        return _error(request, ErrorIA(_("Demasiadas peticiones seguidas.")))
     try:
         propuesta = servicios.respuesta_sugerida(texto, cliente, request.POST.get("indicaciones", ""), request.user)
     except ErrorIA as exc:

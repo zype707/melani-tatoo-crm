@@ -1,20 +1,20 @@
 {% extends "base_publica.html" %}
-{% block titulo %}Tu cita{% endblock %}
+{% block titulo %}{% translate "Tu cita" %}{% endblock %}
 {% block contenido %}
 <div class="pila-g">
-  {% if hecho == "confirmada" %}<div class="alerta" role="status">{% icono "check" %}<p>¡Cita confirmada! Nos vemos pronto.</p></div>
-  {% elif hecho == "cancelada" %}<div class="aviso" role="status">{% icono "check" %}<p>Cita cancelada. Gracias por avisar.</p></div>
-  {% elif hecho == "reprogramar" %}<div class="alerta" role="status">{% icono "check" %}<p>Recibido. Te escribiremos para proponerte otra fecha.</p></div>{% endif %}
+  {% if hecho == "confirmada" %}<div class="alerta" role="status">{% icono "check" %}<p>{% translate "¡Cita confirmada! Nos vemos pronto." %}</p></div>
+  {% elif hecho == "cancelada" %}<div class="aviso" role="status">{% icono "check" %}<p>{% translate "Cita cancelada. Gracias por avisar." %}</p></div>
+  {% elif hecho == "reprogramar" %}<div class="alerta" role="status">{% icono "check" %}<p>{% translate "Recibido. Te escribiremos para proponerte otra fecha." %}</p></div>{% endif %}
 
   <div>
-    <span class="texto-suave">Hola, {{ cita.cliente.nombre }}</span>
-    <h1>Tu cita</h1>
+    <span class="texto-suave">{% blocktranslate with nombre=cita.cliente.nombre %}Hola, {{ nombre }}{% endblocktranslate %}</span>
+    <h1>{% translate "Tu cita" %}</h1>
   </div>
 
-  <section class="bloque bloque-hueso cita-publica" aria-label="Datos de la cita">
+  <section class="bloque bloque-hueso cita-publica" aria-label="{% translate "Datos de la cita" %}">
     <p class="cita-publica-dia">{{ cita.inicio|fecha_larga|capfirst }}</p>
     <p class="cifra">{{ cita.inicio|hora }}</p>
-    <p>{{ cita.tipo }} · {{ cita.duracion_minutos|duracion }} aprox.</p>
+    <p>{% blocktranslate with tipo=cita.tipo duracion_minutos=cita.duracion_minutos|duracion %}{{ tipo }} · {{ duracion_minutos }} aprox.{% endblocktranslate %}</p>
     <p><span class="estado {% if cita.estado == 'confirmada' %}estado-ok{% endif %}">{{ cita.get_estado_display }}</span></p>
     {% if ajustes.direccion %}<p>{% icono "agenda" %} {{ ajustes.direccion }}</p>{% endif %}
   </section>
@@ -22,34 +22,34 @@
   {% if cita.puede_gestionarla_cliente %}
     {% if cita.estado == "solicitada" %}
       <form method="post">{% csrf_token %}<input type="hidden" name="accion" value="confirmar">
-        <button type="submit" class="btn btn-primario btn-bloque">{% icono "check" %} Confirmo que voy</button>
+        <button type="submit" class="btn btn-primario btn-bloque">{% icono "check" %} {% translate "Confirmo que voy" %}</button>
       </form>
     {% endif %}
 
     <details class="desplegable bloque" {% if reprogramar_form.errors %}open{% endif %}>
-      <summary>{% icono "reloj" %} Necesito otra fecha</summary>
+      <summary>{% icono "reloj" %} {% translate "Necesito otra fecha" %}</summary>
       <form method="post" class="formulario">{% csrf_token %}<input type="hidden" name="accion" value="reprogramar">
         {{ reprogramar_form }}
-        <button type="submit" class="btn">Enviar petición</button>
+        <button type="submit" class="btn">{% translate "Enviar petición" %}</button>
       </form>
     </details>
 
     <details class="desplegable bloque">
-      <summary>{% icono "x" %} Cancelar la cita</summary>
+      <summary>{% icono "x" %} {% translate "Cancelar la cita" %}</summary>
       <form method="post" class="formulario">{% csrf_token %}<input type="hidden" name="accion" value="cancelar">
         <p class="texto-peq">{{ ajustes.politica_senas }}</p>
         {{ cancelar_form }}
-        <button type="submit" class="btn btn-peligro" data-confirmar="¿Seguro que quieres cancelar tu cita?" data-confirmar-si="Sí, cancelar">Cancelar mi cita</button>
+        <button type="submit" class="btn btn-peligro" data-confirmar="{% translate "¿Seguro que quieres cancelar tu cita?" %}" data-confirmar-si="{% translate "Sí, cancelar" %}">{% translate "Cancelar mi cita" %}</button>
       </form>
     </details>
   {% elif cita.estado == "cancelada" %}
-    <p class="texto-suave">Esta cita está cancelada.{% if ajustes.telefono %} Si quieres una nueva, escríbenos al {{ ajustes.telefono }}.{% endif %}</p>
+    <p class="texto-suave">{% translate "Esta cita está cancelada." %}{% if ajustes.telefono %} {% blocktranslate with telefono=ajustes.telefono %}Si quieres una nueva, escríbenos al {{ telefono }}.{% endblocktranslate %}{% endif %}</p>
   {% else %}
-    <p class="texto-suave">Esta cita ya no se puede modificar desde aquí.{% if ajustes.telefono %} Escríbenos al {{ ajustes.telefono }}.{% endif %}</p>
+    <p class="texto-suave">{% translate "Esta cita ya no se puede modificar desde aquí." %}{% if ajustes.telefono %} {% blocktranslate with telefono=ajustes.telefono %}Escríbenos al {{ telefono }}.{% endblocktranslate %}{% endif %}</p>
   {% endif %}
 
   {% if ajustes.texto_cuidados and cita.tipo.genera_cuidados %}
-    <section class="bloque"><div class="bloque-titulo"><h2>Antes y después</h2></div><p class="texto-pre texto-peq">{{ ajustes.texto_cuidados }}</p></section>
+    <section class="bloque"><div class="bloque-titulo"><h2>{% translate "Antes y después" %}</h2></div><p class="texto-pre texto-peq">{{ ajustes.texto_cuidados }}</p></section>
   {% endif %}
 </div>
 {% endblock %}

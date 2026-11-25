@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block titulo %}Plantillas{% endblock %}
+{% block titulo %}{% translate "Plantillas" %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
-  <div><span class="antetitulo">Mensajería</span><h1>Plantillas</h1></div>
-  <div class="acciones"><a class="btn btn-primario" href="{% url 'mensajeria:plantilla_nueva' %}">{% icono "plus" %} Nueva plantilla</a></div>
+  <div><span class="antetitulo">{% translate "Mensajería" %}</span><h1>{% translate "Plantillas" %}</h1></div>
+  <div class="acciones"><a class="btn btn-primario" href="{% url 'mensajeria:plantilla_nueva' %}">{% icono "plus" %} {% translate "Nueva plantilla" %}</a></div>
 </header>
 {% include "mensajeria/_subnav.html" with seccion="plantillas" %}
 <div class="pila-g">
@@ -14,7 +14,7 @@
         {% for p in lista %}
           <a class="bloque tarjeta-plantilla{% if not p.activa %} inactiva{% endif %}" href="{% url 'mensajeria:plantilla_editar' p.pk %}">
             <span class="fila-entre"><strong>{{ p.nombre }}</strong>
-              <span class="etiquetas">{% if p.predeterminada %}<span class="etiqueta etiqueta-mini etiqueta-solida">Por defecto</span>{% endif %}{% if p.es_promocional %}<span class="etiqueta etiqueta-mini">Promo</span>{% endif %}{% if not p.activa %}<span class="estado estado-apagado">Inactiva</span>{% endif %}</span>
+              <span class="etiquetas">{% if p.predeterminada %}<span class="etiqueta etiqueta-mini etiqueta-solida">{% translate "Por defecto" %}</span>{% endif %}{% if p.es_promocional %}<span class="etiqueta etiqueta-mini">{% translate "Promo" %}</span>{% endif %}{% if not p.activa %}<span class="estado estado-apagado">{% translate "Inactiva" %}</span>{% endif %}</span>
             </span>
             <span class="texto-peq texto-suave texto-pre">{{ p.cuerpo|truncatechars:150 }}</span>
           </a>
@@ -23,7 +23,7 @@
     </section>
   {% empty %}
     {% url 'mensajeria:plantilla_nueva' as u %}
-    {% include "componentes/vacio.html" with icono="documento" titulo="Sin plantillas" texto="Ejecuta «inicializar_estudio» para cargar las plantillas de partida, o crea la tuya." url=u accion="Nueva plantilla" %}
+    {% include "componentes/vacio.html" with icono="documento" titulo=_("Sin plantillas") texto=_("Ejecuta «inicializar_estudio» para cargar las plantillas de partida, o crea la tuya.") url=u accion=_("Nueva plantilla") %}
   {% endfor %}
 </div>
 {% endblock %}

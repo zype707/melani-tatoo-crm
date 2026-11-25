@@ -11,6 +11,8 @@ from django.utils import timezone
 from django.utils.dateformat import format as dformat
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 
 register = template.Library()
 
@@ -101,7 +103,7 @@ def fecha_corta(valor):
     valor = _local(valor)
     if not valor:
         return ""
-    texto = dformat(valor, "D j M")
+    texto = dformat(valor, _("D j M"))
     if valor.year != timezone.localdate().year:
         texto += f" {valor.year}"
     return texto
@@ -113,16 +115,16 @@ def fecha_larga(valor):
     valor = _local(valor)
     if not valor:
         return ""
-    texto = dformat(valor, r"l j \d\e F")
+    texto = dformat(valor, _(r"l j \d\e F"))
     if valor.year != timezone.localdate().year:
-        texto += f" de {valor.year}"
+        texto += _(" de %(anio)s") % {"anio": valor.year}
     return texto
 
 
 @register.filter
 def fecha_numerica(valor):
     valor = _local(valor)
-    return dformat(valor, "d/m/Y") if valor else ""
+    return dformat(valor, _("d/m/Y")) if valor else ""
 
 
 @register.filter
@@ -134,21 +136,21 @@ def relativo(valor):
     dia = valor.date() if isinstance(valor, datetime) else valor
     dias = (dia - timezone.localdate()).days
     if dias == 0:
-        return "hoy"
+        return _("hoy")
     if dias == 1:
-        return "mañana"
+        return _("mañana")
     if dias == -1:
-        return "ayer"
+        return _("ayer")
     n = abs(dias)
     if n < 30:
-        cantidad = f"{n} días"
+        cantidad = ngettext("%(n)d día", "%(n)d días", n) % {"n": n}
     elif n < 365:
         meses = round(n / 30.4)
-        cantidad = "1 mes" if meses == 1 else f"{meses} meses"
+        cantidad = ngettext("%(n)d mes", "%(n)d meses", meses) % {"n": meses}
     else:
         anios = n // 365
-        cantidad = "1 año" if anios == 1 else f"{anios} años"
-    return f"en {cantidad}" if dias > 0 else f"hace {cantidad}"
+        cantidad = ngettext("%(n)d año", "%(n)d años", anios) % {"n": anios}
+    return (_("en %(cantidad)s") if dias > 0 else _("hace %(cantidad)s")) % {"cantidad": cantidad}
 
 
 @register.filter

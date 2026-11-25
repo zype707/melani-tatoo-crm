@@ -2,22 +2,22 @@
 {% if q %}
   {% if aviso %}<div class="aviso espacio-abajo">{% icono "alerta" %}<p>{{ aviso }}</p></div>{% endif %}
   <div class="fila espacio-abajo">
-    <span class="etiqueta etiqueta-mini">{% if origen == "ia" %}{% icono "ia" %} Interpretado por IA{% else %}Búsqueda básica{% endif %}</span>
-    {% for f in filtros %}<span class="etiqueta">{{ f }}</span>{% empty %}<span class="texto-suave texto-peq">Sin filtros reconocidos: se muestran todos.</span>{% endfor %}
+    <span class="etiqueta etiqueta-mini">{% if origen == "ia" %}{% icono "ia" %} {% translate "Interpretado por IA" %}{% else %}{% translate "Búsqueda básica" %}{% endif %}</span>
+    {% for f in filtros %}<span class="etiqueta">{{ f }}</span>{% empty %}<span class="texto-suave texto-peq">{% translate "Sin filtros reconocidos: se muestran todos." %}</span>{% endfor %}
   </div>
   {% if resultados.object_list %}
-    <p class="texto-suave texto-peq espacio-abajo">{{ resultados.paginator.count }} cliente{{ resultados.paginator.count|pluralize }}</p>
+    <p class="texto-suave texto-peq espacio-abajo">{% blocktranslate count count=resultados.paginator.count %}{{ count }} cliente{% plural %}{{ count }} clientes{% endblocktranslate %}</p>
     <ul class="lista bloque bloque-lista">
       {% for c in resultados %}
         <li><a class="fila-lista" href="{% url 'clientes:ficha' c.pk %}">
           <span class="avatar">{{ c.nombre_completo|iniciales }}</span>
-          <span class="fila-cuerpo"><span class="fila-titulo">{{ c.nombre_completo }}</span><span class="fila-sub">{{ c.n_tatuajes }} tatuaje{{ c.n_tatuajes|pluralize }}{% if c.ultima %} · última visita {{ c.ultima|relativo }}{% endif %}</span></span>
+          <span class="fila-cuerpo"><span class="fila-titulo">{{ c.nombre_completo }}</span><span class="fila-sub">{% blocktranslate count n=c.n_tatuajes %}{{ n }} tatuaje{% plural %}{{ n }} tatuajes{% endblocktranslate %}{% if c.ultima %} {% blocktranslate with ultima=c.ultima|relativo %}· última visita {{ ultima }}{% endblocktranslate %}{% endif %}</span></span>
           {% if c.gasto %}<span class="fila-meta numerico">{{ c.gasto|dinero }}</span>{% endif %}
         </a></li>
       {% endfor %}
     </ul>
   {% else %}
-    {% include "componentes/vacio.html" with icono="buscar" titulo="Nadie coincide" texto="Prueba a decirlo de otra forma." %}
+    {% include "componentes/vacio.html" with icono="buscar" titulo=_("Nadie coincide") texto=_("Prueba a decirlo de otra forma.") %}
   {% endif %}
 {% endif %}
 </div>

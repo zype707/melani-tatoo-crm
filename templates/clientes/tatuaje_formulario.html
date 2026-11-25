@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block titulo %}{% if tatuaje %}Editar tatuaje{% else %}Nuevo tatuaje{% endif %}{% endblock %}
+{% block titulo %}{% if tatuaje %}{% translate "Editar tatuaje" %}{% else %}{% translate "Nuevo tatuaje" %}{% endif %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
   <div>
-    <nav class="migas" aria-label="Migas"><a href="{% url 'clientes:ficha' cliente.pk %}">{{ cliente.nombre_completo }}</a>{% if tatuaje %}<span>/</span><a href="{% url 'clientes:tatuaje' tatuaje.pk %}">{{ tatuaje.titulo }}</a>{% endif %}</nav>
-    <h1>{% if tatuaje %}Editar tatuaje{% else %}Nuevo tatuaje{% endif %}</h1>
+    <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'clientes:ficha' cliente.pk %}">{{ cliente.nombre_completo }}</a>{% if tatuaje %}<span>/</span><a href="{% url 'clientes:tatuaje' tatuaje.pk %}">{{ tatuaje.titulo }}</a>{% endif %}</nav>
+    <h1>{% if tatuaje %}{% translate "Editar tatuaje" %}{% else %}{% translate "Nuevo tatuaje" %}{% endif %}</h1>
   </div>
 </header>
 <form method="post" class="bloque ancho-formulario" novalidate>
@@ -24,9 +24,9 @@
     <div class="ancho-completo">{{ form.notas.as_field_group }}</div>
   </div>
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
-    <a class="btn btn-fantasma" href="{% if tatuaje %}{% url 'clientes:tatuaje' tatuaje.pk %}{% else %}{% url 'clientes:ficha' cliente.pk %}{% endif %}">Cancelar</a>
-    {% if tatuaje %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="Se borrará el tatuaje con todas sus fotos. Las citas y pagos se conservan.">{% icono "basura" %} Eliminar</button>{% endif %}
+    <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar" %}</button>
+    <a class="btn btn-fantasma" href="{% if tatuaje %}{% url 'clientes:tatuaje' tatuaje.pk %}{% else %}{% url 'clientes:ficha' cliente.pk %}{% endif %}">{% translate "Cancelar" %}</a>
+    {% if tatuaje %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="{% translate "Se borrará el tatuaje con todas sus fotos. Las citas y pagos se conservan." %}">{% icono "basura" %} {% translate "Eliminar" %}</button>{% endif %}
   </div>
 </form>
 {% endblock %}

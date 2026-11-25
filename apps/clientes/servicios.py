@@ -5,6 +5,7 @@ from django.db.models import Count, DecimalField, Max, Min, OuterRef, Q, Subquer
 from django.db.models.functions import Coalesce
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from .models import Cliente
 
@@ -17,9 +18,9 @@ def normalizar_telefono(texto: str) -> str:
     try:
         numero = phonenumbers.parse(texto, settings.REGION_TELEFONO)
     except phonenumbers.NumberParseException as exc:
-        raise ValidationError("Ese teléfono no parece válido.") from exc
+        raise ValidationError(_("Ese teléfono no parece válido.")) from exc
     if not phonenumbers.is_possible_number(numero):
-        raise ValidationError("Ese teléfono no parece válido. Si es extranjero, añade el prefijo (+34…).")
+        raise ValidationError(_("Ese teléfono no parece válido. Si es extranjero, añade el prefijo (+34…)."))
     return phonenumbers.format_number(numero, phonenumbers.PhoneNumberFormat.E164)
 
 
@@ -101,7 +102,7 @@ def linea_de_tiempo(cliente: Cliente, limite: int = 80) -> list[dict]:
             {
                 "fecha": t.creado_en,
                 "icono": "aguja",
-                "titulo": f"Tatuaje: {t.titulo}",
+                "titulo": _("Tatuaje: %(titulo)s") % {"titulo": t.titulo},
                 "detalle": " · ".join(filter(None, [t.get_zona_display(), t.get_estilo_display()])),
                 "url": reverse("clientes:tatuaje", args=[t.pk]),
             }
@@ -114,7 +115,7 @@ def linea_de_tiempo(cliente: Cliente, limite: int = 80) -> list[dict]:
                 "fecha": timezone.make_aware(timezone.datetime.combine(p.fecha, timezone.datetime.min.time())),
                 "icono": "dinero",
                 "titulo": f"{p.get_tipo_display()} {dinero(p.importe)}",
-                "detalle": p.get_metodo_display() + (" · devuelto" if p.devuelto else ""),
+                "detalle": p.get_metodo_display() + (_(" · devuelto") if p.devuelto else ""),
                 "url": "",
             }
         )
@@ -123,7 +124,7 @@ def linea_de_tiempo(cliente: Cliente, limite: int = 80) -> list[dict]:
             {
                 "fecha": e.creado_en,
                 "icono": "escudo",
-                "titulo": "Acepta promociones" if e.tipo == "alta" else "Baja de promociones",
+                "titulo": _("Acepta promociones") if e.tipo == "alta" else _("Baja de promociones"),
                 "detalle": e.get_origen_display(),
                 "url": "",
             }
@@ -134,7 +135,7 @@ def linea_de_tiempo(cliente: Cliente, limite: int = 80) -> list[dict]:
                 {
                     "fecha": m.enviado_en,
                     "icono": "enviar",
-                    "titulo": f"Mensaje enviado · {m.get_tipo_display()}",
+                    "titulo": _("Mensaje enviado · %(get_tipo_display)s") % {"get_tipo_display": m.get_tipo_display()},
                     "detalle": m.texto,
                     "url": "",
                     "canal": m.get_canal_usado_display(),
@@ -148,8 +149,8 @@ def linea_de_tiempo(cliente: Cliente, limite: int = 80) -> list[dict]:
                 {
                     "fecha": f.firmado_en,
                     "icono": "firma",
-                    "titulo": "Consentimiento firmado",
-                    "detalle": f"Versión {f.version_texto}",
+                    "titulo": _("Consentimiento firmado"),
+                    "detalle": _("Versión %(version_texto)s") % {"version_texto": f.version_texto},
                     "url": reverse("clientes:consentimiento_pdf", args=[f.pk]),
                 }
             )

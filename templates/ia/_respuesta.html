@@ -1,9 +1,9 @@
 <div class="respuesta-ia" role="status">
-  <span class="etiqueta etiqueta-mini">{% icono "ia" %} Propuesta · edítala a tu gusto</span>
+  <span class="etiqueta etiqueta-mini">{% icono "ia" %} {% translate "Propuesta · edítala a tu gusto" %}</span>
   <textarea id="respuesta-propuesta" rows="5">{{ texto }}</textarea>
   <div class="grupo-botones">
-    <button type="button" class="btn btn-peq" data-copiar="#respuesta-propuesta">{% icono "copiar" %} Copiar</button>
+    <button type="button" class="btn btn-peq" data-copiar="#respuesta-propuesta">{% icono "copiar" %} {% translate "Copiar" %}</button>
     {% for a in acciones %}{% if a.url %}<a class="btn btn-peq" href="{{ a.url }}" target="_blank" rel="noopener noreferrer" data-base="{{ a.base }}" data-texto-desde="#respuesta-propuesta">{% icono a.icono %} {{ a.etiqueta }}</a>{% endif %}{% endfor %}
   </div>
-  {% if cliente %}<p class="texto-peq texto-suave">Para que quede en el historial, envíala desde <a href="{% url 'mensajeria:nuevo' %}?cliente={{ cliente.pk }}">Escribir mensaje</a>.</p>{% endif %}
+  {% if cliente %}<p class="texto-peq texto-suave">{% translate "Para que quede en el historial, envíala desde" %} <a href="{% url 'mensajeria:nuevo' %}?cliente={{ cliente.pk }}">{% translate "Escribir mensaje" %}</a>.</p>{% endif %}
 </div>

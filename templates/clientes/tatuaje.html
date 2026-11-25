@@ -3,40 +3,40 @@
 {% block contenido %}
 <header class="cabecera-pagina">
   <div>
-    <nav class="migas" aria-label="Migas"><a href="{% url 'clientes:lista' %}">Clientes</a><span>/</span><a href="{% url 'clientes:ficha' cliente.pk %}">{{ cliente.nombre_completo }}</a></nav>
+    <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'clientes:lista' %}">{% translate "Clientes" %}</a><span>/</span><a href="{% url 'clientes:ficha' cliente.pk %}">{{ cliente.nombre_completo }}</a></nav>
     <h1>{{ tatuaje.titulo }}</h1>
     <p class="texto-suave">{{ tatuaje.get_zona_display|default:"Zona sin indicar" }}{% if tatuaje.estilo %} · {{ tatuaje.get_estilo_display }}{% endif %}{% if tatuaje.tamano %} · {{ tatuaje.get_tamano_display }}{% endif %}{% if tatuaje.medidas %} · {{ tatuaje.medidas }}{% endif %}</p>
   </div>
   <div class="acciones">
-    {% if nav.url_nueva_cita %}<a class="btn btn-primario" href="{% url 'agenda:nueva' %}?cliente={{ cliente.pk }}&tatuaje={{ tatuaje.pk }}">{% icono "plus" %} Nueva sesión</a>{% endif %}
-    <a class="btn" href="{% url 'clientes:tatuaje_editar' tatuaje.pk %}">{% icono "editar" %} Editar</a>
+    {% if nav.url_nueva_cita %}<a class="btn btn-primario" href="{% url 'agenda:nueva' %}?cliente={{ cliente.pk }}&tatuaje={{ tatuaje.pk }}">{% icono "plus" %} {% translate "Nueva sesión" %}</a>{% endif %}
+    <a class="btn" href="{% url 'clientes:tatuaje_editar' tatuaje.pk %}">{% icono "editar" %} {% translate "Editar" %}</a>
   </div>
 </header>
 
 <div class="rejilla-cifras">
-  <div class="bloque bloque-plano"><span class="estado {% if tatuaje.estado == 'terminado' %}estado-ok{% endif %}">{{ tatuaje.get_estado_display }}</span><span class="cifra-etiqueta">Estado</span></div>
-  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ realizadas }}{% if tatuaje.sesiones_previstas %}/{{ tatuaje.sesiones_previstas }}{% endif %}</span><span class="cifra-etiqueta">Sesiones</span></div>
-  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ tatuaje.precio_total|dinero }}</span><span class="cifra-etiqueta">Precio acordado</span></div>
-  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{% if tatuaje.fecha_aniversario %}{{ tatuaje.fecha_aniversario|date:"d/m/y" }}{% else %}—{% endif %}</span><span class="cifra-etiqueta">{% if tatuaje.fecha_fin %}Terminado{% else %}Inicio{% endif %}</span></div>
+  <div class="bloque bloque-plano"><span class="estado {% if tatuaje.estado == 'terminado' %}estado-ok{% endif %}">{{ tatuaje.get_estado_display }}</span><span class="cifra-etiqueta">{% translate "Estado" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ realizadas }}{% if tatuaje.sesiones_previstas %}/{{ tatuaje.sesiones_previstas }}{% endif %}</span><span class="cifra-etiqueta">{% translate "Sesiones" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ tatuaje.precio_total|dinero }}</span><span class="cifra-etiqueta">{% translate "Precio acordado" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{% if tatuaje.fecha_aniversario %}{{ tatuaje.fecha_aniversario|date:"SHORT_DATE_FORMAT" }}{% else %}—{% endif %}</span><span class="cifra-etiqueta">{% if tatuaje.fecha_fin %}{% translate "Terminado" %}{% else %}{% translate "Inicio" %}{% endif %}</span></div>
 </div>
 
 <section class="bloque espacio-arriba" id="fotos" aria-labelledby="t-fotos">
-  <div class="bloque-titulo"><h2 id="t-fotos">Fotos</h2></div>
+  <div class="bloque-titulo"><h2 id="t-fotos">{% translate "Fotos" %}</h2></div>
   {% if fotos %}
     <div class="galeria">
       {% for f in fotos %}
         <figure class="galeria-foto">
-          <a href="{% url 'clientes:foto' f.pk %}" target="_blank" rel="noopener"><img src="{% url 'clientes:foto_mini' f.pk %}" alt="{{ f.get_tipo_display }} de {{ tatuaje.titulo }}" loading="lazy" width="240" height="240"></a>
+          <a href="{% url 'clientes:foto' f.pk %}" target="_blank" rel="noopener"><img src="{% url 'clientes:foto_mini' f.pk %}" alt="{% blocktranslate with get_tipo_display=f.get_tipo_display titulo=tatuaje.titulo %}{{ get_tipo_display }} de {{ titulo }}{% endblocktranslate %}" loading="lazy" width="240" height="240"></a>
           <figcaption class="fila-entre">
-            <span><span class="etiqueta etiqueta-mini">{{ f.get_tipo_display }}</span> <span class="texto-peq texto-suave">{{ f.creado_en|date:"d/m/y" }}</span></span>
-            <form method="post" action="{% url 'clientes:borrar_foto' f.pk %}">{% csrf_token %}<button type="submit" class="btn btn-icono btn-fantasma btn-peq" aria-label="Borrar foto" data-confirmar="¿Borrar esta foto? No se puede deshacer.">{% icono "basura" %}</button></form>
+            <span><span class="etiqueta etiqueta-mini">{{ f.get_tipo_display }}</span> <span class="texto-peq texto-suave">{{ f.creado_en|date:"SHORT_DATE_FORMAT" }}</span></span>
+            <form method="post" action="{% url 'clientes:borrar_foto' f.pk %}">{% csrf_token %}<button type="submit" class="btn btn-icono btn-fantasma btn-peq" aria-label="{% translate "Borrar foto" %}" data-confirmar="{% translate "¿Borrar esta foto? No se puede deshacer." %}">{% icono "basura" %}</button></form>
           </figcaption>
           {% if f.nota %}<p class="texto-peq">{{ f.nota }}</p>{% endif %}
         </figure>
       {% endfor %}
     </div>
   {% else %}
-    <p class="texto-suave">Sin fotos todavía. Sube la referencia, el resultado del día y cómo cicatrizó.</p>
+    <p class="texto-suave">{% translate "Sin fotos todavía. Sube la referencia, el resultado del día y cómo cicatrizó." %}</p>
   {% endif %}
   <form method="post" action="{% url 'clientes:subir_fotos' tatuaje.pk %}" enctype="multipart/form-data" class="formulario bloque-pie">
     {% csrf_token %}
@@ -45,25 +45,25 @@
       {{ fotos_form.tipo.as_field_group }}
       {{ fotos_form.nota.as_field_group }}
     </div>
-    <div><button type="submit" class="btn">{% icono "subir" %} Subir fotos</button></div>
+    <div><button type="submit" class="btn">{% icono "subir" %} {% translate "Subir fotos" %}</button></div>
   </form>
 </section>
 
 <div class="rejilla-2 espacio-arriba">
   <section class="bloque" aria-labelledby="t-sesiones">
-    <div class="bloque-titulo"><h2 id="t-sesiones">Sesiones</h2></div>
+    <div class="bloque-titulo"><h2 id="t-sesiones">{% translate "Sesiones" %}</h2></div>
     {% if citas %}
       <ul class="lista">{% for c in citas %}
         <li><a class="fila-lista" href="{% url 'agenda:detalle' c.pk %}"><span class="fila-cuerpo"><span class="fila-titulo">{{ c.inicio|fecha_corta }} · {{ c.tipo }}</span><span class="fila-sub">{{ c.descripcion }}</span></span><span class="estado {% if c.estado == 'realizada' %}estado-ok{% elif c.estado == 'solicitada' %}estado-atencion{% elif c.estado == 'cancelada' or c.estado == 'no_show' %}estado-apagado{% endif %}">{{ c.get_estado_display }}</span></a></li>
       {% endfor %}</ul>
-    {% else %}<p class="texto-suave">Sin sesiones asociadas.</p>{% endif %}
+    {% else %}<p class="texto-suave">{% translate "Sin sesiones asociadas." %}</p>{% endif %}
   </section>
   <section class="bloque" aria-labelledby="t-pagos">
-    <div class="bloque-titulo"><h2 id="t-pagos">Pagos</h2></div>
+    <div class="bloque-titulo"><h2 id="t-pagos">{% translate "Pagos" %}</h2></div>
     {% if pagos %}
-      <ul class="lista">{% for p in pagos %}<li class="fila-lista"><span class="fila-cuerpo"><span class="fila-titulo">{{ p.get_tipo_display }}</span><span class="fila-sub">{{ p.fecha|date:"d/m/Y" }} · {{ p.get_metodo_display }}</span></span><span class="numerico {% if p.devuelto %}estado-apagado{% endif %}">{{ p.importe|dinero }}</span></li>{% endfor %}</ul>
-    {% else %}<p class="texto-suave">Sin pagos registrados.</p>{% endif %}
+      <ul class="lista">{% for p in pagos %}<li class="fila-lista"><span class="fila-cuerpo"><span class="fila-titulo">{{ p.get_tipo_display }}</span><span class="fila-sub">{{ p.fecha|date:"SHORT_DATE_FORMAT" }} · {{ p.get_metodo_display }}</span></span><span class="numerico {% if p.devuelto %}estado-apagado{% endif %}">{{ p.importe|dinero }}</span></li>{% endfor %}</ul>
+    {% else %}<p class="texto-suave">{% translate "Sin pagos registrados." %}</p>{% endif %}
   </section>
 </div>
-{% if tatuaje.notas %}<section class="bloque espacio-arriba"><div class="bloque-titulo"><h2>Notas</h2></div><p class="texto-pre">{{ tatuaje.notas }}</p></section>{% endif %}
+{% if tatuaje.notas %}<section class="bloque espacio-arriba"><div class="bloque-titulo"><h2>{% translate "Notas" %}</h2></div><p class="texto-pre">{{ tatuaje.notas }}</p></section>{% endif %}
 {% endblock %}

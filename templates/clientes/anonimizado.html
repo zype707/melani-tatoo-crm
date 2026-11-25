@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% block titulo %}Ficha anonimizada{% endblock %}
+{% block titulo %}{% translate "Ficha anonimizada" %}{% endblock %}
 {% block contenido %}
-<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'clientes:lista' %}">Clientes</a></nav><h1>Ficha anonimizada</h1></div></header>
-<div class="aviso ancho-texto">{% icono "candado" %}<p>Los datos personales de esta ficha se eliminaron el {{ cliente.anonimizado_en|date:"j/m/Y" }} a petición del cliente. Solo se conservan importes para la contabilidad{% if cliente.consentimientos.exists %} y los consentimientos firmados durante el plazo legal{% endif %}.</p></div>
+<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'clientes:lista' %}">{% translate "Clientes" %}</a></nav><h1>{% translate "Ficha anonimizada" %}</h1></div></header>
+<div class="aviso ancho-texto">{% icono "candado" %}<p>{% blocktranslate with anonimizado_en=cliente.anonimizado_en|date:"SHORT_DATE_FORMAT" %}Los datos personales de esta ficha se eliminaron el {{ anonimizado_en }} a petición del cliente. Solo se conservan importes para la contabilidad{% endblocktranslate %}{% if cliente.consentimientos.exists %} {% translate "y los consentimientos firmados durante el plazo legal" %}{% endif %}.</p></div>
 {% endblock %}

@@ -5,15 +5,15 @@
       <a class="fila-titulo" href="{% url 'clientes:ficha' m.cliente.pk %}">{{ m.cliente.nombre_completo }}</a>
       <span class="fila-sub">{{ m.get_tipo_display }}{% if m.motivo %} · {{ m.motivo }}{% endif %}</span>
     </div>
-    {% if m.es_promocional %}<span class="etiqueta etiqueta-mini" title="Solo para quien aceptó promociones">Promo</span>{% endif %}
+    {% if m.es_promocional %}<span class="etiqueta etiqueta-mini" title="{% translate "Solo para quien aceptó promociones" %}">{% translate "Promo" %}</span>{% endif %}
   </header>
   {% if m.estado == "enviado" %}
     <div class="mensaje-enviado">
-      <span>{% icono "check" %} Enviado por {{ m.get_canal_usado_display }} · {{ m.enviado_en|hora }}</span>
-      <button type="button" class="btn btn-peq btn-fantasma" hx-post="{% url 'mensajeria:deshacer' m.pk %}" hx-target="#mensaje-{{ m.pk }}">Deshacer</button>
+      <span>{% icono "check" %} {% blocktranslate with get_canal_usado_display=m.get_canal_usado_display enviado_en=m.enviado_en|hora %}Enviado por {{ get_canal_usado_display }} · {{ enviado_en }}{% endblocktranslate %}</span>
+      <button type="button" class="btn btn-peq btn-fantasma" hx-post="{% url 'mensajeria:deshacer' m.pk %}" hx-target="#mensaje-{{ m.pk }}">{% translate "Deshacer" %}</button>
     </div>
   {% elif m.estado == "pendiente" %}
-    <label class="solo-lectores" for="texto-{{ m.pk }}">Mensaje para {{ m.cliente.nombre }}</label>
+    <label class="solo-lectores" for="texto-{{ m.pk }}">{% blocktranslate with nombre=m.cliente.nombre %}Mensaje para {{ nombre }}{% endblocktranslate %}</label>
     <textarea id="texto-{{ m.pk }}" name="texto" class="mensaje-texto" rows="4" maxlength="4000"
               hx-post="{% url 'mensajeria:texto' m.pk %}" hx-trigger="input changed delay:700ms"
               hx-target="#acciones-{{ m.pk }}">{{ m.texto }}</textarea>

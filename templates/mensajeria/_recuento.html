@@ -1,6 +1,6 @@
 <div id="recuento" class="bloque bloque-plano" aria-live="polite">
   <span class="cifra">{{ recuento.con_consentimiento }}</span>
-  <span class="cifra-etiqueta">Destinatarios</span>
-  {% if recuento.total != recuento.con_consentimiento %}<p class="texto-peq texto-suave">De {{ recuento.total }} en el segmento.</p>{% endif %}
-  {% if recuento.dias %}<p class="texto-peq">Repartidos en <strong>{{ recuento.dias }}</strong> día{{ recuento.dias|pluralize }}.</p>{% endif %}
+  <span class="cifra-etiqueta">{% translate "Destinatarios" %}</span>
+  {% if recuento.total != recuento.con_consentimiento %}<p class="texto-peq texto-suave">{% blocktranslate with total=recuento.total %}De {{ total }} en el segmento.{% endblocktranslate %}</p>{% endif %}
+  {% if recuento.dias %}<p class="texto-peq">{% blocktranslate count n=recuento.dias %}Repartidos en <strong>{{ n }}</strong> día.{% plural %}Repartidos en <strong>{{ n }}</strong> días.{% endblocktranslate %}</p>{% endif %}
 </div>

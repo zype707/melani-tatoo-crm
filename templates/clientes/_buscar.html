@@ -4,5 +4,5 @@
     <span class="fila-cuerpo"><span class="fila-titulo">{{ c.nombre_completo }}</span><span class="fila-sub">{{ c.telefono|telefono|default:c.email }}</span></span>
   </button>
 {% empty %}
-  {% if q|length >= 2 %}<p class="texto-suave texto-peq">Nadie con «{{ q }}». Créalo abajo.</p>{% endif %}
+  {% if q|length >= 2 %}<p class="texto-suave texto-peq">{% blocktranslate %}Nadie con «{{ q }}». Créalo abajo.{% endblocktranslate %}</p>{% endif %}
 {% endfor %}

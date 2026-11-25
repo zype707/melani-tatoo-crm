@@ -1,34 +1,34 @@
 {% extends "base.html" %}
-{% block titulo %}Flash{% endblock %}
+{% block titulo %}{% translate "Flash" %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
-  <div><span class="antetitulo">Catálogo</span><h1>Flash</h1></div>
-  <div class="acciones"><a class="btn btn-primario" href="{% url 'catalogo:nuevo' %}">{% icono "plus" %} Nuevo diseño</a></div>
+  <div><span class="antetitulo">{% translate "Catálogo" %}</span><h1>{% translate "Flash" %}</h1></div>
+  <div class="acciones"><a class="btn btn-primario" href="{% url 'catalogo:nuevo' %}">{% icono "plus" %} {% translate "Nuevo diseño" %}</a></div>
 </header>
 
 <section class="bloque espacio-abajo" aria-labelledby="t-pub">
-  <div class="bloque-titulo"><h2 id="t-pub">Catálogo público</h2>{% if ajustes.flash_publico %}<span class="estado estado-ok">Publicado</span>{% else %}<span class="estado">Oculto</span>{% endif %}</div>
+  <div class="bloque-titulo"><h2 id="t-pub">{% translate "Catálogo público" %}</h2>{% if ajustes.flash_publico %}<span class="estado estado-ok">{% translate "Publicado" %}</span>{% else %}<span class="estado">{% translate "Oculto" %}</span>{% endif %}</div>
   {% if ajustes.flash_publico and url_publica %}
     <div class="fila enlace-fila">
-      <input type="text" id="url-flash" class="mono" value="{{ url_publica }}" readonly aria-label="Enlace del catálogo">
-      <button type="button" class="btn" data-copiar="#url-flash" data-copiado="Enlace copiado.">{% icono "copiar" %} Copiar</button>
-      <a class="btn btn-fantasma" href="{{ url_publica }}" target="_blank" rel="noopener">{% icono "externo" %} Ver</a>
+      <input type="text" id="url-flash" class="mono" value="{{ url_publica }}" readonly aria-label="{% translate "Enlace del catálogo" %}">
+      <button type="button" class="btn" data-copiar="#url-flash" data-copiado="{% translate "Enlace copiado." %}">{% icono "copiar" %} {% translate "Copiar" %}</button>
+      <a class="btn btn-fantasma" href="{{ url_publica }}" target="_blank" rel="noopener">{% icono "externo" %} {% translate "Ver" %}</a>
     </div>
   {% else %}
-    <p class="texto-suave">Publica una página con tus diseños disponibles; cada uno lleva a tu formulario de reserva con el diseño ya elegido.</p>
+    <p class="texto-suave">{% translate "Publica una página con tus diseños disponibles; cada uno lleva a tu formulario de reserva con el diseño ya elegido." %}</p>
   {% endif %}
   <form method="post" action="{% url 'catalogo:enlace' %}" class="grupo-botones bloque-pie">{% csrf_token %}
     {% if ajustes.flash_publico %}
-      <button type="submit" name="accion" value="ocultar" class="btn btn-peq btn-fantasma">Ocultar catálogo</button>
-      <button type="submit" name="accion" value="renovar" class="btn btn-peq btn-fantasma" data-confirmar="El enlace actual dejará de funcionar.">{% icono "refrescar" %} Renovar enlace</button>
+      <button type="submit" name="accion" value="ocultar" class="btn btn-peq btn-fantasma">{% translate "Ocultar catálogo" %}</button>
+      <button type="submit" name="accion" value="renovar" class="btn btn-peq btn-fantasma" data-confirmar="{% translate "El enlace actual dejará de funcionar." %}">{% icono "refrescar" %} {% translate "Renovar enlace" %}</button>
     {% else %}
-      <button type="submit" name="accion" value="publicar" class="btn btn-peq">{% icono "externo" %} Publicar catálogo</button>
+      <button type="submit" name="accion" value="publicar" class="btn btn-peq">{% icono "externo" %} {% translate "Publicar catálogo" %}</button>
     {% endif %}
   </form>
 </section>
 
-<nav class="chips espacio-abajo" aria-label="Filtrar por estado">
-  <a class="chip" href="{% url 'catalogo:lista' %}"><span{% if not estado %} class="activo"{% endif %}>Todos</span></a>
+<nav class="chips espacio-abajo" aria-label="{% translate "Filtrar por estado" %}">
+  <a class="chip" href="{% url 'catalogo:lista' %}"><span{% if not estado %} class="activo"{% endif %}>{% translate "Todos" %}</span></a>
   {% for clave, nombre in estados %}<a class="chip" href="?estado={{ clave }}"><span{% if estado == clave %} class="activo"{% endif %}>{{ nombre }} · {{ cuentas|obtener:clave }}</span></a>{% endfor %}
 </nav>
 
@@ -36,6 +36,6 @@
   <div class="rejilla-flash">{% for d in disenos %}{% include "catalogo/_tarjeta.html" %}{% endfor %}</div>
 {% else %}
   {% url 'catalogo:nuevo' as u %}
-  {% include "componentes/vacio.html" with icono="flash" titulo="Sin diseños" texto="Sube tus flash con precio y tamaño. Marca cuáles se pueden repetir." url=u accion="Subir diseño" principal=True %}
+  {% include "componentes/vacio.html" with icono="flash" titulo=_("Sin diseños") texto=_("Sube tus flash con precio y tamaño. Marca cuáles se pueden repetir.") url=u accion=_("Subir diseño") principal=True %}
 {% endif %}
 {% endblock %}

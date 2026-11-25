@@ -1,28 +1,28 @@
 {% extends "base.html" %}
-{% block titulo %}Etiquetas{% endblock %}
+{% block titulo %}{% translate "Etiquetas" %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
-  <div><nav class="migas"><a href="{% url 'clientes:lista' %}">Clientes</a></nav><h1>Etiquetas</h1></div>
+  <div><nav class="migas"><a href="{% url 'clientes:lista' %}">{% translate "Clientes" %}</a></nav><h1>{% translate "Etiquetas" %}</h1></div>
 </header>
 <div class="rejilla-2">
   <section class="bloque">
-    <div class="bloque-titulo"><h2>Tus etiquetas</h2></div>
+    <div class="bloque-titulo"><h2>{% translate "Tus etiquetas" %}</h2></div>
     {% if etiquetas %}
       <ul class="lista">
         {% for e in etiquetas %}
           <li class="fila-lista">
             <span class="etiqueta">{{ e }}</span>
-            <a class="texto-peq" href="{% url 'clientes:lista' %}?etiqueta={{ e.pk }}">{{ e.n }} cliente{{ e.n|pluralize }}</a>
-            <form method="post" class="empujar">{% csrf_token %}<button type="submit" name="borrar" value="{{ e.pk }}" class="btn btn-icono btn-fantasma btn-peq" aria-label="Eliminar etiqueta {{ e }}" data-confirmar="Se quitará «{{ e }}» de todos los clientes.">{% icono "basura" %}</button></form>
+            <a class="texto-peq" href="{% url 'clientes:lista' %}?etiqueta={{ e.pk }}">{% blocktranslate count n=e.n %}{{ n }} cliente{% plural %}{{ n }} clientes{% endblocktranslate %}</a>
+            <form method="post" class="empujar">{% csrf_token %}<button type="submit" name="borrar" value="{{ e.pk }}" class="btn btn-icono btn-fantasma btn-peq" aria-label="{% blocktranslate %}Eliminar etiqueta {{ e }}{% endblocktranslate %}" data-confirmar="{% blocktranslate %}Se quitará «{{ e }}» de todos los clientes.{% endblocktranslate %}">{% icono "basura" %}</button></form>
           </li>
         {% endfor %}
       </ul>
-    {% else %}<p class="texto-suave">Aún no hay etiquetas.</p>{% endif %}
+    {% else %}<p class="texto-suave">{% translate "Aún no hay etiquetas." %}</p>{% endif %}
   </section>
   <section class="bloque">
-    <div class="bloque-titulo"><h2>Nueva etiqueta</h2></div>
-    <form method="post" class="formulario" novalidate>{% csrf_token %}{{ form }}<div><button type="submit" class="btn">{% icono "plus" %} Crear</button></div></form>
-    <p class="ayuda espacio-arriba">La etiqueta <strong>VIP</strong> alimenta el segmento VIP de las campañas.</p>
+    <div class="bloque-titulo"><h2>{% translate "Nueva etiqueta" %}</h2></div>
+    <form method="post" class="formulario" novalidate>{% csrf_token %}{{ form }}<div><button type="submit" class="btn">{% icono "plus" %} {% translate "Crear" %}</button></div></form>
+    <p class="ayuda espacio-arriba">{% translate "La etiqueta" %} <strong>VIP</strong> {% translate "alimenta el segmento VIP de las campañas." %}</p>
   </section>
 </div>
 {% endblock %}

@@ -1,8 +1,8 @@
-<nav class="pestanas" aria-label="Mensajería">
-  {% url 'mensajeria:bandeja' as u %}<a href="{{ u }}"{% if seccion == "bandeja" %} aria-current="page"{% endif %}>{% icono "mensajes" %} Hoy{% if nav.mensajes %} <span class="insignia">{{ nav.mensajes }}</span>{% endif %}</a>
-  {% url 'mensajeria:historial' as u %}<a href="{{ u }}"{% if seccion == "historial" %} aria-current="page"{% endif %}>Historial</a>
-  {% url 'mensajeria:campanas' as u %}<a href="{{ u }}"{% if seccion == "campanas" %} aria-current="page"{% endif %}>Campañas</a>
-  {% url 'mensajeria:fechas' as u %}<a href="{{ u }}"{% if seccion == "fechas" %} aria-current="page"{% endif %}>Fechas destacadas</a>
-  {% url 'mensajeria:cuidados' as u %}<a href="{{ u }}"{% if seccion == "cuidados" %} aria-current="page"{% endif %}>Cuidados</a>
-  {% url 'mensajeria:plantillas' as u %}<a href="{{ u }}"{% if seccion == "plantillas" %} aria-current="page"{% endif %}>Plantillas</a>
+<nav class="pestanas" aria-label="{% translate "Mensajería" %}">
+  {% url 'mensajeria:bandeja' as u %}<a href="{{ u }}"{% if seccion == "bandeja" %} aria-current="page"{% endif %}>{% icono "mensajes" %} {% translate "Hoy" %}{% if nav.mensajes %} <span class="insignia">{{ nav.mensajes }}</span>{% endif %}</a>
+  {% url 'mensajeria:historial' as u %}<a href="{{ u }}"{% if seccion == "historial" %} aria-current="page"{% endif %}>{% translate "Historial" %}</a>
+  {% url 'mensajeria:campanas' as u %}<a href="{{ u }}"{% if seccion == "campanas" %} aria-current="page"{% endif %}>{% translate "Campañas" %}</a>
+  {% url 'mensajeria:fechas' as u %}<a href="{{ u }}"{% if seccion == "fechas" %} aria-current="page"{% endif %}>{% translate "Fechas destacadas" %}</a>
+  {% url 'mensajeria:cuidados' as u %}<a href="{{ u }}"{% if seccion == "cuidados" %} aria-current="page"{% endif %}>{% translate "Cuidados" %}</a>
+  {% url 'mensajeria:plantillas' as u %}<a href="{{ u }}"{% if seccion == "plantillas" %} aria-current="page"{% endif %}>{% translate "Plantillas" %}</a>
 </nav>

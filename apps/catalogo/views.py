@@ -3,6 +3,7 @@ from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_control
 from django.views.decorators.http import require_POST
 
@@ -55,11 +56,11 @@ def formulario(request, pk=None):
             borrar_archivo(diseno.imagen)
             borrar_archivo(diseno.miniatura)
             diseno.delete()
-            messages.success(request, "Diseño eliminado.")
+            messages.success(request, _("Diseño eliminado."))
             return redirect("catalogo:lista")
         if form.is_valid():
             form.save()
-            messages.success(request, "Diseño guardado.")
+            messages.success(request, _("Diseño guardado."))
             return redirect("catalogo:lista")
     return render(request, "catalogo/formulario.html", {"form": form, "diseno": diseno})
 
@@ -85,15 +86,15 @@ def gestionar_enlace(request):
         ajustes.save(update_fields=["flash_publico", "actualizado_en"])
         if not tokens.enlace_estudio_vigente(Proposito.CATALOGO):
             tokens.crear_enlace(Proposito.CATALOGO, dias=365)
-        messages.success(request, "Catálogo publicado.")
+        messages.success(request, _("Catálogo publicado."))
     elif accion == "ocultar":
         ajustes.flash_publico = False
         ajustes.save(update_fields=["flash_publico", "actualizado_en"])
-        messages.success(request, "Catálogo oculto.")
+        messages.success(request, _("Catálogo oculto."))
     elif accion == "renovar":
         tokens.revocar(Proposito.CATALOGO)
         tokens.crear_enlace(Proposito.CATALOGO, dias=365)
-        messages.success(request, "Enlace del catálogo renovado.")
+        messages.success(request, _("Enlace del catálogo renovado."))
     return redirect("catalogo:lista")
 
 

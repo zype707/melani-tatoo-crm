@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block titulo %}{% if gasto %}Editar gasto{% else %}Nuevo gasto{% endif %}{% endblock %}
+{% block titulo %}{% if gasto %}{% translate "Editar gasto" %}{% else %}{% translate "Nuevo gasto" %}{% endif %}{% endblock %}
 {% block contenido %}
-<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'finanzas:resumen' %}">Finanzas</a></nav><h1>{% if gasto %}Editar gasto{% else %}Nuevo gasto{% endif %}</h1></div></header>
+<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'finanzas:resumen' %}">{% translate "Finanzas" %}</a></nav><h1>{% if gasto %}{% translate "Editar gasto" %}{% else %}{% translate "Nuevo gasto" %}{% endif %}</h1></div></header>
 <form method="post" class="bloque ancho-formulario" novalidate>
   {% csrf_token %}
   <div class="formulario-2">
@@ -13,9 +13,9 @@
     <div class="ancho-completo">{{ form.notas.as_field_group }}</div>
   </div>
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
-    <a class="btn btn-fantasma" href="{% url 'finanzas:resumen' %}">Cancelar</a>
-    {% if gasto %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="¿Eliminar este gasto?">{% icono "basura" %} Eliminar</button>{% endif %}
+    <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar" %}</button>
+    <a class="btn btn-fantasma" href="{% url 'finanzas:resumen' %}">{% translate "Cancelar" %}</a>
+    {% if gasto %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="{% translate "¿Eliminar este gasto?" %}">{% icono "basura" %} {% translate "Eliminar" %}</button>{% endif %}
   </div>
 </form>
 {% endblock %}

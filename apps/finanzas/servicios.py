@@ -5,10 +5,10 @@ from decimal import Decimal
 
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
+from django.utils.dates import MONTHS_3
+from django.utils.translation import gettext as _
 
 from .models import Gasto, Pago
-
-MESES_CORTOS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
 
 
 def limites_mes(anio: int, mes: int) -> tuple[date, date]:
@@ -55,7 +55,7 @@ def resumen_mes(anio: int, mes: int) -> dict:
 
 def serie_mensual(hasta: date, meses: int = 12) -> list[dict]:
     inicio = hasta.replace(day=1)
-    for _ in range(meses - 1):
+    for _x in range(meses - 1):
         inicio = mes_anterior(inicio)
     fin = limites_mes(hasta.year, hasta.month)[1]
     i = {
@@ -78,7 +78,7 @@ def serie_mensual(hasta: date, meses: int = 12) -> list[dict]:
         serie.append(
             {
                 "mes": actual,
-                "etiqueta": MESES_CORTOS[actual.month - 1],
+                "etiqueta": MONTHS_3[actual.month],
                 "ingresos": i.get(actual, Decimal(0)),
                 "gastos": g.get(actual, Decimal(0)),
             }
@@ -93,7 +93,7 @@ def movimientos(desde: date, hasta: date) -> list[dict]:
         filas.append(
             {
                 "fecha": p.fecha,
-                "tipo": "Ingreso",
+                "tipo": _("Ingreso"),
                 "concepto": p.get_tipo_display(),
                 "persona": p.cliente.nombre_completo if p.cliente else "",
                 "metodo": p.get_metodo_display(),
@@ -107,7 +107,7 @@ def movimientos(desde: date, hasta: date) -> list[dict]:
         filas.append(
             {
                 "fecha": g.fecha,
-                "tipo": "Gasto",
+                "tipo": _("Gasto"),
                 "concepto": f"{g.get_categoria_display()} · {g.concepto}",
                 "persona": "",
                 "metodo": g.get_metodo_display(),
@@ -132,7 +132,7 @@ def _celda_segura(valor) -> str:
 def escribir_csv(salida, desde: date, hasta: date) -> int:
     salida.write("﻿")  # BOM: Excel abre bien las tildes
     w = csv.writer(salida)
-    w.writerow(["Fecha", "Tipo", "Concepto", "Cliente", "Método", "Importe", "Devuelto"])
+    w.writerow([_("Fecha"), _("Tipo"), _("Concepto"), _("Cliente"), _("Método"), _("Importe"), _("Devuelto")])
     filas = movimientos(desde, hasta)
     for f in sorted(filas, key=lambda f: f["fecha"]):
         w.writerow(
@@ -143,7 +143,7 @@ def escribir_csv(salida, desde: date, hasta: date) -> int:
                 _celda_segura(f["persona"]),
                 f["metodo"],
                 f"{f['importe']:.2f}",
-                "sí" if f["devuelto"] else "",
+                _("sí") if f["devuelto"] else "",
             ]
         )
     return len(filas)

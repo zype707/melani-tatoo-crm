@@ -1,0 +1,6154 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: tinta-crm 1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-25 15:32-0500\n"
+"PO-Revision-Date: 2026-11-25 16:00-0400\n"
+"Last-Translator: Claude\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps/agenda/forms.py:21 apps/agenda/models.py:32 apps/agenda/models.py:258
+#: apps/clientes/forms.py:89 apps/clientes/models.py:14
+#: apps/clientes/models.py:74 apps/cuentas/models.py:40
+#: apps/mensajeria/models.py:56 apps/mensajeria/models.py:83
+#: apps/mensajeria/models.py:118 apps/mensajeria/models.py:204
+msgid "Nombre"
+msgstr "Name"
+
+#: apps/agenda/forms.py:23 apps/agenda/models.py:260
+#: apps/clientes/consentimiento.py:104 apps/clientes/forms.py:90
+#: apps/clientes/models.py:77 apps/nucleo/models.py:17
+#: templates/clientes/ficha.html:120 templates/solicitudes/detalle.html:57
+msgid "Teléfono"
+msgstr "Phone"
+
+#: apps/agenda/forms.py:25 apps/agenda/views.py:48
+#: apps/mensajeria/models.py:121 templates/agenda/configuracion.html:16
+msgid "Día"
+msgstr "Day"
+
+#: apps/agenda/forms.py:26 apps/agenda/forms.py:172 apps/agenda/forms.py:174
+msgid "Hora"
+msgstr "Time"
+
+#: apps/agenda/forms.py:28 apps/agenda/models.py:34
+msgid "Duración (min)"
+msgstr "Duration (min)"
+
+#: apps/agenda/forms.py:34
+msgid "…o crea un tatuaje nuevo"
+msgstr "…or create a new tattoo"
+
+#: apps/agenda/forms.py:34
+msgid "Título del proyecto"
+msgstr "Project title"
+
+#: apps/agenda/forms.py:36
+msgid "Sé que es fuera de mi horario"
+msgstr "I know it's outside my hours"
+
+#: apps/agenda/forms.py:62 templates/clientes/_opciones_tatuaje.html:1
+msgid "— Sin tatuaje asociado —"
+msgstr "— No linked tattoo —"
+
+#: apps/agenda/forms.py:85
+msgid "Elige un cliente o escribe el nombre de uno nuevo."
+msgstr "Pick a client or type the name of a new one."
+
+#: apps/agenda/forms.py:102
+msgid ""
+"Está fuera de tu horario laboral. Marca la casilla si quieres guardarla "
+"igual."
+msgstr ""
+"It's outside your working hours. Tick the box if you want to save it anyway."
+
+#: apps/agenda/forms.py:106
+msgid "Ese tatuaje es de otro cliente."
+msgstr "That tattoo belongs to another client."
+
+#: apps/agenda/forms.py:125 apps/agenda/models.py:109
+#: apps/agenda/models.py:201
+msgid "Motivo"
+msgstr "Reason"
+
+#: apps/agenda/forms.py:127
+msgid "¿Quién cancela?"
+msgstr "Who is cancelling?"
+
+#: apps/agenda/forms.py:136
+msgid "Cobrado hoy"
+msgstr "Charged today"
+
+#: apps/agenda/forms.py:141
+msgid "Sin contar la seña ya registrada."
+msgstr "Not counting the deposit already recorded."
+
+#: apps/agenda/forms.py:143 apps/finanzas/models.py:36
+#: apps/finanzas/models.py:69 apps/finanzas/servicios.py:135
+#: templates/finanzas/resumen.html:61
+msgid "Método"
+msgstr "Method"
+
+#: apps/agenda/forms.py:145 apps/agenda/models.py:105
+#: templates/agenda/cita_detalle.html:96
+msgid "Notas de la sesión"
+msgstr "Session notes"
+
+#: apps/agenda/forms.py:148
+msgid "Tintas, agujas, cómo reaccionó la piel, qué falta…"
+msgstr "Inks, needles, how the skin reacted, what's left…"
+
+#: apps/agenda/forms.py:150
+msgid "El tatuaje queda terminado"
+msgstr "The tattoo is finished"
+
+#: apps/agenda/forms.py:171
+msgid "Desde el día"
+msgstr "From"
+
+#: apps/agenda/forms.py:173
+msgid "Hasta el día"
+msgstr "Until"
+
+#: apps/agenda/forms.py:191
+msgid "El final debe ser posterior al inicio."
+msgstr "The end must be after the start."
+
+#: apps/agenda/forms.py:197
+#, python-format
+msgid ""
+"Hay %(ocupadas)s cita(s) en ese periodo. Reprográmalas o pulsa «Bloquear "
+"igualmente»."
+msgstr ""
+"There are %(ocupadas)s appointment(s) in that period. Reschedule them or "
+"press “Block anyway”."
+
+#: apps/agenda/forms.py:225
+#, python-format
+msgid "%(nombre)s tramo %(n)s desde"
+msgstr "%(nombre)s slot %(n)s from"
+
+#: apps/agenda/forms.py:230
+#, python-format
+msgid "%(nombre)s tramo %(n)s hasta"
+msgstr "%(nombre)s slot %(n)s until"
+
+#: apps/agenda/forms.py:250
+#, python-format
+msgid "%(nombre)s: la hora final debe ser posterior."
+msgstr "%(nombre)s: the end time must be later."
+
+#: apps/agenda/forms.py:257
+#, python-format
+msgid "%(nombre)s: completa las dos horas del tramo %(n)s."
+msgstr "%(nombre)s: fill in both times for slot %(n)s."
+
+#: apps/agenda/forms.py:269 apps/agenda/models.py:224
+msgid "Días que le van bien"
+msgstr "Days that suit them"
+
+#: apps/agenda/forms.py:274
+msgid "Sin marcar = cualquier día."
+msgstr "None ticked = any day."
+
+#: apps/agenda/forms.py:290
+msgid "¿Qué días u horas te vendrían mejor?"
+msgstr "Which days or times would suit you best?"
+
+#: apps/agenda/forms.py:292
+msgid "Ej.: cualquier tarde de la semana que viene"
+msgstr "E.g.: any afternoon next week"
+
+#: apps/agenda/forms.py:297
+msgid "Motivo (opcional)"
+msgstr "Reason (optional)"
+
+#: apps/agenda/forms.py:309
+msgid "Imágenes de referencia"
+msgstr "Reference images"
+
+#: apps/agenda/forms.py:311
+msgid ""
+"Hasta 5 imágenes (JPG, PNG o WebP). Se eliminan los datos de ubicación."
+msgstr "Up to 5 images (JPG, PNG or WebP). Location data is removed."
+
+#: apps/agenda/forms.py:313
+msgid "He leído y acepto el aviso de privacidad"
+msgstr "I have read and accept the privacy notice"
+
+#: apps/agenda/forms.py:315
+msgid "Quiero recibir felicitaciones, flash disponibles y huecos libres"
+msgstr "I'd like to receive birthday wishes, available flash and open slots"
+
+#: apps/agenda/forms.py:319
+msgid "No rellenes este campo"
+msgstr "Don't fill in this field"
+
+#: apps/agenda/forms.py:353
+msgid "Qué quieres tatuarte, cómo lo imaginas, colores, significado…"
+msgstr "What you want tattooed, how you picture it, colors, meaning…"
+
+#: apps/agenda/forms.py:357
+msgid "Ej.: tardes entre semana, a partir de enero"
+msgstr "E.g.: weekday afternoons, from January on"
+
+#: apps/agenda/forms.py:366
+msgid "Cuéntame tu idea"
+msgstr "Tell me your idea"
+
+#: apps/agenda/forms.py:375
+msgid "El formulario caducó. Recarga la página."
+msgstr "The form expired. Reload the page."
+
+#: apps/agenda/forms.py:377
+msgid "Has ido demasiado rápido. Inténtalo otra vez."
+msgstr "You went too fast. Please try again."
+
+#: apps/agenda/forms.py:382
+msgid "Solicitud no válida."
+msgstr "Invalid request."
+
+#: apps/agenda/forms.py:396
+msgid "Revisa la fecha de nacimiento."
+msgstr "Check the date of birth."
+
+#: apps/agenda/forms.py:399
+#, python-format
+msgid ""
+"Para tatuarte en el estudio necesitas tener al menos %(edad_minima)s años."
+msgstr ""
+"You must be at least %(edad_minima)s years old to get tattooed at the "
+"studio."
+
+#: apps/agenda/forms.py:409
+msgid "Motivo (solo para ti)"
+msgstr "Reason (only for you)"
+
+#: apps/agenda/models.py:20
+msgid "Consulta"
+msgstr "Consultation"
+
+#: apps/agenda/models.py:21
+msgid "Sesión de tatuaje"
+msgstr "Tattoo session"
+
+#: apps/agenda/models.py:22 templates/mensajeria/cuidados.html:15
+msgid "Retoque"
+msgstr "Touch-up"
+
+#: apps/agenda/models.py:25
+msgid "Hueso"
+msgstr "Bone"
+
+#: apps/agenda/models.py:26
+msgid "Menta"
+msgstr "Mint"
+
+#: apps/agenda/models.py:27
+msgid "Cielo"
+msgstr "Sky"
+
+#: apps/agenda/models.py:28
+msgid "Lila"
+msgstr "Lilac"
+
+#: apps/agenda/models.py:29
+msgid "Arena"
+msgstr "Sand"
+
+#: apps/agenda/models.py:30
+msgid "Rosa"
+msgstr "Pink"
+
+#: apps/agenda/models.py:33 apps/finanzas/models.py:66
+msgid "Categoría"
+msgstr "Category"
+
+#: apps/agenda/models.py:35
+msgid "Color"
+msgstr "Color"
+
+#: apps/agenda/models.py:36
+msgid "Seña sugerida"
+msgstr "Suggested deposit"
+
+#: apps/agenda/models.py:37 apps/mensajeria/models.py:91
+msgid "Activo"
+msgstr "Active"
+
+#: apps/agenda/models.py:42
+msgid "tipo de cita"
+msgstr "appointment type"
+
+#: apps/agenda/models.py:43
+msgid "tipos de cita"
+msgstr "appointment types"
+
+#: apps/agenda/models.py:54 templates/agenda/_lista.html:6
+#: templates/agenda/_rejilla.html:21
+msgid "Por confirmar"
+msgstr "To be confirmed"
+
+#: apps/agenda/models.py:55
+msgid "Confirmada"
+msgstr "Confirmed"
+
+#: apps/agenda/models.py:56
+msgid "Realizada"
+msgstr "Done"
+
+#: apps/agenda/models.py:57 apps/mensajeria/models.py:202
+msgid "Cancelada"
+msgstr "Cancelled"
+
+#: apps/agenda/models.py:58 templates/agenda/_lista.html:10
+#: templates/agenda/cita_detalle.html:39 templates/clientes/ficha.html:37
+msgid "No vino"
+msgstr "No-show"
+
+#: apps/agenda/models.py:93
+msgid "El estudio"
+msgstr "The studio"
+
+#: apps/agenda/models.py:94
+msgid "El cliente"
+msgstr "The client"
+
+#: apps/agenda/models.py:99 templates/clientes/tatuaje.html:20
+msgid "Inicio"
+msgstr "Start"
+
+#: apps/agenda/models.py:100
+msgid "Fin"
+msgstr "End"
+
+#: apps/agenda/models.py:101 apps/catalogo/models.py:21
+#: apps/clientes/models.py:285 templates/agenda/_lista.html:3
+#: templates/clientes/tatuaje.html:17 templates/solicitudes/lista.html:38
+msgid "Estado"
+msgstr "Status"
+
+#: apps/agenda/models.py:102 templates/agenda/cita_detalle.html:106
+msgid "Qué se hace"
+msgstr "What's being done"
+
+#: apps/agenda/models.py:103 templates/agenda/cita_detalle.html:107
+msgid "Precio previsto"
+msgstr "Expected price"
+
+#: apps/agenda/models.py:104
+msgid "Notas de preparación"
+msgstr "Prep notes"
+
+#: apps/agenda/models.py:171
+msgid "Lunes"
+msgstr "Monday"
+
+#: apps/agenda/models.py:172
+msgid "Martes"
+msgstr "Tuesday"
+
+#: apps/agenda/models.py:173
+msgid "Miércoles"
+msgstr "Wednesday"
+
+#: apps/agenda/models.py:174
+msgid "Jueves"
+msgstr "Thursday"
+
+#: apps/agenda/models.py:175
+msgid "Viernes"
+msgstr "Friday"
+
+#: apps/agenda/models.py:176
+msgid "Sábado"
+msgstr "Saturday"
+
+#: apps/agenda/models.py:177
+msgid "Domingo"
+msgstr "Sunday"
+
+#: apps/agenda/models.py:195
+msgid "Día libre"
+msgstr "Day off"
+
+#: apps/agenda/models.py:196
+msgid "Vacaciones"
+msgstr "Vacation"
+
+#: apps/agenda/models.py:197 apps/clientes/models.py:71
+msgid "Convención / evento"
+msgstr "Convention / event"
+
+#: apps/agenda/models.py:198
+msgid "Bloqueo"
+msgstr "Block"
+
+#: apps/agenda/models.py:200 apps/clientes/forms.py:169
+#: apps/finanzas/servicios.py:135 templates/mensajeria/historial.html:18
+msgid "Tipo"
+msgstr "Type"
+
+#: apps/agenda/models.py:202 apps/finanzas/forms.py:33
+#: templates/finanzas/resumen.html:53
+msgid "Desde"
+msgstr "From"
+
+#: apps/agenda/models.py:203 apps/finanzas/forms.py:34
+#: templates/finanzas/resumen.html:54
+msgid "Hasta"
+msgstr "Until"
+
+#: apps/agenda/models.py:217
+msgid "Cualquier hora"
+msgstr "Any time"
+
+#: apps/agenda/models.py:218 templates/mensajeria/_acciones.html:32
+msgid "Mañana"
+msgstr "Morning"
+
+#: apps/agenda/models.py:219
+msgid "Tarde"
+msgstr "Afternoon"
+
+#: apps/agenda/models.py:222 apps/mensajeria/variables.py:25
+#: templates/agenda/tipo_formulario.html:2
+msgid "Tipo de cita"
+msgstr "Appointment type"
+
+#: apps/agenda/models.py:226
+msgid "Franja"
+msgstr "Time slot"
+
+#: apps/agenda/models.py:227 apps/clientes/models.py:291
+#: apps/finanzas/models.py:39 apps/finanzas/models.py:70
+#: templates/clientes/tatuaje.html:68
+msgid "Notas"
+msgstr "Notes"
+
+#: apps/agenda/models.py:228 templates/agenda/lista_espera.html:14
+msgid "Prioritaria"
+msgstr "Priority"
+
+#: apps/agenda/models.py:235
+msgid "entrada de lista de espera"
+msgstr "waiting list entry"
+
+#: apps/agenda/models.py:238
+#, python-format
+msgid "%(cliente)s (espera)"
+msgstr "%(cliente)s (waiting)"
+
+#: apps/agenda/models.py:242
+msgid "Cualquier día"
+msgstr "Any day"
+
+#: apps/agenda/models.py:251
+msgid "Nueva"
+msgstr "New"
+
+#: apps/agenda/models.py:252
+msgid "Aceptada · sin fecha"
+msgstr "Accepted · no date"
+
+#: apps/agenda/models.py:253 apps/agenda/views_solicitudes.py:30
+#: apps/clientes/views.py:30
+msgid "Con cita"
+msgstr "Booked"
+
+#: apps/agenda/models.py:254
+msgid "Rechazada"
+msgstr "Declined"
+
+#: apps/agenda/models.py:255 apps/agenda/views_solicitudes.py:161
+msgid "Spam"
+msgstr "Spam"
+
+#: apps/agenda/models.py:259 apps/clientes/models.py:75
+msgid "Apellidos"
+msgstr "Last name"
+
+#: apps/agenda/models.py:261 apps/clientes/models.py:79
+#: apps/cuentas/forms.py:7 apps/cuentas/forms.py:57 apps/cuentas/models.py:39
+#: apps/nucleo/models.py:18 templates/clientes/ficha.html:121
+#: templates/solicitudes/detalle.html:58
+msgid "Email"
+msgstr "Email"
+
+#: apps/agenda/models.py:262 apps/clientes/models.py:67
+#: apps/clientes/models.py:80 apps/nucleo/models.py:20
+msgid "Instagram"
+msgstr "Instagram"
+
+#: apps/agenda/models.py:263 apps/clientes/consentimiento.py:103
+#: apps/clientes/forms.py:186 apps/clientes/models.py:81
+msgid "Fecha de nacimiento"
+msgstr "Date of birth"
+
+#: apps/agenda/models.py:264
+msgid "Tu idea"
+msgstr "Your idea"
+
+#: apps/agenda/models.py:265
+msgid "Zona del cuerpo"
+msgstr "Body area"
+
+#: apps/agenda/models.py:266
+msgid "Tamaño aproximado"
+msgstr "Approximate size"
+
+#: apps/agenda/models.py:267 apps/clientes/models.py:282
+#: templates/solicitudes/_triaje.html:6 templates/solicitudes/detalle.html:37
+msgid "Estilo"
+msgstr "Style"
+
+#: apps/agenda/models.py:268 apps/clientes/models.py:284
+#: templates/solicitudes/detalle.html:36
+msgid "Medidas"
+msgstr "Measurements"
+
+#: apps/agenda/models.py:269
+msgid "Fechas que te vienen bien"
+msgstr "Dates that suit you"
+
+#: apps/agenda/models.py:270
+msgid "Presupuesto orientativo"
+msgstr "Rough budget"
+
+#: apps/agenda/models.py:271
+msgid "Es mi primer tatuaje"
+msgstr "It's my first tattoo"
+
+#: apps/agenda/models.py:279
+msgid "Hash de la IP (no se guarda la IP)."
+msgstr "IP hash (the IP itself is not stored)."
+
+#: apps/agenda/models.py:289
+msgid "solicitud de reserva"
+msgstr "booking request"
+
+#: apps/agenda/models.py:290
+msgid "solicitudes de reserva"
+msgstr "booking requests"
+
+#: apps/agenda/models.py:313
+#, python-format
+msgid "Imagen de %(solicitud)s"
+msgstr "Image of %(solicitud)s"
+
+#: apps/agenda/servicios.py:26
+#, python-format
+msgid "Se solapa con la cita de %(nombre)s (%(hora)s–%(hora2)s)."
+msgstr "Overlaps with %(nombre)s's appointment (%(hora)s–%(hora2)s)."
+
+#: apps/agenda/servicios.py:30
+#, python-format
+msgid "Ese hueco está bloqueado: %(b)s."
+msgstr "That slot is blocked: %(b)s."
+
+#: apps/agenda/servicios.py:85
+msgid "Estado desconocido"
+msgstr "Unknown status"
+
+#: apps/agenda/servicios.py:100
+msgid "Ese hueco ya está ocupado por otra cita."
+msgstr "That slot is already taken by another appointment."
+
+#: apps/agenda/solicitudes.py:55
+msgid "Casilla del formulario de reserva"
+msgstr "Booking form checkbox"
+
+#: apps/agenda/solicitudes.py:66
+#, python-format
+msgid "Proyecto de %(lower)s"
+msgstr "%(lower)s project"
+
+#: apps/agenda/solicitudes.py:103
+msgid "Solicitud"
+msgstr "Request"
+
+#: apps/agenda/solicitudes.py:114
+msgid "(eliminada)"
+msgstr "(deleted)"
+
+#: apps/agenda/views.py:49
+msgid "Semana"
+msgstr "Week"
+
+#: apps/agenda/views.py:50 apps/mensajeria/forms.py:57
+#: apps/mensajeria/models.py:120 templates/agenda/_mes.html:1
+msgid "Mes"
+msgstr "Month"
+
+#: apps/agenda/views.py:51
+msgid "Lista"
+msgstr "List"
+
+#: apps/agenda/views.py:232
+msgid "Ese hueco acaba de ocuparse con otra cita. Elige otra hora."
+msgstr "That slot was just taken by another appointment. Pick another time."
+
+#: apps/agenda/views.py:261
+#, python-format
+msgid "Cita guardada para %(nombre)s."
+msgstr "Appointment saved for %(nombre)s."
+
+#: apps/agenda/views.py:272
+msgid "Cita actualizada."
+msgstr "Appointment updated."
+
+#: apps/agenda/views.py:306
+#, python-format
+msgid "Cita marcada como «%(lower)s»."
+msgstr "Appointment marked as “%(lower)s”."
+
+#: apps/agenda/views.py:320
+msgid "Petición de cambio marcada como atendida."
+msgstr "Change request marked as handled."
+
+#: apps/agenda/views.py:364
+msgid "Sesión cerrada. Los cuidados posteriores se prepararán solos."
+msgstr "Session closed. Aftercare messages will be prepared automatically."
+
+#: apps/agenda/views.py:379
+msgid "Pago registrado."
+msgstr "Payment recorded."
+
+#: apps/agenda/views.py:381
+msgid "Revisa el importe y la fecha del pago."
+msgstr "Check the payment amount and date."
+
+#: apps/agenda/views.py:391
+msgid "Pago marcado como devuelto."
+msgstr "Payment marked as refunded."
+
+#: apps/agenda/views.py:391
+msgid "Devolución anulada."
+msgstr "Refund undone."
+
+#: apps/agenda/views.py:400
+msgid "Pago eliminado."
+msgstr "Payment deleted."
+
+#: apps/agenda/views.py:429
+msgid "Quitado de la lista de espera."
+msgstr "Removed from the waiting list."
+
+#: apps/agenda/views.py:433
+msgid "Lista de espera actualizada."
+msgstr "Waiting list updated."
+
+#: apps/agenda/views.py:447
+msgid "Horario guardado."
+msgstr "Hours saved."
+
+#: apps/agenda/views.py:466
+msgid "Tipo de cita guardado."
+msgstr "Appointment type saved."
+
+#: apps/agenda/views.py:478
+msgid "Bloqueo añadido a la agenda."
+msgstr "Block added to the calendar."
+
+#: apps/agenda/views.py:486
+msgid "Bloqueo eliminado."
+msgstr "Block removed."
+
+#: apps/agenda/views_solicitudes.py:28
+msgid "Nuevas"
+msgstr "New"
+
+#: apps/agenda/views_solicitudes.py:29
+msgid "Aceptadas sin fecha"
+msgstr "Accepted, no date"
+
+#: apps/agenda/views_solicitudes.py:31
+msgid "Rechazadas"
+msgstr "Declined"
+
+#: apps/agenda/views_solicitudes.py:73
+msgid ""
+"Enlace renovado. El anterior ya no funciona: actualízalo en tu Instagram."
+msgstr ""
+"Link renewed. The old one no longer works: update it on your Instagram."
+
+#: apps/agenda/views_solicitudes.py:76
+msgid "Enlace de reservas creado."
+msgstr "Booking link created."
+
+#: apps/agenda/views_solicitudes.py:81
+msgid "Reservas abiertas."
+msgstr "Bookings open."
+
+#: apps/agenda/views_solicitudes.py:81
+msgid "Reservas cerradas temporalmente."
+msgstr "Bookings temporarily closed."
+
+#: apps/agenda/views_solicitudes.py:136
+msgid "Solicitud aceptada"
+msgstr "Request accepted"
+
+#: apps/agenda/views_solicitudes.py:139
+msgid "Solicitud aceptada. Ficha y proyecto creados. Envíale la respuesta:"
+msgstr ""
+"Request accepted. Client record and project created. Send them the reply:"
+
+#: apps/agenda/views_solicitudes.py:141
+msgid "Solicitud aceptada. Ficha y proyecto creados."
+msgstr "Request accepted. Client record and project created."
+
+#: apps/agenda/views_solicitudes.py:163
+msgid "Marcada como spam y eliminada."
+msgstr "Marked as spam and deleted."
+
+#: apps/agenda/views_solicitudes.py:166
+msgid "Solicitud rechazada. Sus datos se borrarán solos en 30 días."
+msgstr ""
+"Request declined. Their data will be deleted automatically in 30 days."
+
+#: apps/agenda/views_solicitudes.py:218
+#, python-format
+msgid "Me interesa el flash «%(titulo)s»."
+msgstr "I'm interested in the flash “%(titulo)s”."
+
+#: apps/catalogo/forms.py:11
+msgid "Imagen"
+msgstr "Image"
+
+#: apps/catalogo/forms.py:13
+msgid "JPG, PNG o WebP. Se guarda sin datos de ubicación."
+msgstr "JPG, PNG or WebP. Saved without location data."
+
+#: apps/catalogo/forms.py:36
+msgid "Sube la imagen del diseño."
+msgstr "Upload the design image."
+
+#: apps/catalogo/models.py:10 templates/catalogo/_tarjeta.html:10
+msgid "Disponible"
+msgstr "Available"
+
+#: apps/catalogo/models.py:11 templates/catalogo/_tarjeta.html:11
+#: templates/publico/flash.html:16
+msgid "Reservado"
+msgstr "Reserved"
+
+#: apps/catalogo/models.py:12 templates/catalogo/_tarjeta.html:12
+msgid "Vendido"
+msgstr "Sold"
+
+#: apps/catalogo/models.py:14 apps/clientes/models.py:280
+msgid "Título"
+msgstr "Title"
+
+#: apps/catalogo/models.py:17
+msgid "Precio"
+msgstr "Price"
+
+#: apps/catalogo/models.py:18 apps/clientes/models.py:283
+#: templates/solicitudes/_triaje.html:8 templates/solicitudes/detalle.html:35
+msgid "Tamaño"
+msgstr "Size"
+
+#: apps/catalogo/models.py:18
+msgid "Ej.: 8 × 6 cm"
+msgstr "E.g.: 3 × 2 in"
+
+#: apps/catalogo/models.py:19
+msgid "Zona sugerida"
+msgstr "Suggested placement"
+
+#: apps/catalogo/models.py:20
+msgid "Descripción"
+msgstr "Description"
+
+#: apps/catalogo/models.py:22
+msgid "Se puede repetir"
+msgstr "Repeatable"
+
+#: apps/catalogo/models.py:22
+msgid "Si no, se tatúa una sola vez."
+msgstr "Otherwise it's tattooed only once."
+
+#: apps/catalogo/models.py:23
+msgid "Mostrar en el catálogo público"
+msgstr "Show in the public catalog"
+
+#: apps/catalogo/models.py:29
+msgid "diseño flash"
+msgstr "flash design"
+
+#: apps/catalogo/models.py:30
+msgid "diseños flash"
+msgstr "flash designs"
+
+#: apps/catalogo/views.py:59
+msgid "Diseño eliminado."
+msgstr "Design deleted."
+
+#: apps/catalogo/views.py:63
+msgid "Diseño guardado."
+msgstr "Design saved."
+
+#: apps/catalogo/views.py:89
+msgid "Catálogo publicado."
+msgstr "Catalog published."
+
+#: apps/catalogo/views.py:93
+msgid "Catálogo oculto."
+msgstr "Catalog hidden."
+
+#: apps/catalogo/views.py:97
+msgid "Enlace del catálogo renovado."
+msgstr "Catalog link renewed."
+
+#: apps/clientes/consentimiento.py:34 apps/clientes/models.py:197
+#: apps/clientes/models.py:219
+msgid "Alergias"
+msgstr "Allergies"
+
+#: apps/clientes/consentimiento.py:35
+msgid "Medicación"
+msgstr "Medication"
+
+#: apps/clientes/consentimiento.py:36 apps/clientes/models.py:221
+msgid "Anticoagulantes"
+msgstr "Blood thinners"
+
+#: apps/clientes/consentimiento.py:37 apps/clientes/models.py:200
+#: apps/clientes/models.py:223
+msgid "Diabetes"
+msgstr "Diabetes"
+
+#: apps/clientes/consentimiento.py:38 apps/clientes/models.py:201
+#: apps/clientes/models.py:225
+msgid "Epilepsia"
+msgstr "Epilepsy"
+
+#: apps/clientes/consentimiento.py:39 apps/clientes/models.py:202
+msgid "Problemas cardíacos"
+msgstr "Heart conditions"
+
+#: apps/clientes/consentimiento.py:40 apps/clientes/models.py:203
+msgid "Embarazo o lactancia"
+msgstr "Pregnancy or breastfeeding"
+
+#: apps/clientes/consentimiento.py:41 apps/clientes/models.py:205
+msgid "Condiciones de la piel"
+msgstr "Skin conditions"
+
+#: apps/clientes/consentimiento.py:42 apps/clientes/models.py:207
+msgid "Otras observaciones"
+msgstr "Other notes"
+
+#: apps/clientes/consentimiento.py:49
+msgid "Falta la firma."
+msgstr "The signature is missing."
+
+#: apps/clientes/consentimiento.py:53
+msgid "La firma no es válida."
+msgstr "The signature is not valid."
+
+#: apps/clientes/consentimiento.py:55
+msgid "La firma es demasiado grande."
+msgstr "The signature is too large."
+
+#: apps/clientes/consentimiento.py:61
+msgid ""
+"La firma está vacía o es demasiado pequeña. Firma con el dedo dentro del "
+"recuadro."
+msgstr ""
+"The signature is empty or too small. Sign with your finger inside the box."
+
+#: apps/clientes/consentimiento.py:80
+#, python-format
+msgid "Consentimiento · %(nombre)s"
+msgstr "Consent · %(nombre)s"
+
+#: apps/clientes/consentimiento.py:98
+msgid "Consentimiento informado para tatuaje"
+msgstr "Informed consent for tattooing"
+
+#: apps/clientes/consentimiento.py:102 apps/finanzas/servicios.py:135
+#: templates/agenda/cita_detalle.html:104
+#: templates/componentes/selector_cliente.html:4
+#: templates/finanzas/resumen.html:61
+msgid "Cliente"
+msgstr "Client"
+
+#: apps/clientes/consentimiento.py:105
+msgid "Fecha y hora de la firma"
+msgstr "Date and time of signature"
+
+#: apps/clientes/consentimiento.py:105
+msgid "%d/%m/%Y %H:%M %Z"
+msgstr "%m/%d/%Y %I:%M %p %Z"
+
+#: apps/clientes/consentimiento.py:106
+msgid "Versión del texto"
+msgstr "Text version"
+
+#: apps/clientes/consentimiento.py:109 templates/base.html:52
+msgid "Cita"
+msgstr "Appointment"
+
+#: apps/clientes/consentimiento.py:109
+msgid "%d/%m/%Y %H:%M"
+msgstr "%m/%d/%Y %I:%M %p"
+
+#: apps/clientes/consentimiento.py:121
+msgid "Declaración de salud"
+msgstr "Health declaration"
+
+#: apps/clientes/consentimiento.py:127
+msgid "Sí"
+msgstr "Yes"
+
+#: apps/clientes/consentimiento.py:127
+msgid "No"
+msgstr "No"
+
+#: apps/clientes/consentimiento.py:139
+msgid "Texto aceptado"
+msgstr "Accepted text"
+
+#: apps/clientes/consentimiento.py:143
+msgid "Autorizaciones"
+msgstr "Permissions"
+
+#: apps/clientes/consentimiento.py:145
+msgid "Fotos del tatuaje para el portfolio del estudio"
+msgstr "Photos of the tattoo for the studio portfolio"
+
+#: apps/clientes/consentimiento.py:146
+msgid "Recibir felicitaciones y novedades"
+msgstr "Receive birthday wishes and news"
+
+#: apps/clientes/consentimiento.py:149
+msgid "Firma"
+msgstr "Signature"
+
+#: apps/clientes/consentimiento.py:158
+#, python-format
+msgid "Firmado digitalmente en el estudio%(ip)s. Documento n.º %(num)s."
+msgstr "Digitally signed at the studio%(ip)s. Document no. %(num)s."
+
+#: apps/clientes/forms.py:15
+msgid "Nuevas etiquetas"
+msgstr "New tags"
+
+#: apps/clientes/forms.py:15
+msgid "Separadas por comas. Ej.: VIP, proyecto grande"
+msgstr "Comma-separated. E.g.: VIP, big project"
+
+#: apps/clientes/forms.py:17
+msgid "Acepta recibir felicitaciones y promociones"
+msgstr "Agrees to receive birthday wishes and promotions"
+
+#: apps/clientes/forms.py:19 templates/clientes/ficha.html:141
+msgid "¿Cómo lo aceptó?"
+msgstr "How did they agree?"
+
+#: apps/clientes/forms.py:65
+msgid "Indica cómo dio su consentimiento (queda registrado)."
+msgstr "State how they gave consent (it gets recorded)."
+
+#: apps/clientes/forms.py:67
+msgid "Añade al menos un dato de contacto."
+msgstr "Add at least one contact detail."
+
+#: apps/clientes/forms.py:82
+msgid "Desde la ficha"
+msgstr "From the client record"
+
+#: apps/clientes/forms.py:129
+msgid "Escribe o dicta una nota…"
+msgstr "Type or dictate a note…"
+
+#: apps/clientes/forms.py:163
+msgid "No puede ser anterior a la primera sesión."
+msgstr "It can't be earlier than the first session."
+
+#: apps/clientes/forms.py:168 templates/clientes/tatuaje.html:24
+msgid "Fotos"
+msgstr "Photos"
+
+#: apps/clientes/forms.py:168
+msgid "JPG, PNG o WebP. Se eliminan los datos de ubicación."
+msgstr "JPG, PNG or WebP. Location data is removed."
+
+#: apps/clientes/forms.py:170 apps/clientes/models.py:340
+#: apps/clientes/models.py:348
+msgid "Nota"
+msgstr "Note"
+
+#: apps/clientes/forms.py:185 apps/mensajeria/variables.py:20
+msgid "Nombre y apellidos"
+msgstr "Full name"
+
+#: apps/clientes/forms.py:188
+msgid "¿Alergias? (látex, pigmentos, medicamentos…)"
+msgstr "Allergies? (latex, pigments, medicines…)"
+
+#: apps/clientes/forms.py:193
+msgid "¿Tomas alguna medicación?"
+msgstr "Are you taking any medication?"
+
+#: apps/clientes/forms.py:196
+msgid "Tomo anticoagulantes o tengo problemas de coagulación"
+msgstr "I take blood thinners or have clotting problems"
+
+#: apps/clientes/forms.py:198
+msgid "Tengo diabetes"
+msgstr "I have diabetes"
+
+#: apps/clientes/forms.py:199
+msgid "Tengo epilepsia"
+msgstr "I have epilepsy"
+
+#: apps/clientes/forms.py:200
+msgid "Tengo problemas cardíacos"
+msgstr "I have heart conditions"
+
+#: apps/clientes/forms.py:201
+msgid "Estoy embarazada o en lactancia"
+msgstr "I'm pregnant or breastfeeding"
+
+#: apps/clientes/forms.py:203
+msgid "¿Alguna condición de la piel? (psoriasis, queloides…)"
+msgstr "Any skin condition? (psoriasis, keloids…)"
+
+#: apps/clientes/forms.py:208
+msgid "¿Algo más que deba saber?"
+msgstr "Anything else I should know?"
+
+#: apps/clientes/forms.py:210
+msgid "He leído el texto y doy mi consentimiento"
+msgstr "I have read the text and give my consent"
+
+#: apps/clientes/forms.py:211
+msgid "Declaro que la información de salud es verdadera y completa"
+msgstr "I declare the health information is true and complete"
+
+#: apps/clientes/forms.py:213
+msgid "Autorizo fotos de mi tatuaje para el portfolio del estudio"
+msgstr "I authorize photos of my tattoo for the studio portfolio"
+
+#: apps/clientes/forms.py:216
+msgid "Quiero recibir felicitaciones y novedades por mensaje"
+msgstr "I'd like to receive birthday wishes and news by message"
+
+#: apps/clientes/forms.py:218
+msgid "Falta tu firma."
+msgstr "Your signature is missing."
+
+#: apps/clientes/forms.py:244
+#, python-format
+msgid "Hace falta tener al menos %(edad_minima)s años."
+msgstr "You must be at least %(edad_minima)s years old."
+
+#: apps/clientes/models.py:26 templates/clientes/ficha.html:143
+msgid "Formulario de reserva"
+msgstr "Booking form"
+
+#: apps/clientes/models.py:27 templates/clientes/ficha.html:143
+msgid "En persona"
+msgstr "In person"
+
+#: apps/clientes/models.py:28 templates/clientes/ficha.html:143
+msgid "De palabra / llamada"
+msgstr "Verbally / phone call"
+
+#: apps/clientes/models.py:29 templates/clientes/ficha.html:143
+msgid "Por mensaje"
+msgstr "By message"
+
+#: apps/clientes/models.py:30
+msgid "Pidió la baja"
+msgstr "Opted out"
+
+#: apps/clientes/models.py:63 apps/mensajeria/models.py:49
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+#: apps/clientes/models.py:64 apps/mensajeria/canales.py:68
+#: apps/mensajeria/models.py:50 templates/mensajeria/historial.html:11
+msgid "SMS / RCS"
+msgstr "SMS / RCS"
+
+#: apps/clientes/models.py:68
+msgid "Recomendación"
+msgstr "Referral"
+
+#: apps/clientes/models.py:69
+msgid "Formulario web"
+msgstr "Web form"
+
+#: apps/clientes/models.py:70
+msgid "Pasó por el estudio"
+msgstr "Walk-in"
+
+#: apps/clientes/models.py:72 apps/clientes/models.py:270
+#: apps/finanzas/models.py:15 apps/finanzas/models.py:26
+msgid "Otro"
+msgstr "Other"
+
+#: apps/clientes/models.py:77
+msgid "Con prefijo si no es de EE. UU."
+msgstr "Include the country code if not from the US."
+
+#: apps/clientes/models.py:83
+msgid "Canal preferido"
+msgstr "Preferred channel"
+
+#: apps/clientes/models.py:86
+msgid "No contactar"
+msgstr "Do not contact"
+
+#: apps/clientes/models.py:86
+msgid "No se le preparará ningún mensaje, ni siquiera recordatorios."
+msgstr "No message will be prepared for them, not even reminders."
+
+#: apps/clientes/models.py:88
+msgid "Acepta mensajes promocionales"
+msgstr "Accepts promotional messages"
+
+#: apps/clientes/models.py:91
+msgid "Cómo llegó"
+msgstr "How they found you"
+
+#: apps/clientes/models.py:92 templates/clientes/ficha.html:174
+msgid "Notas privadas"
+msgstr "Private notes"
+
+#: apps/clientes/models.py:176
+msgid "Alta"
+msgstr "Opt-in"
+
+#: apps/clientes/models.py:177
+msgid "Baja"
+msgstr "Opt-out"
+
+#: apps/clientes/models.py:197
+msgid "Látex, pigmentos, antibióticos, cremas…"
+msgstr "Latex, pigments, antibiotics, creams…"
+
+#: apps/clientes/models.py:198
+msgid "Medicación actual"
+msgstr "Current medication"
+
+#: apps/clientes/models.py:199
+msgid "Toma anticoagulantes"
+msgstr "Takes blood thinners"
+
+#: apps/clientes/models.py:205
+msgid "Psoriasis, queloides, dermatitis…"
+msgstr "Psoriasis, keloids, dermatitis…"
+
+#: apps/clientes/models.py:211
+msgid "datos de salud"
+msgstr "health data"
+
+#: apps/clientes/models.py:214
+#, python-format
+msgid "Salud de %(cliente)s"
+msgstr "Health of %(cliente)s"
+
+#: apps/clientes/models.py:227
+msgid "Cardíaco"
+msgstr "Heart"
+
+#: apps/clientes/models.py:229
+msgid "Embarazo/lactancia"
+msgstr "Pregnancy/breastfeeding"
+
+#: apps/clientes/models.py:231
+msgid "Piel"
+msgstr "Skin"
+
+#: apps/clientes/models.py:237 templates/clientes/ficha.html:72
+msgid "En proceso"
+msgstr "In progress"
+
+#: apps/clientes/models.py:238 templates/clientes/tatuaje.html:20
+msgid "Terminado"
+msgstr "Finished"
+
+#: apps/clientes/models.py:241
+msgid "Brazo"
+msgstr "Arm"
+
+#: apps/clientes/models.py:242
+msgid "Antebrazo"
+msgstr "Forearm"
+
+#: apps/clientes/models.py:243
+msgid "Mano / dedos"
+msgstr "Hand / fingers"
+
+#: apps/clientes/models.py:244
+msgid "Hombro"
+msgstr "Shoulder"
+
+#: apps/clientes/models.py:245
+msgid "Espalda"
+msgstr "Back"
+
+#: apps/clientes/models.py:246
+msgid "Pecho"
+msgstr "Chest"
+
+#: apps/clientes/models.py:247
+msgid "Costillas"
+msgstr "Ribs"
+
+#: apps/clientes/models.py:248
+msgid "Abdomen"
+msgstr "Stomach"
+
+#: apps/clientes/models.py:249
+msgid "Cadera"
+msgstr "Hip"
+
+#: apps/clientes/models.py:250
+msgid "Muslo"
+msgstr "Thigh"
+
+#: apps/clientes/models.py:251
+msgid "Pierna / gemelo"
+msgstr "Leg / calf"
+
+#: apps/clientes/models.py:252
+msgid "Tobillo / pie"
+msgstr "Ankle / foot"
+
+#: apps/clientes/models.py:253
+msgid "Cuello / nuca"
+msgstr "Neck / nape"
+
+#: apps/clientes/models.py:254
+msgid "Cara / cabeza"
+msgstr "Face / head"
+
+#: apps/clientes/models.py:255
+msgid "Oreja"
+msgstr "Ear"
+
+#: apps/clientes/models.py:256
+msgid "Otra"
+msgstr "Other"
+
+#: apps/clientes/models.py:259
+msgid "Fine line"
+msgstr "Fine line"
+
+#: apps/clientes/models.py:260
+msgid "Blackwork"
+msgstr "Blackwork"
+
+#: apps/clientes/models.py:261
+msgid "Realismo"
+msgstr "Realism"
+
+#: apps/clientes/models.py:262
+msgid "Tradicional"
+msgstr "Traditional"
+
+#: apps/clientes/models.py:263
+msgid "Neotradicional"
+msgstr "Neo-traditional"
+
+#: apps/clientes/models.py:264
+msgid "Acuarela"
+msgstr "Watercolor"
+
+#: apps/clientes/models.py:265
+msgid "Geométrico"
+msgstr "Geometric"
+
+#: apps/clientes/models.py:266
+msgid "Lettering"
+msgstr "Lettering"
+
+#: apps/clientes/models.py:267
+msgid "Minimalista"
+msgstr "Minimalist"
+
+#: apps/clientes/models.py:268
+msgid "Japonés"
+msgstr "Japanese"
+
+#: apps/clientes/models.py:269
+msgid "Dotwork"
+msgstr "Dotwork"
+
+#: apps/clientes/models.py:273
+msgid "Mini (< 5 cm)"
+msgstr "Mini (< 2 in)"
+
+#: apps/clientes/models.py:274
+msgid "Pequeño (5-10 cm)"
+msgstr "Small (2-4 in)"
+
+#: apps/clientes/models.py:275
+msgid "Mediano (10-20 cm)"
+msgstr "Medium (4-8 in)"
+
+#: apps/clientes/models.py:276
+msgid "Grande (20-30 cm)"
+msgstr "Large (8-12 in)"
+
+#: apps/clientes/models.py:277
+msgid "Muy grande (> 30 cm)"
+msgstr "Extra large (> 12 in)"
+
+#: apps/clientes/models.py:281 templates/solicitudes/_triaje.html:7
+#: templates/solicitudes/detalle.html:34
+msgid "Zona"
+msgstr "Placement"
+
+#: apps/clientes/models.py:284
+msgid "Ej.: 12 × 8 cm"
+msgstr "E.g.: 5 × 3 in"
+
+#: apps/clientes/models.py:286
+msgid "Primera sesión"
+msgstr "First session"
+
+#: apps/clientes/models.py:287
+msgid "Terminado el"
+msgstr "Finished on"
+
+#: apps/clientes/models.py:288
+msgid "Sesiones previstas"
+msgstr "Planned sessions"
+
+#: apps/clientes/models.py:289 templates/clientes/tatuaje.html:19
+msgid "Precio acordado"
+msgstr "Agreed price"
+
+#: apps/clientes/models.py:290
+msgid "Retoque hecho"
+msgstr "Touch-up done"
+
+#: apps/clientes/models.py:320
+msgid "Referencia"
+msgstr "Reference"
+
+#: apps/clientes/models.py:321
+msgid "Recién hecho"
+msgstr "Fresh"
+
+#: apps/clientes/models.py:322
+msgid "Cicatrizado"
+msgstr "Healed"
+
+#: apps/clientes/models.py:341
+msgid "Dictado"
+msgstr "Dictated"
+
+#: apps/clientes/models.py:342
+msgid "Tras la sesión"
+msgstr "After the session"
+
+#: apps/clientes/models.py:369
+msgid "Salud y autorizaciones declaradas al firmar."
+msgstr "Health info and permissions declared when signing."
+
+#: apps/clientes/models.py:380
+msgid "consentimiento informado"
+msgstr "informed consent"
+
+#: apps/clientes/models.py:381
+msgid "consentimientos informados"
+msgstr "informed consents"
+
+#: apps/clientes/servicios.py:21
+msgid "Ese teléfono no parece válido."
+msgstr "That phone number doesn't look valid."
+
+#: apps/clientes/servicios.py:23
+msgid ""
+"Ese teléfono no parece válido. Si es extranjero, añade el prefijo (+34…)."
+msgstr ""
+"That phone number doesn't look valid. If it's international, add the country"
+" code (+34…)."
+
+#: apps/clientes/servicios.py:105
+#, python-format
+msgid "Tatuaje: %(titulo)s"
+msgstr "Tattoo: %(titulo)s"
+
+#: apps/clientes/servicios.py:118
+msgid " · devuelto"
+msgstr " · refunded"
+
+#: apps/clientes/servicios.py:127
+msgid "Acepta promociones"
+msgstr "Accepts promotions"
+
+#: apps/clientes/servicios.py:127
+msgid "Baja de promociones"
+msgstr "Opted out of promotions"
+
+#: apps/clientes/servicios.py:138
+#, python-format
+msgid "Mensaje enviado · %(get_tipo_display)s"
+msgstr "Message sent · %(get_tipo_display)s"
+
+#: apps/clientes/servicios.py:152
+msgid "Consentimiento firmado"
+msgstr "Consent signed"
+
+#: apps/clientes/servicios.py:153 templates/clientes/_consentimientos.html:8
+#, python-format
+msgid "Versión %(version_texto)s"
+msgstr "Version %(version_texto)s"
+
+#: apps/clientes/views.py:29 templates/catalogo/lista.html:31
+msgid "Todos"
+msgstr "All"
+
+#: apps/clientes/views.py:31 apps/mensajeria/segmentos.py:118
+msgid "VIP"
+msgstr "VIP"
+
+#: apps/clientes/views.py:32 apps/mensajeria/segmentos.py:119
+msgid "Nuevos del mes"
+msgstr "New this month"
+
+#: apps/clientes/views.py:33 apps/ia/busqueda.py:267
+msgid "Aceptan promociones"
+msgstr "Accept promotions"
+
+#: apps/clientes/views.py:92
+#, python-format
+msgid "%(nombre)s añadido."
+msgstr "%(nombre)s added."
+
+#: apps/clientes/views.py:103
+msgid "Ficha actualizada."
+msgstr "Client record updated."
+
+#: apps/clientes/views.py:113
+#, python-format
+msgid "Ojo: hay otras fichas con el mismo teléfono o email (%(nombres)s)."
+msgstr "Heads up: other records have the same phone or email (%(nombres)s)."
+
+#: apps/clientes/views.py:149
+msgid "Datos de salud guardados."
+msgstr "Health data saved."
+
+#: apps/clientes/views.py:161
+msgid "Consentimiento registrado."
+msgstr "Consent recorded."
+
+#: apps/clientes/views.py:165
+msgid "Baja registrada: no recibirá mensajes promocionales."
+msgstr "Opt-out recorded: they won't receive promotional messages."
+
+#: apps/clientes/views.py:187
+msgid "Nota guardada."
+msgstr "Note saved."
+
+#: apps/clientes/views.py:196
+msgid "Nota borrada."
+msgstr "Note deleted."
+
+#: apps/clientes/views.py:210
+msgid "Tatuaje añadido."
+msgstr "Tattoo added."
+
+#: apps/clientes/views.py:225
+msgid "Tatuaje eliminado."
+msgstr "Tattoo deleted."
+
+#: apps/clientes/views.py:229
+msgid "Tatuaje actualizado."
+msgstr "Tattoo updated."
+
+#: apps/clientes/views.py:261
+msgid "Fotos subidas."
+msgstr "Photos uploaded."
+
+#: apps/clientes/views.py:281
+msgid "Foto eliminada."
+msgstr "Photo deleted."
+
+#: apps/clientes/views.py:293
+msgid "Etiqueta eliminada."
+msgstr "Tag deleted."
+
+#: apps/clientes/views.py:297
+msgid "Etiqueta creada."
+msgstr "Tag created."
+
+#: apps/clientes/views.py:399 apps/clientes/views.py:422
+msgid "Escribe el nombre completo exactamente para confirmar."
+msgstr "Type the full name exactly to confirm."
+
+#: apps/clientes/views.py:405
+msgid ""
+"Datos personales eliminados. Se conservan importes y consentimientos en "
+"plazo legal."
+msgstr ""
+"Personal data deleted. Amounts and consents within the legal retention "
+"period are kept."
+
+#: apps/clientes/views.py:428
+msgid ""
+"Tiene consentimientos firmados que la normativa obliga a conservar. "
+"Anonimiza la ficha en su lugar."
+msgstr ""
+"They have signed consents the law requires you to keep. Anonymize the record"
+" instead."
+
+#: apps/clientes/views.py:434
+msgid "Cliente eliminado definitivamente."
+msgstr "Client permanently deleted."
+
+#: apps/cuentas/forms.py:12 apps/cuentas/forms.py:72
+#: apps/cuentas/models.py:116 templates/cuentas/cuenta.html:38
+msgid "Contraseña"
+msgstr "Password"
+
+#: apps/cuentas/forms.py:20
+msgid "Código de 6 dígitos"
+msgstr "6-digit code"
+
+#: apps/cuentas/forms.py:36
+msgid "Escribe los 6 dígitos que muestra tu app."
+msgstr "Type the 6 digits shown in your app."
+
+#: apps/cuentas/forms.py:42 templates/cuentas/verificar.html:6
+msgid "Código de recuperación"
+msgstr "Recovery code"
+
+#: apps/cuentas/forms.py:44
+msgid "Formato xxxxx-xxxxx. Cada código solo sirve una vez."
+msgstr "Format xxxxx-xxxxx. Each code works only once."
+
+#: apps/cuentas/forms.py:50 apps/cuentas/forms.py:63
+#: apps/mensajeria/variables.py:22
+msgid "Tu nombre"
+msgstr "Your name"
+
+#: apps/cuentas/forms.py:59
+msgid "Debe ser uno de los correos autorizados del estudio."
+msgstr "It must be one of the studio's authorized emails."
+
+#: apps/cuentas/forms.py:66
+msgid "Código de alta"
+msgstr "Sign-up code"
+
+#: apps/cuentas/forms.py:68
+msgid "Te lo da quien administra el despliegue (variable CODIGO_ALTA)."
+msgstr "Ask whoever manages the deployment for it (CODIGO_ALTA variable)."
+
+#: apps/cuentas/forms.py:74
+msgid "Mínimo 12 caracteres."
+msgstr "At least 12 characters."
+
+#: apps/cuentas/forms.py:78
+msgid "Repite la contraseña"
+msgstr "Repeat the password"
+
+#: apps/cuentas/forms.py:86
+msgid "Las contraseñas no coinciden."
+msgstr "The passwords don't match."
+
+#: apps/cuentas/models.py:15
+msgid "El email es obligatorio."
+msgstr "Email is required."
+
+#: apps/cuentas/models.py:36
+msgid "Propietaria"
+msgstr "Owner"
+
+#: apps/cuentas/models.py:37
+msgid "Ayudante"
+msgstr "Assistant"
+
+#: apps/cuentas/models.py:41
+msgid "Rol"
+msgstr "Role"
+
+#: apps/cuentas/models.py:42 apps/mensajeria/models.py:67
+#: apps/mensajeria/models.py:135 templates/cuentas/cuenta.html:23
+#: templates/mensajeria/fechas.html:21
+msgid "Activa"
+msgstr "Active"
+
+#: apps/cuentas/models.py:76
+msgid "códigos de recuperación"
+msgstr "recovery codes"
+
+#: apps/cuentas/models.py:117
+msgid "Segundo factor"
+msgstr "Second factor"
+
+#: apps/cuentas/views.py:38
+#, python-format
+msgid ""
+"Demasiados intentos. Por seguridad, espera %(minutos)s min antes de volver a"
+" probar."
+msgstr ""
+"Too many attempts. For security, wait %(minutos)s min before trying again."
+
+#: apps/cuentas/views.py:66
+msgid "Email o contraseña incorrectos."
+msgstr "Wrong email or password."
+
+#: apps/cuentas/views.py:101
+msgid "No se pudo crear la cuenta. Revisa el correo y el código de alta."
+msgstr ""
+"The account could not be created. Check the email and the sign-up code."
+
+#: apps/cuentas/views.py:128
+msgid "Tu sesión de acceso caducó. Vuelve a escribir tu contraseña."
+msgstr "Your sign-in session expired. Enter your password again."
+
+#: apps/cuentas/views.py:158
+#, python-format
+msgid ""
+"Has usado un código de recuperación. Te quedan %(restantes)s. Si perdiste el"
+" móvil, reconfigura la app autenticadora en Mi cuenta."
+msgstr ""
+"You used a recovery code. You have %(restantes)s left. If you lost your "
+"phone, set up the authenticator app again in My account."
+
+#: apps/cuentas/views.py:166
+msgid ""
+"Código incorrecto o caducado. Si fallas varias veces tendrás que esperar "
+"unos segundos."
+msgstr ""
+"Wrong or expired code. If you fail several times you'll have to wait a few "
+"seconds."
+
+#: apps/cuentas/views.py:179
+msgid "Confirma primero tu código actual."
+msgstr "Confirm your current code first."
+
+#: apps/cuentas/views.py:213
+msgid "Ese código no coincide. Comprueba que la hora del móvil es automática."
+msgstr ""
+"That code doesn't match. Check that your phone's clock is set automatically."
+
+#: apps/cuentas/views.py:234
+msgid "Listo. Guarda esos códigos en un lugar seguro."
+msgstr "Done. Keep those codes somewhere safe."
+
+#: apps/cuentas/views.py:243
+msgid "Has cerrado sesión."
+msgstr "You have signed out."
+
+#: apps/cuentas/views.py:264
+msgid "Nombre actualizado."
+msgstr "Name updated."
+
+#: apps/cuentas/views.py:272
+msgid "Contraseña cambiada."
+msgstr "Password changed."
+
+#: apps/cuentas/views.py:286 apps/nucleo/views.py:168
+msgid "Código incorrecto."
+msgstr "Wrong code."
+
+#: apps/finanzas/forms.py:39
+msgid "La fecha final es anterior a la inicial."
+msgstr "The end date is before the start date."
+
+#: apps/finanzas/models.py:8
+msgid "Efectivo"
+msgstr "Cash"
+
+#: apps/finanzas/models.py:9
+msgid "Tarjeta"
+msgstr "Card"
+
+#: apps/finanzas/models.py:10
+msgid "Zelle"
+msgstr "Zelle"
+
+#: apps/finanzas/models.py:11
+msgid "Venmo"
+msgstr "Venmo"
+
+#: apps/finanzas/models.py:12
+msgid "Cash App"
+msgstr "Cash App"
+
+#: apps/finanzas/models.py:13
+msgid "PayPal"
+msgstr "PayPal"
+
+#: apps/finanzas/models.py:14
+msgid "Transferencia"
+msgstr "Bank transfer"
+
+#: apps/finanzas/models.py:22
+msgid "Seña / depósito"
+msgstr "Deposit"
+
+#: apps/finanzas/models.py:23 apps/mensajeria/variables.py:130
+msgid "Sesión"
+msgstr "Session"
+
+#: apps/finanzas/models.py:24 apps/nucleo/navegacion.py:44
+#: templates/catalogo/formulario.html:4 templates/catalogo/lista.html:2
+#: templates/catalogo/lista.html:5 templates/publico/flash.html:7
+msgid "Flash"
+msgstr "Flash"
+
+#: apps/finanzas/models.py:25
+msgid "Producto (cremas…)"
+msgstr "Product (creams…)"
+
+#: apps/finanzas/models.py:35 apps/finanzas/models.py:67
+#: apps/finanzas/servicios.py:135 templates/finanzas/resumen.html:61
+msgid "Concepto"
+msgstr "Description"
+
+#: apps/finanzas/models.py:37 apps/finanzas/models.py:68
+#: apps/finanzas/servicios.py:135 templates/finanzas/resumen.html:61
+msgid "Importe"
+msgstr "Amount"
+
+#: apps/finanzas/models.py:38 apps/finanzas/models.py:65
+#: apps/finanzas/servicios.py:135 apps/mensajeria/models.py:126
+#: templates/finanzas/resumen.html:61 templates/mensajeria/fechas.html:13
+msgid "Fecha"
+msgstr "Date"
+
+#: apps/finanzas/models.py:40 apps/finanzas/servicios.py:135
+#: templates/agenda/cita_detalle.html:71 templates/agenda/cita_detalle.html:73
+#: templates/finanzas/resumen.html:66
+msgid "Devuelto"
+msgstr "Refunded"
+
+#: apps/finanzas/models.py:55
+msgid "Material (agujas, tintas, film…)"
+msgstr "Supplies (needles, inks, film…)"
+
+#: apps/finanzas/models.py:56
+msgid "Alquiler"
+msgstr "Rent"
+
+#: apps/finanzas/models.py:57
+msgid "Luz, agua, internet"
+msgstr "Utilities and internet"
+
+#: apps/finanzas/models.py:58
+msgid "Licencias y permisos"
+msgstr "Licenses and permits"
+
+#: apps/finanzas/models.py:59
+msgid "Equipo"
+msgstr "Equipment"
+
+#: apps/finanzas/models.py:60
+msgid "Marketing"
+msgstr "Marketing"
+
+#: apps/finanzas/models.py:61
+msgid "Formación"
+msgstr "Training"
+
+#: apps/finanzas/models.py:62
+msgid "Gestoría / impuestos"
+msgstr "Accountant / taxes"
+
+#: apps/finanzas/models.py:63
+msgid "Otros"
+msgstr "Other"
+
+#: apps/finanzas/servicios.py:96 templates/finanzas/resumen.html:12
+msgid "Ingreso"
+msgstr "Income"
+
+#: apps/finanzas/servicios.py:110 templates/finanzas/resumen.html:13
+msgid "Gasto"
+msgstr "Expense"
+
+#: apps/finanzas/servicios.py:146
+msgid "sí"
+msgstr "yes"
+
+#: apps/finanzas/views.py:39 apps/panel/servicios.py:88
+#: templates/finanzas/resumen.html:20
+msgid "Ingresos"
+msgstr "Income"
+
+#: apps/finanzas/views.py:40 templates/finanzas/resumen.html:23
+msgid "Gastos"
+msgstr "Expenses"
+
+#: apps/finanzas/views.py:72
+msgid "Gasto eliminado."
+msgstr "Expense deleted."
+
+#: apps/finanzas/views.py:76
+msgid "Gasto guardado."
+msgstr "Expense saved."
+
+#: apps/finanzas/views.py:88
+msgid "Ingreso eliminado."
+msgstr "Income deleted."
+
+#: apps/finanzas/views.py:92
+msgid "Ingreso guardado."
+msgstr "Income saved."
+
+#: apps/finanzas/views.py:104
+msgid "Revisa las fechas de la exportación."
+msgstr "Check the export dates."
+
+#: apps/ia/busqueda.py:249
+#, python-format
+msgid "Estilo: %(v)s"
+msgstr "Style: %(v)s"
+
+#: apps/ia/busqueda.py:251
+#, python-format
+msgid "Zona: %(v)s"
+msgstr "Placement: %(v)s"
+
+#: apps/ia/busqueda.py:253
+#, python-format
+msgid "Tamaño: %(v)s"
+msgstr "Size: %(v)s"
+
+#: apps/ia/busqueda.py:255
+msgid "Tatuaje en proceso"
+msgstr "Tattoo in progress"
+
+#: apps/ia/busqueda.py:255
+msgid "Tatuaje terminado"
+msgstr "Tattoo finished"
+
+#: apps/ia/busqueda.py:257
+#, python-format
+msgid "Etiqueta: %(v)s"
+msgstr "Tag: %(v)s"
+
+#: apps/ia/busqueda.py:259
+#, python-format
+msgid "Sin venir desde hace %(n)s+ meses"
+msgstr "Haven't come in for %(n)s+ months"
+
+#: apps/ia/busqueda.py:261
+#, python-format
+msgid "Vino en los últimos %(n)s meses"
+msgstr "Came in during the last %(n)s months"
+
+#: apps/ia/busqueda.py:263
+#, python-format
+msgid "Cumple en %(mes)s"
+msgstr "Birthday in %(mes)s"
+
+#: apps/ia/busqueda.py:265
+#, python-format
+msgid "Gasto ≥ %(n).0f"
+msgstr "Spent ≥ %(n).0f"
+
+#: apps/ia/busqueda.py:269
+#, python-format
+msgid "Texto: «%(t)s»"
+msgstr "Text: “%(t)s”"
+
+#: apps/ia/models.py:11
+msgid "Redactar mensaje"
+msgstr "Write message"
+
+#: apps/ia/models.py:12
+msgid "Triaje de solicitud"
+msgstr "Request triage"
+
+#: apps/ia/models.py:13
+msgid "Resumen previo a la cita"
+msgstr "Pre-appointment summary"
+
+#: apps/ia/models.py:14
+msgid "Sugerencias de retención"
+msgstr "Retention ideas"
+
+#: apps/ia/models.py:15
+msgid "Búsqueda en lenguaje natural"
+msgstr "Natural language search"
+
+#: apps/ia/models.py:16
+msgid "Respuesta sugerida"
+msgstr "Suggested reply"
+
+#: apps/ia/models.py:29
+msgid "uso de IA"
+msgstr "AI usage"
+
+#: apps/ia/models.py:30
+msgid "usos de IA"
+msgstr "AI usages"
+
+#: apps/ia/servicios.py:45
+msgid "El asistente de IA no está activado."
+msgstr "The AI assistant is not enabled."
+
+#: apps/ia/servicios.py:47
+msgid ""
+"Has llegado al límite mensual de consultas de IA. Puedes subirlo en Ajustes."
+msgstr ""
+"You've reached the monthly AI query limit. You can raise it in Settings."
+
+#: apps/ia/views.py:46
+#, python-format
+msgid "%(mensaje)s Uso la búsqueda básica."
+msgstr "%(mensaje)s Using basic search instead."
+
+#: apps/ia/views.py:67
+msgid "Elige primero a quién va el mensaje."
+msgstr "First choose who the message is for."
+
+#: apps/ia/views.py:71 apps/ia/views.py:94 apps/ia/views.py:114
+#: apps/ia/views.py:126 apps/ia/views.py:138 apps/ia/views.py:153
+msgid "Demasiadas peticiones seguidas."
+msgstr "Too many requests in a row."
+
+#: apps/ia/views.py:76
+msgid "mensaje personal"
+msgstr "personal message"
+
+#: apps/ia/views.py:131
+msgid "Resumen para la cita"
+msgstr "Appointment summary"
+
+#: apps/ia/views.py:151
+msgid "Pega primero el mensaje que has recibido."
+msgstr "First paste the message you received."
+
+#: apps/mensajeria/canales.py:44
+msgid "Este canal no envía automáticamente."
+msgstr "This channel doesn't send automatically."
+
+#: apps/mensajeria/canales.py:82 templates/agenda/_enlace.html:4
+#: templates/catalogo/lista.html:14 templates/cuentas/codigos.html:17
+#: templates/ia/_respuesta.html:5 templates/ia/_retencion.html:7
+#: templates/mensajeria/_acciones.html:18
+#: templates/solicitudes/detalle.html:72 templates/solicitudes/lista.html:16
+msgid "Copiar"
+msgstr "Copy"
+
+#: apps/mensajeria/forms.py:22
+#, python-format
+msgid "Variables que no existen: %(lista)s. Usa las de la lista."
+msgstr "These variables don't exist: %(lista)s. Use the ones in the list."
+
+#: apps/mensajeria/forms.py:55 apps/mensajeria/models.py:57
+#: apps/mensajeria/models.py:133
+msgid "Para"
+msgstr "To"
+
+#: apps/mensajeria/forms.py:117
+msgid "Necesario para esta regla."
+msgstr "Required for this rule."
+
+#: apps/mensajeria/forms.py:119
+msgid "Elige una plantilla o desmarca «Preparar mensajes»."
+msgstr "Pick a template or untick “Prepare messages”."
+
+#: apps/mensajeria/forms.py:124 apps/mensajeria/models.py:206
+msgid "Segmento"
+msgstr "Segment"
+
+#: apps/mensajeria/forms.py:130
+msgid "Así no parece un envío masivo y puedes responder a cada persona."
+msgstr ""
+"That way it doesn't look like a mass send and you can reply to each person."
+
+#: apps/mensajeria/forms.py:140
+msgid "Entre 1 y 50 al día."
+msgstr "Between 1 and 50 per day."
+
+#: apps/mensajeria/forms.py:147
+msgid "Partir de una plantilla"
+msgstr "Start from a template"
+
+#: apps/mensajeria/forms.py:151 templates/mensajeria/fechas.html:13
+msgid "Mensaje"
+msgstr "Message"
+
+#: apps/mensajeria/generadores.py:56
+#, python-format
+msgid "Cumple %(edad)s años hoy"
+msgstr "Turns %(edad)s today"
+
+#: apps/mensajeria/generadores.py:79
+#, python-format
+msgid "Cita %(relativo)s a las %(hora)s"
+msgstr "Appointment %(relativo)s at %(hora)s"
+
+#: apps/mensajeria/generadores.py:81
+msgid " · por confirmar"
+msgstr " · to be confirmed"
+
+#: apps/mensajeria/generadores.py:138
+#, python-format
+msgid "%(nombre)s tras la sesión del %(fecha_corta)s"
+msgstr "%(nombre)s after the session on %(fecha_corta)s"
+
+#: apps/mensajeria/generadores.py:174
+#, python-format
+msgid "Hoy hace %(n)d año de «%(titulo)s»"
+msgid_plural "Hoy hace %(n)d años de «%(titulo)s»"
+msgstr[0] "%(n)d year since “%(titulo)s” today"
+msgstr[1] "%(n)d years since “%(titulo)s” today"
+
+#: apps/mensajeria/generadores.py:208
+#, python-format
+msgid "Última visita %(relativo)s"
+msgstr "Last visit %(relativo)s"
+
+#: apps/mensajeria/models.py:11
+msgid "Recordatorio de cita"
+msgstr "Appointment reminder"
+
+#: apps/mensajeria/models.py:12 templates/mensajeria/cuidados.html:2
+#: templates/mensajeria/cuidados.html:4
+msgid "Cuidados posteriores"
+msgstr "Aftercare"
+
+#: apps/mensajeria/models.py:13
+msgid "Oferta de retoque"
+msgstr "Touch-up offer"
+
+#: apps/mensajeria/models.py:14
+msgid "Hueco libre"
+msgstr "Open slot"
+
+#: apps/mensajeria/models.py:15
+msgid "Respuesta a solicitud"
+msgstr "Booking reply"
+
+#: apps/mensajeria/models.py:16 templates/clientes/ficha.html:123
+msgid "Cumpleaños"
+msgstr "Birthday"
+
+#: apps/mensajeria/models.py:17
+msgid "Aniversario del tatuaje"
+msgstr "Tattoo anniversary"
+
+#: apps/mensajeria/models.py:18 templates/mensajeria/fecha_formulario.html:2
+msgid "Fecha destacada"
+msgstr "Special date"
+
+#: apps/mensajeria/models.py:19
+msgid "Campaña"
+msgstr "Campaign"
+
+#: apps/mensajeria/models.py:20
+msgid "Reactivación"
+msgstr "Win-back"
+
+#: apps/mensajeria/models.py:21
+msgid "Mensaje libre"
+msgstr "Free message"
+
+#: apps/mensajeria/models.py:51
+msgid "Copiado"
+msgstr "Copied"
+
+#: apps/mensajeria/models.py:52
+msgid "WhatsApp (API oficial)"
+msgstr "WhatsApp (official API)"
+
+#: apps/mensajeria/models.py:58 templates/mensajeria/campana.html:27
+#: templates/mensajeria/plantilla_formulario.html:14
+msgid "Texto"
+msgstr "Text"
+
+#: apps/mensajeria/models.py:60
+msgid "Es promocional"
+msgstr "Promotional"
+
+#: apps/mensajeria/models.py:62
+msgid "Solo se preparará para clientes que aceptaron recibir promociones."
+msgstr ""
+"It will only be prepared for clients who agreed to receive promotions."
+
+#: apps/mensajeria/models.py:65
+msgid "Usar por defecto"
+msgstr "Use by default"
+
+#: apps/mensajeria/models.py:65
+msgid "La que se usa automáticamente para esta categoría."
+msgstr "The one used automatically for this category."
+
+#: apps/mensajeria/models.py:83
+msgid "Ej.: Día 3"
+msgstr "E.g.: Day 3"
+
+#: apps/mensajeria/models.py:84
+msgid "Días tras la sesión"
+msgstr "Days after the session"
+
+#: apps/mensajeria/models.py:87
+msgid "Ofrece el retoque"
+msgstr "Offers the touch-up"
+
+#: apps/mensajeria/models.py:89
+msgid "No se envía si ya hubo retoque o quedan sesiones pendientes."
+msgstr ""
+"Not sent if a touch-up already happened or sessions are still pending."
+
+#: apps/mensajeria/models.py:95
+msgid "paso de cuidados"
+msgstr "aftercare step"
+
+#: apps/mensajeria/models.py:103
+msgid "Mismo día cada año"
+msgstr "Same day every year"
+
+#: apps/mensajeria/models.py:104
+msgid "N-ésimo día de la semana del mes"
+msgstr "Nth weekday of the month"
+
+#: apps/mensajeria/models.py:105
+msgid "Último día de la semana del mes"
+msgstr "Last weekday of the month"
+
+#: apps/mensajeria/models.py:106
+msgid "Cada viernes 13"
+msgstr "Every Friday the 13th"
+
+#: apps/mensajeria/models.py:107
+msgid "Una fecha concreta"
+msgstr "A specific date"
+
+#: apps/mensajeria/models.py:110
+msgid "lunes"
+msgstr "Monday"
+
+#: apps/mensajeria/models.py:111
+msgid "martes"
+msgstr "Tuesday"
+
+#: apps/mensajeria/models.py:112
+msgid "miércoles"
+msgstr "Wednesday"
+
+#: apps/mensajeria/models.py:113
+msgid "jueves"
+msgstr "Thursday"
+
+#: apps/mensajeria/models.py:114
+msgid "viernes"
+msgstr "Friday"
+
+#: apps/mensajeria/models.py:115
+msgid "sábado"
+msgstr "Saturday"
+
+#: apps/mensajeria/models.py:116
+msgid "domingo"
+msgstr "Sunday"
+
+#: apps/mensajeria/models.py:119
+msgid "Se repite"
+msgstr "Repeats"
+
+#: apps/mensajeria/models.py:122
+msgid "Semana del mes"
+msgstr "Week of the month"
+
+#: apps/mensajeria/models.py:122
+msgid "1 = primera"
+msgstr "1 = first"
+
+#: apps/mensajeria/models.py:124
+msgid "Día de la semana"
+msgstr "Weekday"
+
+#: apps/mensajeria/models.py:131
+msgid "Repartir en (días)"
+msgstr "Spread over (days)"
+
+#: apps/mensajeria/models.py:131
+msgid "Los mensajes se reparten en estos días, terminando ese día."
+msgstr "Messages are spread over these days, ending on that day."
+
+#: apps/mensajeria/models.py:134
+msgid "Preparar mensajes"
+msgstr "Prepare messages"
+
+#: apps/mensajeria/models.py:139
+msgid "fecha destacada"
+msgstr "special date"
+
+#: apps/mensajeria/models.py:140
+msgid "fechas destacadas"
+msgstr "special dates"
+
+#: apps/mensajeria/models.py:181
+msgid "1.er"
+msgstr "1st"
+
+#: apps/mensajeria/models.py:181
+msgid "2.º"
+msgstr "2nd"
+
+#: apps/mensajeria/models.py:181
+msgid "3.er"
+msgstr "3rd"
+
+#: apps/mensajeria/models.py:181
+msgid "4.º"
+msgstr "4th"
+
+#: apps/mensajeria/models.py:181
+msgid "5.º"
+msgstr "5th"
+
+#: apps/mensajeria/models.py:183
+#, python-format
+msgid "Cada %(dia)s de %(mes)s"
+msgstr "Every %(mes)s %(dia)s"
+
+#: apps/mensajeria/models.py:185
+#, python-format
+msgid "%(ordinal)s %(dia)s de %(mes)s"
+msgstr "%(ordinal)s %(dia)s of %(mes)s"
+
+#: apps/mensajeria/models.py:191
+#, python-format
+msgid "Último %(dia)s de %(mes)s"
+msgstr "Last %(dia)s of %(mes)s"
+
+#: apps/mensajeria/models.py:199
+msgid "Borrador"
+msgstr "Draft"
+
+#: apps/mensajeria/models.py:200
+msgid "En curso"
+msgstr "Running"
+
+#: apps/mensajeria/models.py:201
+msgid "Completada"
+msgstr "Completed"
+
+#: apps/mensajeria/models.py:207
+msgid "Empezar el"
+msgstr "Start on"
+
+#: apps/mensajeria/models.py:209
+msgid "Mensajes por día"
+msgstr "Messages per day"
+
+#: apps/mensajeria/models.py:251
+msgid "Pendiente"
+msgstr "Pending"
+
+#: apps/mensajeria/models.py:252
+msgid "Enviado"
+msgstr "Sent"
+
+#: apps/mensajeria/models.py:253
+msgid "Descartado"
+msgstr "Dismissed"
+
+#: apps/mensajeria/models.py:254
+msgid "Caducado"
+msgstr "Expired"
+
+#: apps/mensajeria/models.py:290
+msgid "mensaje preparado"
+msgstr "prepared message"
+
+#: apps/mensajeria/models.py:291
+msgid "mensajes preparados"
+msgstr "prepared messages"
+
+#: apps/mensajeria/segmentos.py:102
+msgid "Todos los que aceptan promociones"
+msgstr "Everyone who accepts promotions"
+
+#: apps/mensajeria/segmentos.py:103
+msgid "Toda tu base con consentimiento."
+msgstr "Your whole list with consent."
+
+#: apps/mensajeria/segmentos.py:108
+msgid "No vuelven hace tiempo"
+msgstr "Haven't been back in a while"
+
+#: apps/mensajeria/segmentos.py:109
+msgid "Sin visitas en los últimos meses y sin cita."
+msgstr "No visits in recent months and no appointment."
+
+#: apps/mensajeria/segmentos.py:114
+msgid "Proyectos a medias"
+msgstr "Unfinished projects"
+
+#: apps/mensajeria/segmentos.py:115
+msgid "Tatuaje en proceso y ninguna cita próxima."
+msgstr "Tattoo in progress and no upcoming appointment."
+
+#: apps/mensajeria/segmentos.py:118
+msgid "Etiqueta VIP o gasto acumulado alto."
+msgstr "VIP tag or high total spend."
+
+#: apps/mensajeria/segmentos.py:119
+msgid "Fichas creadas este mes."
+msgstr "Records created this month."
+
+#: apps/mensajeria/segmentos.py:122
+msgid "Cumplen años este mes"
+msgstr "Birthdays this month"
+
+#: apps/mensajeria/segmentos.py:123
+msgid "Para una promo de cumpleaños."
+msgstr "For a birthday promo."
+
+#: apps/mensajeria/servicios.py:21
+msgid "Ficha anonimizada."
+msgstr "Anonymized record."
+
+#: apps/mensajeria/servicios.py:23
+msgid "Pidió no ser contactado."
+msgstr "Asked not to be contacted."
+
+#: apps/mensajeria/servicios.py:25
+msgid "No ha aceptado mensajes promocionales."
+msgstr "Hasn't accepted promotional messages."
+
+#: apps/mensajeria/servicios.py:27
+msgid "No tiene ningún dato de contacto."
+msgstr "Has no contact details."
+
+#: apps/mensajeria/variables.py:19
+msgid "Nombre del cliente"
+msgstr "Client's first name"
+
+#: apps/mensajeria/variables.py:21 apps/nucleo/models.py:13
+msgid "Nombre del estudio"
+msgstr "Studio name"
+
+#: apps/mensajeria/variables.py:23
+msgid "Día de la cita (jueves 27 de noviembre)"
+msgstr "Appointment day (Thursday, November 27)"
+
+#: apps/mensajeria/variables.py:24
+msgid "Hora de la cita (3:30 pm)"
+msgstr "Appointment time (3:30 pm)"
+
+#: apps/mensajeria/variables.py:26
+msgid "Enlace para confirmar, cancelar o cambiar la cita"
+msgstr "Link to confirm, cancel or change the appointment"
+
+#: apps/mensajeria/variables.py:27
+msgid "Título del tatuaje"
+msgstr "Tattoo title"
+
+#: apps/mensajeria/variables.py:28
+msgid "Zona del tatuaje"
+msgstr "Tattoo placement"
+
+#: apps/mensajeria/variables.py:29
+msgid "Tiempo desde el tatuaje (1 año)"
+msgstr "Time since the tattoo (1 year)"
+
+#: apps/mensajeria/variables.py:30
+msgid "Días desde la sesión"
+msgstr "Days since the session"
+
+#: apps/mensajeria/variables.py:31
+msgid "Nombre de la fecha destacada"
+msgstr "Special date name"
+
+#: apps/mensajeria/variables.py:32
+msgid "Enlace a tu página de reservas"
+msgstr "Link to your booking page"
+
+#: apps/mensajeria/variables.py:33
+msgid "Tu Instagram (@usuario)"
+msgstr "Your Instagram (@user)"
+
+#: apps/mensajeria/variables.py:34
+msgid "Teléfono del estudio"
+msgstr "Studio phone"
+
+#: apps/mensajeria/variables.py:35
+msgid "Dirección del estudio"
+msgstr "Studio address"
+
+#: apps/mensajeria/variables.py:36
+msgid "Texto de cuidados generales"
+msgstr "General aftercare text"
+
+#: apps/mensajeria/variables.py:60 apps/mensajeria/variables.py:134
+#: apps/nucleo/templatetags/ui.py:152
+#, python-format
+msgid "%(n)d año"
+msgid_plural "%(n)d años"
+msgstr[0] "%(n)d year"
+msgstr[1] "%(n)d years"
+
+#: apps/mensajeria/variables.py:62 apps/nucleo/templatetags/ui.py:149
+#, python-format
+msgid "%(n)d mes"
+msgid_plural "%(n)d meses"
+msgstr[0] "%(n)d month"
+msgstr[1] "%(n)d months"
+
+#: apps/mensajeria/variables.py:128
+msgid "jueves 27 de noviembre"
+msgstr "Thursday, November 27"
+
+#: apps/mensajeria/variables.py:132
+msgid "Manga botánica"
+msgstr "Botanical sleeve"
+
+#: apps/mensajeria/variables.py:133
+msgid "antebrazo"
+msgstr "forearm"
+
+#: apps/mensajeria/variables.py:136
+msgid "Navidad"
+msgstr "Christmas"
+
+#: apps/mensajeria/variables.py:140
+msgid "Calle Ejemplo 123"
+msgstr "123 Example St"
+
+#: apps/mensajeria/views.py:84
+#, python-format
+msgid "Bandeja actualizada: %(nuevos)s mensaje nuevo."
+msgid_plural "Bandeja actualizada: %(nuevos)s mensajes nuevos."
+msgstr[0] "Inbox updated: %(nuevos)s new message."
+msgstr[1] "Inbox updated: %(nuevos)s new messages."
+
+#: apps/mensajeria/views.py:120 apps/mensajeria/views.py:124
+#, python-format
+msgid "No se puede enviar: %(exc)s"
+msgstr "Can't send: %(exc)s"
+
+#: apps/mensajeria/views.py:127
+msgid "Mensaje registrado como enviado."
+msgstr "Message recorded as sent."
+
+#: apps/mensajeria/views.py:129
+msgid "Guardado en el historial."
+msgstr "Saved to history."
+
+#: apps/mensajeria/views.py:147
+#, python-format
+msgid "Pospuesto hasta el %(fecha)s."
+msgstr "Snoozed until %(fecha)s."
+
+#: apps/mensajeria/views.py:147 templates/finanzas/resumen.html:65
+msgid "d/m"
+msgstr "m/d"
+
+#: apps/mensajeria/views.py:152
+msgid "Descartado a mano"
+msgstr "Dismissed manually"
+
+#: apps/mensajeria/views.py:153
+msgid "Mensaje descartado."
+msgstr "Message dismissed."
+
+#: apps/mensajeria/views.py:158
+#, python-format
+msgid "¡Hola %(nombre)s! Se ha liberado un hueco. ¿Te interesa?"
+msgstr "Hi %(nombre)s! A slot just opened up. Are you interested?"
+
+#: apps/mensajeria/views.py:180
+msgid "Mensaje escrito a mano"
+msgstr "Hand-written message"
+
+#: apps/mensajeria/views.py:220
+msgid "Hueco liberado por una cancelación"
+msgstr "Slot freed by a cancellation"
+
+#: apps/mensajeria/views.py:224
+msgid "No se puede contactar a esta persona."
+msgstr "This person can't be contacted."
+
+#: apps/mensajeria/views.py:289
+msgid "Plantilla eliminada."
+msgstr "Template deleted."
+
+#: apps/mensajeria/views.py:293
+msgid ""
+"Esta plantilla se usa en los cuidados o en una campaña. Desactívala en su "
+"lugar."
+msgstr ""
+"This template is used in aftercare or in a campaign. Deactivate it instead."
+
+#: apps/mensajeria/views.py:297
+msgid "Plantilla guardada."
+msgstr "Template saved."
+
+#: apps/mensajeria/views.py:335
+msgid "Paso eliminado."
+msgstr "Step deleted."
+
+#: apps/mensajeria/views.py:339
+msgid "Secuencia de cuidados actualizada."
+msgstr "Aftercare sequence updated."
+
+#: apps/mensajeria/views.py:367
+msgid "Fecha eliminada."
+msgstr "Date deleted."
+
+#: apps/mensajeria/views.py:371
+msgid "Fecha guardada."
+msgstr "Date saved."
+
+#: apps/mensajeria/views.py:397
+#, python-format
+msgid "Campaña lanzada: %(creados)s mensajes repartidos en %(dias)s día."
+msgid_plural ""
+"Campaña lanzada: %(creados)s mensajes repartidos en %(dias)s días."
+msgstr[0] "Campaign launched: %(creados)s messages spread over %(dias)s day."
+msgstr[1] "Campaign launched: %(creados)s messages spread over %(dias)s days."
+
+#: apps/mensajeria/views.py:430
+msgid "Campaña cancelada"
+msgstr "Campaign cancelled"
+
+#: apps/mensajeria/views.py:434
+#, python-format
+msgid "Campaña cancelada. %(n)s mensajes pendientes descartados."
+msgstr "Campaign cancelled. %(n)s pending messages dismissed."
+
+#: apps/mensajeria/views.py:439
+#, python-format
+msgid "%(n)s cliente nuevo añadido."
+msgid_plural "%(n)s clientes nuevos añadidos."
+msgstr[0] "%(n)s new client added."
+msgstr[1] "%(n)s new clients added."
+
+#: apps/nucleo/apps.py:8
+msgid "Núcleo"
+msgstr "Core"
+
+#: apps/nucleo/apps.py:14
+msgid "— Elige —"
+msgstr "— Choose —"
+
+#: apps/nucleo/decoradores.py:19
+msgid "Solo la propietaria del estudio puede hacer esto."
+msgstr "Only the studio owner can do this."
+
+#: apps/nucleo/forms.py:9
+msgid "Marca y contacto"
+msgstr "Brand and contact"
+
+#: apps/nucleo/forms.py:13
+msgid "Reservas y textos"
+msgstr "Bookings and texts"
+
+#: apps/nucleo/forms.py:23 apps/nucleo/models.py:115
+#: templates/agenda/_extras_detalle.html:9
+#: templates/clientes/_consentimientos.html:2
+msgid "Consentimiento"
+msgstr "Consent"
+
+#: apps/nucleo/forms.py:25
+msgid "Fidelización"
+msgstr "Loyalty"
+
+#: apps/nucleo/forms.py:28 apps/nucleo/navegacion.py:52
+msgid "Asistente IA"
+msgstr "AI assistant"
+
+#: apps/nucleo/forms.py:52
+msgid "En Florida no se puede tatuar a menores de 16 años en ningún caso."
+msgstr "In Florida, minors under 16 can never be tattooed."
+
+#: apps/nucleo/forms.py:68 apps/nucleo/models.py:16
+#: templates/nucleo/ajustes.html:23
+msgid "Logotipo"
+msgstr "Logo"
+
+#: apps/nucleo/forms.py:70
+msgid "PNG cuadrado, idealmente con fondo transparente."
+msgstr "Square PNG, ideally with a transparent background."
+
+#: apps/nucleo/forms.py:73
+msgid "Quitar el logotipo"
+msgstr "Remove the logo"
+
+#: apps/nucleo/forms.py:82
+msgid "Código de tu app autenticadora"
+msgstr "Code from your authenticator app"
+
+#: apps/nucleo/formularios.py:58
+#, python-format
+msgid "Como máximo %(maximo)s imágenes por envío."
+msgstr "At most %(maximo)s images per upload."
+
+#: apps/nucleo/imagenes.py:44
+#, python-format
+msgid "La imagen supera %(SUBIDAS_MAX_MB)s MB."
+msgstr "The image is larger than %(SUBIDAS_MAX_MB)s MB."
+
+#: apps/nucleo/imagenes.py:48 apps/nucleo/imagenes.py:58
+msgid "Solo se aceptan imágenes JPG, PNG o WebP."
+msgstr "Only JPG, PNG or WebP images are accepted."
+
+#: apps/nucleo/imagenes.py:56
+msgid "La imagen está dañada o no es válida."
+msgstr "The image is damaged or not valid."
+
+#: apps/nucleo/imagenes.py:60
+msgid "La imagen es demasiado grande."
+msgstr "The image is too large."
+
+#: apps/nucleo/imagenes.py:108
+msgid "Firma no válida."
+msgstr "Invalid signature."
+
+#: apps/nucleo/models.py:14
+msgid "Nombre de la artista"
+msgstr "Artist name"
+
+#: apps/nucleo/models.py:15
+msgid "Frase corta"
+msgstr "Short tagline"
+
+#: apps/nucleo/models.py:19
+msgid "Dirección"
+msgstr "Address"
+
+#: apps/nucleo/models.py:20
+msgid "Sin @"
+msgstr "Without @"
+
+#: apps/nucleo/models.py:21
+msgid "Web"
+msgstr "Website"
+
+#: apps/nucleo/models.py:24
+msgid "Edad mínima"
+msgstr "Minimum age"
+
+#: apps/nucleo/models.py:28
+msgid "Texto del consentimiento informado"
+msgstr "Informed consent text"
+
+#: apps/nucleo/models.py:31
+msgid "Aviso de privacidad"
+msgstr "Privacy notice"
+
+#: apps/nucleo/models.py:32
+msgid "Política de señas y cancelación"
+msgstr "Deposit and cancellation policy"
+
+#: apps/nucleo/models.py:33
+msgid "Cuidados generales"
+msgstr "General aftercare"
+
+#: apps/nucleo/models.py:35
+msgid "Años de conservación de consentimientos"
+msgstr "Years to keep consents"
+
+#: apps/nucleo/models.py:37
+msgid ""
+"Florida exige conservar los registros de clientes 2 años (FAC 64E-28.007)."
+msgstr "Florida requires keeping client records for 2 years (FAC 64E-28.007)."
+
+#: apps/nucleo/models.py:41
+msgid "Aceptar solicitudes de reserva"
+msgstr "Accept booking requests"
+
+#: apps/nucleo/models.py:42
+msgid "Texto de bienvenida"
+msgstr "Welcome text"
+
+#: apps/nucleo/models.py:43
+msgid "Publicar catálogo de flash"
+msgstr "Publish flash catalog"
+
+#: apps/nucleo/models.py:46
+msgid "Meses sin volver para considerar inactivo"
+msgstr "Months without returning to count as inactive"
+
+#: apps/nucleo/models.py:47
+msgid "Reactivaciones por día"
+msgstr "Win-backs per day"
+
+#: apps/nucleo/models.py:48
+msgid "Mensajes de campaña por día"
+msgstr "Campaign messages per day"
+
+#: apps/nucleo/models.py:49
+msgid "Gasto acumulado para VIP"
+msgstr "Total spend for VIP"
+
+#: apps/nucleo/models.py:50
+msgid "Recordar cita con (días)"
+msgstr "Remind appointment (days before)"
+
+#: apps/nucleo/models.py:53
+msgid "Usar asistente de IA"
+msgstr "Use AI assistant"
+
+#: apps/nucleo/models.py:54
+msgid "Tono de voz"
+msgstr "Tone of voice"
+
+#: apps/nucleo/models.py:56
+msgid "Ejemplos de mensajes tuyos"
+msgstr "Examples of your messages"
+
+#: apps/nucleo/models.py:58
+msgid ""
+"Pega 3-5 mensajes reales tuyos (sin datos de clientes) para imitar tu "
+"estilo."
+msgstr ""
+"Paste 3-5 real messages of yours (without client data) to imitate your "
+"style."
+
+#: apps/nucleo/models.py:61
+msgid "Límite mensual de consultas"
+msgstr "Monthly query limit"
+
+#: apps/nucleo/models.py:61
+msgid "Vacío = valor del servidor."
+msgstr "Empty = server value."
+
+#: apps/nucleo/models.py:67 apps/nucleo/models.py:68
+msgid "ajustes del estudio"
+msgstr "studio settings"
+
+#: apps/nucleo/models.py:101
+msgid "Inicio de sesión"
+msgstr "Sign-in"
+
+#: apps/nucleo/models.py:102
+msgid "Intento fallido"
+msgstr "Failed attempt"
+
+#: apps/nucleo/models.py:103
+msgid "Acceso bloqueado"
+msgstr "Access blocked"
+
+#: apps/nucleo/models.py:104
+msgid "Cierre de sesión"
+msgstr "Sign-out"
+
+#: apps/nucleo/models.py:105
+msgid "2FA activada"
+msgstr "2FA enabled"
+
+#: apps/nucleo/models.py:106
+msgid "Código 2FA incorrecto"
+msgstr "Wrong 2FA code"
+
+#: apps/nucleo/models.py:107
+msgid "Código de recuperación usado"
+msgstr "Recovery code used"
+
+#: apps/nucleo/models.py:108
+msgid "Códigos regenerados"
+msgstr "Codes regenerated"
+
+#: apps/nucleo/models.py:109
+msgid "Contraseña cambiada"
+msgstr "Password changed"
+
+#: apps/nucleo/models.py:110
+msgid "Exportación de datos"
+msgstr "Data export"
+
+#: apps/nucleo/models.py:111
+msgid "Borrado"
+msgstr "Deletion"
+
+#: apps/nucleo/models.py:112
+msgid "Anonimización"
+msgstr "Anonymization"
+
+#: apps/nucleo/models.py:113
+msgid "Acceso a documento sensible"
+msgstr "Access to sensitive document"
+
+#: apps/nucleo/models.py:114
+msgid "Cambio de ajustes"
+msgstr "Settings change"
+
+#: apps/nucleo/models.py:116
+msgid "Tarea programada"
+msgstr "Scheduled task"
+
+#: apps/nucleo/models.py:117
+msgid "Consulta de IA"
+msgstr "AI query"
+
+#: apps/nucleo/models.py:134
+msgid "registro de auditoría"
+msgstr "audit log"
+
+#: apps/nucleo/models.py:149
+msgid "Solicitud de reserva"
+msgstr "Booking request"
+
+#: apps/nucleo/models.py:150
+msgid "Catálogo de flash"
+msgstr "Flash catalog"
+
+#: apps/nucleo/models.py:151
+msgid "Gestión de cita"
+msgstr "Appointment management"
+
+#: apps/nucleo/navegacion.py:13 templates/agenda/calendario.html:35
+#: templates/mensajeria/_subnav.html:2 templates/panel/inicio.html:2
+msgid "Hoy"
+msgstr "Today"
+
+#: apps/nucleo/navegacion.py:21 templates/agenda/calendario.html:2
+#: templates/agenda/calendario.html:6 templates/agenda/cita_detalle.html:6
+#: templates/agenda/cita_formulario.html:6
+#: templates/agenda/configuracion.html:5 templates/agenda/lista_espera.html:5
+msgid "Agenda"
+msgstr "Calendar"
+
+#: apps/nucleo/navegacion.py:29 templates/clientes/formulario.html:30
+#: templates/mensajeria/campana.html:10 templates/mensajeria/enviar.html:7
+#: templates/mensajeria/nuevo.html:6
+msgid "Mensajes"
+msgstr "Messages"
+
+#: apps/nucleo/navegacion.py:36 templates/clientes/anonimizado.html:4
+#: templates/clientes/etiquetas.html:5 templates/clientes/ficha.html:5
+#: templates/clientes/formulario.html:6 templates/clientes/lista.html:2
+#: templates/clientes/lista.html:7 templates/clientes/salud.html:6
+#: templates/clientes/tatuaje.html:6
+msgid "Clientes"
+msgstr "Clients"
+
+#: apps/nucleo/navegacion.py:39 templates/solicitudes/detalle.html:7
+#: templates/solicitudes/lista.html:2 templates/solicitudes/lista.html:5
+msgid "Solicitudes"
+msgstr "Requests"
+
+#: apps/nucleo/navegacion.py:47 templates/finanzas/gasto_formulario.html:4
+#: templates/finanzas/pago_formulario.html:4 templates/finanzas/resumen.html:2
+#: templates/finanzas/resumen.html:6 templates/panel/inicio.html:87
+msgid "Finanzas"
+msgstr "Finances"
+
+#: apps/nucleo/navegacion.py:55 templates/nucleo/ajustes.html:2
+#: templates/nucleo/ajustes.html:5 templates/nucleo/auditoria.html:5
+msgid "Ajustes"
+msgstr "Settings"
+
+#: apps/nucleo/templatetags/ui.py:106
+msgid "D j M"
+msgstr "D, M j"
+
+#: apps/nucleo/templatetags/ui.py:118
+msgid "l j \\d\\e F"
+msgstr "l, F j"
+
+#: apps/nucleo/templatetags/ui.py:120
+#, python-format
+msgid " de %(anio)s"
+msgstr ", %(anio)s"
+
+#: apps/nucleo/templatetags/ui.py:127
+msgid "d/m/Y"
+msgstr "m/d/Y"
+
+#: apps/nucleo/templatetags/ui.py:139
+msgid "hoy"
+msgstr "today"
+
+#: apps/nucleo/templatetags/ui.py:141
+msgid "mañana"
+msgstr "tomorrow"
+
+#: apps/nucleo/templatetags/ui.py:143
+msgid "ayer"
+msgstr "yesterday"
+
+#: apps/nucleo/templatetags/ui.py:146
+#, python-format
+msgid "%(n)d día"
+msgid_plural "%(n)d días"
+msgstr[0] "%(n)d day"
+msgstr[1] "%(n)d days"
+
+#: apps/nucleo/templatetags/ui.py:153
+#, python-format
+msgid "en %(cantidad)s"
+msgstr "in %(cantidad)s"
+
+#: apps/nucleo/templatetags/ui.py:153
+#, python-format
+msgid "hace %(cantidad)s"
+msgstr "%(cantidad)s ago"
+
+#: apps/nucleo/views.py:107
+msgid "Logotipo actualizado."
+msgstr "Logo updated."
+
+#: apps/nucleo/views.py:115
+msgid ""
+"Nuevo texto de consentimiento: las próximas firmas usarán la nueva versión."
+msgstr "New consent text: upcoming signatures will use the new version."
+
+#: apps/nucleo/views.py:117
+msgid "Ajustes guardados."
+msgstr "Settings saved."
+
+#: apps/nucleo/views.py:147
+msgid ""
+"Código incorrecto. La exportación necesita tu código de la app "
+"autenticadora."
+msgstr "Wrong code. Exporting requires the code from your authenticator app."
+
+#: apps/nucleo/views.py:175
+#, python-format
+msgid "Copia creada: %(name)s"
+msgstr "Backup created: %(name)s"
+
+#: apps/nucleo/views.py:233
+msgid "Agenda, clientes y mensajes del estudio"
+msgstr "Studio calendar, clients and messages"
+
+#: apps/nucleo/views.py:251 templates/componentes/dialogos.html:23
+#: templates/mensajeria/bandeja.html:2 templates/mensajeria/bandeja.html:8
+#: templates/mensajeria/enviar.html:13
+msgid "Mensajes de hoy"
+msgstr "Today's messages"
+
+#: apps/nucleo/views.py:252 templates/agenda/_lista.html:33
+#: templates/agenda/cita_formulario.html:2
+#: templates/agenda/cita_formulario.html:7 templates/base.html:27
+#: templates/clientes/ficha.html:18 templates/componentes/dialogos.html:19
+msgid "Nueva cita"
+msgstr "New appointment"
+
+#: templates/agenda/_enlace.html:2 templates/agenda/cita_detalle.html:115
+msgid "Enlace para el cliente"
+msgstr "Client link"
+
+#: templates/agenda/_enlace.html:4 templates/catalogo/lista.html:14
+msgid "Enlace copiado."
+msgstr "Link copied."
+
+#: templates/agenda/_extras_detalle.html:3
+msgid "Antes de la cita"
+msgstr "Before the appointment"
+
+#: templates/agenda/_extras_detalle.html:4
+msgid "Ficha rápida de quién viene y qué recordar."
+msgstr "Quick brief on who's coming and what to remember."
+
+#: templates/agenda/_extras_detalle.html:5
+msgid "Preparar resumen"
+msgstr "Prepare summary"
+
+#: templates/agenda/_extras_detalle.html:12
+msgid "Firmado"
+msgstr "Signed"
+
+#: templates/agenda/_extras_detalle.html:13
+msgid "Ver PDF"
+msgstr "View PDF"
+
+#: templates/agenda/_extras_detalle.html:15
+msgid "Pásale la tablet para que lo firme antes de empezar."
+msgstr "Hand them the tablet to sign before you start."
+
+#: templates/agenda/_extras_detalle.html:16
+#: templates/clientes/consentimiento.html:56
+msgid "Firmar consentimiento"
+msgstr "Sign consent"
+
+#: templates/agenda/_lista.html:5
+msgid "Todas (sin canceladas)"
+msgstr "All (except cancelled)"
+
+#: templates/agenda/_lista.html:7
+msgid "Confirmadas"
+msgstr "Confirmed"
+
+#: templates/agenda/_lista.html:8
+msgid "Realizadas"
+msgstr "Done"
+
+#: templates/agenda/_lista.html:9
+msgid "Canceladas"
+msgstr "Cancelled"
+
+#: templates/agenda/_lista.html:33
+msgid "Nada en estos 30 días"
+msgstr "Nothing in these 30 days"
+
+#: templates/agenda/_lista.html:33
+msgid "Cuando reserves citas aparecerán aquí, agrupadas por día."
+msgstr "When you book appointments they'll show up here, grouped by day."
+
+#: templates/agenda/_mes.html:8
+#, python-format
+msgid "%(dia)s: %(total)s cita"
+msgid_plural "%(dia)s: %(total)s citas"
+msgstr[0] "%(dia)s: %(total)s appointment"
+msgstr[1] "%(dia)s: %(total)s appointments"
+
+#: templates/agenda/_mes.html:13
+#, python-format
+msgid "+%(mas)s más"
+msgstr "+%(mas)s more"
+
+#: templates/agenda/_ofrecer.html:2
+msgid "Ofrecer otra vez"
+msgstr "Offer again"
+
+#: templates/agenda/_ofrecer.html:2
+msgid "Ofrecer"
+msgstr "Offer"
+
+#: templates/agenda/_rejilla.html:10
+msgid "12 am"
+msgstr "12 am"
+
+#: templates/agenda/_rejilla.html:10
+#, python-format
+msgid "%(hora)s am"
+msgstr "%(hora)s am"
+
+#: templates/agenda/_rejilla.html:10
+msgid "12 pm"
+msgstr "12 pm"
+
+#: templates/agenda/_rejilla.html:10
+#, python-format
+msgid "%(hora)s pm"
+msgstr "%(hora)s pm"
+
+#: templates/agenda/_rejilla.html:21
+msgid "Pide cambio"
+msgstr "Change requested"
+
+#: templates/agenda/_rejilla.html:29
+msgid "Configura tu horario laboral para ver las horas."
+msgstr "Set up your working hours to see the time grid."
+
+#: templates/agenda/bloqueo_formulario.html:2
+msgid "Nuevo bloqueo"
+msgstr "New block"
+
+#: templates/agenda/bloqueo_formulario.html:5
+#: templates/agenda/calendario.html:16 templates/agenda/configuracion.html:5
+#: templates/agenda/tipo_formulario.html:5
+msgid "Horario y tipos"
+msgstr "Hours and types"
+
+#: templates/agenda/bloqueo_formulario.html:5
+msgid "Bloquear agenda"
+msgstr "Block calendar"
+
+#: templates/agenda/bloqueo_formulario.html:18
+msgid "Sin horas = días completos."
+msgstr "No times = full days."
+
+#: templates/agenda/bloqueo_formulario.html:20
+msgid "Bloquear"
+msgstr "Block"
+
+#: templates/agenda/bloqueo_formulario.html:21
+msgid "Bloquear igualmente"
+msgstr "Block anyway"
+
+#: templates/agenda/bloqueo_formulario.html:22
+#: templates/agenda/cita_formulario.html:50
+#: templates/agenda/espera_formulario.html:20
+#: templates/agenda/tipo_formulario.html:21
+#: templates/catalogo/formulario.html:22
+#: templates/clientes/_privacidad.html:25
+#: templates/clientes/_privacidad.html:34
+#: templates/clientes/formulario.html:50 templates/clientes/salud.html:30
+#: templates/clientes/tatuaje_formulario.html:28
+#: templates/componentes/dialogos.html:6
+#: templates/finanzas/gasto_formulario.html:17
+#: templates/finanzas/pago_formulario.html:20
+#: templates/mensajeria/campana_nueva.html:11
+#: templates/mensajeria/cuidados.html:29
+#: templates/mensajeria/fecha_formulario.html:25
+#: templates/mensajeria/nuevo.html:25
+#: templates/mensajeria/plantilla_formulario.html:30
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: templates/agenda/calendario.html:9
+msgid "j M"
+msgstr "M j"
+
+#: templates/agenda/calendario.html:9
+msgid "j M Y"
+msgstr "M j, Y"
+
+#: templates/agenda/calendario.html:11
+msgid "Próximos 30 días"
+msgstr "Next 30 days"
+
+#: templates/agenda/calendario.html:15
+#: templates/agenda/espera_formulario.html:2
+#: templates/agenda/espera_formulario.html:5
+#: templates/agenda/lista_espera.html:2 templates/agenda/lista_espera.html:5
+#: templates/clientes/ficha.html:164 templates/panel/inicio.html:69
+msgid "Lista de espera"
+msgstr "Waiting list"
+
+#: templates/agenda/calendario.html:22
+#, python-format
+msgid "%(n)s cita por confirmar."
+msgid_plural "%(n)s citas por confirmar."
+msgstr[0] "%(n)s appointment to confirm."
+msgstr[1] "%(n)s appointments to confirm."
+
+#: templates/agenda/calendario.html:22
+#, python-format
+msgid "%(n)s cliente pide cambiar la fecha."
+msgid_plural "%(n)s clientes piden cambiar la fecha."
+msgstr[0] "%(n)s client asked to change the date."
+msgstr[1] "%(n)s clients asked to change the date."
+
+#: templates/agenda/calendario.html:23 templates/agenda/cita_detalle.html:16
+#: templates/catalogo/lista.html:15 templates/solicitudes/lista.html:17
+msgid "Ver"
+msgstr "View"
+
+#: templates/agenda/calendario.html:30
+msgid "Vista"
+msgstr "View"
+
+#: templates/agenda/calendario.html:34 templates/clientes/lista.html:73
+#: templates/mensajeria/historial.html:45
+msgid "Anterior"
+msgstr "Previous"
+
+#: templates/agenda/calendario.html:36 templates/clientes/lista.html:75
+#: templates/mensajeria/historial.html:47 templates/panel/inicio.html:11
+msgid "Siguiente"
+msgstr "Next"
+
+#: templates/agenda/calendario.html:39
+msgid "Ir a una fecha"
+msgstr "Go to a date"
+
+#: templates/agenda/calendario.html:54 templates/agenda/configuracion.html:34
+msgid "Tipos de cita"
+msgstr "Appointment types"
+
+#: templates/agenda/calendario.html:56
+msgid "Bloqueado"
+msgstr "Blocked"
+
+#: templates/agenda/cerrar_sesion.html:2
+#, python-format
+msgid "Cerrar sesión de %(nombre)s"
+msgstr "Close session for %(nombre)s"
+
+#: templates/agenda/cerrar_sesion.html:6 templates/agenda/cita_detalle.html:6
+#: templates/agenda/cita_formulario.html:6 templates/clientes/ficha.html:5
+#: templates/clientes/formulario.html:6 templates/clientes/salud.html:6
+#: templates/clientes/tatuaje.html:6
+#: templates/clientes/tatuaje_formulario.html:6
+#: templates/mensajeria/enviar.html:7
+msgid "Migas"
+msgstr "Breadcrumbs"
+
+#: templates/agenda/cerrar_sesion.html:6
+#, python-format
+msgid "Cita de %(nombre)s"
+msgstr "Appointment for %(nombre)s"
+
+#: templates/agenda/cerrar_sesion.html:7
+msgid "¿Cómo fue la sesión?"
+msgstr "How did the session go?"
+
+#: templates/agenda/cerrar_sesion.html:18
+#, python-format
+msgid "Ya registrado: %(pagado)s"
+msgstr "Already recorded: %(pagado)s"
+
+#: templates/agenda/cerrar_sesion.html:18
+#, python-format
+msgid "de %(precio)s"
+msgstr "of %(precio)s"
+
+#: templates/agenda/cerrar_sesion.html:20
+#: templates/agenda/cita_formulario.html:38
+#: templates/componentes/campo.html:10 templates/ia/asistente.html:42
+#: templates/ia/asistente.html:44 templates/mensajeria/_ia_redactar.html:6
+#: templates/mensajeria/nuevo.html:14
+msgid "(opcional)"
+msgstr "(optional)"
+
+#: templates/agenda/cerrar_sesion.html:23
+msgid "Dictar notas"
+msgstr "Dictate notes"
+
+#: templates/agenda/cerrar_sesion.html:26
+msgid ""
+"Al guardar, los mensajes de cuidados posteriores se prepararán "
+"automáticamente en su día."
+msgstr ""
+"When you save, aftercare messages will be prepared automatically on their "
+"day."
+
+#: templates/agenda/cerrar_sesion.html:28
+msgid "Marcar como realizada"
+msgstr "Mark as done"
+
+#: templates/agenda/cerrar_sesion.html:29
+#: templates/agenda/cita_detalle.html:134 templates/cuentas/verificar.html:28
+#: templates/errores/413.html:8 templates/errores/429.html:8
+#: templates/solicitudes/detalle.html:91
+msgid "Volver"
+msgstr "Back"
+
+#: templates/agenda/cita_detalle.html:2
+#, python-format
+msgid "Cita · %(nombre)s"
+msgstr "Appointment · %(nombre)s"
+
+#: templates/agenda/cita_detalle.html:15
+#, python-format
+msgid "Cliente menor de %(edad_minima)s años."
+msgstr "Client under %(edad_minima)s."
+
+#: templates/agenda/cita_detalle.html:16
+#, python-format
+msgid "Antes de empezar revisa su salud: %(alertas)s."
+msgstr "Check their health before you start: %(alertas)s."
+
+#: templates/agenda/cita_detalle.html:19
+#, python-format
+msgid ""
+"Pide cambiar la fecha (%(reprogramacion_pedida_en)s): "
+"«%(reprogramacion_pedida)s»"
+msgstr ""
+"Asked to change the date (%(reprogramacion_pedida_en)s): "
+"“%(reprogramacion_pedida)s”"
+
+#: templates/agenda/cita_detalle.html:20
+msgid "Marcar como atendido"
+msgstr "Mark as handled"
+
+#: templates/agenda/cita_detalle.html:25
+#, python-format
+msgid "Cancelada por %(get_cancelada_por_display)s %(cancelada_en)s"
+msgstr "Cancelled by %(get_cancelada_por_display)s %(cancelada_en)s"
+
+#: templates/agenda/cita_detalle.html:32
+msgid "Acciones"
+msgstr "Actions"
+
+#: templates/agenda/cita_detalle.html:36
+msgid "Confirmar"
+msgstr "Confirm"
+
+#: templates/agenda/cita_detalle.html:38
+msgid "Marcar realizada"
+msgstr "Mark done"
+
+#: templates/agenda/cita_detalle.html:39
+msgid "¿Marcar que no vino? Contará en su historial."
+msgstr "Mark as no-show? It will count in their history."
+
+#: templates/agenda/cita_detalle.html:40
+#: templates/agenda/cita_detalle.html:131
+#: templates/agenda/cita_detalle.html:135
+msgid "Cancelar cita"
+msgstr "Cancel appointment"
+
+#: templates/agenda/cita_detalle.html:41
+msgid "Editar / mover"
+msgstr "Edit / move"
+
+#: templates/agenda/cita_detalle.html:43
+msgid "La cita volverá a estar confirmada (si el hueco sigue libre)."
+msgstr "The appointment will be confirmed again (if the slot is still free)."
+
+#: templates/agenda/cita_detalle.html:43
+msgid "Reactivar"
+msgstr "Reactivate"
+
+#: templates/agenda/cita_detalle.html:44 templates/clientes/ficha.html:20
+#: templates/clientes/ficha.html:152 templates/clientes/tatuaje.html:12
+msgid "Editar"
+msgstr "Edit"
+
+#: templates/agenda/cita_detalle.html:51
+msgid "¿A quién ofrecer el hueco?"
+msgstr "Who should get the slot?"
+
+#: templates/agenda/cita_detalle.html:52
+msgid "De tu lista de espera, encajan por día, franja y duración:"
+msgstr "From your waiting list, these match by day, time slot and duration:"
+
+#: templates/agenda/cita_detalle.html:57
+msgid "· prioritaria"
+msgstr "· priority"
+
+#: templates/agenda/cita_detalle.html:66
+msgid "Señas y pagos"
+msgstr "Deposits and payments"
+
+#: templates/agenda/cita_detalle.html:73
+msgid "Marcar devuelto"
+msgstr "Mark refunded"
+
+#: templates/agenda/cita_detalle.html:73
+msgid "Anular devolución"
+msgstr "Undo refund"
+
+#: templates/agenda/cita_detalle.html:74
+msgid "Borrar pago"
+msgstr "Delete payment"
+
+#: templates/agenda/cita_detalle.html:74
+msgid "¿Borrar este pago?"
+msgstr "Delete this payment?"
+
+#: templates/agenda/cita_detalle.html:79
+msgid "Sin señas ni pagos."
+msgstr "No deposits or payments."
+
+#: templates/agenda/cita_detalle.html:79
+#, python-format
+msgid "Seña sugerida: %(deposito_sugerido)s."
+msgstr "Suggested deposit: %(deposito_sugerido)s."
+
+#: templates/agenda/cita_detalle.html:82
+msgid "Registrar seña o pago"
+msgstr "Record deposit or payment"
+
+#: templates/agenda/cita_detalle.html:90
+msgid "Guardar pago"
+msgstr "Save payment"
+
+#: templates/agenda/cita_detalle.html:102
+msgid "Detalles"
+msgstr "Details"
+
+#: templates/agenda/cita_detalle.html:105
+#: templates/agenda/cita_formulario.html:38
+msgid "Tatuaje"
+msgstr "Tattoo"
+
+#: templates/agenda/cita_detalle.html:108
+msgid "Confirmó"
+msgstr "Confirmed"
+
+#: templates/agenda/cita_detalle.html:116
+msgid ""
+"Podrá confirmar, cancelar o pedir otra fecha sin crear cuenta. El enlace "
+"caduca tras la cita."
+msgstr ""
+"They'll be able to confirm, cancel or ask for another date without creating "
+"an account. The link expires after the appointment."
+
+#: templates/agenda/cita_detalle.html:118
+msgid "Generar enlace"
+msgstr "Generate link"
+
+#: templates/agenda/cita_formulario.html:2
+#: templates/agenda/cita_formulario.html:7
+msgid "Editar cita"
+msgstr "Edit appointment"
+
+#: templates/agenda/cita_formulario.html:16 templates/nucleo/auditoria.html:16
+msgid "Quién"
+msgstr "Who"
+
+#: templates/agenda/cita_formulario.html:21
+msgid "Cuándo y qué"
+msgstr "When and what"
+
+#: templates/agenda/cita_formulario.html:35
+msgid "Proyecto"
+msgstr "Project"
+
+#: templates/agenda/cita_formulario.html:49
+msgid "Guardar cita"
+msgstr "Save appointment"
+
+#: templates/agenda/configuracion.html:2 templates/nucleo/ajustes.html:63
+msgid "Horario y tipos de cita"
+msgstr "Hours and appointment types"
+
+#: templates/agenda/configuracion.html:10
+msgid "Horario laboral"
+msgstr "Working hours"
+
+#: templates/agenda/configuracion.html:11
+msgid "Hasta dos tramos por día. Deja vacíos los días que no trabajas."
+msgstr "Up to two time slots per day. Leave the days you don't work empty."
+
+#: templates/agenda/configuracion.html:16
+msgid "Tramo 1"
+msgstr "Slot 1"
+
+#: templates/agenda/configuracion.html:16
+msgid "Tramo 2"
+msgstr "Slot 2"
+
+#: templates/agenda/configuracion.html:28
+msgid "Guardar horario"
+msgstr "Save hours"
+
+#: templates/agenda/configuracion.html:34
+#: templates/agenda/configuracion.html:46
+msgid "Nuevo"
+msgstr "New"
+
+#: templates/agenda/configuracion.html:39
+msgid "Inactivo"
+msgstr "Inactive"
+
+#: templates/agenda/configuracion.html:39
+#, python-format
+msgid "· seña %(deposito_sugerido)s"
+msgstr "· deposit %(deposito_sugerido)s"
+
+#: templates/agenda/configuracion.html:41
+msgid "Crea al menos un tipo de cita."
+msgstr "Create at least one appointment type."
+
+#: templates/agenda/configuracion.html:46
+msgid "Días libres y bloqueos"
+msgstr "Days off and blocks"
+
+#: templates/agenda/configuracion.html:51
+msgid "Eliminar bloqueo"
+msgstr "Remove block"
+
+#: templates/agenda/configuracion.html:51
+msgid "¿Eliminar este bloqueo?"
+msgstr "Remove this block?"
+
+#: templates/agenda/configuracion.html:53
+msgid "Sin bloqueos próximos."
+msgstr "No upcoming blocks."
+
+#: templates/agenda/espera_formulario.html:5
+msgid "Editar entrada"
+msgstr "Edit entry"
+
+#: templates/agenda/espera_formulario.html:5 templates/clientes/ficha.html:168
+msgid "Añadir a la lista"
+msgstr "Add to the list"
+
+#: templates/agenda/espera_formulario.html:19
+#: templates/agenda/tipo_formulario.html:20
+#: templates/catalogo/formulario.html:21 templates/clientes/formulario.html:49
+#: templates/clientes/salud.html:29
+#: templates/clientes/tatuaje_formulario.html:27
+#: templates/cuentas/cuenta.html:18
+#: templates/finanzas/gasto_formulario.html:16
+#: templates/finanzas/pago_formulario.html:19
+#: templates/mensajeria/cuidados.html:28
+#: templates/mensajeria/fecha_formulario.html:24
+#: templates/mensajeria/plantilla_formulario.html:29
+#: templates/nucleo/ajustes.html:19 templates/nucleo/ajustes.html:77
+msgid "Guardar"
+msgstr "Save"
+
+#: templates/agenda/espera_formulario.html:21
+msgid "Quitar de la lista"
+msgstr "Remove from the list"
+
+#: templates/agenda/lista_espera.html:6 templates/clientes/ficha.html:61
+msgid "Añadir"
+msgstr "Add"
+
+#: templates/agenda/lista_espera.html:8
+msgid ""
+"Cuando se cancele una cita, te sugeriremos a quién ofrecer el hueco según "
+"sus días, franja y tipo de cita."
+msgstr ""
+"When an appointment is cancelled, we'll suggest who to offer the slot to "
+"based on their days, time slot and appointment type."
+
+#: templates/agenda/lista_espera.html:15
+#, python-format
+msgid "Desde %(creado_en)s"
+msgstr "Since %(creado_en)s"
+
+#: templates/agenda/lista_espera.html:21
+msgid "Lista de espera vacía"
+msgstr "Waiting list is empty"
+
+#: templates/agenda/lista_espera.html:21
+msgid "Apunta aquí a quien quiere cita antes de lo que tienes libre."
+msgstr ""
+"Add people here who want an appointment sooner than your next opening."
+
+#: templates/agenda/lista_espera.html:21
+msgid "Añadir a alguien"
+msgstr "Add someone"
+
+#: templates/agenda/tipo_formulario.html:5
+msgid "Nuevo tipo de cita"
+msgstr "New appointment type"
+
+#: templates/agenda/tipo_formulario.html:18
+msgid ""
+"Las sesiones y retoques activan los cuidados posteriores automáticos; las "
+"consultas no."
+msgstr ""
+"Sessions and touch-ups trigger automatic aftercare; consultations don't."
+
+#: templates/base.html:21 templates/base_publica.html:17
+msgid "Saltar al contenido"
+msgstr "Skip to content"
+
+#: templates/base.html:24
+msgid "Navegación principal"
+msgstr "Main navigation"
+
+#: templates/base.html:29
+msgid "Secciones"
+msgstr "Sections"
+
+#: templates/base.html:33
+#, python-format
+msgid "%(cuenta)s pendientes"
+msgstr "%(cuenta)s pending"
+
+#: templates/base.html:39 templates/base.html:84
+#: templates/cuentas/configurar_2fa.html:6 templates/cuentas/cuenta.html:2
+#: templates/cuentas/cuenta.html:7
+msgid "Mi cuenta"
+msgstr "My account"
+
+#: templates/base.html:41 templates/base.html:87
+msgid "Salir"
+msgstr "Sign out"
+
+#: templates/base.html:44
+msgid "Atajos"
+msgstr "Shortcuts"
+
+#: templates/base.html:62
+msgid "Navegación"
+msgstr "Navigation"
+
+#: templates/base.html:69 templates/base.html:75
+msgid "Más"
+msgstr "More"
+
+#: templates/base.html:72
+msgid "Más secciones"
+msgstr "More sections"
+
+#: templates/base.html:76 templates/componentes/dialogos.html:27
+msgid "Cerrar"
+msgstr "Close"
+
+#: templates/base.html:96 templates/base_publica.html:27
+msgid "Cerrar aviso"
+msgstr "Close notice"
+
+#: templates/catalogo/_tarjeta.html:8
+msgid "· repetible"
+msgstr "· repeatable"
+
+#: templates/catalogo/_tarjeta.html:8
+msgid "· privado"
+msgstr "· private"
+
+#: templates/catalogo/_tarjeta.html:8
+#, python-format
+msgid "· %(n)s solicitud"
+msgid_plural "· %(n)s solicitudes"
+msgstr[0] "· %(n)s request"
+msgstr[1] "· %(n)s requests"
+
+#: templates/catalogo/_tarjeta.html:9
+#, python-format
+msgid "Estado de %(titulo)s"
+msgstr "Status of %(titulo)s"
+
+#: templates/catalogo/formulario.html:2 templates/catalogo/formulario.html:4
+#: templates/catalogo/lista.html:6
+msgid "Nuevo diseño"
+msgstr "New design"
+
+#: templates/catalogo/formulario.html:23
+msgid "¿Eliminar este diseño?"
+msgstr "Delete this design?"
+
+#: templates/catalogo/formulario.html:23
+#: templates/clientes/_privacidad.html:34
+#: templates/clientes/tatuaje_formulario.html:29
+#: templates/finanzas/gasto_formulario.html:18
+#: templates/finanzas/pago_formulario.html:21
+#: templates/mensajeria/fecha_formulario.html:26
+#: templates/mensajeria/plantilla_formulario.html:31
+msgid "Eliminar"
+msgstr "Delete"
+
+#: templates/catalogo/lista.html:5
+msgid "Catálogo"
+msgstr "Catalog"
+
+#: templates/catalogo/lista.html:10
+msgid "Catálogo público"
+msgstr "Public catalog"
+
+#: templates/catalogo/lista.html:10
+msgid "Publicado"
+msgstr "Published"
+
+#: templates/catalogo/lista.html:10
+msgid "Oculto"
+msgstr "Hidden"
+
+#: templates/catalogo/lista.html:13
+msgid "Enlace del catálogo"
+msgstr "Catalog link"
+
+#: templates/catalogo/lista.html:18
+msgid ""
+"Publica una página con tus diseños disponibles; cada uno lleva a tu "
+"formulario de reserva con el diseño ya elegido."
+msgstr ""
+"Publish a page with your available designs; each one leads to your booking "
+"form with the design already picked."
+
+#: templates/catalogo/lista.html:22
+msgid "Ocultar catálogo"
+msgstr "Hide catalog"
+
+#: templates/catalogo/lista.html:23
+msgid "El enlace actual dejará de funcionar."
+msgstr "The current link will stop working."
+
+#: templates/catalogo/lista.html:23 templates/solicitudes/lista.html:26
+msgid "Renovar enlace"
+msgstr "Renew link"
+
+#: templates/catalogo/lista.html:25
+msgid "Publicar catálogo"
+msgstr "Publish catalog"
+
+#: templates/catalogo/lista.html:30
+msgid "Filtrar por estado"
+msgstr "Filter by status"
+
+#: templates/catalogo/lista.html:39
+msgid "Sin diseños"
+msgstr "No designs"
+
+#: templates/catalogo/lista.html:39
+msgid "Sube tus flash con precio y tamaño. Marca cuáles se pueden repetir."
+msgstr ""
+"Upload your flash with price and size. Mark which ones can be repeated."
+
+#: templates/catalogo/lista.html:39
+msgid "Subir diseño"
+msgstr "Upload design"
+
+#: templates/clientes/_buscar.html:7
+#, python-format
+msgid "Nadie con «%(q)s». Créalo abajo."
+msgstr "Nobody matches “%(q)s”. Create them below."
+
+#: templates/clientes/_consentimientos.html:13
+msgid "El texto ha cambiado desde su última firma."
+msgstr "The text has changed since their last signature."
+
+#: templates/clientes/_consentimientos.html:15
+msgid "Sin consentimiento firmado."
+msgstr "No signed consent."
+
+#: templates/clientes/_consentimientos.html:18
+msgid "Firmar ahora (tablet)"
+msgstr "Sign now (tablet)"
+
+#: templates/clientes/_opciones_tatuaje.html:2
+msgid "(en proceso)"
+msgstr "(in progress)"
+
+#: templates/clientes/_privacidad.html:3
+msgid "Que vuelva"
+msgstr "Win them back"
+
+#: templates/clientes/_privacidad.html:4
+msgid "Ideas y un mensaje para retomar el contacto."
+msgstr "Ideas and a message to get back in touch."
+
+#: templates/clientes/_privacidad.html:5
+msgid "Pedir ideas"
+msgstr "Get ideas"
+
+#: templates/clientes/_privacidad.html:9 templates/publico/reserva.html:65
+msgid "Privacidad"
+msgstr "Privacy"
+
+#: templates/clientes/_privacidad.html:11
+msgid "Exportar sus datos"
+msgstr "Export their data"
+
+#: templates/clientes/_privacidad.html:13
+#: templates/clientes/_privacidad.html:25
+msgid "Anonimizar"
+msgstr "Anonymize"
+
+#: templates/clientes/_privacidad.html:14
+#: templates/clientes/_privacidad.html:31
+msgid "Eliminar definitivamente"
+msgstr "Delete permanently"
+
+#: templates/clientes/_privacidad.html:22
+msgid "Anonimizar ficha"
+msgstr "Anonymize record"
+
+#: templates/clientes/_privacidad.html:23
+#, python-format
+msgid ""
+"Se borran nombre, contacto, salud, notas, fotos y mensajes. Se conservan los"
+" importes (contabilidad) y los consentimientos firmados durante el plazo "
+"legal (%(retencion_consentimientos_anios)s años); después se borran solos."
+msgstr ""
+"Name, contact details, health, notes, photos and messages are deleted. "
+"Amounts (accounting) and signed consents are kept for the legal period "
+"(%(retencion_consentimientos_anios)s years); after that they're deleted "
+"automatically."
+
+#: templates/clientes/_privacidad.html:24
+#: templates/clientes/_privacidad.html:33
+#, python-format
+msgid "Escribe «%(nombre_completo)s» para confirmar"
+msgstr "Type “%(nombre_completo)s” to confirm"
+
+#: templates/clientes/_privacidad.html:32
+msgid ""
+"Borra la ficha, sus citas, tatuajes, fotos y mensajes. No se puede deshacer."
+" Si tiene consentimientos que hay que conservar por ley, no se permitirá: "
+"anonimiza en su lugar."
+msgstr ""
+"Deletes the record, its appointments, tattoos, photos and messages. This "
+"can't be undone. If there are consents the law requires you to keep, it "
+"won't be allowed: anonymize instead."
+
+#: templates/clientes/anonimizado.html:2 templates/clientes/anonimizado.html:4
+msgid "Ficha anonimizada"
+msgstr "Anonymized record"
+
+#: templates/clientes/anonimizado.html:5
+#, python-format
+msgid ""
+"Los datos personales de esta ficha se eliminaron el %(anonimizado_en)s a "
+"petición del cliente. Solo se conservan importes para la contabilidad"
+msgstr ""
+"The personal data in this record was deleted on %(anonimizado_en)s at the "
+"client's request. Only amounts are kept for accounting"
+
+#: templates/clientes/anonimizado.html:5
+msgid "y los consentimientos firmados durante el plazo legal"
+msgstr "and signed consents for the legal period"
+
+#: templates/clientes/consentimiento.html:2
+msgid "Consentimiento informado"
+msgstr "Informed consent"
+
+#: templates/clientes/consentimiento.html:8 templates/publico/cita.html:10
+#, python-format
+msgid "Hola, %(nombre)s"
+msgstr "Hi, %(nombre)s"
+
+#: templates/clientes/consentimiento.html:9
+msgid "Antes de empezar"
+msgstr "Before we start"
+
+#: templates/clientes/consentimiento.html:10
+msgid ""
+"Lee el texto, revisa tus datos de salud y firma con el dedo. Tarda un "
+"minuto."
+msgstr ""
+"Read the text, check your health details and sign with your finger. It takes"
+" a minute."
+
+#: templates/clientes/consentimiento.html:12 templates/publico/reserva.html:23
+msgid "Revisa los campos marcados."
+msgstr "Check the highlighted fields."
+
+#: templates/clientes/consentimiento.html:15
+msgid "Texto del consentimiento"
+msgstr "Consent text"
+
+#: templates/clientes/consentimiento.html:20
+msgid "Tus datos"
+msgstr "Your details"
+
+#: templates/clientes/consentimiento.html:25
+msgid "Tu salud"
+msgstr "Your health"
+
+#: templates/clientes/consentimiento.html:38
+msgid "Confirmo"
+msgstr "I confirm"
+
+#: templates/clientes/consentimiento.html:46
+msgid "Tu firma"
+msgstr "Your signature"
+
+#: templates/clientes/consentimiento.html:46
+msgid "Borrar"
+msgstr "Clear"
+
+#: templates/clientes/consentimiento.html:48
+msgid "Recuadro para firmar con el dedo"
+msgstr "Box to sign with your finger"
+
+#: templates/clientes/consentimiento.html:49
+msgid "Firma aquí"
+msgstr "Sign here"
+
+#: templates/clientes/consentimiento.html:53
+msgid "Para firmar hace falta JavaScript."
+msgstr "JavaScript is required to sign."
+
+#: templates/clientes/consentimiento.html:57
+#, python-format
+msgid ""
+"Se guardará como PDF en tu ficha. %(nombre)s lo conserva el tiempo que exige"
+" la normativa sanitaria."
+msgstr ""
+"It will be saved as a PDF in your record. %(nombre)s keeps it for as long as"
+" health regulations require."
+
+#: templates/clientes/consentimiento_listo.html:2
+msgid "¡Gracias!"
+msgstr "Thank you!"
+
+#: templates/clientes/consentimiento_listo.html:6
+#, python-format
+msgid "¡Gracias, %(nombre)s!"
+msgstr "Thank you, %(nombre)s!"
+
+#: templates/clientes/consentimiento_listo.html:7
+#, python-format
+msgid ""
+"Tu consentimiento está firmado y guardado. Devuelve el dispositivo a "
+"%(firma)s."
+msgstr ""
+"Your consent is signed and saved. Please hand the device back to %(firma)s."
+
+#: templates/clientes/consentimiento_listo.html:8
+msgid "Volver a la ficha"
+msgstr "Back to the record"
+
+#: templates/clientes/consentimiento_listo.html:9
+#, python-format
+msgid "Documento n.º %(pk)s · huella SHA-256 %(hash_pdf)s…"
+msgstr "Document no. %(pk)s · SHA-256 fingerprint %(hash_pdf)s…"
+
+#: templates/clientes/etiquetas.html:2 templates/clientes/etiquetas.html:5
+#: templates/clientes/lista.html:10
+msgid "Etiquetas"
+msgstr "Tags"
+
+#: templates/clientes/etiquetas.html:9
+msgid "Tus etiquetas"
+msgstr "Your tags"
+
+#: templates/clientes/etiquetas.html:15 templates/clientes/lista.html:6
+#, python-format
+msgid "%(n)s cliente"
+msgid_plural "%(n)s clientes"
+msgstr[0] "%(n)s client"
+msgstr[1] "%(n)s clients"
+
+#: templates/clientes/etiquetas.html:16
+#, python-format
+msgid "Eliminar etiqueta %(e)s"
+msgstr "Delete tag %(e)s"
+
+#: templates/clientes/etiquetas.html:16
+#, python-format
+msgid "Se quitará «%(e)s» de todos los clientes."
+msgstr "“%(e)s” will be removed from all clients."
+
+#: templates/clientes/etiquetas.html:20
+msgid "Aún no hay etiquetas."
+msgstr "No tags yet."
+
+#: templates/clientes/etiquetas.html:23
+msgid "Nueva etiqueta"
+msgstr "New tag"
+
+#: templates/clientes/etiquetas.html:24
+msgid "Crear"
+msgstr "Create"
+
+#: templates/clientes/etiquetas.html:25
+msgid "La etiqueta"
+msgstr "The tag"
+
+#: templates/clientes/etiquetas.html:25
+msgid "alimenta el segmento VIP de las campañas."
+msgstr "feeds the VIP segment for campaigns."
+
+#: templates/clientes/ficha.html:11
+#, python-format
+msgid "%(edad)s años ·"
+msgstr "%(edad)s years old ·"
+
+#: templates/clientes/ficha.html:11
+#, python-format
+msgid "Cliente desde %(creado_en)s"
+msgstr "Client since %(creado_en)s"
+
+#: templates/clientes/ficha.html:19 templates/ia/_respuesta.html:8
+#: templates/mensajeria/bandeja.html:11 templates/mensajeria/nuevo.html:2
+#: templates/mensajeria/nuevo.html:6
+msgid "Escribir mensaje"
+msgstr "Write message"
+
+#: templates/clientes/ficha.html:26
+#, python-format
+msgid ""
+"Menor de %(edad_minima)s años según su fecha de nacimiento. No se puede "
+"tatuar sin cumplir los requisitos legales."
+msgstr ""
+"Under %(edad_minima)s according to their date of birth. They can't be "
+"tattooed without meeting the legal requirements."
+
+#: templates/clientes/ficha.html:27
+#, python-format
+msgid "Salud: %(alertas_salud)s."
+msgstr "Health: %(alertas_salud)s."
+
+#: templates/clientes/ficha.html:27
+msgid "Ver detalles"
+msgstr "See details"
+
+#: templates/clientes/ficha.html:28
+msgid "Pidió no ser contactado: no se le prepara ningún mensaje."
+msgstr "Asked not to be contacted: no messages are prepared for them."
+
+#: templates/clientes/ficha.html:33
+msgid "Visitas"
+msgstr "Visits"
+
+#: templates/clientes/ficha.html:34
+msgid "Gasto total"
+msgstr "Total spent"
+
+#: templates/clientes/ficha.html:35 templates/clientes/ficha.html:61
+msgid "Tatuajes"
+msgstr "Tattoos"
+
+#: templates/clientes/ficha.html:44
+msgid "Próximas citas"
+msgstr "Upcoming appointments"
+
+#: templates/clientes/ficha.html:56
+msgid "Sin citas pendientes."
+msgstr "No pending appointments."
+
+#: templates/clientes/ficha.html:56
+#, python-format
+msgid "Última visita %(ultima)s."
+msgstr "Last visit %(ultima)s."
+
+#: templates/clientes/ficha.html:79
+msgid "Sin tatuajes registrados"
+msgstr "No tattoos recorded"
+
+#: templates/clientes/ficha.html:79
+msgid ""
+"Registra su primer tatuaje para guardar fotos, sesiones y aniversarios."
+msgstr "Record their first tattoo to keep photos, sessions and anniversaries."
+
+#: templates/clientes/ficha.html:79
+msgid "Añadir tatuaje"
+msgstr "Add tattoo"
+
+#: templates/clientes/ficha.html:84 templates/mensajeria/_subnav.html:3
+#: templates/mensajeria/historial.html:5
+msgid "Historial"
+msgstr "History"
+
+#: templates/clientes/ficha.html:89
+msgid "Nueva nota"
+msgstr "New note"
+
+#: templates/clientes/ficha.html:93
+msgid "Guardar nota"
+msgstr "Save note"
+
+#: templates/clientes/ficha.html:94
+msgid "Dictar"
+msgstr "Dictate"
+
+#: templates/clientes/ficha.html:111
+msgid "Todavía no hay historial."
+msgstr "No history yet."
+
+#: templates/clientes/ficha.html:118 templates/solicitudes/detalle.html:55
+msgid "Contacto"
+msgstr "Contact"
+
+#: templates/clientes/ficha.html:123
+msgid "j \\d\\e F"
+msgstr "F j"
+
+#: templates/clientes/ficha.html:124
+msgid "Prefiere"
+msgstr "Prefers"
+
+#: templates/clientes/ficha.html:129 templates/solicitudes/detalle.html:61
+msgid "Promociones"
+msgstr "Promotions"
+
+#: templates/clientes/ficha.html:130
+msgid "Acepta"
+msgstr "Accepts"
+
+#: templates/clientes/ficha.html:130
+msgid "No acepta"
+msgstr "Doesn't accept"
+
+#: templates/clientes/ficha.html:132
+#, python-format
+msgid "Desde el %(marketing_fecha)s · %(get_marketing_origen_display)s"
+msgstr "Since %(marketing_fecha)s · %(get_marketing_origen_display)s"
+
+#: templates/clientes/ficha.html:137
+msgid ""
+"Dejará de recibir felicitaciones y promociones. Los mensajes promocionales "
+"pendientes se descartarán."
+msgstr ""
+"They'll stop receiving birthday wishes and promotions. Pending promotional "
+"messages will be dismissed."
+
+#: templates/clientes/ficha.html:137
+msgid "Registrar baja"
+msgstr "Record opt-out"
+
+#: templates/clientes/ficha.html:146
+msgid "Registrar consentimiento"
+msgstr "Record consent"
+
+#: templates/clientes/ficha.html:152
+msgid "Salud"
+msgstr "Health"
+
+#: templates/clientes/ficha.html:154
+msgid "Nada relevante."
+msgstr "Nothing relevant."
+
+#: templates/clientes/ficha.html:155
+#, python-format
+msgid "Actualizado %(actualizado_en)s. Estos datos nunca se envían a la IA."
+msgstr "Updated %(actualizado_en)s. This data is never sent to the AI."
+
+#: templates/clientes/ficha.html:157
+msgid "Sin datos de salud."
+msgstr "No health data."
+
+#: templates/clientes/formulario.html:2
+#, python-format
+msgid "Editar %(nombre)s"
+msgstr "Edit %(nombre)s"
+
+#: templates/clientes/formulario.html:2 templates/clientes/formulario.html:7
+#: templates/clientes/lista.html:11 templates/componentes/dialogos.html:20
+#: templates/componentes/dialogos.html:30
+msgid "Nuevo cliente"
+msgstr "New client"
+
+#: templates/clientes/formulario.html:7
+msgid "Editar ficha"
+msgstr "Edit record"
+
+#: templates/clientes/formulario.html:16
+msgid "Datos"
+msgstr "Details"
+
+#: templates/clientes/formulario.html:34
+msgid ""
+"Sin este consentimiento solo recibirá mensajes de servicio (recordatorios y "
+"cuidados), nunca promociones ni felicitaciones."
+msgstr ""
+"Without this consent they'll only get service messages (reminders and "
+"aftercare), never promotions or birthday wishes."
+
+#: templates/clientes/formulario.html:40
+msgid "Etiquetas y notas"
+msgstr "Tags and notes"
+
+#: templates/clientes/lista.html:20
+msgid "Buscar clientes"
+msgstr "Search clients"
+
+#: templates/clientes/lista.html:21
+msgid "Nombre, teléfono, email o @instagram"
+msgstr "Name, phone, email or @instagram"
+
+#: templates/clientes/lista.html:24
+msgid "Filtro rápido"
+msgstr "Quick filter"
+
+#: templates/clientes/lista.html:31
+msgid "Etiqueta"
+msgstr "Tag"
+
+#: templates/clientes/lista.html:33
+msgid "Todas las etiquetas"
+msgstr "All tags"
+
+#: templates/clientes/lista.html:37
+msgid "Ordenar"
+msgstr "Sort"
+
+#: templates/clientes/lista.html:39
+msgid "A-Z"
+msgstr "A-Z"
+
+#: templates/clientes/lista.html:40
+msgid "Más recientes"
+msgstr "Most recent"
+
+#: templates/clientes/lista.html:41
+msgid "Última visita"
+msgstr "Last visit"
+
+#: templates/clientes/lista.html:42
+msgid "Mayor gasto"
+msgstr "Highest spend"
+
+#: templates/clientes/lista.html:46 templates/mensajeria/historial.html:26
+msgid "Filtrar"
+msgstr "Filter"
+
+#: templates/clientes/lista.html:63
+#, python-format
+msgid "Vino %(ultima_visita)s"
+msgstr "Came in %(ultima_visita)s"
+
+#: templates/clientes/lista.html:64
+msgid "Sin visitas"
+msgstr "No visits"
+
+#: templates/clientes/lista.html:72
+msgid "Páginas"
+msgstr "Pages"
+
+#: templates/clientes/lista.html:74
+#, python-format
+msgid "Página %(number)s de %(num_pages)s"
+msgstr "Page %(number)s of %(num_pages)s"
+
+#: templates/clientes/lista.html:79 templates/ia/_resultados.html:20
+msgid "Nadie coincide"
+msgstr "Nobody matches"
+
+#: templates/clientes/lista.html:79
+msgid "Prueba con otro nombre, un trozo del teléfono o quita los filtros."
+msgstr "Try another name, part of the phone number, or clear the filters."
+
+#: templates/clientes/lista.html:82
+msgid "Aún no hay clientes"
+msgstr "No clients yet"
+
+#: templates/clientes/lista.html:82
+msgid ""
+"Añade tu primera clienta o espera a que lleguen solicitudes desde tu página "
+"de reservas."
+msgstr ""
+"Add your first client or wait for requests to arrive from your booking page."
+
+#: templates/clientes/lista.html:82 templates/panel/inicio.html:144
+msgid "Añadir cliente"
+msgstr "Add client"
+
+#: templates/clientes/salud.html:2
+#, python-format
+msgid "Salud · %(nombre)s"
+msgstr "Health · %(nombre)s"
+
+#: templates/clientes/salud.html:7
+msgid "Datos de salud"
+msgstr "Health data"
+
+#: templates/clientes/salud.html:10
+msgid ""
+"Información sensible. Solo la ves tú, no se envía nunca a la IA y se elimina"
+" al anonimizar la ficha."
+msgstr ""
+"Sensitive information. Only you can see it, it's never sent to the AI and "
+"it's deleted when the record is anonymized."
+
+#: templates/clientes/salud.html:17
+msgid "Marca lo que aplique"
+msgstr "Tick what applies"
+
+#: templates/clientes/tatuaje.html:11
+msgid "Nueva sesión"
+msgstr "New session"
+
+#: templates/clientes/tatuaje.html:18 templates/clientes/tatuaje.html:54
+msgid "Sesiones"
+msgstr "Sessions"
+
+#: templates/clientes/tatuaje.html:29
+#, python-format
+msgid "%(get_tipo_display)s de %(titulo)s"
+msgstr "%(get_tipo_display)s of %(titulo)s"
+
+#: templates/clientes/tatuaje.html:32
+msgid "Borrar foto"
+msgstr "Delete photo"
+
+#: templates/clientes/tatuaje.html:32
+msgid "¿Borrar esta foto? No se puede deshacer."
+msgstr "Delete this photo? This can't be undone."
+
+#: templates/clientes/tatuaje.html:39
+msgid ""
+"Sin fotos todavía. Sube la referencia, el resultado del día y cómo "
+"cicatrizó."
+msgstr ""
+"No photos yet. Upload the reference, the result on the day and how it "
+"healed."
+
+#: templates/clientes/tatuaje.html:48
+msgid "Subir fotos"
+msgstr "Upload photos"
+
+#: templates/clientes/tatuaje.html:59
+msgid "Sin sesiones asociadas."
+msgstr "No linked sessions."
+
+#: templates/clientes/tatuaje.html:62
+msgid "Pagos"
+msgstr "Payments"
+
+#: templates/clientes/tatuaje.html:65
+msgid "Sin pagos registrados."
+msgstr "No payments recorded."
+
+#: templates/clientes/tatuaje_formulario.html:2
+#: templates/clientes/tatuaje_formulario.html:7
+msgid "Editar tatuaje"
+msgstr "Edit tattoo"
+
+#: templates/clientes/tatuaje_formulario.html:2
+#: templates/clientes/tatuaje_formulario.html:7
+msgid "Nuevo tatuaje"
+msgstr "New tattoo"
+
+#: templates/clientes/tatuaje_formulario.html:29
+msgid ""
+"Se borrará el tatuaje con todas sus fotos. Las citas y pagos se conservan."
+msgstr ""
+"The tattoo will be deleted along with all its photos. Appointments and "
+"payments are kept."
+
+#: templates/componentes/dialogos.html:3
+msgid "¿Seguro?"
+msgstr "Are you sure?"
+
+#: templates/componentes/dialogos.html:7
+msgid "Sí, continuar"
+msgstr "Yes, continue"
+
+#: templates/componentes/dialogos.html:15
+msgid "Atajos de teclado"
+msgstr "Keyboard shortcuts"
+
+#: templates/componentes/dialogos.html:18 templates/ia/asistente.html:27
+#: templates/mensajeria/historial.html:16
+msgid "Buscar"
+msgstr "Search"
+
+#: templates/componentes/dialogos.html:19
+msgid "n"
+msgstr "n"
+
+#: templates/componentes/dialogos.html:20
+msgid "c"
+msgstr "c"
+
+#: templates/componentes/dialogos.html:21
+msgid "h"
+msgstr "h"
+
+#: templates/componentes/dialogos.html:21
+msgid "Ir a Hoy"
+msgstr "Go to Today"
+
+#: templates/componentes/dialogos.html:22
+msgid "a"
+msgstr "a"
+
+#: templates/componentes/dialogos.html:22
+msgid "Ir a la agenda"
+msgstr "Go to the calendar"
+
+#: templates/componentes/dialogos.html:23
+msgid "m"
+msgstr "m"
+
+#: templates/componentes/dialogos.html:24
+msgid "Esta ayuda"
+msgstr "This help"
+
+#: templates/componentes/grafico_barras.html:29
+msgid "Ver datos en tabla"
+msgstr "View data as a table"
+
+#: templates/componentes/grafico_barras.html:31
+msgid "Periodo"
+msgstr "Period"
+
+#: templates/componentes/idioma.html:2
+msgid "Idioma"
+msgstr "Language"
+
+#: templates/componentes/selector_cliente.html:8
+msgid "Cambiar"
+msgstr "Change"
+
+#: templates/componentes/selector_cliente.html:12
+msgid "Busca por nombre, teléfono o @instagram"
+msgstr "Search by name, phone or @instagram"
+
+#: templates/componentes/selector_cliente.html:21
+msgid "Cliente nuevo"
+msgstr "New client"
+
+#: templates/cuentas/acceso.html:2
+msgid "Acceso"
+msgstr "Sign in"
+
+#: templates/cuentas/acceso.html:6
+msgid "Entrar"
+msgstr "Sign in"
+
+#: templates/cuentas/acceso.html:7
+msgid "Acceso privado del estudio."
+msgstr "Private studio access."
+
+#: templates/cuentas/acceso.html:13
+msgid "Continuar"
+msgstr "Continue"
+
+#: templates/cuentas/acceso.html:16
+msgid "Después te pediremos el código de tu app autenticadora."
+msgstr "Next we'll ask for the code from your authenticator app."
+
+#: templates/cuentas/acceso.html:18
+msgid "¿Primer acceso? Crea tu cuenta"
+msgstr "First time? Create your account"
+
+#: templates/cuentas/alta.html:2 templates/cuentas/alta.html:6
+#: templates/cuentas/alta.html:13
+msgid "Crear cuenta"
+msgstr "Create account"
+
+#: templates/cuentas/alta.html:7
+msgid ""
+"Solo para los correos autorizados del estudio. Necesitas el código de alta."
+msgstr "Only for the studio's authorized emails. You need the sign-up code."
+
+#: templates/cuentas/alta.html:16
+msgid "Después configurarás la app autenticadora (2FA obligatoria)."
+msgstr "Next you'll set up the authenticator app (2FA is required)."
+
+#: templates/cuentas/alta.html:18
+msgid "Ya tengo cuenta"
+msgstr "I already have an account"
+
+#: templates/cuentas/codigos.html:2 templates/cuentas/codigos.html:8
+msgid "Códigos de recuperación"
+msgstr "Recovery codes"
+
+#: templates/cuentas/codigos.html:7
+msgid "Guárdalos ahora"
+msgstr "Save them now"
+
+#: templates/cuentas/codigos.html:11
+msgid ""
+"Solo se muestran esta vez. Si pierdes el móvil, estos códigos son la única "
+"forma de entrar. Cada uno sirve una sola vez."
+msgstr ""
+"They're shown only this once. If you lose your phone, these codes are the "
+"only way in. Each one works only once."
+
+#: templates/cuentas/codigos.html:17
+msgid "Códigos copiados."
+msgstr "Codes copied."
+
+#: templates/cuentas/codigos.html:18
+msgid "Imprimir"
+msgstr "Print"
+
+#: templates/cuentas/codigos.html:23
+msgid "Ya los he guardado"
+msgstr "I've saved them"
+
+#: templates/cuentas/configurar_2fa.html:2
+msgid "Activar verificación en dos pasos"
+msgstr "Turn on two-step verification"
+
+#: templates/cuentas/configurar_2fa.html:6
+msgid "Obligatorio · solo una vez"
+msgstr "Required · only once"
+
+#: templates/cuentas/configurar_2fa.html:7
+msgid "Protege tu cuenta"
+msgstr "Protect your account"
+
+#: templates/cuentas/configurar_2fa.html:8
+msgid ""
+"Aquí guardas datos de salud y firmas de tus clientes. Con la verificación en"
+" dos pasos, nadie podrá entrar solo con tu contraseña."
+msgstr ""
+"You keep your clients' health data and signatures here. With two-step "
+"verification, nobody can get in with just your password."
+
+#: templates/cuentas/configurar_2fa.html:12
+msgid "Instala una app autenticadora"
+msgstr "Install an authenticator app"
+
+#: templates/cuentas/configurar_2fa.html:12
+msgid ""
+"Google Authenticator, Microsoft Authenticator, 1Password o la app "
+"Contraseñas del iPhone."
+msgstr ""
+"Google Authenticator, Microsoft Authenticator, 1Password or the iPhone "
+"Passwords app."
+
+#: templates/cuentas/configurar_2fa.html:15
+msgid "Escanea este código QR"
+msgstr "Scan this QR code"
+
+#: templates/cuentas/configurar_2fa.html:16
+msgid "Código QR para la app autenticadora"
+msgstr "QR code for the authenticator app"
+
+#: templates/cuentas/configurar_2fa.html:18
+msgid "¿No puedes escanearlo? Escribe la clave a mano"
+msgstr "Can't scan it? Type the key by hand"
+
+#: templates/cuentas/configurar_2fa.html:19
+msgid "Clave secreta"
+msgstr "Secret key"
+
+#: templates/cuentas/configurar_2fa.html:25
+msgid "Escribe el código que aparece"
+msgstr "Type the code that appears"
+
+#: templates/cuentas/configurar_2fa.html:29
+msgid "Activar"
+msgstr "Turn on"
+
+#: templates/cuentas/cuenta.html:13
+msgid "Perfil"
+msgstr "Profile"
+
+#: templates/cuentas/cuenta.html:17
+msgid "Email de acceso:"
+msgstr "Sign-in email:"
+
+#: templates/cuentas/cuenta.html:23
+msgid "Verificación en dos pasos"
+msgstr "Two-step verification"
+
+#: templates/cuentas/cuenta.html:24
+msgid "Te quedan"
+msgstr "You have"
+
+#: templates/cuentas/cuenta.html:24
+msgid "códigos de recuperación."
+msgstr "recovery codes left."
+
+#: templates/cuentas/cuenta.html:25
+msgid "Genera códigos nuevos cuanto antes."
+msgstr "Generate new codes as soon as possible."
+
+#: templates/cuentas/cuenta.html:28
+msgid "Para cambiar algo, confirma con tu código actual."
+msgstr "To change anything, confirm with your current code."
+
+#: templates/cuentas/cuenta.html:31
+msgid "Nuevos códigos"
+msgstr "New codes"
+
+#: templates/cuentas/cuenta.html:32
+msgid "Cambiar de móvil"
+msgstr "Change phone"
+
+#: templates/cuentas/cuenta.html:42
+msgid "Cambiar contraseña"
+msgstr "Change password"
+
+#: templates/cuentas/verificar.html:2
+msgid "Verificación"
+msgstr "Verification"
+
+#: templates/cuentas/verificar.html:6
+msgid "Segundo paso"
+msgstr "Second step"
+
+#: templates/cuentas/verificar.html:9
+msgid "Escribe uno de los códigos que guardaste al activar la verificación."
+msgstr "Type one of the codes you saved when you turned on verification."
+
+#: templates/cuentas/verificar.html:11
+msgid "Abre tu app autenticadora y escribe el código de 6 dígitos de"
+msgstr "Open your authenticator app and type the 6-digit code for"
+
+#: templates/cuentas/verificar.html:19
+msgid "Verificar"
+msgstr "Verify"
+
+#: templates/cuentas/verificar.html:24
+msgid "Usar la app autenticadora"
+msgstr "Use the authenticator app"
+
+#: templates/cuentas/verificar.html:26
+msgid "¿Sin móvil? Usa un código de recuperación"
+msgstr "No phone? Use a recovery code"
+
+#: templates/errores/403.html:2 templates/errores/403.html:6
+msgid "No puedes ver esto"
+msgstr "You can't see this"
+
+#: templates/errores/403.html:7
+msgid "No tienes permiso para esta página o acción."
+msgstr "You don't have permission for this page or action."
+
+#: templates/errores/403.html:8 templates/errores/404.html:8
+#: templates/errores/500.html:15 templates/errores/csrf.html:8
+msgid "Volver al inicio"
+msgstr "Back to home"
+
+#: templates/errores/404.html:2 templates/errores/404.html:6
+msgid "Aquí no hay nada"
+msgstr "Nothing here"
+
+#: templates/errores/404.html:7
+msgid "La página no existe o el enlace ya no es válido."
+msgstr "The page doesn't exist or the link is no longer valid."
+
+#: templates/errores/413.html:2 templates/errores/413.html:6
+msgid "Demasiado pesado"
+msgstr "Too large"
+
+#: templates/errores/413.html:7
+msgid ""
+"Las imágenes ocupan demasiado. Envía menos o más ligeras (máx. 8 MB cada "
+"una)."
+msgstr ""
+"The images are too large. Send fewer or smaller ones (max. 8 MB each)."
+
+#: templates/errores/429.html:2 templates/errores/429.html:6
+msgid "Demasiado rápido"
+msgstr "Too fast"
+
+#: templates/errores/429.html:7
+msgid ""
+"Has hecho muchas peticiones seguidas. Espera unos minutos y vuelve a "
+"intentarlo."
+msgstr "You've made many requests in a row. Wait a few minutes and try again."
+
+#: templates/errores/500.html:6
+msgid "Error del servidor"
+msgstr "Server error"
+
+#: templates/errores/500.html:13
+msgid "Algo se ha roto"
+msgstr "Something broke"
+
+#: templates/errores/500.html:14
+msgid ""
+"No es culpa tuya. Vuelve a intentarlo en un momento; si sigue pasando, "
+"revisa los registros del servidor en Render."
+msgstr ""
+"It's not your fault. Try again in a moment; if it keeps happening, check the"
+" server logs on Render."
+
+#: templates/errores/csrf.html:2 templates/errores/csrf.html:6
+msgid "La página caducó"
+msgstr "The page expired"
+
+#: templates/errores/csrf.html:7
+msgid ""
+"Por seguridad, el formulario ya no es válido. Recarga la página e inténtalo "
+"de nuevo."
+msgstr ""
+"For security, the form is no longer valid. Reload the page and try again."
+
+#: templates/finanzas/gasto_formulario.html:2
+#: templates/finanzas/gasto_formulario.html:4
+msgid "Editar gasto"
+msgstr "Edit expense"
+
+#: templates/finanzas/gasto_formulario.html:2
+#: templates/finanzas/gasto_formulario.html:4
+msgid "Nuevo gasto"
+msgstr "New expense"
+
+#: templates/finanzas/gasto_formulario.html:18
+msgid "¿Eliminar este gasto?"
+msgstr "Delete this expense?"
+
+#: templates/finanzas/pago_formulario.html:2
+#: templates/finanzas/pago_formulario.html:4
+msgid "Editar ingreso"
+msgstr "Edit income"
+
+#: templates/finanzas/pago_formulario.html:2
+#: templates/finanzas/pago_formulario.html:4
+msgid "Nuevo ingreso"
+msgstr "New income"
+
+#: templates/finanzas/pago_formulario.html:7
+msgid ""
+"Opcional: un flash pagado en efectivo o una crema vendida pueden no tener "
+"ficha."
+msgstr ""
+"Optional: a flash paid in cash or a cream you sold may not have a client "
+"record."
+
+#: templates/finanzas/pago_formulario.html:16
+msgid "Vinculado a la"
+msgstr "Linked to the"
+
+#: templates/finanzas/pago_formulario.html:16
+#, python-format
+msgid "cita del %(inicio)s"
+msgstr "appointment on %(inicio)s"
+
+#: templates/finanzas/pago_formulario.html:21
+msgid "¿Eliminar este ingreso?"
+msgstr "Delete this income?"
+
+#: templates/finanzas/resumen.html:10
+msgid "Mes anterior"
+msgstr "Previous month"
+
+#: templates/finanzas/resumen.html:11
+msgid "Mes siguiente"
+msgstr "Next month"
+
+#: templates/finanzas/resumen.html:21
+#, python-format
+msgid "%(variacion)s vs. %(mes_anterior)s"
+msgstr "%(variacion)s vs. %(mes_anterior)s"
+
+#: templates/finanzas/resumen.html:24 templates/finanzas/resumen.html:73
+msgid "Balance"
+msgstr "Balance"
+
+#: templates/finanzas/resumen.html:25
+#, python-format
+msgid "Balance %(mes_anterior)s"
+msgstr "Balance %(mes_anterior)s"
+
+#: templates/finanzas/resumen.html:29
+msgid "Últimos 12 meses"
+msgstr "Last 12 months"
+
+#: templates/finanzas/resumen.html:30
+msgid "Ingresos y gastos de los últimos 12 meses"
+msgstr "Income and expenses over the last 12 months"
+
+#: templates/finanzas/resumen.html:35
+msgid "Ingresos por concepto"
+msgstr "Income by type"
+
+#: templates/finanzas/resumen.html:38
+msgid "Sin ingresos este mes."
+msgstr "No income this month."
+
+#: templates/finanzas/resumen.html:41
+msgid "Gastos por categoría"
+msgstr "Expenses by category"
+
+#: templates/finanzas/resumen.html:44
+msgid "Sin gastos registrados."
+msgstr "No expenses recorded."
+
+#: templates/finanzas/resumen.html:50
+msgid "Movimientos"
+msgstr "Transactions"
+
+#: templates/finanzas/resumen.html:55
+msgid "Exportar CSV"
+msgstr "Export CSV"
+
+#: templates/finanzas/resumen.html:78
+msgid "Sin movimientos"
+msgstr "No transactions"
+
+#: templates/finanzas/resumen.html:78
+msgid ""
+"Los cobros de sesiones y señas aparecen solos. Añade aquí tus gastos para "
+"ver el balance real."
+msgstr ""
+"Session and deposit payments show up automatically. Add your expenses here "
+"to see your real balance."
+
+#: templates/finanzas/resumen.html:78
+msgid "Añadir gasto"
+msgstr "Add expense"
+
+#: templates/ia/_respuesta.html:2
+msgid "Propuesta · edítala a tu gusto"
+msgstr "Draft · edit it as you like"
+
+#: templates/ia/_respuesta.html:8
+msgid "Para que quede en el historial, envíala desde"
+msgstr "To keep it in the history, send it from"
+
+#: templates/ia/_resultados.html:5
+msgid "Interpretado por IA"
+msgstr "Interpreted by AI"
+
+#: templates/ia/_resultados.html:5
+msgid "Búsqueda básica"
+msgstr "Basic search"
+
+#: templates/ia/_resultados.html:6
+msgid "Sin filtros reconocidos: se muestran todos."
+msgstr "No filters recognized: showing everyone."
+
+#: templates/ia/_resultados.html:9
+#, python-format
+msgid "%(count)s cliente"
+msgid_plural "%(count)s clientes"
+msgstr[0] "%(count)s client"
+msgstr[1] "%(count)s clients"
+
+#: templates/ia/_resultados.html:14
+#, python-format
+msgid "%(n)s tatuaje"
+msgid_plural "%(n)s tatuajes"
+msgstr[0] "%(n)s tattoo"
+msgstr[1] "%(n)s tattoos"
+
+#: templates/ia/_resultados.html:14
+#, python-format
+msgid "· última visita %(ultima)s"
+msgstr "· last visit %(ultima)s"
+
+#: templates/ia/_resultados.html:20
+msgid "Prueba a decirlo de otra forma."
+msgstr "Try phrasing it another way."
+
+#: templates/ia/_retencion.html:2
+msgid "Sugerencias de la IA"
+msgstr "AI suggestions"
+
+#: templates/ia/_retencion.html:8
+msgid "Escribirle"
+msgstr "Write to them"
+
+#: templates/ia/_texto.html:2
+msgid "IA · revisa antes de usar"
+msgstr "AI · review before using"
+
+#: templates/ia/asistente.html:2 templates/ia/asistente.html:5
+msgid "Asistente"
+msgstr "Assistant"
+
+#: templates/ia/asistente.html:5
+msgid "Pregunta a tu CRM"
+msgstr "Ask your CRM"
+
+#: templates/ia/asistente.html:9
+msgid "Consultas de IA este mes"
+msgstr "AI queries this month"
+
+#: templates/ia/asistente.html:11
+msgid "IA desactivada"
+msgstr "AI disabled"
+
+#: templates/ia/asistente.html:17
+msgid "La IA no está configurada (falta"
+msgstr "AI is not configured (missing"
+
+#: templates/ia/asistente.html:17
+msgid "OPENAI_API_KEY"
+msgstr "OPENAI_API_KEY"
+
+#: templates/ia/asistente.html:17
+msgid "). La búsqueda funciona igual con un intérprete básico."
+msgstr "). Search still works with a basic interpreter."
+
+#: templates/ia/asistente.html:17
+msgid "El asistente está desactivado en Ajustes."
+msgstr "The assistant is turned off in Settings."
+
+#: templates/ia/asistente.html:22
+msgid "Buscar con tus palabras"
+msgstr "Search in your own words"
+
+#: templates/ia/asistente.html:24
+msgid "¿A quién buscas?"
+msgstr "Who are you looking for?"
+
+#: templates/ia/asistente.html:25
+msgid ""
+"Ej.: clientes con fine line en el antebrazo que no vienen desde hace 6 meses"
+msgstr "E.g.: fine line forearm clients who haven't come in for 6 months"
+
+#: templates/ia/asistente.html:29
+msgid "VIP que cumplen en diciembre"
+msgstr "VIPs with a birthday in December"
+
+#: templates/ia/asistente.html:30
+msgid "proyectos a medias de blackwork"
+msgstr "unfinished blackwork projects"
+
+#: templates/ia/asistente.html:31
+msgid "no vienen desde hace 8 meses y aceptan promociones"
+msgstr "haven't come in for 8 months and accept promotions"
+
+#: templates/ia/asistente.html:31
+msgid "no vienen desde hace 8 meses"
+msgstr "haven't come in for 8 months"
+
+#: templates/ia/asistente.html:38
+msgid "Responder un mensaje"
+msgstr "Reply to a message"
+
+#: templates/ia/asistente.html:41
+msgid "Pega el mensaje que te han enviado"
+msgstr "Paste the message you received"
+
+#: templates/ia/asistente.html:41
+msgid "Hola! Cuánto costaría un tatuaje pequeño en la muñeca?"
+msgstr "Hi! How much would a small wrist tattoo cost?"
+
+#: templates/ia/asistente.html:42 templates/mensajeria/_ia_redactar.html:6
+msgid "Indicaciones"
+msgstr "Guidance"
+
+#: templates/ia/asistente.html:42
+msgid "Mis mini empiezan en $120, tengo hueco en enero"
+msgstr "My minis start at $120, I have openings in January"
+
+#: templates/ia/asistente.html:44
+msgid "¿De quién es?"
+msgstr "Who is it from?"
+
+#: templates/ia/asistente.html:45
+msgid "— Persona nueva —"
+msgstr "— New person —"
+
+#: templates/ia/asistente.html:46
+msgid ""
+"Si es clienta, la IA tiene en cuenta sus tatuajes y visitas (nunca salud ni "
+"contacto)."
+msgstr ""
+"If they're a client, the AI considers their tattoos and visits (never health"
+" or contact details)."
+
+#: templates/ia/asistente.html:48
+msgid "Proponer respuesta"
+msgstr "Suggest a reply"
+
+#: templates/ia/asistente.html:52
+msgid "Disponible cuando se configure la IA."
+msgstr "Available once AI is configured."
+
+#: templates/ia/asistente.html:58
+msgid "Qué ve la IA"
+msgstr "What the AI sees"
+
+#: templates/ia/asistente.html:59
+msgid ""
+"Solo el mínimo: nombre de pila, tatuajes (zona, estilo, tamaño), número de "
+"visitas y fechas aproximadas."
+msgstr ""
+"Only the minimum: first name, tattoos (placement, style, size), number of "
+"visits and approximate dates."
+
+#: templates/ia/asistente.html:59
+msgid "Nunca"
+msgstr "Never"
+
+#: templates/ia/asistente.html:59
+msgid ""
+"datos de salud, fecha de nacimiento, teléfono, email, notas privadas, "
+"firmas, consentimientos ni imágenes. Los textos libres se limpian de emails,"
+" teléfonos y enlaces antes de salir. OpenAI recibe la petición con"
+msgstr ""
+"health data, date of birth, phone, email, private notes, signatures, "
+"consents or images. Free text is stripped of emails, phone numbers and links"
+" before it leaves. OpenAI receives the request with"
+
+#: templates/ia/asistente.html:59
+msgid "store=false"
+msgstr "store=false"
+
+#: templates/ia/asistente.html:59
+msgid "y modelo"
+msgstr "and model"
+
+#: templates/ia/asistente.html:59
+msgid ". La IA propone; tú decides y envías."
+msgstr ". The AI suggests; you decide and send."
+
+#: templates/mensajeria/_acciones.html:4
+msgid "¿Lo enviaste"
+msgstr "Did you send it"
+
+#: templates/mensajeria/_acciones.html:4
+#, python-format
+msgid "por %(get_canal_usado_display)s"
+msgstr "via %(get_canal_usado_display)s"
+
+#: templates/mensajeria/_acciones.html:7
+msgid "Sí, enviado"
+msgstr "Yes, sent"
+
+#: templates/mensajeria/_acciones.html:17
+msgid "Texto copiado. Pégalo donde quieras enviarlo."
+msgstr "Text copied. Paste it wherever you want to send it."
+
+#: templates/mensajeria/_acciones.html:26
+msgid "Marcar enviado"
+msgstr "Mark sent"
+
+#: templates/mensajeria/_acciones.html:30
+msgid "Posponer"
+msgstr "Snooze"
+
+#: templates/mensajeria/_acciones.html:33
+msgid "En 3 días"
+msgstr "In 3 days"
+
+#: templates/mensajeria/_acciones.html:34
+msgid "En una semana"
+msgstr "In a week"
+
+#: templates/mensajeria/_acciones.html:37
+msgid "Reescribir"
+msgstr "Rewrite"
+
+#: templates/mensajeria/_acciones.html:39
+msgid "¿Descartar este mensaje? No se enviará."
+msgstr "Dismiss this message? It won't be sent."
+
+#: templates/mensajeria/_acciones.html:39
+msgid "Descartar"
+msgstr "Dismiss"
+
+#: templates/mensajeria/_ia_redactar.html:3
+msgid "Redactar con IA"
+msgstr "Write with AI"
+
+#: templates/mensajeria/_ia_redactar.html:5
+msgid "¿Para qué es el mensaje?"
+msgstr "What's the message for?"
+
+#: templates/mensajeria/_ia_redactar.html:5
+msgid "Ej.: felicitar por su tatuaje cicatrizado y ofrecer flash"
+msgstr "E.g.: congratulate them on their healed tattoo and offer flash"
+
+#: templates/mensajeria/_ia_redactar.html:6
+msgid "Más corto, menciona que tengo hueco el sábado…"
+msgstr "Shorter, mention I have an opening on Saturday…"
+
+#: templates/mensajeria/_ia_redactar.html:7
+msgid "Generar borrador"
+msgstr "Generate draft"
+
+#: templates/mensajeria/_ia_redactar.html:8
+msgid ""
+"La IA solo recibe su nombre de pila, sus tatuajes y visitas. Nunca datos de "
+"salud ni de contacto."
+msgstr ""
+"The AI only gets their first name, tattoos and visits. Never health or "
+"contact details."
+
+#: templates/mensajeria/_mensaje.html:8
+msgid "Solo para quien aceptó promociones"
+msgstr "Only for people who accepted promotions"
+
+#: templates/mensajeria/_mensaje.html:8
+#: templates/mensajeria/plantillas.html:17
+msgid "Promo"
+msgstr "Promo"
+
+#: templates/mensajeria/_mensaje.html:12
+#, python-format
+msgid "Enviado por %(get_canal_usado_display)s · %(enviado_en)s"
+msgstr "Sent via %(get_canal_usado_display)s · %(enviado_en)s"
+
+#: templates/mensajeria/_mensaje.html:13
+msgid "Deshacer"
+msgstr "Undo"
+
+#: templates/mensajeria/_mensaje.html:16
+#, python-format
+msgid "Mensaje para %(nombre)s"
+msgstr "Message for %(nombre)s"
+
+#: templates/mensajeria/_recuento.html:3
+msgid "Destinatarios"
+msgstr "Recipients"
+
+#: templates/mensajeria/_recuento.html:4
+#, python-format
+msgid "De %(total)s en el segmento."
+msgstr "Out of %(total)s in the segment."
+
+#: templates/mensajeria/_recuento.html:5
+#, python-format
+msgid "Repartidos en <strong>%(n)s</strong> día."
+msgid_plural "Repartidos en <strong>%(n)s</strong> días."
+msgstr[0] "Spread over <strong>%(n)s</strong> day."
+msgstr[1] "Spread over <strong>%(n)s</strong> days."
+
+#: templates/mensajeria/_subnav.html:1 templates/mensajeria/campanas.html:5
+#: templates/mensajeria/cuidados.html:4 templates/mensajeria/fechas.html:5
+#: templates/mensajeria/historial.html:5
+#: templates/mensajeria/plantillas.html:5
+msgid "Mensajería"
+msgstr "Messaging"
+
+#: templates/mensajeria/_subnav.html:4 templates/mensajeria/campana.html:5
+#: templates/mensajeria/campana_nueva.html:4
+#: templates/mensajeria/campanas.html:2 templates/mensajeria/campanas.html:5
+#: templates/mensajeria/campanas.html:21
+msgid "Campañas"
+msgstr "Campaigns"
+
+#: templates/mensajeria/_subnav.html:5
+#: templates/mensajeria/fecha_formulario.html:4
+#: templates/mensajeria/fechas.html:2 templates/mensajeria/fechas.html:5
+#: templates/nucleo/ajustes.html:66
+msgid "Fechas destacadas"
+msgstr "Special dates"
+
+#: templates/mensajeria/_subnav.html:6
+msgid "Cuidados"
+msgstr "Aftercare"
+
+#: templates/mensajeria/_subnav.html:7
+#: templates/mensajeria/plantilla_formulario.html:6
+#: templates/mensajeria/plantillas.html:2
+#: templates/mensajeria/plantillas.html:5
+msgid "Plantillas"
+msgstr "Templates"
+
+#: templates/mensajeria/_vista_previa.html:3
+msgid "Variables que no existen:"
+msgstr "These variables don't exist:"
+
+#: templates/mensajeria/_vista_previa.html:4
+#, python-format
+msgid "%(caracteres)s caracteres"
+msgstr "%(caracteres)s characters"
+
+#: templates/mensajeria/bandeja.html:17
+msgid "Por enviar"
+msgstr "To send"
+
+#: templates/mensajeria/bandeja.html:18
+msgid "Enviados hoy"
+msgstr "Sent today"
+
+#: templates/mensajeria/bandeja.html:19
+msgid ""
+"Nada se envía solo: pulsa WhatsApp o SMS, envía desde tu móvil y vuelve para"
+" marcarlo. Todo queda en el historial."
+msgstr ""
+"Nothing is sent automatically: tap WhatsApp or SMS, send from your phone and"
+" come back to mark it. Everything is kept in the history."
+
+#: templates/mensajeria/bandeja.html:23
+msgid "Filtrar por tipo"
+msgstr "Filter by type"
+
+#: templates/mensajeria/bandeja.html:24
+#, python-format
+msgid "Todos · %(total)s"
+msgstr "All · %(total)s"
+
+#: templates/mensajeria/bandeja.html:38 templates/panel/inicio.html:24
+msgid "Todo al día"
+msgstr "All caught up"
+
+#: templates/mensajeria/bandeja.html:39
+msgid "No quedan mensajes para hoy."
+msgstr "No messages left for today."
+
+#: templates/mensajeria/bandeja.html:39
+#, python-format
+msgid "Hay %(n)s preparado para los próximos días."
+msgid_plural "Hay %(n)s preparados para los próximos días."
+msgstr[0] "There is %(n)s prepared for the coming days."
+msgstr[1] "There are %(n)s prepared for the coming days."
+
+#: templates/mensajeria/bandeja.html:40
+msgid "Escribir a alguien"
+msgstr "Write to someone"
+
+#: templates/mensajeria/bandeja.html:45
+msgid "Volver a revisar hoy"
+msgstr "Check today again"
+
+#: templates/mensajeria/bandeja.html:46
+msgid ""
+"La bandeja se prepara sola cada mañana. Esto solo comprueba si falta algo "
+"(no duplica)."
+msgstr ""
+"The inbox prepares itself every morning. This only checks if anything is "
+"missing (no duplicates)."
+
+#: templates/mensajeria/campana.html:11
+msgid "Enviados"
+msgstr "Sent"
+
+#: templates/mensajeria/campana.html:12
+msgid "Pendientes"
+msgstr "Pending"
+
+#: templates/mensajeria/campana.html:13
+msgid "Descartados"
+msgstr "Dismissed"
+
+#: templates/mensajeria/campana.html:17
+msgid "Reparto por días"
+msgstr "Daily distribution"
+
+#: templates/mensajeria/campana.html:21
+#, python-format
+msgid "%(enviados)s de %(total)s"
+msgstr "%(enviados)s of %(total)s"
+
+#: templates/mensajeria/campana.html:23
+msgid "Ningún cliente del segmento acepta promociones."
+msgstr "No client in the segment accepts promotions."
+
+#: templates/mensajeria/campana.html:30
+msgid "Añadir clientes nuevos del segmento"
+msgstr "Add new clients from the segment"
+
+#: templates/mensajeria/campana.html:31
+msgid "Se descartarán los mensajes pendientes de esta campaña."
+msgstr "Pending messages from this campaign will be dismissed."
+
+#: templates/mensajeria/campana.html:31
+msgid "Cancelar campaña"
+msgstr "Cancel campaign"
+
+#: templates/mensajeria/campana_nueva.html:2
+#: templates/mensajeria/campana_nueva.html:4
+#: templates/mensajeria/campanas.html:6
+msgid "Nueva campaña"
+msgstr "New campaign"
+
+#: templates/mensajeria/campana_nueva.html:10
+msgid ""
+"Se prepararán los mensajes en tu bandeja, repartidos por días. ¿Lanzar "
+"campaña?"
+msgstr ""
+"The messages will be prepared in your inbox, spread over days. Launch the "
+"campaign?"
+
+#: templates/mensajeria/campana_nueva.html:10
+msgid "Lanzar"
+msgstr "Launch"
+
+#: templates/mensajeria/campana_nueva.html:10
+msgid "Lanzar campaña"
+msgstr "Launch campaign"
+
+#: templates/mensajeria/campana_nueva.html:15
+msgid "Alcance"
+msgstr "Reach"
+
+#: templates/mensajeria/campana_nueva.html:17
+msgid ""
+"Solo se incluyen clientes que aceptaron promociones y no pidieron «no "
+"contactar». Si alguien se da de baja después, su mensaje desaparece de la "
+"bandeja."
+msgstr ""
+"Only clients who accepted promotions and didn't ask “do not contact” are "
+"included. If someone opts out later, their message disappears from the "
+"inbox."
+
+#: templates/mensajeria/campanas.html:10
+msgid "Segmentos automáticos"
+msgstr "Automatic segments"
+
+#: templates/mensajeria/campanas.html:16
+#, python-format
+msgid "%(total)s en total; solo %(con_consentimiento)s aceptan promociones."
+msgstr "%(total)s in total; only %(con_consentimiento)s accept promotions."
+
+#: templates/mensajeria/campanas.html:27
+#, python-format
+msgid "%(plantilla)s · desde %(fecha_inicio)s"
+msgstr "%(plantilla)s · from %(fecha_inicio)s"
+
+#: templates/mensajeria/campanas.html:33
+msgid ""
+"Aún no hay campañas. Las fechas destacadas crean la suya automáticamente."
+msgstr "No campaigns yet. Special dates create their own automatically."
+
+#: templates/mensajeria/cuidados.html:8
+msgid "Secuencia tras cada sesión"
+msgstr "Sequence after each session"
+
+#: templates/mensajeria/cuidados.html:9
+msgid ""
+"Cuando marcas una sesión o retoque como realizado, cada paso aparece en tu "
+"bandeja el día que toca."
+msgstr ""
+"When you mark a session or touch-up as done, each step shows up in your "
+"inbox on the right day."
+
+#: templates/mensajeria/cuidados.html:13
+msgid "días"
+msgstr "days"
+
+#: templates/mensajeria/cuidados.html:15
+msgid "Pausado"
+msgstr "Paused"
+
+#: templates/mensajeria/cuidados.html:19
+msgid "Sin pasos todavía."
+msgstr "No steps yet."
+
+#: templates/mensajeria/cuidados.html:23
+#, python-format
+msgid "Editar «%(nombre)s»"
+msgstr "Edit “%(nombre)s”"
+
+#: templates/mensajeria/cuidados.html:23
+msgid "Añadir paso"
+msgstr "Add step"
+
+#: templates/mensajeria/cuidados.html:30
+msgid "¿Eliminar este paso?"
+msgstr "Delete this step?"
+
+#: templates/mensajeria/cuidados.html:33
+msgid ""
+"El paso de retoque no se prepara si ya hubo retoque o si quedan sesiones de "
+"ese tatuaje."
+msgstr ""
+"The touch-up step isn't prepared if a touch-up already happened or there are"
+" sessions left for that tattoo."
+
+#: templates/mensajeria/enviar.html:2
+msgid "Enviar mensaje"
+msgstr "Send message"
+
+#: templates/mensajeria/enviar.html:8
+#, python-format
+msgid "Enviar a %(nombre)s"
+msgstr "Send to %(nombre)s"
+
+#: templates/mensajeria/enviar.html:13
+msgid "Si no lo envías ahora, lo tienes en"
+msgstr "If you don't send it now, you'll find it in"
+
+#: templates/mensajeria/fecha_formulario.html:4
+#: templates/mensajeria/fechas.html:6
+msgid "Nueva fecha"
+msgstr "New date"
+
+#: templates/mensajeria/fecha_formulario.html:22
+msgid ""
+"Ejemplos: Día de la Madre en EE. UU. = «N-ésimo», mayo, semana 2, domingo. "
+"Acción de Gracias = noviembre, semana 4, jueves."
+msgstr ""
+"Examples: Mother's Day in the US = “Nth”, May, week 2, Sunday. Thanksgiving "
+"= November, week 4, Thursday."
+
+#: templates/mensajeria/fecha_formulario.html:26
+msgid "¿Eliminar esta fecha?"
+msgstr "Delete this date?"
+
+#: templates/mensajeria/fechas.html:9
+msgid ""
+"Unos días antes de cada fecha se prepara una campaña repartida en esos días,"
+" solo para clientes que aceptaron promociones."
+msgstr ""
+"A few days before each date, a campaign is prepared and spread over those "
+"days, only for clients who accepted promotions."
+
+#: templates/mensajeria/fechas.html:13
+msgid "Regla"
+msgstr "Rule"
+
+#: templates/mensajeria/fechas.html:13
+msgid "Próxima"
+msgstr "Next"
+
+#: templates/mensajeria/fechas.html:20
+#, python-format
+msgid "%(nombre)s · %(n)s día"
+msgid_plural "%(nombre)s · %(n)s días"
+msgstr[0] "%(nombre)s · %(n)s day"
+msgstr[1] "%(nombre)s · %(n)s days"
+
+#: templates/mensajeria/fechas.html:20
+msgid "Solo recordatorio"
+msgstr "Reminder only"
+
+#: templates/mensajeria/fechas.html:21
+msgid "Pausada"
+msgstr "Paused"
+
+#: templates/mensajeria/fechas.html:29
+msgid "Sin fechas"
+msgstr "No dates"
+
+#: templates/mensajeria/fechas.html:29
+msgid "Añadir fecha"
+msgstr "Add date"
+
+#: templates/mensajeria/historial.html:2
+msgid "Historial de mensajes"
+msgstr "Message history"
+
+#: templates/mensajeria/historial.html:11
+msgid "Copiados"
+msgstr "Copied"
+
+#: templates/mensajeria/historial.html:11
+msgid "· 30 días"
+msgstr "· 30 days"
+
+#: templates/mensajeria/historial.html:16
+msgid "Cliente o texto del mensaje"
+msgstr "Client or message text"
+
+#: templates/mensajeria/historial.html:19
+msgid "Todos los tipos"
+msgstr "All types"
+
+#: templates/mensajeria/historial.html:22
+msgid "Canal"
+msgstr "Channel"
+
+#: templates/mensajeria/historial.html:23
+msgid "Todos los canales"
+msgstr "All channels"
+
+#: templates/mensajeria/historial.html:51
+msgid "Sin mensajes enviados"
+msgstr "No messages sent"
+
+#: templates/mensajeria/historial.html:51
+msgid ""
+"Cada mensaje que marques como enviado quedará aquí y en la ficha del "
+"cliente."
+msgstr ""
+"Every message you mark as sent will show up here and in the client's record."
+
+#: templates/mensajeria/nuevo.html:16
+msgid "— Escribir desde cero —"
+msgstr "— Write from scratch —"
+
+#: templates/mensajeria/nuevo.html:24
+msgid "Preparar envío"
+msgstr "Prepare to send"
+
+#: templates/mensajeria/plantilla_formulario.html:2
+#: templates/mensajeria/plantilla_formulario.html:6
+#: templates/mensajeria/plantillas.html:6
+#: templates/mensajeria/plantillas.html:26
+msgid "Nueva plantilla"
+msgstr "New template"
+
+#: templates/mensajeria/plantilla_formulario.html:20
+msgid "Insertar variable"
+msgstr "Insert variable"
+
+#: templates/mensajeria/plantilla_formulario.html:31
+msgid "¿Eliminar esta plantilla?"
+msgstr "Delete this template?"
+
+#: templates/mensajeria/plantilla_formulario.html:35
+msgid "Vista previa"
+msgstr "Preview"
+
+#: templates/mensajeria/plantilla_formulario.html:37
+msgid ""
+"Con datos de ejemplo. Las variables en blanco se ven tal cual para que las "
+"corrijas."
+msgstr ""
+"With sample data. Blank variables are shown as-is so you can fix them."
+
+#: templates/mensajeria/plantillas.html:17
+msgid "Por defecto"
+msgstr "Default"
+
+#: templates/mensajeria/plantillas.html:17
+msgid "Inactiva"
+msgstr "Inactive"
+
+#: templates/mensajeria/plantillas.html:26
+msgid "Sin plantillas"
+msgstr "No templates"
+
+#: templates/mensajeria/plantillas.html:26
+msgid ""
+"Ejecuta «inicializar_estudio» para cargar las plantillas de partida, o crea "
+"la tuya."
+msgstr ""
+"Run “inicializar_estudio” to load the starter templates, or create your own."
+
+#: templates/nucleo/ajustes.html:5
+msgid "Estudio"
+msgstr "Studio"
+
+#: templates/nucleo/ajustes.html:7
+msgid "Secciones de ajustes"
+msgstr "Settings sections"
+
+#: templates/nucleo/ajustes.html:9
+msgid "Datos y seguridad"
+msgstr "Data and security"
+
+#: templates/nucleo/ajustes.html:24
+msgid "Logotipo actual"
+msgstr "Current logo"
+
+#: templates/nucleo/ajustes.html:26
+msgid "Actualizar logotipo"
+msgstr "Update logo"
+
+#: templates/nucleo/ajustes.html:27
+msgid "Aparece en tu página de reservas, el catálogo y la app."
+msgstr "It appears on your booking page, the catalog and the app."
+
+#: templates/nucleo/ajustes.html:34
+msgid "Exportar todos tus datos"
+msgstr "Export all your data"
+
+#: templates/nucleo/ajustes.html:35
+msgid ""
+"Un .zip con todos los registros (JSON) y archivos: fotos, referencias, "
+"firmas y PDFs. No incluye contraseñas ni claves 2FA. Contiene datos de "
+"salud: guárdalo en un lugar seguro."
+msgstr ""
+"A .zip with all records (JSON) and files: photos, references, signatures and"
+" PDFs. It doesn't include passwords or 2FA keys. It contains health data: "
+"keep it somewhere safe."
+
+#: templates/nucleo/ajustes.html:38
+msgid "Descargar exportación"
+msgstr "Download export"
+
+#: templates/nucleo/ajustes.html:42
+msgid "Copias de seguridad"
+msgstr "Backups"
+
+#: templates/nucleo/ajustes.html:43
+msgid ""
+"Se crean solas cada noche en el disco del servidor (se conservan las "
+"últimas). Además, Render guarda copias de la base de datos."
+msgstr ""
+"They're created automatically every night on the server disk (the latest "
+"ones are kept). Render also keeps database backups."
+
+#: templates/nucleo/ajustes.html:46
+msgid "Código"
+msgstr "Code"
+
+#: templates/nucleo/ajustes.html:46 templates/nucleo/ajustes.html:49
+msgid "Código 2FA"
+msgstr "2FA code"
+
+#: templates/nucleo/ajustes.html:47
+msgid "Aún no hay copias."
+msgstr "No backups yet."
+
+#: templates/nucleo/ajustes.html:50
+msgid "Crear copia ahora"
+msgstr "Create backup now"
+
+#: templates/nucleo/ajustes.html:54
+msgid "Seguridad"
+msgstr "Security"
+
+#: templates/nucleo/ajustes.html:56
+msgid "Mi cuenta y 2FA"
+msgstr "My account and 2FA"
+
+#: templates/nucleo/ajustes.html:56
+msgid "Contraseña, códigos de recuperación, cambiar de móvil"
+msgstr "Password, recovery codes, change phone"
+
+#: templates/nucleo/ajustes.html:57 templates/nucleo/auditoria.html:2
+#: templates/nucleo/auditoria.html:5
+msgid "Registro de actividad"
+msgstr "Activity log"
+
+#: templates/nucleo/ajustes.html:57
+msgid "Accesos, exportaciones y borrados"
+msgstr "Sign-ins, exports and deletions"
+
+#: templates/nucleo/ajustes.html:61
+msgid "Más configuración"
+msgstr "More settings"
+
+#: templates/nucleo/ajustes.html:64
+msgid "Plantillas de mensajes"
+msgstr "Message templates"
+
+#: templates/nucleo/ajustes.html:65
+msgid "Secuencia de cuidados"
+msgstr "Aftercare sequence"
+
+#: templates/nucleo/ajustes.html:74
+msgid "Versión actual:"
+msgstr "Current version:"
+
+#: templates/nucleo/ajustes.html:74
+msgid ""
+". Al cambiar el texto se crea una versión nueva; los consentimientos ya "
+"firmados conservan el texto que se firmó. Revísalo con tu asesoría: es una "
+"plantilla de partida."
+msgstr ""
+". Changing the text creates a new version; consents already signed keep the "
+"text that was signed. Review it with your advisor: it's a starting template."
+
+#: templates/nucleo/ajustes.html:75
+msgid ""
+"Modelo configurado en el servidor (IA_MODELO). Los ejemplos se limpian de "
+"emails y teléfonos antes de enviarse; no pegues datos de clientes."
+msgstr ""
+"Model configured on the server (IA_MODELO). Examples are stripped of emails "
+"and phone numbers before being sent; don't paste client data."
+
+#: templates/nucleo/auditoria.html:8 templates/nucleo/auditoria.html:16
+msgid "Acción"
+msgstr "Action"
+
+#: templates/nucleo/auditoria.html:10
+msgid "Todas las acciones"
+msgstr "All actions"
+
+#: templates/nucleo/auditoria.html:16 templates/publico/reserva.html:57
+#: templates/solicitudes/detalle.html:38
+msgid "Cuándo"
+msgstr "When"
+
+#: templates/nucleo/auditoria.html:16
+msgid "Detalle"
+msgstr "Detail"
+
+#: templates/nucleo/auditoria.html:16
+msgid "IP"
+msgstr "IP"
+
+#: templates/nucleo/auditoria.html:26
+msgid "Sin registros."
+msgstr "No records."
+
+#: templates/nucleo/offline.html:2 templates/nucleo/offline.html:6
+msgid "Sin conexión"
+msgstr "Offline"
+
+#: templates/nucleo/offline.html:7
+msgid ""
+"No hay internet ahora mismo. Por privacidad, los datos de tus clientes no se"
+" guardan en el móvil: vuelve a intentarlo cuando tengas conexión."
+msgstr ""
+"There's no internet right now. For privacy, your clients' data isn't stored "
+"on the phone: try again when you're back online."
+
+#: templates/nucleo/offline.html:8
+msgid "Reintentar"
+msgstr "Retry"
+
+#: templates/panel/inicio.html:7
+#, python-format
+msgid "Hola, %(primer_nombre)s"
+msgstr "Hi, %(primer_nombre)s"
+
+#: templates/panel/inicio.html:19
+msgid "Citas hoy"
+msgstr "Appointments today"
+
+#: templates/panel/inicio.html:20
+#, python-format
+msgid "%(citas_semana)s esta semana · %(horas_semana)s h"
+msgstr "%(citas_semana)s this week · %(horas_semana)s h"
+
+#: templates/panel/inicio.html:23
+msgid "Mensajes por enviar"
+msgstr "Messages to send"
+
+#: templates/panel/inicio.html:24
+msgid "Prepara tu café y dale ↗"
+msgstr "Grab your coffee and get going ↗"
+
+#: templates/panel/inicio.html:27
+msgid "Solicitudes nuevas"
+msgstr "New requests"
+
+#: templates/panel/inicio.html:28
+#, python-format
+msgid "%(n)s cita por confirmar"
+msgid_plural "%(n)s citas por confirmar"
+msgstr[0] "%(n)s appointment to confirm"
+msgstr[1] "%(n)s appointments to confirm"
+
+#: templates/panel/inicio.html:28
+msgid "Citas confirmadas"
+msgstr "Confirmed appointments"
+
+#: templates/panel/inicio.html:32
+msgid "Ingresos del mes"
+msgstr "Income this month"
+
+#: templates/panel/inicio.html:33
+#, python-format
+msgid "%(variacion)s vs. mismo tramo del mes pasado"
+msgstr "%(variacion)s vs. same period last month"
+
+#: templates/panel/inicio.html:33
+msgid "Sin datos del mes pasado"
+msgstr "No data from last month"
+
+#: templates/panel/inicio.html:39
+msgid "Avisos"
+msgstr "Alerts"
+
+#: templates/panel/inicio.html:42
+#, python-format
+msgid "canceló su cita del %(inicio)s. Hay hueco que ofrecer."
+msgstr "cancelled their appointment on %(inicio)s. There's a slot to offer."
+
+#: templates/panel/inicio.html:42
+#, python-format
+msgid "pide cambiar su cita del %(inicio)s: «%(reprogramacion_pedida)s»"
+msgstr ""
+"wants to change their appointment on %(inicio)s: “%(reprogramacion_pedida)s”"
+
+#: templates/panel/inicio.html:51
+msgid "Agenda de hoy"
+msgstr "Today's schedule"
+
+#: templates/panel/inicio.html:51
+msgid "Ver agenda"
+msgstr "View calendar"
+
+#: templates/panel/inicio.html:64
+msgid "Hoy no hay citas."
+msgstr "No appointments today."
+
+#: templates/panel/inicio.html:64
+msgid "Buen día para mover la lista de espera."
+msgstr "A good day to work through the waiting list."
+
+#: templates/panel/inicio.html:69
+msgid "Huecos libres · 7 días"
+msgstr "Open slots · 7 days"
+
+#: templates/panel/inicio.html:81
+msgid "Semana completa (o sin horario configurado)."
+msgstr "Fully booked week (or no working hours set)."
+
+#: templates/panel/inicio.html:87
+msgid "Ingresos · 6 meses"
+msgstr "Income · 6 months"
+
+#: templates/panel/inicio.html:88
+msgid "Ingresos de los últimos 6 meses"
+msgstr "Income over the last 6 months"
+
+#: templates/panel/inicio.html:95
+msgid "Salud del estudio"
+msgstr "Studio health"
+
+#: templates/panel/inicio.html:97
+msgid "No-show · 90 días"
+msgstr "No-show · 90 days"
+
+#: templates/panel/inicio.html:97
+#, python-format
+msgid "%(no_show)s de %(realizadas)s"
+msgstr "%(no_show)s of %(realizadas)s"
+
+#: templates/panel/inicio.html:98
+msgid "Vuelven"
+msgstr "Returning"
+
+#: templates/panel/inicio.html:98
+#, python-format
+msgid "%(vuelven)s de %(total)s con 2+ visitas"
+msgstr "%(vuelven)s of %(total)s with 2+ visits"
+
+#: templates/panel/inicio.html:103
+msgid "En riesgo de perderse"
+msgstr "At risk of drifting away"
+
+#: templates/panel/inicio.html:109
+#, python-format
+msgid "%(visitas)s visitas · última %(ultima)s"
+msgstr "%(visitas)s visits · last %(ultima)s"
+
+#: templates/panel/inicio.html:113
+msgid "Campaña de reactivación"
+msgstr "Win-back campaign"
+
+#: templates/panel/inicio.html:115
+msgid "Nadie fiel se está alejando. 🖤"
+msgstr "No loyal client is drifting away. 🖤"
+
+#: templates/panel/inicio.html:120
+msgid "Próximos cumpleaños"
+msgstr "Upcoming birthdays"
+
+#: templates/panel/inicio.html:125
+#, python-format
+msgid "%(fecha)s · cumple %(edad)s"
+msgstr "%(fecha)s · turns %(edad)s"
+
+#: templates/panel/inicio.html:131
+msgid "Ninguno en las próximas dos semanas."
+msgstr "None in the next two weeks."
+
+#: templates/panel/inicio.html:137
+msgid "Próxima fecha"
+msgstr "Next date"
+
+#: templates/panel/inicio.html:137
+msgid "Fechas"
+msgstr "Dates"
+
+#: templates/panel/inicio.html:144
+msgid "Empieza por tus clientes"
+msgstr "Start with your clients"
+
+#: templates/panel/inicio.html:144
+msgid ""
+"Añade a tus clientas habituales o comparte tu enlace de reservas desde "
+"Solicitudes."
+msgstr "Add your regular clients or share your booking link from Requests."
+
+#: templates/publico/cita.html:2 templates/publico/cita.html:11
+msgid "Tu cita"
+msgstr "Your appointment"
+
+#: templates/publico/cita.html:5
+msgid "¡Cita confirmada! Nos vemos pronto."
+msgstr "Appointment confirmed! See you soon."
+
+#: templates/publico/cita.html:6
+msgid "Cita cancelada. Gracias por avisar."
+msgstr "Appointment cancelled. Thanks for letting us know."
+
+#: templates/publico/cita.html:7
+msgid "Recibido. Te escribiremos para proponerte otra fecha."
+msgstr "Got it. We'll message you to suggest another date."
+
+#: templates/publico/cita.html:14
+msgid "Datos de la cita"
+msgstr "Appointment details"
+
+#: templates/publico/cita.html:17
+#, python-format
+msgid "%(tipo)s · %(duracion_minutos)s aprox."
+msgstr "%(tipo)s · approx. %(duracion_minutos)s"
+
+#: templates/publico/cita.html:25
+msgid "Confirmo que voy"
+msgstr "I confirm I'm coming"
+
+#: templates/publico/cita.html:30
+msgid "Necesito otra fecha"
+msgstr "I need another date"
+
+#: templates/publico/cita.html:33
+msgid "Enviar petición"
+msgstr "Send request"
+
+#: templates/publico/cita.html:38
+msgid "Cancelar la cita"
+msgstr "Cancel the appointment"
+
+#: templates/publico/cita.html:42
+msgid "¿Seguro que quieres cancelar tu cita?"
+msgstr "Are you sure you want to cancel your appointment?"
+
+#: templates/publico/cita.html:42
+msgid "Sí, cancelar"
+msgstr "Yes, cancel"
+
+#: templates/publico/cita.html:42
+msgid "Cancelar mi cita"
+msgstr "Cancel my appointment"
+
+#: templates/publico/cita.html:46
+msgid "Esta cita está cancelada."
+msgstr "This appointment is cancelled."
+
+#: templates/publico/cita.html:46
+#, python-format
+msgid "Si quieres una nueva, escríbenos al %(telefono)s."
+msgstr "If you'd like a new one, message us at %(telefono)s."
+
+#: templates/publico/cita.html:48
+msgid "Esta cita ya no se puede modificar desde aquí."
+msgstr "This appointment can no longer be changed from here."
+
+#: templates/publico/cita.html:48
+#, python-format
+msgid "Escríbenos al %(telefono)s."
+msgstr "Message us at %(telefono)s."
+
+#: templates/publico/cita.html:52
+msgid "Antes y después"
+msgstr "Before and after"
+
+#: templates/publico/enlace_invalido.html:2
+msgid "Enlace no válido"
+msgstr "Invalid link"
+
+#: templates/publico/enlace_invalido.html:6
+msgid "Este enlace ya no funciona"
+msgstr "This link no longer works"
+
+#: templates/publico/enlace_invalido.html:7
+msgid "Puede que haya caducado o que lo hayamos renovado."
+msgstr "It may have expired or we may have renewed it."
+
+#: templates/publico/enlace_invalido.html:7
+#, python-format
+msgid "Escríbenos al %(telefono)s y te enviamos uno nuevo."
+msgstr "Message us at %(telefono)s and we'll send you a new one."
+
+#: templates/publico/flash.html:2
+msgid "Flash disponibles"
+msgstr "Available flash"
+
+#: templates/publico/flash.html:8
+msgid "Diseños listos para tatuar. Elige uno y te escribo para darte fecha."
+msgstr "Designs ready to tattoo. Pick one and I'll message you with a date."
+
+#: templates/publico/flash.html:20
+msgid "· pieza única"
+msgstr "· one of a kind"
+
+#: templates/publico/flash.html:23
+msgid "Lo quiero"
+msgstr "I want it"
+
+#: templates/publico/flash.html:29
+msgid "La agenda está cerrada ahora mismo."
+msgstr "Bookings are closed right now."
+
+#: templates/publico/flash.html:29
+#, python-format
+msgid "Escríbeme por Instagram @%(instagram)s."
+msgstr "Message me on Instagram @%(instagram)s."
+
+#: templates/publico/flash.html:31
+msgid "No hay diseños disponibles en este momento. ¡Vuelve pronto!"
+msgstr "No designs available right now. Check back soon!"
+
+#: templates/publico/reserva.html:2 templates/publico/reserva.html:7
+msgid "Pide tu cita"
+msgstr "Book your appointment"
+
+#: templates/publico/reserva.html:14
+msgid "Flash elegido"
+msgstr "Chosen flash"
+
+#: templates/publico/reserva.html:29
+msgid "Sobre ti"
+msgstr "About you"
+
+#: templates/publico/reserva.html:38
+#, python-format
+msgid ""
+"Te contestaré por WhatsApp o SMS. Hace falta tener al menos %(edad_minima)s "
+"años."
+msgstr ""
+"I'll reply by WhatsApp or SMS. You must be at least %(edad_minima)s years "
+"old."
+
+#: templates/publico/reserva.html:42
+msgid "Tu tatuaje"
+msgstr "Your tattoo"
+
+#: templates/publico/reserva.html:71
+msgid "Enviar solicitud"
+msgstr "Send request"
+
+#: templates/publico/reserva_gracias.html:2
+msgid "¡Recibido!"
+msgstr "Received!"
+
+#: templates/publico/reserva_gracias.html:6
+msgid "¡Solicitud enviada!"
+msgstr "Request sent!"
+
+#: templates/publico/reserva_gracias.html:7
+#, python-format
+msgid ""
+"Gracias por confiar en %(nombre_artista)s. Reviso cada idea personalmente y "
+"te escribiré por WhatsApp o SMS en unos días."
+msgstr ""
+"Thanks for trusting %(nombre_artista)s. I review every idea personally and "
+"will message you by WhatsApp or SMS within a few days."
+
+#: templates/publico/reserva_gracias.html:8
+#, python-format
+msgid "Mientras, mira mi trabajo en @%(instagram)s"
+msgstr "In the meantime, check out my work at @%(instagram)s"
+
+#: templates/publico/reservas_cerradas.html:2
+msgid "Agenda cerrada"
+msgstr "Bookings closed"
+
+#: templates/publico/reservas_cerradas.html:6
+msgid "Agenda cerrada por ahora"
+msgstr "Bookings closed for now"
+
+#: templates/publico/reservas_cerradas.html:7
+msgid "En este momento no estoy aceptando nuevas solicitudes."
+msgstr "I'm not taking new requests at the moment."
+
+#: templates/publico/reservas_cerradas.html:7
+#, python-format
+msgid "Avisaré en @%(instagram)s cuando vuelva a abrir."
+msgstr "I'll post on @%(instagram)s when bookings reopen."
+
+#: templates/solicitudes/_triaje.html:2
+msgid "Análisis"
+msgstr "Analysis"
+
+#: templates/solicitudes/_triaje.html:9
+msgid "Estimación"
+msgstr "Estimate"
+
+#: templates/solicitudes/_triaje.html:9
+#, python-format
+msgid ""
+"%(sesiones_estimadas)s sesión(es) · %(horas_estimadas)s h · complejidad "
+"%(complejidad)s"
+msgstr ""
+"%(sesiones_estimadas)s session(s) · %(horas_estimadas)s h · complexity "
+"%(complejidad)s"
+
+#: templates/solicitudes/_triaje.html:11
+msgid "Preguntas pendientes"
+msgstr "Open questions"
+
+#: templates/solicitudes/_triaje.html:12
+msgid "Orientativo: lo propone la IA a partir del texto (no ve las imágenes)."
+msgstr ""
+"Rough guide: suggested by AI from the text (it doesn't see the images)."
+
+#: templates/solicitudes/_triaje.html:14
+msgid ""
+"Estructura la idea, estima sesiones y lista lo que falta preguntar. Solo se "
+"envía la descripción, sin datos de contacto ni imágenes."
+msgstr ""
+"Structures the idea, estimates sessions and lists what still needs asking. "
+"Only the description is sent, without contact details or images."
+
+#: templates/solicitudes/_triaje.html:16
+msgid ""
+"Activa el asistente de IA (OPENAI_API_KEY) para analizar solicitudes "
+"automáticamente."
+msgstr ""
+"Turn on the AI assistant (OPENAI_API_KEY) to analyze requests automatically."
+
+#: templates/solicitudes/_triaje.html:20
+msgid "Volver a analizar"
+msgstr "Analyze again"
+
+#: templates/solicitudes/_triaje.html:20
+msgid "Analizar con IA"
+msgstr "Analyze with AI"
+
+#: templates/solicitudes/detalle.html:2
+#, python-format
+msgid "Solicitud de %(nombre)s"
+msgstr "Request from %(nombre)s"
+
+#: templates/solicitudes/detalle.html:9
+#, python-format
+msgid "Recibida %(creado_en)s · %(creado_en2)s %(creado_en3)s"
+msgstr "Received %(creado_en)s · %(creado_en2)s %(creado_en3)s"
+
+#: templates/solicitudes/detalle.html:16
+msgid "¿Qué hacemos?"
+msgstr "What should we do?"
+
+#: templates/solicitudes/detalle.html:18
+msgid "Dar cita"
+msgstr "Book appointment"
+
+#: templates/solicitudes/detalle.html:19
+msgid "Aceptar sin fecha"
+msgstr "Accept without date"
+
+#: templates/solicitudes/detalle.html:20 templates/solicitudes/detalle.html:92
+msgid "Rechazar"
+msgstr "Decline"
+
+#: templates/solicitudes/detalle.html:23
+msgid "Ya existe la ficha de"
+msgstr "There's already a record for"
+
+#: templates/solicitudes/detalle.html:23
+msgid "con ese teléfono o email: se usará esa."
+msgstr "with that phone or email: it will be used."
+
+#: templates/solicitudes/detalle.html:23
+msgid ""
+"Al aceptar o dar cita se crea su ficha y el proyecto con las imágenes de "
+"referencia."
+msgstr ""
+"Accepting or booking creates their record and the project with the reference"
+" images."
+
+#: templates/solicitudes/detalle.html:31
+msgid "La idea"
+msgstr "The idea"
+
+#: templates/solicitudes/detalle.html:39
+msgid "Presupuesto"
+msgstr "Budget"
+
+#: templates/solicitudes/detalle.html:40 templates/solicitudes/lista.html:57
+msgid "Primer tatuaje"
+msgstr "First tattoo"
+
+#: templates/solicitudes/detalle.html:45
+msgid "Referencias"
+msgstr "References"
+
+#: templates/solicitudes/detalle.html:47
+#, python-format
+msgid "Referencia %(counter)s"
+msgstr "Reference %(counter)s"
+
+#: templates/solicitudes/detalle.html:60
+msgid "Edad"
+msgstr "Age"
+
+#: templates/solicitudes/detalle.html:60
+#, python-format
+msgid "%(edad)s años"
+msgstr "%(edad)s years old"
+
+#: templates/solicitudes/detalle.html:66
+msgid "Responder rápido"
+msgstr "Quick reply"
+
+#: templates/solicitudes/detalle.html:78
+msgid "Ver cita"
+msgstr "View appointment"
+
+#: templates/solicitudes/detalle.html:79
+msgid "Ver ficha"
+msgstr "View record"
+
+#: templates/solicitudes/detalle.html:86
+msgid "Rechazar solicitud"
+msgstr "Decline request"
+
+#: templates/solicitudes/detalle.html:88
+msgid ""
+"Si quieres avisar, usa «Responder rápido» antes. Los datos se borran solos a"
+" los 30 días."
+msgstr ""
+"If you want to let them know, use “Quick reply” first. The data is deleted "
+"automatically after 30 days."
+
+#: templates/solicitudes/detalle.html:90
+msgid "Es spam"
+msgstr "It's spam"
+
+#: templates/solicitudes/lista.html:5
+msgid "Página pública"
+msgstr "Public page"
+
+#: templates/solicitudes/lista.html:10
+msgid "Tu enlace de reservas"
+msgstr "Your booking link"
+
+#: templates/solicitudes/lista.html:11
+msgid "Abierto"
+msgstr "Open"
+
+#: templates/solicitudes/lista.html:11
+msgid "Cerrado"
+msgstr "Closed"
+
+#: templates/solicitudes/lista.html:15
+msgid "Enlace de reservas"
+msgstr "Booking link"
+
+#: templates/solicitudes/lista.html:16
+msgid "Enlace copiado. Pégalo en tu bio de Instagram."
+msgstr "Link copied. Paste it in your Instagram bio."
+
+#: templates/solicitudes/lista.html:19
+#, python-format
+msgid "Caduca el %(caduca_en)s · %(n)s visita."
+msgid_plural "Caduca el %(caduca_en)s · %(n)s visitas."
+msgstr[0] "Expires on %(caduca_en)s · %(n)s visit."
+msgstr[1] "Expires on %(caduca_en)s · %(n)s visits."
+
+#: templates/solicitudes/lista.html:21
+msgid "Aún no tienes enlace público."
+msgstr "You don't have a public link yet."
+
+#: templates/solicitudes/lista.html:26
+msgid ""
+"El enlace actual dejará de funcionar. Tendrás que cambiarlo en tu Instagram."
+msgstr ""
+"The current link will stop working. You'll have to update it on your "
+"Instagram."
+
+#: templates/solicitudes/lista.html:28
+msgid "Crear enlace"
+msgstr "Create link"
+
+#: templates/solicitudes/lista.html:31
+msgid "Cerrar agenda"
+msgstr "Close bookings"
+
+#: templates/solicitudes/lista.html:33
+msgid "Abrir agenda"
+msgstr "Open bookings"
+
+#: templates/solicitudes/lista.html:66
+msgid "Nada por aquí"
+msgstr "Nothing here"
+
+#: templates/solicitudes/lista.html:66
+msgid ""
+"Comparte tu enlace de reservas en Instagram: las solicitudes llegan a esta "
+"bandeja."
+msgstr "Share your booking link on Instagram: requests land in this inbox."

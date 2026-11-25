@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block titulo %}{% if plantilla %}{{ plantilla.nombre }}{% else %}Nueva plantilla{% endif %}{% endblock %}
+{% block titulo %}{% if plantilla %}{{ plantilla.nombre }}{% else %}{% translate "Nueva plantilla" %}{% endif %}{% endblock %}
 {% block cabeza %}<script src="{% static 'js/mensajes.js' %}" defer></script>{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
-  <div><nav class="migas"><a href="{% url 'mensajeria:plantillas' %}">Plantillas</a></nav><h1>{% if plantilla %}{{ plantilla.nombre }}{% else %}Nueva plantilla{% endif %}</h1></div>
+  <div><nav class="migas"><a href="{% url 'mensajeria:plantillas' %}">{% translate "Plantillas" %}</a></nav><h1>{% if plantilla %}{{ plantilla.nombre }}{% else %}{% translate "Nueva plantilla" %}{% endif %}</h1></div>
 </header>
 <form method="post" class="rejilla-ficha" novalidate>
   {% csrf_token %}
@@ -11,13 +11,13 @@
     {% if form.non_field_errors %}<div class="alerta">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
     <div class="formulario-2">{{ form.nombre.as_field_group }}{{ form.categoria.as_field_group }}</div>
     <div class="campo{% if form.cuerpo.errors %} campo-con-error{% endif %}">
-      <label for="{{ form.cuerpo.id_for_label }}">Texto</label>
+      <label for="{{ form.cuerpo.id_for_label }}">{% translate "Texto" %}</label>
       <textarea name="cuerpo" id="{{ form.cuerpo.id_for_label }}" rows="8" data-editor-plantilla
                 hx-post="{% url 'mensajeria:vista_previa' %}" hx-trigger="input changed delay:300ms, insertar" hx-target="#vista-previa">{{ form.cuerpo.value|default:"" }}</textarea>
       {{ form.cuerpo.errors }}
     </div>
     <div class="campo">
-      <span class="campo-etiqueta">Insertar variable</span>
+      <span class="campo-etiqueta">{% translate "Insertar variable" %}</span>
       <div class="variables">
         {% for clave, ayuda in variables.items %}<button type="button" class="etiqueta boton-variable" data-insertar-variable="{{ clave }}" title="{{ ayuda }}">{{ "{" }}{{ clave }}{{ "}" }}</button>{% endfor %}
       </div>
@@ -26,15 +26,15 @@
     {{ form.predeterminada.as_field_group }}
     {{ form.activa.as_field_group }}
     <div class="acciones-formulario">
-      <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
-      <a class="btn btn-fantasma" href="{% url 'mensajeria:plantillas' %}">Cancelar</a>
-      {% if plantilla %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="¿Eliminar esta plantilla?">{% icono "basura" %} Eliminar</button>{% endif %}
+      <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar" %}</button>
+      <a class="btn btn-fantasma" href="{% url 'mensajeria:plantillas' %}">{% translate "Cancelar" %}</a>
+      {% if plantilla %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="{% translate "¿Eliminar esta plantilla?" %}">{% icono "basura" %} {% translate "Eliminar" %}</button>{% endif %}
     </div>
   </section>
   <aside class="pila">
-    <h2 class="titulo-seccion">Vista previa</h2>
+    <h2 class="titulo-seccion">{% translate "Vista previa" %}</h2>
     {% include "mensajeria/_vista_previa.html" %}
-    <p class="texto-peq texto-suave">Con datos de ejemplo. Las variables en blanco se ven tal cual para que las corrijas.</p>
+    <p class="texto-peq texto-suave">{% translate "Con datos de ejemplo. Las variables en blanco se ven tal cual para que las corrijas." %}</p>
   </aside>
 </form>
 {% endblock %}

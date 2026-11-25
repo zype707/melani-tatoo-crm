@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.renderers import TemplatesSetting
+from django.utils.translation import gettext as _
 
 
 class Renderizador(TemplatesSetting):
@@ -54,5 +55,5 @@ def procesar_lista_imagenes(archivos, maximo: int) -> list:
     from .imagenes import procesar_imagen
 
     if len(archivos) > maximo:
-        raise forms.ValidationError(f"Como máximo {maximo} imágenes por envío.")
+        raise forms.ValidationError(_("Como máximo %(maximo)s imágenes por envío.") % {"maximo": maximo})
     return [procesar_imagen(a) for a in archivos]

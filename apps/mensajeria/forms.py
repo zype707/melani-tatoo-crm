@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from apps.clientes.models import Cliente
 from apps.nucleo.formularios import EntradaFecha
@@ -18,7 +19,8 @@ class PlantillaForm(forms.ModelForm):
         malas = variables.desconocidas(cuerpo)
         if malas:
             raise forms.ValidationError(
-                "Variables que no existen: " + ", ".join("{" + v + "}" for v in malas) + ". Usa las de la lista."
+                _("Variables que no existen: %(lista)s. Usa las de la lista.")
+                % {"lista": ", ".join("{" + v + "}" for v in malas)}
             )
         return cuerpo
 
@@ -50,9 +52,9 @@ class PasoCuidadoForm(forms.ModelForm):
 
 
 class FechaDestacadaForm(forms.ModelForm):
-    segmento = forms.ChoiceField(label="Para", choices=segmentos.OPCIONES)
+    segmento = forms.ChoiceField(label=_("Para"), choices=segmentos.OPCIONES)
     mes = forms.TypedChoiceField(
-        label="Mes",
+        label=_("Mes"),
         coerce=int,
         required=False,
         empty_value=None,
@@ -112,20 +114,20 @@ class FechaDestacadaForm(forms.ModelForm):
         }.get(regla, [])
         for campo in faltan:
             if datos.get(campo) in (None, ""):
-                self.add_error(campo, "Necesario para esta regla.")
+                self.add_error(campo, _("Necesario para esta regla."))
         if datos.get("generar_campana") and not datos.get("plantilla"):
-            self.add_error("plantilla", "Elige una plantilla o desmarca «Preparar mensajes».")
+            self.add_error("plantilla", _("Elige una plantilla o desmarca «Preparar mensajes»."))
         return datos
 
 
 class CampanaForm(forms.ModelForm):
-    segmento = forms.ChoiceField(label="Segmento", choices=segmentos.OPCIONES)
+    segmento = forms.ChoiceField(label=_("Segmento"), choices=segmentos.OPCIONES)
 
     class Meta:
         model = Campana
         fields = ["nombre", "segmento", "plantilla", "fecha_inicio", "por_dia"]
         widgets = {"fecha_inicio": EntradaFecha()}
-        help_texts = {"por_dia": "Así no parece un envío masivo y puedes responder a cada persona."}
+        help_texts = {"por_dia": _("Así no parece un envío masivo y puedes responder a cada persona.")}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -135,15 +137,15 @@ class CampanaForm(forms.ModelForm):
     def clean_por_dia(self):
         n = self.cleaned_data["por_dia"]
         if not 1 <= n <= 50:
-            raise forms.ValidationError("Entre 1 y 50 al día.")
+            raise forms.ValidationError(_("Entre 1 y 50 al día."))
         return n
 
 
 class MensajeLibreForm(forms.Form):
     cliente = forms.ModelChoiceField(queryset=Cliente.objects.activos(), widget=forms.HiddenInput)
     plantilla = forms.ModelChoiceField(
-        label="Partir de una plantilla",
+        label=_("Partir de una plantilla"),
         queryset=Plantilla.objects.filter(activa=True),
         required=False,
     )
-    texto = forms.CharField(label="Mensaje", widget=forms.Textarea(attrs={"rows": 6}), max_length=4000)
+    texto = forms.CharField(label=_("Mensaje"), widget=forms.Textarea(attrs={"rows": 6}), max_length=4000)

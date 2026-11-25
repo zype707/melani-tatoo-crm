@@ -8,6 +8,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_date, parse_datetime
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 from django.views.decorators.http import require_POST
 
 from apps.clientes.models import Cliente, NotaCliente
@@ -42,7 +44,12 @@ from .models import (
     limites_dia,
 )
 
-VISTAS = {"dia": "Día", "semana": "Semana", "mes": "Mes", "lista": "Lista"}
+VISTAS = {
+    "dia": gettext_lazy("Día"),
+    "semana": gettext_lazy("Semana"),
+    "mes": gettext_lazy("Mes"),
+    "lista": gettext_lazy("Lista"),
+}
 MIN_FRANJA = 30
 
 
@@ -64,8 +71,8 @@ def _mover(fecha: date, vista: str, pasos: int) -> date:
 
 def _rejilla(dias: list[date]) -> dict:
     """Datos para la vista de día/semana: filas de 30 min y posición de cada bloque."""
-    desde, _ = limites_dia(dias[0])
-    _, hasta = limites_dia(dias[-1])
+    desde, _x = limites_dia(dias[0])
+    _x, hasta = limites_dia(dias[-1])
     citas = list(
         Cita.objects.entre(desde, hasta).exclude(estado=EstadoCita.CANCELADA).select_related("cliente", "tipo")
     )
@@ -135,8 +142,8 @@ def _mes(fecha: date) -> dict:
     primero = fecha.replace(day=1)
     inicio = primero - timedelta(days=primero.weekday())
     dias = [inicio + timedelta(days=i) for i in range(42)]
-    desde, _ = limites_dia(dias[0])
-    _, hasta = limites_dia(dias[-1])
+    desde, _x = limites_dia(dias[0])
+    _x, hasta = limites_dia(dias[-1])
     citas = Cita.objects.entre(desde, hasta).exclude(estado=EstadoCita.CANCELADA).select_related("cliente", "tipo")
     por_dia: dict[date, list] = {}
     for c in citas:
@@ -169,7 +176,7 @@ def _mes(fecha: date) -> dict:
 
 
 def _lista(fecha: date, estado: str) -> dict:
-    desde, _ = limites_dia(fecha)
+    desde, _x = limites_dia(fecha)
     qs = Cita.objects.filter(inicio__gte=desde, inicio__lt=desde + timedelta(days=30)).select_related("cliente", "tipo")
     if estado in EstadoCita.values:
         qs = qs.filter(estado=estado)
@@ -222,7 +229,7 @@ def _guardar_cita(request, form, cita=None):
         with transaction.atomic():
             return form.save()
     except IntegrityError:
-        form.add_error(None, "Ese hueco acaba de ocuparse con otra cita. Elige otra hora.")
+        form.add_error(None, _("Ese hueco acaba de ocuparse con otra cita. Elige otra hora."))
         return None
 
 
@@ -251,7 +258,7 @@ def nueva(request):
                 SolicitudReserva.objects.filter(pk=request.GET["solicitud"]).update(
                     cita=cita, estado=SolicitudReserva.Estado.CONVERTIDA, revisada_en=timezone.now()
                 )
-            messages.success(request, f"Cita guardada para {cita.cliente.nombre}.")
+            messages.success(request, _("Cita guardada para %(nombre)s.") % {"nombre": cita.cliente.nombre})
             return redirect("agenda:detalle", cita.pk)
     if request.method == "POST" and form.data.get("cliente", "").isdigit():
         cliente = Cliente.objects.filter(pk=form.data["cliente"]).first()
@@ -262,7 +269,7 @@ def editar(request, pk):
     cita = get_object_or_404(Cita.objects.select_related("cliente"), pk=pk)
     form = CitaForm(request.POST or None, instance=cita, initial={"cliente": cita.cliente})
     if request.method == "POST" and form.is_valid() and _guardar_cita(request, form, cita):
-        messages.success(request, "Cita actualizada.")
+        messages.success(request, _("Cita actualizada."))
         return redirect("agenda:detalle", cita.pk)
     return render(request, "agenda/cita_formulario.html", {"form": form, "cita": cita, "cliente": cita.cliente})
 
@@ -296,7 +303,7 @@ def cambiar_estado(request, pk):
             )
         elif nuevo in EstadoCita.values:
             servicios.cambiar_estado(cita, nuevo)
-        messages.success(request, f"Cita marcada como «{cita.get_estado_display().lower()}».")
+        messages.success(request, _("Cita marcada como «%(lower)s».") % {"lower": cita.get_estado_display().lower()})
     except servicios.ConflictoAgenda as exc:
         messages.error(request, str(exc))
     if request.POST.get("atendida"):
@@ -310,7 +317,7 @@ def atender_cambio(request, pk):
     cita = get_object_or_404(Cita, pk=pk)
     cita.reprogramacion_atendida = True
     cita.save(update_fields=["reprogramacion_atendida"])
-    messages.success(request, "Petición de cambio marcada como atendida.")
+    messages.success(request, _("Petición de cambio marcada como atendida."))
     return redirect("agenda:detalle", cita.pk)
 
 
@@ -354,7 +361,7 @@ def cerrar_sesion(request, pk):
         except servicios.ConflictoAgenda as exc:
             messages.error(request, str(exc))
             return redirect("agenda:detalle", cita.pk)
-        messages.success(request, "Sesión cerrada. Los cuidados posteriores se prepararán solos.")
+        messages.success(request, _("Sesión cerrada. Los cuidados posteriores se prepararán solos."))
         if cita.tatuaje:
             return redirect(reverse("clientes:tatuaje", args=[cita.tatuaje.pk]) + "#fotos")
         return redirect("agenda:detalle", cita.pk)
@@ -369,9 +376,9 @@ def pago_nuevo(request, pk):
         pago = form.save(commit=False)
         pago.cita, pago.cliente, pago.tatuaje = cita, cita.cliente, cita.tatuaje
         pago.save()
-        messages.success(request, "Pago registrado.")
+        messages.success(request, _("Pago registrado."))
     else:
-        messages.error(request, "Revisa el importe y la fecha del pago.")
+        messages.error(request, _("Revisa el importe y la fecha del pago."))
     return redirect(reverse("agenda:detalle", args=[cita.pk]) + "#pagos")
 
 
@@ -381,7 +388,7 @@ def pago_devolver(request, pk):
     pago.devuelto = not pago.devuelto
     pago.devuelto_en = timezone.localdate() if pago.devuelto else None
     pago.save(update_fields=["devuelto", "devuelto_en"])
-    messages.success(request, "Pago marcado como devuelto." if pago.devuelto else "Devolución anulada.")
+    messages.success(request, _("Pago marcado como devuelto.") if pago.devuelto else _("Devolución anulada."))
     return redirect(request.POST.get("volver") or reverse("agenda:detalle", args=[pago.cita_id]))
 
 
@@ -390,7 +397,7 @@ def pago_borrar(request, pk):
     pago = get_object_or_404(Pago, pk=pk)
     volver = request.POST.get("volver") or (reverse("agenda:detalle", args=[pago.cita_id]) if pago.cita_id else "/")
     pago.delete()
-    messages.success(request, "Pago eliminado.")
+    messages.success(request, _("Pago eliminado."))
     return redirect(volver)
 
 
@@ -419,11 +426,11 @@ def espera_formulario(request, pk=None):
         if entrada and "quitar" in request.POST:
             entrada.activa = False
             entrada.save(update_fields=["activa"])
-            messages.success(request, "Quitado de la lista de espera.")
+            messages.success(request, _("Quitado de la lista de espera."))
             return redirect("agenda:lista_espera")
         if form.is_valid():
             form.save()
-            messages.success(request, "Lista de espera actualizada.")
+            messages.success(request, _("Lista de espera actualizada."))
             return redirect("agenda:lista_espera")
     cliente_id = form["cliente"].value()
     cliente = Cliente.objects.filter(pk=cliente_id).first() if str(cliente_id or "").isdigit() else None
@@ -437,7 +444,7 @@ def configuracion(request):
     form = HorarioForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Horario guardado.")
+        messages.success(request, _("Horario guardado."))
         return redirect("agenda:configuracion")
     ahora = timezone.now()
     return render(
@@ -456,7 +463,7 @@ def tipo_formulario(request, pk=None):
     form = TipoCitaForm(request.POST or None, instance=tipo)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Tipo de cita guardado.")
+        messages.success(request, _("Tipo de cita guardado."))
         return redirect("agenda:configuracion")
     return render(request, "agenda/tipo_formulario.html", {"form": form, "tipo": tipo})
 
@@ -468,7 +475,7 @@ def bloqueo_formulario(request):
     form = BloqueoForm(request.POST or None, initial=inicial)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Bloqueo añadido a la agenda.")
+        messages.success(request, _("Bloqueo añadido a la agenda."))
         return redirect("agenda:configuracion")
     return render(request, "agenda/bloqueo_formulario.html", {"form": form})
 
@@ -476,7 +483,7 @@ def bloqueo_formulario(request):
 @require_POST
 def bloqueo_borrar(request, pk):
     get_object_or_404(Bloqueo, pk=pk).delete()
-    messages.success(request, "Bloqueo eliminado.")
+    messages.success(request, _("Bloqueo eliminado."))
     return redirect("agenda:configuracion")
 
 

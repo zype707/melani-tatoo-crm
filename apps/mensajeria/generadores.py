@@ -13,6 +13,8 @@ from math import ceil
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 
 from apps.agenda.models import Cita, EstadoCita
 from apps.clientes.models import Cliente, Tatuaje
@@ -44,14 +46,14 @@ def generar_cumpleanos(hoy: date) -> int:
     creados = 0
     for c in Cliente.objects.activos().filter(filtro):
         edad = hoy.year - c.fecha_nacimiento.year
-        _, nuevo = servicios.preparar(
+        _x, nuevo = servicios.preparar(
             c,
             tipo=Categoria.CUMPLEANOS,
             clave=f"cumpleanos:{c.pk}:{hoy.year}",
             plantilla=plantilla,
             fecha=hoy,
             caduca_el=hoy + timedelta(days=2),
-            motivo=f"Cumple {edad} años hoy",
+            motivo=_("Cumple %(edad)s años hoy") % {"edad": edad},
         )
         creados += nuevo
     return creados
@@ -66,7 +68,7 @@ def generar_recordatorios(hoy: date) -> int:
     creados = 0
     for cita in Cita.objects.pendientes().filter(inicio__gte=desde, inicio__lt=hasta).select_related("cliente", "tipo"):
         local = timezone.localtime(cita.inicio)
-        _, nuevo = servicios.preparar(
+        _x, nuevo = servicios.preparar(
             cita.cliente,
             tipo=Categoria.RECORDATORIO,
             clave=f"recordatorio:{cita.pk}:{local:%Y%m%d%H%M}",
@@ -74,8 +76,9 @@ def generar_recordatorios(hoy: date) -> int:
             fecha=hoy,
             caduca_el=local.date(),
             cita=cita,
-            motivo=f"Cita {relativo(cita.inicio)} a las {hora(cita.inicio)}"
-            + (" · por confirmar" if cita.estado == EstadoCita.SOLICITADA else ""),
+            motivo=_("Cita %(relativo)s a las %(hora)s")
+            % {"relativo": relativo(cita.inicio), "hora": hora(cita.inicio)}
+            + (_(" · por confirmar") if cita.estado == EstadoCita.SOLICITADA else ""),
         )
         creados += nuevo
     return creados
@@ -123,7 +126,7 @@ def generar_cuidados(hoy: date) -> int:
         for paso in elegidos:
             objetivo = fecha_sesion + timedelta(days=paso.dias_despues)
             tipo = Categoria.RETOQUE if paso.es_oferta_retoque else Categoria.CUIDADO
-            _, nuevo = servicios.preparar(
+            _x, nuevo = servicios.preparar(
                 cita.cliente,
                 tipo=tipo,
                 clave=f"cuidado:{cita.pk}:{paso.pk}",
@@ -132,7 +135,8 @@ def generar_cuidados(hoy: date) -> int:
                 caduca_el=objetivo + timedelta(days=7 if paso.es_oferta_retoque else RECUPERACION_DIAS),
                 cita=cita,
                 tatuaje=cita.tatuaje,
-                motivo=f"{paso.nombre} tras la sesión del {fecha_corta(cita.inicio)}",
+                motivo=_("%(nombre)s tras la sesión del %(fecha_corta)s")
+                % {"nombre": paso.nombre, "fecha_corta": fecha_corta(cita.inicio)},
             )
             creados += nuevo
     return creados
@@ -167,7 +171,8 @@ def generar_aniversarios(hoy: date) -> int:
             fecha=hoy,
             caduca_el=hoy + timedelta(days=3),
             tatuaje=t,
-            motivo=f"Hoy hace {anios} año{'s' if anios > 1 else ''} de «{t.titulo}»",
+            motivo=ngettext("Hoy hace %(n)d año de «%(titulo)s»", "Hoy hace %(n)d años de «%(titulo)s»", anios)
+            % {"n": anios, "titulo": t.titulo},
         )
         if m:
             ya.add(t.cliente_id)
@@ -193,14 +198,14 @@ def generar_reactivaciones(hoy: date) -> int:
         ultima = c.citas.filter(estado=EstadoCita.REALIZADA).order_by("-inicio").first()
         if ultima is None:
             continue
-        _, nuevo = servicios.preparar(
+        _x, nuevo = servicios.preparar(
             c,
             tipo=Categoria.REACTIVACION,
             clave=f"reactivacion:{c.pk}:{ultima.pk}",
             plantilla=plantilla,
             fecha=hoy,
             caduca_el=hoy + timedelta(days=7),
-            motivo=f"Última visita {relativo(ultima.inicio)}",
+            motivo=_("Última visita %(relativo)s") % {"relativo": relativo(ultima.inicio)},
         )
         creados += nuevo
     return creados
@@ -221,7 +226,7 @@ def lanzar_campana(campana: Campana, hoy: date | None = None) -> int:
     for i, cliente in enumerate(destinatarios):
         fecha = inicio + timedelta(days=i // por_dia)
         caduca = campana.fecha_limite + timedelta(days=1) if campana.fecha_limite else fecha + timedelta(days=5)
-        _, nuevo = servicios.preparar(
+        _x, nuevo = servicios.preparar(
             cliente,
             tipo=tipo,
             clave=f"campana:{campana.pk}:{cliente.pk}",

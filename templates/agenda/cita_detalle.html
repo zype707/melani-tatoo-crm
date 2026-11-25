@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block titulo %}Cita · {{ cita.cliente.nombre }}{% endblock %}
+{% block titulo %}{% blocktranslate with nombre=cita.cliente.nombre %}Cita · {{ nombre }}{% endblocktranslate %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
   <div>
-    <nav class="migas" aria-label="Migas"><a href="{% url 'agenda:calendario' %}?fecha={{ cita.inicio|date:'Y-m-d' }}">Agenda</a></nav>
+    <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'agenda:calendario' %}?fecha={{ cita.inicio|date:'Y-m-d' }}">{% translate "Agenda" %}</a></nav>
     <span class="antetitulo"><span class="tipo-marca tipo-{{ cita.tipo.color }}" aria-hidden="true"></span> {{ cita.tipo }}</span>
     <h1><a href="{% url 'clientes:ficha' cita.cliente.pk %}" class="enlace-titulo">{{ cita.cliente.nombre_completo }}</a></h1>
     <p class="cita-cuando">{{ cita.inicio|fecha_larga|capfirst }} · <span class="numerico">{{ cita.inicio|hora }}–{{ cita.fin|hora }}</span> <span class="texto-suave">({{ cita.duracion_minutos|duracion }}, {{ cita.inicio|relativo }})</span></p>
@@ -12,49 +12,49 @@
 </header>
 
 <div class="pila">
-  {% if es_menor %}<div class="alerta">{% icono "alerta" %}<p>Cliente menor de {{ ajustes.edad_minima }} años.</p></div>{% endif %}
-  {% if salud and salud.alertas %}<div class="alerta">{% icono "alerta" %}<p>Antes de empezar revisa su salud: {{ salud.alertas|join:", " }}. <a href="{% url 'clientes:salud' cita.cliente.pk %}">Ver</a></p></div>{% endif %}
+  {% if es_menor %}<div class="alerta">{% icono "alerta" %}<p>{% blocktranslate with edad_minima=ajustes.edad_minima %}Cliente menor de {{ edad_minima }} años.{% endblocktranslate %}</p></div>{% endif %}
+  {% if salud and salud.alertas %}<div class="alerta">{% icono "alerta" %}<p>{% blocktranslate with alertas=salud.alertas|join:", " %}Antes de empezar revisa su salud: {{ alertas }}.{% endblocktranslate %} <a href="{% url 'clientes:salud' cita.cliente.pk %}">{% translate "Ver" %}</a></p></div>{% endif %}
   {% if cita.reprogramacion_pedida and not cita.reprogramacion_atendida %}
     <div class="alerta">{% icono "reloj" %}
-      <div class="pila-p"><p>Pide cambiar la fecha ({{ cita.reprogramacion_pedida_en|relativo }}): «{{ cita.reprogramacion_pedida }}»</p>
-        <form method="post" action="{% url 'agenda:atender_cambio' cita.pk %}">{% csrf_token %}<button class="btn btn-peq btn-solido" type="submit">Marcar como atendido</button></form>
+      <div class="pila-p"><p>{% blocktranslate with reprogramacion_pedida_en=cita.reprogramacion_pedida_en|relativo reprogramacion_pedida=cita.reprogramacion_pedida %}Pide cambiar la fecha ({{ reprogramacion_pedida_en }}): «{{ reprogramacion_pedida }}»{% endblocktranslate %}</p>
+        <form method="post" action="{% url 'agenda:atender_cambio' cita.pk %}">{% csrf_token %}<button class="btn btn-peq btn-solido" type="submit">{% translate "Marcar como atendido" %}</button></form>
       </div>
     </div>
   {% endif %}
   {% if cita.estado == "cancelada" %}
-    <div class="aviso">{% icono "x" %}<p>Cancelada por {{ cita.get_cancelada_por_display|lower|default:"—" }} {{ cita.cancelada_en|relativo }}{% if cita.motivo_cancelacion %}: «{{ cita.motivo_cancelacion }}»{% endif %}.</p></div>
+    <div class="aviso">{% icono "x" %}<p>{% blocktranslate with get_cancelada_por_display=cita.get_cancelada_por_display|lower|default:"—" cancelada_en=cita.cancelada_en|relativo %}Cancelada por {{ get_cancelada_por_display }} {{ cancelada_en }}{% endblocktranslate %}{% if cita.motivo_cancelacion %}: «{{ cita.motivo_cancelacion }}»{% endif %}.</p></div>
   {% endif %}
 </div>
 
 <div class="rejilla-ficha espacio-arriba">
   <div class="pila-g">
     <section class="bloque" aria-labelledby="t-acciones">
-      <div class="bloque-titulo"><h2 id="t-acciones">Acciones</h2></div>
+      <div class="bloque-titulo"><h2 id="t-acciones">{% translate "Acciones" %}</h2></div>
       <div class="grupo-botones">
         {% if cita.pendiente %}
           {% if cita.estado == "solicitada" %}
-            <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button class="btn btn-primario" name="estado" value="confirmada">{% icono "check" %} Confirmar</button></form>
+            <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button class="btn btn-primario" name="estado" value="confirmada">{% icono "check" %} {% translate "Confirmar" %}</button></form>
           {% endif %}
-          <a class="btn {% if cita.estado == 'confirmada' %}btn-primario{% endif %}" href="{% url 'agenda:cerrar_sesion' cita.pk %}">{% icono "check" %} Marcar realizada</a>
-          <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button class="btn" name="estado" value="no_show" data-confirmar="¿Marcar que no vino? Contará en su historial.">{% icono "x" %} No vino</button></form>
-          <button type="button" class="btn btn-peligro" data-abrir="dialogo-cancelar">Cancelar cita</button>
-          <a class="btn btn-fantasma" href="{% url 'agenda:editar' cita.pk %}">{% icono "editar" %} Editar / mover</a>
+          <a class="btn {% if cita.estado == 'confirmada' %}btn-primario{% endif %}" href="{% url 'agenda:cerrar_sesion' cita.pk %}">{% icono "check" %} {% translate "Marcar realizada" %}</a>
+          <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button class="btn" name="estado" value="no_show" data-confirmar="{% translate "¿Marcar que no vino? Contará en su historial." %}">{% icono "x" %} {% translate "No vino" %}</button></form>
+          <button type="button" class="btn btn-peligro" data-abrir="dialogo-cancelar">{% translate "Cancelar cita" %}</button>
+          <a class="btn btn-fantasma" href="{% url 'agenda:editar' cita.pk %}">{% icono "editar" %} {% translate "Editar / mover" %}</a>
         {% else %}
-          <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button class="btn" name="estado" value="confirmada" data-confirmar="La cita volverá a estar confirmada (si el hueco sigue libre).">{% icono "refrescar" %} Reactivar</button></form>
-          <a class="btn btn-fantasma" href="{% url 'agenda:editar' cita.pk %}">{% icono "editar" %} Editar</a>
+          <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button class="btn" name="estado" value="confirmada" data-confirmar="{% translate "La cita volverá a estar confirmada (si el hueco sigue libre)." %}">{% icono "refrescar" %} {% translate "Reactivar" %}</button></form>
+          <a class="btn btn-fantasma" href="{% url 'agenda:editar' cita.pk %}">{% icono "editar" %} {% translate "Editar" %}</a>
         {% endif %}
       </div>
     </section>
 
     {% if sugerencias %}
     <section class="bloque" aria-labelledby="t-hueco">
-      <div class="bloque-titulo"><h2 id="t-hueco">¿A quién ofrecer el hueco?</h2></div>
-      <p class="texto-suave">De tu lista de espera, encajan por día, franja y duración:</p>
+      <div class="bloque-titulo"><h2 id="t-hueco">{% translate "¿A quién ofrecer el hueco?" %}</h2></div>
+      <p class="texto-suave">{% translate "De tu lista de espera, encajan por día, franja y duración:" %}</p>
       <ul class="lista">
         {% for e in sugerencias %}
           <li class="fila-lista">
             <span class="avatar">{{ e.cliente.nombre_completo|iniciales }}</span>
-            <span class="fila-cuerpo"><a class="fila-titulo" href="{% url 'clientes:ficha' e.cliente.pk %}">{{ e.cliente.nombre_completo }}</a><span class="fila-sub">{{ e.tipo|default:"Cualquier cita" }} · {{ e.dias_legibles }}{% if e.prioritaria %} · prioritaria{% endif %}</span></span>
+            <span class="fila-cuerpo"><a class="fila-titulo" href="{% url 'clientes:ficha' e.cliente.pk %}">{{ e.cliente.nombre_completo }}</a><span class="fila-sub">{{ e.tipo|default:"Cualquier cita" }} · {{ e.dias_legibles }}{% if e.prioritaria %} {% translate "· prioritaria" %}{% endif %}</span></span>
             {% include "agenda/_ofrecer.html" %}
           </li>
         {% endfor %}
@@ -63,23 +63,23 @@
     {% endif %}
 
     <section class="bloque" id="pagos" aria-labelledby="t-pagos">
-      <div class="bloque-titulo"><h2 id="t-pagos">Señas y pagos</h2><span class="numerico"><strong>{{ cita.pagado|dinero }}</strong>{% if cita.precio %} / {{ cita.precio|dinero }}{% endif %}</span></div>
+      <div class="bloque-titulo"><h2 id="t-pagos">{% translate "Señas y pagos" %}</h2><span class="numerico"><strong>{{ cita.pagado|dinero }}</strong>{% if cita.precio %} / {{ cita.precio|dinero }}{% endif %}</span></div>
       {% if pagos %}
         <ul class="lista">
           {% for p in pagos %}
             <li class="fila-lista">
-              <span class="fila-cuerpo"><span class="fila-titulo">{{ p.get_tipo_display }}{% if p.devuelto %} · <span class="estado estado-apagado">Devuelto</span>{% endif %}</span><span class="fila-sub">{{ p.fecha|date:"d/m/Y" }} · {{ p.get_metodo_display }}{% if p.notas %} · {{ p.notas }}{% endif %}</span></span>
+              <span class="fila-cuerpo"><span class="fila-titulo">{{ p.get_tipo_display }}{% if p.devuelto %} · <span class="estado estado-apagado">{% translate "Devuelto" %}</span>{% endif %}</span><span class="fila-sub">{{ p.fecha|date:"SHORT_DATE_FORMAT" }} · {{ p.get_metodo_display }}{% if p.notas %} · {{ p.notas }}{% endif %}</span></span>
               <span class="numerico">{{ p.importe|dinero }}</span>
-              <form method="post" action="{% url 'agenda:pago_devolver' p.pk %}">{% csrf_token %}<button class="btn btn-peq btn-fantasma" type="submit" title="Marcar devuelto">{% if p.devuelto %}Anular devolución{% else %}Devuelto{% endif %}</button></form>
-              <form method="post" action="{% url 'agenda:pago_borrar' p.pk %}">{% csrf_token %}<button class="btn btn-icono btn-peq btn-fantasma" type="submit" aria-label="Borrar pago" data-confirmar="¿Borrar este pago?">{% icono "basura" %}</button></form>
+              <form method="post" action="{% url 'agenda:pago_devolver' p.pk %}">{% csrf_token %}<button class="btn btn-peq btn-fantasma" type="submit" title="{% translate "Marcar devuelto" %}">{% if p.devuelto %}{% translate "Anular devolución" %}{% else %}{% translate "Devuelto" %}{% endif %}</button></form>
+              <form method="post" action="{% url 'agenda:pago_borrar' p.pk %}">{% csrf_token %}<button class="btn btn-icono btn-peq btn-fantasma" type="submit" aria-label="{% translate "Borrar pago" %}" data-confirmar="{% translate "¿Borrar este pago?" %}">{% icono "basura" %}</button></form>
             </li>
           {% endfor %}
         </ul>
       {% else %}
-        <p class="texto-suave">Sin señas ni pagos.{% if cita.tipo.deposito_sugerido %} Seña sugerida: {{ cita.tipo.deposito_sugerido|dinero }}.{% endif %}</p>
+        <p class="texto-suave">{% translate "Sin señas ni pagos." %}{% if cita.tipo.deposito_sugerido %} {% blocktranslate with deposito_sugerido=cita.tipo.deposito_sugerido|dinero %}Seña sugerida: {{ deposito_sugerido }}.{% endblocktranslate %}{% endif %}</p>
       {% endif %}
       <details class="desplegable bloque-pie" {% if not pagos %}open{% endif %}>
-        <summary>{% icono "plus" %} Registrar seña o pago</summary>
+        <summary>{% icono "plus" %} {% translate "Registrar seña o pago" %}</summary>
         <form method="post" action="{% url 'agenda:pago_nuevo' cita.pk %}" class="formulario-2" novalidate>
           {% csrf_token %}
           {{ pago_form.tipo.as_field_group }}
@@ -87,35 +87,35 @@
           {{ pago_form.metodo.as_field_group }}
           {{ pago_form.fecha.as_field_group }}
           <div class="ancho-completo">{{ pago_form.notas.as_field_group }}</div>
-          <div><button type="submit" class="btn">{% icono "dinero" %} Guardar pago</button></div>
+          <div><button type="submit" class="btn">{% icono "dinero" %} {% translate "Guardar pago" %}</button></div>
         </form>
       </details>
     </section>
 
     {% if cita.notas_sesion %}
-    <section class="bloque"><div class="bloque-titulo"><h2>Notas de la sesión</h2></div><p class="texto-pre">{{ cita.notas_sesion }}</p></section>
+    <section class="bloque"><div class="bloque-titulo"><h2>{% translate "Notas de la sesión" %}</h2></div><p class="texto-pre">{{ cita.notas_sesion }}</p></section>
     {% endif %}
   </div>
 
   <aside class="pila-g">
     <section class="bloque" aria-labelledby="t-detalles">
-      <div class="bloque-titulo"><h2 id="t-detalles">Detalles</h2></div>
+      <div class="bloque-titulo"><h2 id="t-detalles">{% translate "Detalles" %}</h2></div>
       <dl class="datos">
-        <dt>Cliente</dt><dd><a href="{% url 'clientes:ficha' cita.cliente.pk %}">{{ cita.cliente.nombre_completo }}</a>{% if cita.cliente.telefono %}<br><a href="tel:{{ cita.cliente.telefono }}">{{ cita.cliente.telefono|telefono }}</a>{% endif %}</dd>
-        {% if cita.tatuaje %}<dt>Tatuaje</dt><dd><a href="{% url 'clientes:tatuaje' cita.tatuaje.pk %}">{{ cita.tatuaje }}</a></dd>{% endif %}
-        {% if cita.descripcion %}<dt>Qué se hace</dt><dd>{{ cita.descripcion }}</dd>{% endif %}
-        {% if cita.precio %}<dt>Precio previsto</dt><dd class="numerico">{{ cita.precio|dinero }}</dd>{% endif %}
-        {% if cita.confirmada_cliente_en %}<dt>Confirmó</dt><dd>{{ cita.confirmada_cliente_en|relativo }}</dd>{% endif %}
+        <dt>{% translate "Cliente" %}</dt><dd><a href="{% url 'clientes:ficha' cita.cliente.pk %}">{{ cita.cliente.nombre_completo }}</a>{% if cita.cliente.telefono %}<br><a href="tel:{{ cita.cliente.telefono }}">{{ cita.cliente.telefono|telefono }}</a>{% endif %}</dd>
+        {% if cita.tatuaje %}<dt>{% translate "Tatuaje" %}</dt><dd><a href="{% url 'clientes:tatuaje' cita.tatuaje.pk %}">{{ cita.tatuaje }}</a></dd>{% endif %}
+        {% if cita.descripcion %}<dt>{% translate "Qué se hace" %}</dt><dd>{{ cita.descripcion }}</dd>{% endif %}
+        {% if cita.precio %}<dt>{% translate "Precio previsto" %}</dt><dd class="numerico">{{ cita.precio|dinero }}</dd>{% endif %}
+        {% if cita.confirmada_cliente_en %}<dt>{% translate "Confirmó" %}</dt><dd>{{ cita.confirmada_cliente_en|relativo }}</dd>{% endif %}
       </dl>
       {% if cita.notas %}<p class="texto-pre bloque-pie">{{ cita.notas }}</p>{% endif %}
     </section>
 
     {% if cita.puede_gestionarla_cliente %}
     <section class="bloque" aria-labelledby="t-enlace">
-      <div class="bloque-titulo"><h2 id="t-enlace">Enlace para el cliente</h2></div>
-      <p class="texto-peq texto-suave">Podrá confirmar, cancelar o pedir otra fecha sin crear cuenta. El enlace caduca tras la cita.</p>
+      <div class="bloque-titulo"><h2 id="t-enlace">{% translate "Enlace para el cliente" %}</h2></div>
+      <p class="texto-peq texto-suave">{% translate "Podrá confirmar, cancelar o pedir otra fecha sin crear cuenta. El enlace caduca tras la cita." %}</p>
       <div id="enlace-cita">
-        <button type="button" class="btn btn-peq" hx-post="{% url 'agenda:enlace' cita.pk %}" hx-target="#enlace-cita" hx-swap="innerHTML">{% icono "enlace" %} Generar enlace</button>
+        <button type="button" class="btn btn-peq" hx-post="{% url 'agenda:enlace' cita.pk %}" hx-target="#enlace-cita" hx-swap="innerHTML">{% icono "enlace" %} {% translate "Generar enlace" %}</button>
       </div>
     </section>
     {% endif %}
@@ -128,11 +128,11 @@
 <dialog id="dialogo-cancelar" class="dialogo" aria-labelledby="t-cancelar">
   <form method="post" action="{% url 'agenda:estado' cita.pk %}" class="dialogo-cuerpo">
     {% csrf_token %}<input type="hidden" name="estado" value="cancelada">
-    <h2 id="t-cancelar">Cancelar cita</h2>
+    <h2 id="t-cancelar">{% translate "Cancelar cita" %}</h2>
     {{ cancelar_form }}
     <div class="dialogo-acciones">
-      <button type="button" class="btn" data-cerrar>Volver</button>
-      <button type="submit" class="btn btn-solido">Cancelar cita</button>
+      <button type="button" class="btn" data-cerrar>{% translate "Volver" %}</button>
+      <button type="submit" class="btn btn-solido">{% translate "Cancelar cita" %}</button>
     </div>
   </form>
 </dialog>

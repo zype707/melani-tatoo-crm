@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models, transaction
 from django.db.models.functions import Lower
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from django_otp.models import Device, ThrottlingMixin
 
 
@@ -11,7 +12,7 @@ class GestorUsuarios(BaseUserManager):
 
     def _crear(self, email, password, **extra):
         if not email:
-            raise ValueError("El email es obligatorio.")
+            raise ValueError(_("El email es obligatorio."))
         usuario = self.model(email=self.normalize_email(email).lower(), **extra)
         usuario.set_password(password)
         usuario.save(using=self._db)
@@ -32,13 +33,13 @@ class GestorUsuarios(BaseUserManager):
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     class Rol(models.TextChoices):
-        PROPIETARIA = "propietaria", "Propietaria"
-        AYUDANTE = "ayudante", "Ayudante"
+        PROPIETARIA = "propietaria", _("Propietaria")
+        AYUDANTE = "ayudante", _("Ayudante")
 
-    email = models.EmailField("Email", unique=True)
-    nombre = models.CharField("Nombre", max_length=120)
-    rol = models.CharField("Rol", max_length=16, choices=Rol.choices, default=Rol.PROPIETARIA)
-    is_active = models.BooleanField("Activa", default=True)
+    email = models.EmailField(_("Email"), unique=True)
+    nombre = models.CharField(_("Nombre"), max_length=120)
+    rol = models.CharField(_("Rol"), max_length=16, choices=Rol.choices, default=Rol.PROPIETARIA)
+    is_active = models.BooleanField(_("Activa"), default=True)
     is_staff = models.BooleanField(default=False)
     fecha_alta = models.DateTimeField(default=timezone.now)
 
@@ -72,7 +73,7 @@ class DispositivoRecuperacion(ThrottlingMixin, Device):
     """
 
     class Meta:
-        verbose_name = "códigos de recuperación"
+        verbose_name = _("códigos de recuperación")
 
     def get_throttle_factor(self):
         return 1
@@ -84,7 +85,7 @@ class DispositivoRecuperacion(ThrottlingMixin, Device):
     def verify_token(self, token):
         from .servicios import normalizar_codigo
 
-        permitido, _ = self.verify_is_allowed()
+        permitido, _x = self.verify_is_allowed()
         if not permitido:
             return False
         normal = normalizar_codigo(token)
@@ -112,8 +113,8 @@ class CodigoRecuperacion(models.Model):
 
 class IntentoAcceso(models.Model):
     class Fase(models.TextChoices):
-        PASSWORD = "password", "Contraseña"
-        DOSFA = "2fa", "Segundo factor"
+        PASSWORD = "password", _("Contraseña")
+        DOSFA = "2fa", _("Segundo factor")
 
     email = models.CharField(max_length=254)
     ip = models.GenericIPAddressField(null=True, blank=True)

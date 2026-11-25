@@ -2,46 +2,46 @@
 {% block titulo %}{{ cliente.nombre_completo }}{% endblock %}
 {% block contenido %}
 <header class="cabecera-ficha">
-  <nav class="migas" aria-label="Migas"><a href="{% url 'clientes:lista' %}">Clientes</a></nav>
+  <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'clientes:lista' %}">{% translate "Clientes" %}</a></nav>
   <div class="ficha-identidad">
     <span class="avatar avatar-g">{{ cliente.nombre_completo|iniciales }}</span>
     <div class="pila-p">
       <h1>{{ cliente.nombre_completo }}</h1>
       <p class="texto-suave">
-        {% if cliente.edad is not None %}{{ cliente.edad }} años · {% endif %}Cliente desde {{ cliente.creado_en|date:"F Y" }}
+        {% if cliente.edad is not None %}{% blocktranslate with edad=cliente.edad %}{{ edad }} años ·{% endblocktranslate %} {% endif %}{% blocktranslate with creado_en=cliente.creado_en|date:"F Y" %}Cliente desde {{ creado_en }}{% endblocktranslate %}
         {% if cliente.origen %} · {{ cliente.get_origen_display }}{% endif %}
       </p>
       {% if cliente.etiquetas.all %}<div class="etiquetas">{% for e in cliente.etiquetas.all %}<a class="etiqueta" href="{% url 'clientes:lista' %}?etiqueta={{ e.pk }}">{{ e }}</a>{% endfor %}</div>{% endif %}
     </div>
   </div>
   <div class="grupo-botones">
-    {% if nav.url_nueva_cita %}<a class="btn btn-primario" href="{% url 'agenda:nueva' %}?cliente={{ cliente.pk }}">{% icono "plus" %} Nueva cita</a>{% endif %}
-    <a class="btn" href="{% url 'mensajeria:nuevo' %}?cliente={{ cliente.pk }}">{% icono "mensajes" %} Escribir mensaje</a>
-    <a class="btn" href="{% url 'clientes:editar' cliente.pk %}">{% icono "editar" %} Editar</a>
+    {% if nav.url_nueva_cita %}<a class="btn btn-primario" href="{% url 'agenda:nueva' %}?cliente={{ cliente.pk }}">{% icono "plus" %} {% translate "Nueva cita" %}</a>{% endif %}
+    <a class="btn" href="{% url 'mensajeria:nuevo' %}?cliente={{ cliente.pk }}">{% icono "mensajes" %} {% translate "Escribir mensaje" %}</a>
+    <a class="btn" href="{% url 'clientes:editar' cliente.pk %}">{% icono "editar" %} {% translate "Editar" %}</a>
   </div>
 </header>
 
 {% if es_menor or alertas_salud or cliente.contacto_bloqueado %}
 <div class="pila">
-  {% if es_menor %}<div class="alerta">{% icono "alerta" %}<p>Menor de {{ ajustes.edad_minima }} años según su fecha de nacimiento. No se puede tatuar sin cumplir los requisitos legales.</p></div>{% endif %}
-  {% if alertas_salud %}<div class="alerta">{% icono "alerta" %}<p>Salud: {{ alertas_salud|join:", " }}. <a href="{% url 'clientes:salud' cliente.pk %}">Ver detalles</a></p></div>{% endif %}
-  {% if cliente.contacto_bloqueado %}<div class="aviso">{% icono "candado" %}<p>Pidió no ser contactado: no se le prepara ningún mensaje.</p></div>{% endif %}
+  {% if es_menor %}<div class="alerta">{% icono "alerta" %}<p>{% blocktranslate with edad_minima=ajustes.edad_minima %}Menor de {{ edad_minima }} años según su fecha de nacimiento. No se puede tatuar sin cumplir los requisitos legales.{% endblocktranslate %}</p></div>{% endif %}
+  {% if alertas_salud %}<div class="alerta">{% icono "alerta" %}<p>{% blocktranslate with alertas_salud=alertas_salud|join:", " %}Salud: {{ alertas_salud }}.{% endblocktranslate %} <a href="{% url 'clientes:salud' cliente.pk %}">{% translate "Ver detalles" %}</a></p></div>{% endif %}
+  {% if cliente.contacto_bloqueado %}<div class="aviso">{% icono "candado" %}<p>{% translate "Pidió no ser contactado: no se le prepara ningún mensaje." %}</p></div>{% endif %}
 </div>
 {% endif %}
 
 <div class="rejilla-cifras ficha-cifras">
-  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ stats.visitas }}</span><span class="cifra-etiqueta">Visitas</span></div>
-  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ stats.gasto|dinero }}</span><span class="cifra-etiqueta">Gasto total</span></div>
-  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ stats.tatuajes }}</span><span class="cifra-etiqueta">Tatuajes</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ stats.visitas }}</span><span class="cifra-etiqueta">{% translate "Visitas" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ stats.gasto|dinero }}</span><span class="cifra-etiqueta">{% translate "Gasto total" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ stats.tatuajes }}</span><span class="cifra-etiqueta">{% translate "Tatuajes" %}</span></div>
   <div class="bloque bloque-plano">
-    <span class="cifra cifra-peq {% if stats.no_shows %}cifra-critica{% endif %}">{{ stats.no_shows }}</span><span class="cifra-etiqueta">No vino</span>
+    <span class="cifra cifra-peq {% if stats.no_shows %}cifra-critica{% endif %}">{{ stats.no_shows }}</span><span class="cifra-etiqueta">{% translate "No vino" %}</span>
   </div>
 </div>
 
 <div class="rejilla-ficha">
   <div class="pila-g">
     <section class="bloque" aria-labelledby="t-proximas">
-      <div class="bloque-titulo"><h2 id="t-proximas">Próximas citas</h2></div>
+      <div class="bloque-titulo"><h2 id="t-proximas">{% translate "Próximas citas" %}</h2></div>
       {% if proximas %}
         <ul class="lista">
           {% for c in proximas %}
@@ -53,12 +53,12 @@
           {% endfor %}
         </ul>
       {% else %}
-        <p class="texto-suave">Sin citas pendientes.{% if stats.ultima %} Última visita {{ stats.ultima|relativo }}.{% endif %}</p>
+        <p class="texto-suave">{% translate "Sin citas pendientes." %}{% if stats.ultima %} {% blocktranslate with ultima=stats.ultima|relativo %}Última visita {{ ultima }}.{% endblocktranslate %}{% endif %}</p>
       {% endif %}
     </section>
 
     <section class="bloque" aria-labelledby="t-tatuajes">
-      <div class="bloque-titulo"><h2 id="t-tatuajes">Tatuajes</h2><a href="{% url 'clientes:tatuaje_nuevo' cliente.pk %}">{% icono "plus" %} Añadir</a></div>
+      <div class="bloque-titulo"><h2 id="t-tatuajes">{% translate "Tatuajes" %}</h2><a href="{% url 'clientes:tatuaje_nuevo' cliente.pk %}">{% icono "plus" %} {% translate "Añadir" %}</a></div>
       {% if cliente.tatuajes.all %}
         <div class="rejilla-tatuajes">
           {% for t in cliente.tatuajes.all %}
@@ -69,29 +69,29 @@
               <span class="tarjeta-tatuaje-texto">
                 <strong>{{ t.titulo }}</strong>
                 <span class="texto-peq texto-suave">{{ t.get_zona_display|default:"" }}{% if t.fecha_aniversario %} · {{ t.fecha_aniversario|date:"M Y" }}{% endif %}</span>
-                {% if t.estado == "en_proceso" %}<span class="estado">En proceso</span>{% endif %}
+                {% if t.estado == "en_proceso" %}<span class="estado">{% translate "En proceso" %}</span>{% endif %}
               </span>
             </a>
           {% endfor %}
         </div>
       {% else %}
         {% url 'clientes:tatuaje_nuevo' cliente.pk as url_tat %}
-        {% include "componentes/vacio.html" with icono="aguja" titulo="Sin tatuajes registrados" texto="Registra su primer tatuaje para guardar fotos, sesiones y aniversarios." url=url_tat accion="Añadir tatuaje" %}
+        {% include "componentes/vacio.html" with icono="aguja" titulo=_("Sin tatuajes registrados") texto=_("Registra su primer tatuaje para guardar fotos, sesiones y aniversarios.") url=url_tat accion=_("Añadir tatuaje") %}
       {% endif %}
     </section>
 
     <section class="bloque" id="linea" aria-labelledby="t-linea">
-      <div class="bloque-titulo"><h2 id="t-linea">Historial</h2></div>
+      <div class="bloque-titulo"><h2 id="t-linea">{% translate "Historial" %}</h2></div>
       <form method="post" action="{% url 'clientes:nota' cliente.pk %}" class="formulario nota-rapida">
         {% csrf_token %}
         {{ nota_form.origen }}
         <div class="campo">
-          <label for="{{ nota_form.texto.id_for_label }}" class="solo-lectores">Nueva nota</label>
+          <label for="{{ nota_form.texto.id_for_label }}" class="solo-lectores">{% translate "Nueva nota" %}</label>
           {{ nota_form.texto }}
         </div>
         <div class="grupo-botones">
-          <button type="submit" class="btn btn-peq">{% icono "plus" %} Guardar nota</button>
-          <button type="button" class="btn btn-peq btn-fantasma oculto" data-dictado-para="{{ nota_form.texto.id_for_label }}" data-dictado-origen="#{{ nota_form.origen.id_for_label }}">{% icono "mic" %} <span>Dictar</span></button>
+          <button type="submit" class="btn btn-peq">{% icono "plus" %} {% translate "Guardar nota" %}</button>
+          <button type="button" class="btn btn-peq btn-fantasma oculto" data-dictado-para="{{ nota_form.texto.id_for_label }}" data-dictado-origen="#{{ nota_form.origen.id_for_label }}">{% icono "mic" %} <span>{% translate "Dictar" %}</span></button>
         </div>
       </form>
       {% if linea %}
@@ -108,70 +108,70 @@
           {% endfor %}
         </ol>
       {% else %}
-        <p class="texto-suave">Todavía no hay historial.</p>
+        <p class="texto-suave">{% translate "Todavía no hay historial." %}</p>
       {% endif %}
     </section>
   </div>
 
   <aside class="pila-g">
     <section class="bloque" aria-labelledby="t-contacto">
-      <div class="bloque-titulo"><h2 id="t-contacto">Contacto</h2></div>
+      <div class="bloque-titulo"><h2 id="t-contacto">{% translate "Contacto" %}</h2></div>
       <dl class="datos">
-        {% if cliente.telefono %}<dt>Teléfono</dt><dd><a href="tel:{{ cliente.telefono }}">{{ cliente.telefono|telefono }}</a></dd>{% endif %}
-        {% if cliente.email %}<dt>Email</dt><dd><a href="mailto:{{ cliente.email }}">{{ cliente.email }}</a></dd>{% endif %}
+        {% if cliente.telefono %}<dt>{% translate "Teléfono" %}</dt><dd><a href="tel:{{ cliente.telefono }}">{{ cliente.telefono|telefono }}</a></dd>{% endif %}
+        {% if cliente.email %}<dt>{% translate "Email" %}</dt><dd><a href="mailto:{{ cliente.email }}">{{ cliente.email }}</a></dd>{% endif %}
         {% if cliente.instagram %}<dt>Instagram</dt><dd>@{{ cliente.instagram }}</dd>{% endif %}
-        {% if cliente.fecha_nacimiento %}<dt>Cumpleaños</dt><dd>{{ cliente.fecha_nacimiento|date:"j \d\e F" }}</dd>{% endif %}
-        <dt>Prefiere</dt><dd>{{ cliente.get_canal_preferido_display }}</dd>
+        {% if cliente.fecha_nacimiento %}<dt>{% translate "Cumpleaños" %}</dt><dd>{{ cliente.fecha_nacimiento|date:_("j \d\e F") }}</dd>{% endif %}
+        <dt>{% translate "Prefiere" %}</dt><dd>{{ cliente.get_canal_preferido_display }}</dd>
       </dl>
     </section>
 
     <section class="bloque" aria-labelledby="t-marketing">
-      <div class="bloque-titulo"><h2 id="t-marketing">Promociones</h2>
-        {% if cliente.marketing_consentimiento %}<span class="estado estado-ok">Acepta</span>{% else %}<span class="estado">No acepta</span>{% endif %}
+      <div class="bloque-titulo"><h2 id="t-marketing">{% translate "Promociones" %}</h2>
+        {% if cliente.marketing_consentimiento %}<span class="estado estado-ok">{% translate "Acepta" %}</span>{% else %}<span class="estado">{% translate "No acepta" %}</span>{% endif %}
       </div>
-      {% if cliente.marketing_fecha %}<p class="texto-peq texto-suave">Desde el {{ cliente.marketing_fecha|date:"j/m/Y" }} · {{ cliente.get_marketing_origen_display }}</p>{% endif %}
+      {% if cliente.marketing_fecha %}<p class="texto-peq texto-suave">{% blocktranslate with marketing_fecha=cliente.marketing_fecha|date:"SHORT_DATE_FORMAT" get_marketing_origen_display=cliente.get_marketing_origen_display %}Desde el {{ marketing_fecha }} · {{ get_marketing_origen_display }}{% endblocktranslate %}</p>{% endif %}
       <form method="post" action="{% url 'clientes:marketing' cliente.pk %}" class="formulario bloque-pie">
         {% csrf_token %}
         {% if cliente.marketing_consentimiento %}
           <input type="hidden" name="accion" value="baja"><input type="hidden" name="origen" value="peticion_baja">
-          <button type="submit" class="btn btn-peq btn-peligro" data-confirmar="Dejará de recibir felicitaciones y promociones. Los mensajes promocionales pendientes se descartarán.">Registrar baja</button>
+          <button type="submit" class="btn btn-peq btn-peligro" data-confirmar="{% translate "Dejará de recibir felicitaciones y promociones. Los mensajes promocionales pendientes se descartarán." %}">{% translate "Registrar baja" %}</button>
         {% else %}
           <input type="hidden" name="accion" value="alta">
           <div class="campo">
-            <label for="origen-mk">¿Cómo lo aceptó?</label>
+            <label for="origen-mk">{% translate "¿Cómo lo aceptó?" %}</label>
             <select id="origen-mk" name="origen">
-              <option value="presencial">En persona</option><option value="verbal">De palabra / llamada</option><option value="mensaje">Por mensaje</option><option value="formulario">Formulario de reserva</option>
+              <option value="presencial">{% translate "En persona" %}</option><option value="verbal">{% translate "De palabra / llamada" %}</option><option value="mensaje">{% translate "Por mensaje" %}</option><option value="formulario">{% translate "Formulario de reserva" %}</option>
             </select>
           </div>
-          <button type="submit" class="btn btn-peq">Registrar consentimiento</button>
+          <button type="submit" class="btn btn-peq">{% translate "Registrar consentimiento" %}</button>
         {% endif %}
       </form>
     </section>
 
     <section class="bloque" aria-labelledby="t-salud">
-      <div class="bloque-titulo"><h2 id="t-salud">Salud</h2><a href="{% url 'clientes:salud' cliente.pk %}">{% icono "editar" %} Editar</a></div>
+      <div class="bloque-titulo"><h2 id="t-salud">{% translate "Salud" %}</h2><a href="{% url 'clientes:salud' cliente.pk %}">{% icono "editar" %} {% translate "Editar" %}</a></div>
       {% if salud %}
-        {% if alertas_salud %}<div class="etiquetas">{% for a in alertas_salud %}<span class="estado estado-atencion">{{ a }}</span>{% endfor %}</div>{% else %}<p class="texto-suave">Nada relevante.</p>{% endif %}
-        <p class="texto-peq texto-suave">Actualizado {{ salud.actualizado_en|relativo }}. Estos datos nunca se envían a la IA.</p>
+        {% if alertas_salud %}<div class="etiquetas">{% for a in alertas_salud %}<span class="estado estado-atencion">{{ a }}</span>{% endfor %}</div>{% else %}<p class="texto-suave">{% translate "Nada relevante." %}</p>{% endif %}
+        <p class="texto-peq texto-suave">{% blocktranslate with actualizado_en=salud.actualizado_en|relativo %}Actualizado {{ actualizado_en }}. Estos datos nunca se envían a la IA.{% endblocktranslate %}</p>
       {% else %}
-        <p class="texto-suave">Sin datos de salud.</p>
+        <p class="texto-suave">{% translate "Sin datos de salud." %}</p>
       {% endif %}
     </section>
 
     {% include "clientes/_consentimientos.html" %}
 
     <section class="bloque" aria-labelledby="t-espera">
-      <div class="bloque-titulo"><h2 id="t-espera">Lista de espera</h2></div>
+      <div class="bloque-titulo"><h2 id="t-espera">{% translate "Lista de espera" %}</h2></div>
       {% for e in espera %}
         <p><a href="{% url 'agenda:espera_editar' e.pk %}">{{ e.tipo|default:"Cualquier cita" }}</a> · {{ e.dias_legibles }} · {{ e.get_franja_display|lower }}</p>
       {% empty %}
-        <a class="btn btn-peq" href="{% url 'agenda:espera_nueva' %}?cliente={{ cliente.pk }}">{% icono "plus" %} Añadir a la lista</a>
+        <a class="btn btn-peq" href="{% url 'agenda:espera_nueva' %}?cliente={{ cliente.pk }}">{% icono "plus" %} {% translate "Añadir a la lista" %}</a>
       {% endfor %}
     </section>
 
     {% if cliente.notas %}
     <section class="bloque" aria-labelledby="t-notas">
-      <div class="bloque-titulo"><h2 id="t-notas">Notas privadas</h2></div>
+      <div class="bloque-titulo"><h2 id="t-notas">{% translate "Notas privadas" %}</h2></div>
       <p class="texto-pre">{{ cliente.notas }}</p>
     </section>
     {% endif %}

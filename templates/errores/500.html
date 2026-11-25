@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Error del servidor</title>
+  <title>{% translate "Error del servidor" %}</title>
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
 </head>
 <body class="publico">
   <main class="publico-cuerpo">
     <div class="error-pagina pila">
       <p class="error-codigo">500</p>
-      <h1>Algo se ha roto</h1>
-      <p class="texto-suave">No es culpa tuya. Vuelve a intentarlo en un momento; si sigue pasando, revisa los registros del servidor en Render.</p>
-      <p><a class="btn btn-primario" href="/">Volver al inicio</a></p>
+      <h1>{% translate "Algo se ha roto" %}</h1>
+      <p class="texto-suave">{% translate "No es culpa tuya. Vuelve a intentarlo en un momento; si sigue pasando, revisa los registros del servidor en Render." %}</p>
+      <p><a class="btn btn-primario" href="/">{% translate "Volver al inicio" %}</a></p>
     </div>
   </main>
 </body>

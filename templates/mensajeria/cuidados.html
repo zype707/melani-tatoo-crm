@@ -1,36 +1,36 @@
 {% extends "base.html" %}
-{% block titulo %}Cuidados posteriores{% endblock %}
+{% block titulo %}{% translate "Cuidados posteriores" %}{% endblock %}
 {% block contenido %}
-<header class="cabecera-pagina"><div><span class="antetitulo">Mensajería</span><h1>Cuidados posteriores</h1></div></header>
+<header class="cabecera-pagina"><div><span class="antetitulo">{% translate "Mensajería" %}</span><h1>{% translate "Cuidados posteriores" %}</h1></div></header>
 {% include "mensajeria/_subnav.html" with seccion="cuidados" %}
 <div class="rejilla-ficha">
   <section class="bloque">
-    <div class="bloque-titulo"><h2>Secuencia tras cada sesión</h2></div>
-    <p class="texto-suave texto-peq espacio-abajo">Cuando marcas una sesión o retoque como realizado, cada paso aparece en tu bandeja el día que toca.</p>
+    <div class="bloque-titulo"><h2>{% translate "Secuencia tras cada sesión" %}</h2></div>
+    <p class="texto-suave texto-peq espacio-abajo">{% translate "Cuando marcas una sesión o retoque como realizado, cada paso aparece en tu bandeja el día que toca." %}</p>
     <ol class="secuencia">
       {% for p in pasos %}
         <li class="{% if not p.activo %}inactivo{% endif %}">
-          <span class="secuencia-dia">+{{ p.dias_despues }}<small>días</small></span>
+          <span class="secuencia-dia">+{{ p.dias_despues }}<small>{% translate "días" %}</small></span>
           <a class="fila-cuerpo" href="{% url 'mensajeria:cuidado_editar' p.pk %}">
-            <span class="fila-titulo">{{ p.nombre }}{% if p.es_oferta_retoque %} <span class="etiqueta etiqueta-mini">Retoque</span>{% endif %}{% if not p.activo %} <span class="estado estado-apagado">Pausado</span>{% endif %}</span>
+            <span class="fila-titulo">{{ p.nombre }}{% if p.es_oferta_retoque %} <span class="etiqueta etiqueta-mini">{% translate "Retoque" %}</span>{% endif %}{% if not p.activo %} <span class="estado estado-apagado">{% translate "Pausado" %}</span>{% endif %}</span>
             <span class="fila-sub">{{ p.plantilla.cuerpo|truncatechars:110 }}</span>
           </a>
         </li>
-      {% empty %}<li class="texto-suave">Sin pasos todavía.</li>{% endfor %}
+      {% empty %}<li class="texto-suave">{% translate "Sin pasos todavía." %}</li>{% endfor %}
     </ol>
   </section>
   <section class="bloque">
-    <div class="bloque-titulo"><h2>{% if paso %}Editar «{{ paso.nombre }}»{% else %}Añadir paso{% endif %}</h2></div>
+    <div class="bloque-titulo"><h2>{% if paso %}{% blocktranslate with nombre=paso.nombre %}Editar «{{ nombre }}»{% endblocktranslate %}{% else %}{% translate "Añadir paso" %}{% endif %}</h2></div>
     <form method="post" class="formulario" novalidate>
       {% csrf_token %}
       {{ form }}
       <div class="acciones-formulario">
-        <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
-        {% if paso %}<a class="btn btn-fantasma" href="{% url 'mensajeria:cuidados' %}">Cancelar</a>
-        <button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="¿Eliminar este paso?">{% icono "basura" %}</button>{% endif %}
+        <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar" %}</button>
+        {% if paso %}<a class="btn btn-fantasma" href="{% url 'mensajeria:cuidados' %}">{% translate "Cancelar" %}</a>
+        <button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="{% translate "¿Eliminar este paso?" %}">{% icono "basura" %}</button>{% endif %}
       </div>
     </form>
-    <p class="ayuda espacio-arriba">El paso de retoque no se prepara si ya hubo retoque o si quedan sesiones de ese tatuaje.</p>
+    <p class="ayuda espacio-arriba">{% translate "El paso de retoque no se prepara si ya hubo retoque o si quedan sesiones de ese tatuaje." %}</p>
   </section>
 </div>
 {% endblock %}

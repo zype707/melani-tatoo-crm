@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -9,12 +9,13 @@
   <title>{% block titulo %}{% endblock %} · {{ ajustes.nombre }}</title>
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
   <link rel="icon" href="{% static 'img/icono-192.png' %}" type="image/png">
+  <script src="{% url 'catalogo_js' %}" defer></script>
   <script src="{% static 'js/app.js' %}" defer></script>
   {% block cabeza %}{% endblock %}
 </head>
 <body class="publico">
-  <a class="saltar" href="#principal">Saltar al contenido</a>
-  <header class="publico-cabecera">{% include "componentes/marca.html" %}</header>
+  <a class="saltar" href="#principal">{% translate "Saltar al contenido" %}</a>
+  <header class="publico-cabecera">{% include "componentes/marca.html" %}{% include "componentes/idioma.html" %}</header>
   <main id="principal" class="publico-cuerpo" tabindex="-1">
     {% block contenido %}{% endblock %}
   </main>
@@ -23,7 +24,7 @@
   </footer>
   <div id="avisos" class="avisos" aria-live="polite">
     {% for m in messages %}
-      <div class="toast toast-{{ m.tags }}" role="status"><span>{{ m }}</span><button type="button" data-cerrar-aviso aria-label="Cerrar aviso">✕</button></div>
+      <div class="toast toast-{{ m.tags }}" role="status"><span>{{ m }}</span><button type="button" data-cerrar-aviso aria-label="{% translate "Cerrar aviso" %}">✕</button></div>
     {% endfor %}
   </div>
   {% include "componentes/dialogos.html" %}

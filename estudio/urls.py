@@ -30,6 +30,8 @@ urlpatterns = [
     ),
     # Infraestructura
     path("salud/", nucleo.salud, name="salud"),
+    path("idioma/", nucleo.cambiar_idioma, name="cambiar_idioma"),
+    path("jsi18n/", nucleo.catalogo_js, name="catalogo_js"),
     path("manifest.webmanifest", nucleo.manifest, name="manifest"),
     path("sw.js", nucleo.service_worker, name="service_worker"),
     path("offline/", nucleo.offline, name="offline"),

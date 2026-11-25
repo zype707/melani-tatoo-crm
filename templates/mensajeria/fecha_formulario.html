@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block titulo %}Fecha destacada{% endblock %}
+{% block titulo %}{% translate "Fecha destacada" %}{% endblock %}
 {% block contenido %}
-<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'mensajeria:fechas' %}">Fechas destacadas</a></nav><h1>{% if fecha %}{{ fecha.nombre }}{% else %}Nueva fecha{% endif %}</h1></div></header>
+<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'mensajeria:fechas' %}">{% translate "Fechas destacadas" %}</a></nav><h1>{% if fecha %}{{ fecha.nombre }}{% else %}{% translate "Nueva fecha" %}{% endif %}</h1></div></header>
 <form method="post" class="bloque ancho-formulario" novalidate>
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="alerta espacio-abajo">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
@@ -19,11 +19,11 @@
     <div>{{ form.generar_campana.as_field_group }}</div>
     <div>{{ form.activa.as_field_group }}</div>
   </div>
-  <p class="ayuda espacio-arriba">Ejemplos: Día de la Madre en EE. UU. = «N-ésimo», mayo, semana 2, domingo. Acción de Gracias = noviembre, semana 4, jueves.</p>
+  <p class="ayuda espacio-arriba">{% translate "Ejemplos: Día de la Madre en EE. UU. = «N-ésimo», mayo, semana 2, domingo. Acción de Gracias = noviembre, semana 4, jueves." %}</p>
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
-    <a class="btn btn-fantasma" href="{% url 'mensajeria:fechas' %}">Cancelar</a>
-    {% if fecha %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="¿Eliminar esta fecha?">{% icono "basura" %} Eliminar</button>{% endif %}
+    <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar" %}</button>
+    <a class="btn btn-fantasma" href="{% url 'mensajeria:fechas' %}">{% translate "Cancelar" %}</a>
+    {% if fecha %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="{% translate "¿Eliminar esta fecha?" %}">{% icono "basura" %} {% translate "Eliminar" %}</button>{% endif %}
   </div>
 </form>
 {% endblock %}

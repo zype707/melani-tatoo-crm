@@ -10,3 +10,4 @@ NUMBER_GROUPING = 3
 DATE_INPUT_FORMATS = ["%Y-%m-%d", "%d/%m/%Y", "%m/%d/%Y"]
 TIME_INPUT_FORMATS = ["%H:%M", "%H:%M:%S", "%I:%M %p"]
 DATETIME_INPUT_FORMATS = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M", "%Y-%m-%d %H:%M:%S"]
+SHORT_DATETIME_FORMAT = "d/m/Y H:i"

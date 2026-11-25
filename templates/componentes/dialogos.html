@@ -1,10 +1,10 @@
 <dialog id="dialogo-confirmar" class="dialogo" aria-labelledby="dialogo-confirmar-titulo">
   <div class="dialogo-cuerpo">
-    <h2 id="dialogo-confirmar-titulo">¿Seguro?</h2>
+    <h2 id="dialogo-confirmar-titulo">{% translate "¿Seguro?" %}</h2>
     <p data-texto></p>
     <div class="dialogo-acciones">
-      <button type="button" class="btn" data-cerrar>Cancelar</button>
-      <button type="button" class="btn btn-solido" data-si>Sí, continuar</button>
+      <button type="button" class="btn" data-cerrar>{% translate "Cancelar" %}</button>
+      <button type="button" class="btn btn-solido" data-si>{% translate "Sí, continuar" %}</button>
     </div>
   </div>
 </dialog>
@@ -12,20 +12,20 @@
 {% if user.is_authenticated %}
 <dialog id="dialogo-atajos" class="dialogo" aria-labelledby="dialogo-atajos-titulo">
   <div class="dialogo-cuerpo">
-    <h2 id="dialogo-atajos-titulo">Atajos de teclado</h2>
+    <h2 id="dialogo-atajos-titulo">{% translate "Atajos de teclado" %}</h2>
     <table class="tabla">
       <tbody>
-        <tr><td><kbd>/</kbd></td><td>Buscar</td></tr>
-        <tr><td><kbd>n</kbd></td><td>Nueva cita</td></tr>
-        <tr><td><kbd>c</kbd></td><td>Nuevo cliente</td></tr>
-        <tr><td><kbd>h</kbd></td><td>Ir a Hoy</td></tr>
-        <tr><td><kbd>a</kbd></td><td>Ir a la agenda</td></tr>
-        <tr><td><kbd>m</kbd></td><td>Mensajes de hoy</td></tr>
-        <tr><td><kbd>?</kbd></td><td>Esta ayuda</td></tr>
+        <tr><td><kbd>/</kbd></td><td>{% translate "Buscar" %}</td></tr>
+        <tr><td><kbd>{% translate "n" %}</kbd></td><td>{% translate "Nueva cita" %}</td></tr>
+        <tr><td><kbd>{% translate "c" %}</kbd></td><td>{% translate "Nuevo cliente" %}</td></tr>
+        <tr><td><kbd>{% translate "h" %}</kbd></td><td>{% translate "Ir a Hoy" %}</td></tr>
+        <tr><td><kbd>{% translate "a" %}</kbd></td><td>{% translate "Ir a la agenda" %}</td></tr>
+        <tr><td><kbd>{% translate "m" %}</kbd></td><td>{% translate "Mensajes de hoy" %}</td></tr>
+        <tr><td><kbd>?</kbd></td><td>{% translate "Esta ayuda" %}</td></tr>
       </tbody>
     </table>
-    <div class="dialogo-acciones"><button type="button" class="btn" data-cerrar>Cerrar</button></div>
+    <div class="dialogo-acciones"><button type="button" class="btn" data-cerrar>{% translate "Cerrar" %}</button></div>
   </div>
 </dialog>
-{% if nav.url_nuevo_cliente %}<a class="oculto" href="{{ nav.url_nuevo_cliente }}" data-atajo="nuevo-cliente" tabindex="-1" aria-hidden="true">Nuevo cliente</a>{% endif %}
+{% if nav.url_nuevo_cliente %}<a class="oculto" href="{{ nav.url_nuevo_cliente }}" data-atajo="nuevo-cliente" tabindex="-1" aria-hidden="true">{% translate "Nuevo cliente" %}</a>{% endif %}
 {% endif %}

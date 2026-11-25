@@ -5,8 +5,11 @@ import time
 
 from django.conf import settings
 from django.utils import timezone
+from django.utils.translation import get_language
+from django.utils.translation import gettext as _
 
 from apps.clientes.models import Tatuaje
+from apps.nucleo.idioma import idioma_ia
 from apps.nucleo.models import AjustesEstudio
 
 from . import proveedor
@@ -39,9 +42,9 @@ def estado() -> dict:
 
 def _comprobar() -> None:
     if not disponible():
-        raise ErrorIA("El asistente de IA no está activado.", "no_configurada")
+        raise ErrorIA(_("El asistente de IA no está activado."), "no_configurada")
     if usos_del_mes() >= AjustesEstudio.obtener().limite_ia:
-        raise ErrorIA("Has llegado al límite mensual de consultas de IA. Puedes subirlo en Ajustes.", "cuota")
+        raise ErrorIA(_("Has llegado al límite mensual de consultas de IA. Puedes subirlo en Ajustes."), "cuota")
 
 
 def _ejecutar(funcion: str, usuario, llamada):
@@ -66,7 +69,7 @@ def _voz() -> str:
     ejemplos = redactar_pii(a.ia_ejemplos, 2500)
     partes = [
         f"Escribes en nombre de {a.firma}, tatuadora de {a.nombre} (Orlando, Florida).",
-        "Idioma: español neutro, tuteo. Mensajes para WhatsApp o SMS: breves (2-4 frases), cálidos y directos.",
+        f"Idioma: {idioma_ia(settings.LANGUAGE_CODE)}. Mensajes para WhatsApp o SMS: breves (2-4 frases), cálidos y directos.",
         f"Tono: {a.ia_tono or 'cercano y profesional'}",
         "Reglas: no inventes precios, fechas, ofertas ni enlaces que no te den. Nunca menciones salud ni datos médicos. "
         "Como mucho un emoji. Sin firmas tipo 'Atentamente'. Devuelve solo el texto del mensaje.",
@@ -153,7 +156,7 @@ def triaje_solicitud(solicitud, usuario=None) -> dict:
     instrucciones = (
         "Eres la asistente de una tatuadora profesional. Estructura la solicitud de tatuaje. "
         "Estima sesiones y horas de forma prudente para una tatuadora experimentada. "
-        "En 'preguntas' lista en español (tuteo) lo que falta para presupuestar: tamaño exacto, color o negro, "
+        f"En 'preguntas' lista en {idioma_ia(get_language())} lo que falta para presupuestar: tamaño exacto, color o negro, "
         "ubicación precisa, referencias, disponibilidad… Máximo 5. Si un dato no se deduce, usa 'desconocido'."
     )
     datos = _ejecutar(
@@ -192,7 +195,7 @@ def resumen_cita(cita, usuario=None) -> str:
         cliente=perfil_cliente(cita.cliente),
     )
     instrucciones = (
-        "Prepara una ficha rápida para la tatuadora antes de la cita: 3-5 viñetas breves en español con quién viene, "
+        f"Prepara una ficha rápida para la tatuadora antes de la cita: 3-5 viñetas breves en {idioma_ia(get_language())} con quién viene, "
         "qué se hace hoy, cómo va el proyecto y qué recordar (seña o pago pendiente, si repite, etc.). "
         "No hables de salud. No inventes datos."
     )

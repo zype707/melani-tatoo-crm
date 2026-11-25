@@ -1,13 +1,13 @@
 <form method="get" class="fila espacio-abajo">
   <input type="hidden" name="vista" value="lista"><input type="hidden" name="fecha" value="{{ fecha|date:'Y-m-d' }}">
-  <label for="f-estado" class="solo-lectores">Estado</label>
+  <label for="f-estado" class="solo-lectores">{% translate "Estado" %}</label>
   <select id="f-estado" name="estado" class="select-compacto" data-autoenviar>
-    <option value="">Todas (sin canceladas)</option>
-    <option value="solicitada" {% if estado == "solicitada" %}selected{% endif %}>Por confirmar</option>
-    <option value="confirmada" {% if estado == "confirmada" %}selected{% endif %}>Confirmadas</option>
-    <option value="realizada" {% if estado == "realizada" %}selected{% endif %}>Realizadas</option>
-    <option value="cancelada" {% if estado == "cancelada" %}selected{% endif %}>Canceladas</option>
-    <option value="no_show" {% if estado == "no_show" %}selected{% endif %}>No vino</option>
+    <option value="">{% translate "Todas (sin canceladas)" %}</option>
+    <option value="solicitada" {% if estado == "solicitada" %}selected{% endif %}>{% translate "Por confirmar" %}</option>
+    <option value="confirmada" {% if estado == "confirmada" %}selected{% endif %}>{% translate "Confirmadas" %}</option>
+    <option value="realizada" {% if estado == "realizada" %}selected{% endif %}>{% translate "Realizadas" %}</option>
+    <option value="cancelada" {% if estado == "cancelada" %}selected{% endif %}>{% translate "Canceladas" %}</option>
+    <option value="no_show" {% if estado == "no_show" %}selected{% endif %}>{% translate "No vino" %}</option>
   </select>
 </form>
 {% if grupos %}
@@ -30,5 +30,5 @@
   </div>
 {% else %}
   {% url 'agenda:nueva' as url_nueva %}
-  {% include "componentes/vacio.html" with icono="agenda" titulo="Nada en estos 30 días" texto="Cuando reserves citas aparecerán aquí, agrupadas por día." url=url_nueva accion="Nueva cita" principal=True %}
+  {% include "componentes/vacio.html" with icono="agenda" titulo=_("Nada en estos 30 días") texto=_("Cuando reserves citas aparecerán aquí, agrupadas por día.") url=url_nueva accion=_("Nueva cita") principal=True %}
 {% endif %}

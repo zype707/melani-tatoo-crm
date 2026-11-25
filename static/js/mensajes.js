@@ -1,6 +1,7 @@
 /* Bandeja de mensajes y editor de plantillas. */
 (function () {
   "use strict";
+  var gettext = function (s) { return window.gettext ? window.gettext(s) : s; };
 
   /* Al pulsar WhatsApp / SMS / Copiar:
      1. Se actualiza el enlace con el texto tal y como está ahora en el cuadro
@@ -75,7 +76,7 @@
     fetch(url, { credentials: "same-origin", headers: { "HX-Request": "true" } })
       .then(function (r) { return r.ok ? r.text() : ""; })
       .then(function (texto) {
-        if (destino && texto && (!destino.value.trim() || window.confirm("¿Sustituir el texto actual por la plantilla?"))) {
+        if (destino && texto && (!destino.value.trim() || window.confirm(gettext("¿Sustituir el texto actual por la plantilla?")))) {
           destino.value = texto;
         }
       });

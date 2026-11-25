@@ -1,28 +1,28 @@
 {% extends "base_kiosco.html" %}
-{% block titulo %}Consentimiento informado{% endblock %}
+{% block titulo %}{% translate "Consentimiento informado" %}{% endblock %}
 {% block cabeza %}<script src="{% static 'js/firma.js' %}" defer></script>{% endblock %}
 {% block contenido %}
 <form method="post" class="pila-g" novalidate data-formulario-firma>
   {% csrf_token %}
   <div>
-    <span class="texto-suave">Hola, {{ cliente.nombre }}</span>
-    <h1>Antes de empezar</h1>
-    <p class="texto-suave">Lee el texto, revisa tus datos de salud y firma con el dedo. Tarda un minuto.</p>
+    <span class="texto-suave">{% blocktranslate with nombre=cliente.nombre %}Hola, {{ nombre }}{% endblocktranslate %}</span>
+    <h1>{% translate "Antes de empezar" %}</h1>
+    <p class="texto-suave">{% translate "Lee el texto, revisa tus datos de salud y firma con el dedo. Tarda un minuto." %}</p>
   </div>
-  {% if form.errors %}<div class="alerta" role="alert">{% icono "alerta" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}<p>Revisa los campos marcados.</p></div></div>{% endif %}
+  {% if form.errors %}<div class="alerta" role="alert">{% icono "alerta" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}<p>{% translate "Revisa los campos marcados." %}</p></div></div>{% endif %}
 
   <section class="bloque bloque-hueso texto-legal" aria-labelledby="t-texto">
-    <h2 id="t-texto" class="solo-lectores">Texto del consentimiento</h2>
+    <h2 id="t-texto" class="solo-lectores">{% translate "Texto del consentimiento" %}</h2>
     <div class="texto-pre">{{ ajustes.texto_consentimiento }}</div>
   </section>
 
   <section class="bloque formulario" aria-labelledby="t-datos">
-    <div class="bloque-titulo"><h2 id="t-datos">Tus datos</h2></div>
+    <div class="bloque-titulo"><h2 id="t-datos">{% translate "Tus datos" %}</h2></div>
     <div class="formulario-2">{{ form.nombre_firmante.as_field_group }}{{ form.fecha_nacimiento.as_field_group }}</div>
   </section>
 
   <section class="bloque formulario" aria-labelledby="t-salud">
-    <div class="bloque-titulo"><h2 id="t-salud">Tu salud</h2></div>
+    <div class="bloque-titulo"><h2 id="t-salud">{% translate "Tu salud" %}</h2></div>
     {{ form.alergias.as_field_group }}
     {{ form.medicacion.as_field_group }}
     {{ form.anticoagulantes.as_field_group }}
@@ -35,7 +35,7 @@
   </section>
 
   <section class="bloque formulario" aria-labelledby="t-acepto">
-    <div class="bloque-titulo"><h2 id="t-acepto">Confirmo</h2></div>
+    <div class="bloque-titulo"><h2 id="t-acepto">{% translate "Confirmo" %}</h2></div>
     {{ form.acepto.as_field_group }}
     {{ form.veraz.as_field_group }}
     {{ form.autoriza_fotos.as_field_group }}
@@ -43,17 +43,17 @@
   </section>
 
   <section class="bloque" aria-labelledby="t-firma">
-    <div class="bloque-titulo"><h2 id="t-firma">Tu firma</h2><button type="button" class="btn btn-peq btn-fantasma" data-borrar-firma>{% icono "refrescar" %} Borrar</button></div>
+    <div class="bloque-titulo"><h2 id="t-firma">{% translate "Tu firma" %}</h2><button type="button" class="btn btn-peq btn-fantasma" data-borrar-firma>{% icono "refrescar" %} {% translate "Borrar" %}</button></div>
     <div class="lienzo-firma{% if form.firma.errors %} campo-con-error{% endif %}">
-      <canvas data-lienzo-firma aria-label="Recuadro para firmar con el dedo" role="img"></canvas>
-      <span class="lienzo-guia" aria-hidden="true">Firma aquí</span>
+      <canvas data-lienzo-firma aria-label="{% translate "Recuadro para firmar con el dedo" %}" role="img"></canvas>
+      <span class="lienzo-guia" aria-hidden="true">{% translate "Firma aquí" %}</span>
     </div>
     <input type="hidden" name="firma" value="">
     {{ form.firma.errors }}
-    <noscript><p class="error">Para firmar hace falta JavaScript.</p></noscript>
+    <noscript><p class="error">{% translate "Para firmar hace falta JavaScript." %}</p></noscript>
   </section>
 
-  <button type="submit" class="btn btn-primario btn-bloque btn-grande">{% icono "firma" %} Firmar consentimiento</button>
-  <p class="texto-peq texto-suave texto-centro">Se guardará como PDF en tu ficha. {{ ajustes.nombre }} lo conserva el tiempo que exige la normativa sanitaria.</p>
+  <button type="submit" class="btn btn-primario btn-bloque btn-grande">{% icono "firma" %} {% translate "Firmar consentimiento" %}</button>
+  <p class="texto-peq texto-suave texto-centro">{% blocktranslate with nombre=ajustes.nombre %}Se guardará como PDF en tu ficha. {{ nombre }} lo conserva el tiempo que exige la normativa sanitaria.{% endblocktranslate %}</p>
 </form>
 {% endblock %}

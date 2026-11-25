@@ -1,14 +1,14 @@
 {% extends "base_publica.html" %}
-{% block titulo %}Verificación{% endblock %}
+{% block titulo %}{% translate "Verificación" %}{% endblock %}
 {% block contenido %}
 <div class="acceso-caja pila-g">
   <div>
-    <h1>{% if modo == "recuperacion" %}Código de recuperación{% else %}Segundo paso{% endif %}</h1>
+    <h1>{% if modo == "recuperacion" %}{% translate "Código de recuperación" %}{% else %}{% translate "Segundo paso" %}{% endif %}</h1>
     <p class="texto-suave">
       {% if modo == "recuperacion" %}
-        Escribe uno de los códigos que guardaste al activar la verificación.
+        {% translate "Escribe uno de los códigos que guardaste al activar la verificación." %}
       {% else %}
-        Abre tu app autenticadora y escribe el código de 6 dígitos de <strong>{{ ajustes.nombre }}</strong>.
+        {% translate "Abre tu app autenticadora y escribe el código de 6 dígitos de" %} <strong>{{ ajustes.nombre }}</strong>.
       {% endif %}
     </p>
   </div>
@@ -16,16 +16,16 @@
     {% csrf_token %}
     {{ form }}
     <div class="acciones-formulario">
-      <button type="submit" class="btn btn-primario btn-bloque">{% icono "check" %} Verificar</button>
+      <button type="submit" class="btn btn-primario btn-bloque">{% icono "check" %} {% translate "Verificar" %}</button>
     </div>
   </form>
   <div class="fila-entre texto-peq">
     {% if modo == "recuperacion" %}
-      <a href="{% url 'cuentas:verificar' %}">Usar la app autenticadora</a>
+      <a href="{% url 'cuentas:verificar' %}">{% translate "Usar la app autenticadora" %}</a>
     {% else %}
-      <a href="?modo=recuperacion">¿Sin móvil? Usa un código de recuperación</a>
+      <a href="?modo=recuperacion">{% translate "¿Sin móvil? Usa un código de recuperación" %}</a>
     {% endif %}
-    <a href="{% url 'cuentas:login' %}">Volver</a>
+    <a href="{% url 'cuentas:login' %}">{% translate "Volver" %}</a>
   </div>
 </div>
 {% endblock %}

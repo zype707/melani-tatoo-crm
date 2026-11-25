@@ -3,6 +3,7 @@ y tipos de cita. Se crea una sola vez con `manage.py inicializar_estudio`."""
 
 from datetime import time
 
+from django.conf import settings
 from django.db import transaction
 
 from .models import Categoria, FechaDestacada, PasoCuidado, Plantilla
@@ -189,14 +190,28 @@ FECHAS = [
 ]
 
 
+def _en_idioma(idioma: str):
+    """Devuelve las listas de contenido en el idioma del estudio (es por defecto, o en)."""
+    if not idioma.startswith("en"):
+        return PLANTILLAS, CUIDADOS, FECHAS, {}
+    from . import predeterminados_en as en
+
+    plantillas = [(c, *en.PLANTILLAS[c][:1], cat, promo, en.PLANTILLAS[c][1]) for c, _n, cat, promo, _t in PLANTILLAS]
+    cuidados = [(en.CUIDADOS[clave], dias, clave, retoque) for _n, dias, clave, retoque in CUIDADOS]
+    fechas = [(en.FECHAS[f[7]], *f[1:]) for f in FECHAS]
+    return plantillas, cuidados, fechas, en.TIPOS
+
+
 @transaction.atomic
-def crear_predeterminados() -> dict:
+def crear_predeterminados(idioma: str | None = None) -> dict:
+    """Crea el contenido inicial en el idioma del estudio (IDIOMA / LANGUAGE_CODE)."""
     creado = {"plantillas": 0, "cuidados": 0, "fechas": 0, "tipos": 0, "horario": 0}
     if Plantilla.objects.exists():
         return creado
+    plantillas, cuidados, fechas, tipos_traducidos = _en_idioma(idioma or settings.LANGUAGE_CODE)
     por_clave = {}
     vistas = set()
-    for clave, nombre, categoria, promo, texto in PLANTILLAS:
+    for clave, nombre, categoria, promo, texto in plantillas:
         por_clave[clave] = Plantilla.objects.create(
             nombre=nombre,
             categoria=categoria,
@@ -206,12 +221,12 @@ def crear_predeterminados() -> dict:
         )
         vistas.add(categoria)
         creado["plantillas"] += 1
-    for nombre, dias, clave, retoque in CUIDADOS:
+    for nombre, dias, clave, retoque in cuidados:
         PasoCuidado.objects.create(
             nombre=nombre, dias_despues=dias, plantilla=por_clave[clave], es_oferta_retoque=retoque
         )
         creado["cuidados"] += 1
-    for nombre, regla, mes, dia, semana, dsem, ventana, clave, activa in FECHAS:
+    for nombre, regla, mes, dia, semana, dsem, ventana, clave, activa in fechas:
         FechaDestacada.objects.create(
             nombre=nombre,
             regla=regla,
@@ -237,7 +252,12 @@ def crear_predeterminados() -> dict:
             ]
         ):
             TipoCita.objects.create(
-                nombre=nombre, categoria=cat, duracion_minutos=minutos, color=color, deposito_sugerido=sena, orden=orden
+                nombre=tipos_traducidos.get(nombre, nombre),
+                categoria=cat,
+                duracion_minutos=minutos,
+                color=color,
+                deposito_sugerido=sena,
+                orden=orden,
             )
             creado["tipos"] += 1
     if not HorarioLaboral.objects.exists():

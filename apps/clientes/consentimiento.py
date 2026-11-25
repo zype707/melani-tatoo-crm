@@ -7,10 +7,13 @@ from datetime import date
 from io import BytesIO
 from xml.sax.saxutils import escape
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.db import transaction
-from django.utils import timezone
+from django.utils import timezone, translation
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 from PIL import Image
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import LETTER
@@ -28,38 +31,44 @@ from .models import ConsentimientoInformado, DatosSalud
 MAX_FIRMA_BYTES = 600 * 1024
 PREFIJO = "data:image/png;base64,"
 ETIQUETAS_SALUD = {
-    "alergias": "Alergias",
-    "medicacion": "Medicación",
-    "anticoagulantes": "Anticoagulantes",
-    "diabetes": "Diabetes",
-    "epilepsia": "Epilepsia",
-    "problemas_cardiacos": "Problemas cardíacos",
-    "embarazo_lactancia": "Embarazo o lactancia",
-    "condiciones_piel": "Condiciones de la piel",
-    "otras": "Otras observaciones",
+    "alergias": gettext_lazy("Alergias"),
+    "medicacion": gettext_lazy("Medicación"),
+    "anticoagulantes": gettext_lazy("Anticoagulantes"),
+    "diabetes": gettext_lazy("Diabetes"),
+    "epilepsia": gettext_lazy("Epilepsia"),
+    "problemas_cardiacos": gettext_lazy("Problemas cardíacos"),
+    "embarazo_lactancia": gettext_lazy("Embarazo o lactancia"),
+    "condiciones_piel": gettext_lazy("Condiciones de la piel"),
+    "otras": gettext_lazy("Otras observaciones"),
 }
 
 
 def decodificar_firma(data_url: str) -> ContentFile:
     """Valida la firma enviada desde el canvas y la devuelve como PNG limpio."""
     if not data_url or not data_url.startswith(PREFIJO):
-        raise ValidationError("Falta la firma.")
+        raise ValidationError(_("Falta la firma."))
     try:
         datos = base64.b64decode(data_url[len(PREFIJO) :], validate=True)
     except (binascii.Error, ValueError) as exc:
-        raise ValidationError("La firma no es válida.") from exc
+        raise ValidationError(_("La firma no es válida.")) from exc
     if len(datos) > MAX_FIRMA_BYTES:
-        raise ValidationError("La firma es demasiado grande.")
+        raise ValidationError(_("La firma es demasiado grande."))
     limpia = procesar_png_firma(datos)  # valida firma binaria, tamaño y re-codifica
     imagen = Image.open(BytesIO(limpia.read())).convert("L")
     limpia.seek(0)
     caja = imagen.point(lambda p: 255 if p < 200 else 0).getbbox()
     if not caja or (caja[2] - caja[0]) < 40 or (caja[3] - caja[1]) < 15:
-        raise ValidationError("La firma está vacía o es demasiado pequeña. Firma con el dedo dentro del recuadro.")
+        raise ValidationError(_("La firma está vacía o es demasiado pequeña. Firma con el dedo dentro del recuadro."))
     return limpia
 
 
 def _pdf(c: ConsentimientoInformado, firma_bytes: bytes, ajustes: AjustesEstudio) -> bytes:
+    # El PDF va en el idioma del contenido, el mismo del texto legal que se firma.
+    with translation.override(settings.LANGUAGE_CODE):
+        return _generar_pdf(c, firma_bytes, ajustes)
+
+
+def _generar_pdf(c: ConsentimientoInformado, firma_bytes: bytes, ajustes: AjustesEstudio) -> bytes:
     buf = BytesIO()
     doc = SimpleDocTemplate(
         buf,
@@ -68,7 +77,7 @@ def _pdf(c: ConsentimientoInformado, firma_bytes: bytes, ajustes: AjustesEstudio
         rightMargin=20 * mm,
         topMargin=18 * mm,
         bottomMargin=18 * mm,
-        title=f"Consentimiento · {c.nombre_firmante}",
+        title=_("Consentimiento · %(nombre)s") % {"nombre": c.nombre_firmante},
         author=ajustes.nombre,
     )
     base = getSampleStyleSheet()
@@ -86,18 +95,18 @@ def _pdf(c: ConsentimientoInformado, firma_bytes: bytes, ajustes: AjustesEstudio
         Paragraph(p(ajustes.nombre), titulo),
         Paragraph(p(" · ".join(filter(None, [ajustes.direccion, ajustes.telefono, ajustes.email]))), sub),
         Spacer(1, 6 * mm),
-        Paragraph("Consentimiento informado para tatuaje", h2),
+        Paragraph(_("Consentimiento informado para tatuaje"), h2),
     ]
     cliente = c.cliente
     filas = [
-        ["Cliente", p(c.nombre_firmante)],
-        ["Fecha de nacimiento", c.respuestas.get("fecha_nacimiento", "")],
-        ["Teléfono", p(telefono_legible(cliente.telefono) or "—")],
-        ["Fecha y hora de la firma", timezone.localtime(c.firmado_en).strftime("%d/%m/%Y %H:%M %Z")],
-        ["Versión del texto", str(c.version_texto)],
+        [_("Cliente"), p(c.nombre_firmante)],
+        [_("Fecha de nacimiento"), c.respuestas.get("fecha_nacimiento", "")],
+        [_("Teléfono"), p(telefono_legible(cliente.telefono) or "—")],
+        [_("Fecha y hora de la firma"), timezone.localtime(c.firmado_en).strftime(_("%d/%m/%Y %H:%M %Z"))],
+        [_("Versión del texto"), str(c.version_texto)],
     ]
     if c.cita_id:
-        filas.append(["Cita", timezone.localtime(c.cita.inicio).strftime("%d/%m/%Y %H:%M") + f" · {c.cita.tipo}"])
+        filas.append([_("Cita"), timezone.localtime(c.cita.inicio).strftime(_("%d/%m/%Y %H:%M")) + f" · {c.cita.tipo}"])
     tabla = Table(filas, colWidths=[50 * mm, 120 * mm])
     tabla.setStyle(
         TableStyle(
@@ -109,14 +118,14 @@ def _pdf(c: ConsentimientoInformado, firma_bytes: bytes, ajustes: AjustesEstudio
             ]
         )
     )
-    elementos += [tabla, Paragraph("Declaración de salud", h2)]
+    elementos += [tabla, Paragraph(_("Declaración de salud"), h2)]
     salud = c.respuestas.get("salud", {})
     filas_salud = []
     for clave, etiqueta in ETIQUETAS_SALUD.items():
         valor = salud.get(clave)
         if isinstance(valor, bool):
-            valor = "Sí" if valor else "No"
-        filas_salud.append([etiqueta, Paragraph(p(valor or "—"), cuerpo)])
+            valor = _("Sí") if valor else _("No")
+        filas_salud.append([str(etiqueta), Paragraph(p(valor or "—"), cuerpo)])
     tabla_salud = Table(filas_salud, colWidths=[50 * mm, 120 * mm])
     tabla_salud.setStyle(
         TableStyle(
@@ -127,17 +136,17 @@ def _pdf(c: ConsentimientoInformado, firma_bytes: bytes, ajustes: AjustesEstudio
             ]
         )
     )
-    elementos += [tabla_salud, Paragraph("Texto aceptado", h2)]
+    elementos += [tabla_salud, Paragraph(_("Texto aceptado"), h2)]
     for parrafo in c.texto.split("\n"):
         if parrafo.strip():
             elementos.append(Paragraph(p(parrafo), cuerpo))
-    elementos += [Paragraph("Autorizaciones", h2)]
+    elementos += [Paragraph(_("Autorizaciones"), h2)]
     for texto, valor in (
-        ("Fotos del tatuaje para el portfolio del estudio", c.respuestas.get("autoriza_fotos")),
-        ("Recibir felicitaciones y novedades", c.respuestas.get("acepta_marketing")),
+        (_("Fotos del tatuaje para el portfolio del estudio"), c.respuestas.get("autoriza_fotos")),
+        (_("Recibir felicitaciones y novedades"), c.respuestas.get("acepta_marketing")),
     ):
-        elementos.append(Paragraph(f"{p(texto)}: <b>{'Sí' if valor else 'No'}</b>", cuerpo))
-    elementos += [Spacer(1, 6 * mm), Paragraph("Firma", h2)]
+        elementos.append(Paragraph(f"{p(texto)}: <b>{_('Sí') if valor else _('No')}</b>", cuerpo))
+    elementos += [Spacer(1, 6 * mm), Paragraph(_("Firma"), h2)]
     firma = Image.open(BytesIO(firma_bytes))
     ancho = 70 * mm
     alto = ancho * firma.height / max(firma.width, 1)
@@ -145,7 +154,9 @@ def _pdf(c: ConsentimientoInformado, firma_bytes: bytes, ajustes: AjustesEstudio
     elementos.append(Paragraph(p(c.nombre_firmante), sub))
     elementos.append(Spacer(1, 4 * mm))
     ip = f" · IP {c.ip}" if c.ip else ""
-    elementos.append(Paragraph(f"Firmado digitalmente en el estudio{ip}. Documento n.º {c.pk}.", sub))
+    elementos.append(
+        Paragraph(_("Firmado digitalmente en el estudio%(ip)s. Documento n.º %(num)s.") % {"ip": ip, "num": c.pk}, sub)
+    )
     doc.build(elementos)
     return buf.getvalue()
 

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% block titulo %}Hoy{% endblock %}
+{% block titulo %}{% translate "Hoy" %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
   <div>
     <span class="antetitulo">{{ hoy|fecha_larga }}</span>
-    <h1>Hola, {{ user.primer_nombre }}</h1>
+    <h1>{% blocktranslate with primer_nombre=user.primer_nombre %}Hola, {{ primer_nombre }}{% endblocktranslate %}</h1>
   </div>
   {% if siguiente %}
     <a class="siguiente-cita" href="{% url 'agenda:detalle' siguiente.pk %}">
-      <span class="texto-suave texto-peq">Siguiente</span>
+      <span class="texto-suave texto-peq">{% translate "Siguiente" %}</span>
       <strong>{{ siguiente.inicio|hora }} · {{ siguiente.cliente.nombre }}</strong>
     </a>
   {% endif %}
@@ -16,30 +16,30 @@
 
 <div class="rejilla-cifras panel-cifras">
   <a class="bloque cifra-enlace" href="{% url 'agenda:calendario' %}?vista=dia">
-    <span class="cifra">{{ citas_hoy|length }}</span><span class="cifra-etiqueta">Citas hoy</span>
-    <span class="texto-peq texto-suave">{{ citas_semana }} esta semana · {{ horas_semana }} h</span>
+    <span class="cifra">{{ citas_hoy|length }}</span><span class="cifra-etiqueta">{% translate "Citas hoy" %}</span>
+    <span class="texto-peq texto-suave">{% blocktranslate %}{{ citas_semana }} esta semana · {{ horas_semana }} h{% endblocktranslate %}</span>
   </a>
   <a class="bloque cifra-enlace" href="{% url 'mensajeria:bandeja' %}">
-    <span class="cifra {% if mensajes %}cifra-critica{% endif %}">{{ mensajes }}</span><span class="cifra-etiqueta">Mensajes por enviar</span>
-    <span class="texto-peq texto-suave">{% if mensajes %}Prepara tu café y dale ↗{% else %}Todo al día{% endif %}</span>
+    <span class="cifra {% if mensajes %}cifra-critica{% endif %}">{{ mensajes }}</span><span class="cifra-etiqueta">{% translate "Mensajes por enviar" %}</span>
+    <span class="texto-peq texto-suave">{% if mensajes %}{% translate "Prepara tu café y dale ↗" %}{% else %}{% translate "Todo al día" %}{% endif %}</span>
   </a>
   <a class="bloque cifra-enlace" href="{% url 'solicitudes:lista' %}">
-    <span class="cifra {% if solicitudes %}cifra-critica{% endif %}">{{ solicitudes }}</span><span class="cifra-etiqueta">Solicitudes nuevas</span>
-    <span class="texto-peq texto-suave">{% if por_confirmar %}{{ por_confirmar }} cita{{ por_confirmar|pluralize }} por confirmar{% else %}Citas confirmadas{% endif %}</span>
+    <span class="cifra {% if solicitudes %}cifra-critica{% endif %}">{{ solicitudes }}</span><span class="cifra-etiqueta">{% translate "Solicitudes nuevas" %}</span>
+    <span class="texto-peq texto-suave">{% if por_confirmar %}{% blocktranslate count n=por_confirmar %}{{ n }} cita por confirmar{% plural %}{{ n }} citas por confirmar{% endblocktranslate %}{% else %}{% translate "Citas confirmadas" %}{% endif %}</span>
   </a>
   {% if user.es_propietaria %}
   <a class="bloque cifra-enlace" href="{% url 'finanzas:resumen' %}">
-    <span class="cifra">{{ ingresos_mes|dinero }}</span><span class="cifra-etiqueta">Ingresos del mes</span>
-    <span class="texto-peq texto-suave">{% if variacion is not None %}{% if variacion >= 0 %}▲{% else %}▼{% endif %} {{ variacion|porcentaje }} vs. mismo tramo del mes pasado{% else %}Sin datos del mes pasado{% endif %}</span>
+    <span class="cifra">{{ ingresos_mes|dinero }}</span><span class="cifra-etiqueta">{% translate "Ingresos del mes" %}</span>
+    <span class="texto-peq texto-suave">{% if variacion is not None %}{% if variacion >= 0 %}▲{% else %}▼{% endif %} {% blocktranslate with variacion=variacion|porcentaje %}{{ variacion }} vs. mismo tramo del mes pasado{% endblocktranslate %}{% else %}{% translate "Sin datos del mes pasado" %}{% endif %}</span>
   </a>
   {% endif %}
 </div>
 
 {% if avisos %}
-<section class="pila espacio-arriba" aria-label="Avisos">
+<section class="pila espacio-arriba" aria-label="{% translate "Avisos" %}">
   {% for c in avisos %}
     <a class="alerta alerta-enlace" href="{% url 'agenda:detalle' c.pk %}">{% icono "alerta" %}
-      <span>{% if c.estado == "cancelada" %}<strong>{{ c.cliente.nombre }}</strong> canceló su cita del {{ c.inicio|fecha_corta }}. Hay hueco que ofrecer.{% else %}<strong>{{ c.cliente.nombre }}</strong> pide cambiar su cita del {{ c.inicio|fecha_corta }}: «{{ c.reprogramacion_pedida|truncatechars:80 }}»{% endif %}</span>
+      <span>{% if c.estado == "cancelada" %}<strong>{{ c.cliente.nombre }}</strong> {% blocktranslate with inicio=c.inicio|fecha_corta %}canceló su cita del {{ inicio }}. Hay hueco que ofrecer.{% endblocktranslate %}{% else %}<strong>{{ c.cliente.nombre }}</strong> {% blocktranslate with inicio=c.inicio|fecha_corta reprogramacion_pedida=c.reprogramacion_pedida|truncatechars:80 %}pide cambiar su cita del {{ inicio }}: «{{ reprogramacion_pedida }}»{% endblocktranslate %}{% endif %}</span>
     </a>
   {% endfor %}
 </section>
@@ -48,7 +48,7 @@
 <div class="rejilla-ficha espacio-arriba">
   <div class="pila-g">
     <section class="bloque" aria-labelledby="t-hoy">
-      <div class="bloque-titulo"><h2 id="t-hoy">Agenda de hoy</h2><a href="{% url 'agenda:calendario' %}">Ver agenda {% icono "flecha-der" %}</a></div>
+      <div class="bloque-titulo"><h2 id="t-hoy">{% translate "Agenda de hoy" %}</h2><a href="{% url 'agenda:calendario' %}">{% translate "Ver agenda" %} {% icono "flecha-der" %}</a></div>
       {% if citas_hoy %}
         <ul class="lista">
           {% for c in citas_hoy %}
@@ -61,12 +61,12 @@
           {% endfor %}
         </ul>
       {% else %}
-        <p class="texto-suave">Hoy no hay citas. {% if huecos %}Buen día para mover la lista de espera.{% endif %}</p>
+        <p class="texto-suave">{% translate "Hoy no hay citas." %} {% if huecos %}{% translate "Buen día para mover la lista de espera." %}{% endif %}</p>
       {% endif %}
     </section>
 
     <section class="bloque" aria-labelledby="t-huecos">
-      <div class="bloque-titulo"><h2 id="t-huecos">Huecos libres · 7 días</h2><a href="{% url 'agenda:lista_espera' %}">Lista de espera {% icono "flecha-der" %}</a></div>
+      <div class="bloque-titulo"><h2 id="t-huecos">{% translate "Huecos libres · 7 días" %}</h2><a href="{% url 'agenda:lista_espera' %}">{% translate "Lista de espera" %} {% icono "flecha-der" %}</a></div>
       {% if huecos %}
         <ul class="huecos">
           {% for h in huecos %}
@@ -78,69 +78,69 @@
           {% endfor %}
         </ul>
       {% else %}
-        <p class="texto-suave">Semana completa (o sin horario configurado).</p>
+        <p class="texto-suave">{% translate "Semana completa (o sin horario configurado)." %}</p>
       {% endif %}
     </section>
 
     {% if user.es_propietaria %}
     <section class="bloque" aria-labelledby="t-ingresos">
-      <div class="bloque-titulo"><h2 id="t-ingresos">Ingresos · 6 meses</h2><a href="{% url 'finanzas:resumen' %}">Finanzas {% icono "flecha-der" %}</a></div>
-      {% include "componentes/grafico_barras.html" with g=grafico id="g-panel" titulo="Ingresos de los últimos 6 meses" %}
+      <div class="bloque-titulo"><h2 id="t-ingresos">{% translate "Ingresos · 6 meses" %}</h2><a href="{% url 'finanzas:resumen' %}">{% translate "Finanzas" %} {% icono "flecha-der" %}</a></div>
+      {% include "componentes/grafico_barras.html" with g=grafico id="g-panel" titulo=_("Ingresos de los últimos 6 meses") %}
     </section>
     {% endif %}
   </div>
 
   <aside class="pila-g">
     <section class="bloque" aria-labelledby="t-salud">
-      <div class="bloque-titulo"><h2 id="t-salud">Salud del estudio</h2></div>
+      <div class="bloque-titulo"><h2 id="t-salud">{% translate "Salud del estudio" %}</h2></div>
       <div class="metricas">
-        <div><span class="cifra cifra-peq {% if no_show.tasa and no_show.tasa > 0.1 %}cifra-critica{% endif %}">{{ no_show.tasa|porcentaje }}</span><span class="cifra-etiqueta">No-show · 90 días</span><span class="texto-peq texto-suave">{{ no_show.no_show }} de {{ no_show.realizadas|add:no_show.no_show }}</span></div>
-        <div><span class="cifra cifra-peq">{{ retorno.tasa|porcentaje }}</span><span class="cifra-etiqueta">Vuelven</span><span class="texto-peq texto-suave">{{ retorno.vuelven }} de {{ retorno.total }} con 2+ visitas</span></div>
+        <div><span class="cifra cifra-peq {% if no_show.tasa and no_show.tasa > 0.1 %}cifra-critica{% endif %}">{{ no_show.tasa|porcentaje }}</span><span class="cifra-etiqueta">{% translate "No-show · 90 días" %}</span><span class="texto-peq texto-suave">{% blocktranslate with no_show=no_show.no_show realizadas=no_show.realizadas|add:no_show.no_show %}{{ no_show }} de {{ realizadas }}{% endblocktranslate %}</span></div>
+        <div><span class="cifra cifra-peq">{{ retorno.tasa|porcentaje }}</span><span class="cifra-etiqueta">{% translate "Vuelven" %}</span><span class="texto-peq texto-suave">{% blocktranslate with vuelven=retorno.vuelven total=retorno.total %}{{ vuelven }} de {{ total }} con 2+ visitas{% endblocktranslate %}</span></div>
       </div>
     </section>
 
     <section class="bloque" aria-labelledby="t-riesgo">
-      <div class="bloque-titulo"><h2 id="t-riesgo">En riesgo de perderse</h2></div>
+      <div class="bloque-titulo"><h2 id="t-riesgo">{% translate "En riesgo de perderse" %}</h2></div>
       {% if en_riesgo %}
         <ul class="lista">
           {% for c in en_riesgo %}
             <li><a class="fila-lista" href="{% url 'clientes:ficha' c.pk %}">
               <span class="avatar">{{ c.nombre_completo|iniciales }}</span>
-              <span class="fila-cuerpo"><span class="fila-titulo">{{ c.nombre_completo }}</span><span class="fila-sub">{{ c.visitas }} visitas · última {{ c.ultima|relativo }}</span></span>
+              <span class="fila-cuerpo"><span class="fila-titulo">{{ c.nombre_completo }}</span><span class="fila-sub">{% blocktranslate with visitas=c.visitas ultima=c.ultima|relativo %}{{ visitas }} visitas · última {{ ultima }}{% endblocktranslate %}</span></span>
             </a></li>
           {% endfor %}
         </ul>
-        <a class="btn btn-peq espacio-arriba" href="{% url 'mensajeria:campana_nueva' %}?segmento=inactivos">{% icono "enviar" %} Campaña de reactivación</a>
+        <a class="btn btn-peq espacio-arriba" href="{% url 'mensajeria:campana_nueva' %}?segmento=inactivos">{% icono "enviar" %} {% translate "Campaña de reactivación" %}</a>
       {% else %}
-        <p class="texto-suave">Nadie fiel se está alejando. 🖤</p>
+        <p class="texto-suave">{% translate "Nadie fiel se está alejando. 🖤" %}</p>
       {% endif %}
     </section>
 
     <section class="bloque" aria-labelledby="t-cumple">
-      <div class="bloque-titulo"><h2 id="t-cumple">Próximos cumpleaños</h2></div>
+      <div class="bloque-titulo"><h2 id="t-cumple">{% translate "Próximos cumpleaños" %}</h2></div>
       {% if cumpleanos %}
         <ul class="lista">
           {% for b in cumpleanos %}
             <li><a class="fila-lista" href="{% url 'clientes:ficha' b.cliente.pk %}">
-              <span class="fila-cuerpo"><span class="fila-titulo">{{ b.cliente.nombre_completo }}</span><span class="fila-sub">{{ b.fecha|fecha_corta }} · cumple {{ b.edad }}</span></span>
+              <span class="fila-cuerpo"><span class="fila-titulo">{{ b.cliente.nombre_completo }}</span><span class="fila-sub">{% blocktranslate with fecha=b.fecha|fecha_corta edad=b.edad %}{{ fecha }} · cumple {{ edad }}{% endblocktranslate %}</span></span>
               <span class="{% if b.faltan == 0 %}estado estado-atencion{% else %}texto-peq texto-suave{% endif %}">{{ b.fecha|relativo }}</span>
             </a></li>
           {% endfor %}
         </ul>
       {% else %}
-        <p class="texto-suave">Ninguno en las próximas dos semanas.</p>
+        <p class="texto-suave">{% translate "Ninguno en las próximas dos semanas." %}</p>
       {% endif %}
     </section>
 
     {% if fecha_destacada %}
     <section class="bloque" aria-labelledby="t-fecha">
-      <div class="bloque-titulo"><h2 id="t-fecha">Próxima fecha</h2><a href="{% url 'mensajeria:fechas' %}">Fechas {% icono "flecha-der" %}</a></div>
+      <div class="bloque-titulo"><h2 id="t-fecha">{% translate "Próxima fecha" %}</h2><a href="{% url 'mensajeria:fechas' %}">{% translate "Fechas" %} {% icono "flecha-der" %}</a></div>
       <p><strong>{{ fecha_destacada.1.nombre }}</strong> · {{ fecha_destacada.0|fecha_corta }} <span class="texto-suave">({{ fecha_destacada.0|relativo }})</span></p>
     </section>
     {% endif %}
   </aside>
 </div>
 {% if clientes_total == 0 %}
-  <div class="espacio-arriba">{% url 'clientes:nuevo' as u %}{% include "componentes/vacio.html" with icono="clientes" titulo="Empieza por tus clientes" texto="Añade a tus clientas habituales o comparte tu enlace de reservas desde Solicitudes." url=u accion="Añadir cliente" principal=True %}</div>
+  <div class="espacio-arriba">{% url 'clientes:nuevo' as u %}{% include "componentes/vacio.html" with icono="clientes" titulo=_("Empieza por tus clientes") texto=_("Añade a tus clientas habituales o comparte tu enlace de reservas desde Solicitudes.") url=u accion=_("Añadir cliente") principal=True %}</div>
 {% endif %}
 {% endblock %}

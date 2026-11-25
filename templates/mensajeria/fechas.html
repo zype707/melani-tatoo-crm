@@ -1,24 +1,24 @@
 {% extends "base.html" %}
-{% block titulo %}Fechas destacadas{% endblock %}
+{% block titulo %}{% translate "Fechas destacadas" %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
-  <div><span class="antetitulo">Mensajería</span><h1>Fechas destacadas</h1></div>
-  <div class="acciones"><a class="btn btn-primario" href="{% url 'mensajeria:fecha_nueva' %}">{% icono "plus" %} Nueva fecha</a></div>
+  <div><span class="antetitulo">{% translate "Mensajería" %}</span><h1>{% translate "Fechas destacadas" %}</h1></div>
+  <div class="acciones"><a class="btn btn-primario" href="{% url 'mensajeria:fecha_nueva' %}">{% icono "plus" %} {% translate "Nueva fecha" %}</a></div>
 </header>
 {% include "mensajeria/_subnav.html" with seccion="fechas" %}
-<p class="texto-suave espacio-abajo ancho-texto">Unos días antes de cada fecha se prepara una campaña repartida en esos días, solo para clientes que aceptaron promociones.</p>
+<p class="texto-suave espacio-abajo ancho-texto">{% translate "Unos días antes de cada fecha se prepara una campaña repartida en esos días, solo para clientes que aceptaron promociones." %}</p>
 {% if filas %}
 <div class="tabla-envoltura">
   <table class="tabla">
-    <thead><tr><th>Fecha</th><th>Regla</th><th>Próxima</th><th>Mensaje</th><th></th></tr></thead>
+    <thead><tr><th>{% translate "Fecha" %}</th><th>{% translate "Regla" %}</th><th>{% translate "Próxima" %}</th><th>{% translate "Mensaje" %}</th><th></th></tr></thead>
     <tbody>
       {% for f in filas %}
         <tr>
           <td><a href="{% url 'mensajeria:fecha_editar' f.fecha.pk %}"><strong>{{ f.fecha.nombre }}</strong></a></td>
           <td class="texto-suave">{{ f.fecha.descripcion_regla }}</td>
           <td>{% if f.proxima %}{{ f.proxima|fecha_corta }} <span class="texto-suave">· {{ f.proxima|relativo }}</span>{% else %}—{% endif %}</td>
-          <td class="texto-suave">{% if f.fecha.generar_campana and f.fecha.plantilla %}{{ f.fecha.plantilla.nombre }} · {{ f.fecha.dias_ventana }} día{{ f.fecha.dias_ventana|pluralize }}{% else %}Solo recordatorio{% endif %}</td>
-          <td>{% if f.fecha.activa %}<span class="estado estado-ok">Activa</span>{% else %}<span class="estado estado-apagado">Pausada</span>{% endif %}</td>
+          <td class="texto-suave">{% if f.fecha.generar_campana and f.fecha.plantilla %}{% blocktranslate with nombre=f.fecha.plantilla.nombre count n=f.fecha.dias_ventana %}{{ nombre }} · {{ n }} día{% plural %}{{ nombre }} · {{ n }} días{% endblocktranslate %}{% else %}{% translate "Solo recordatorio" %}{% endif %}</td>
+          <td>{% if f.fecha.activa %}<span class="estado estado-ok">{% translate "Activa" %}</span>{% else %}<span class="estado estado-apagado">{% translate "Pausada" %}</span>{% endif %}</td>
         </tr>
       {% endfor %}
     </tbody>
@@ -26,6 +26,6 @@
 </div>
 {% else %}
   {% url 'mensajeria:fecha_nueva' as u %}
-  {% include "componentes/vacio.html" with icono="estrella" titulo="Sin fechas" url=u accion="Añadir fecha" %}
+  {% include "componentes/vacio.html" with icono="estrella" titulo=_("Sin fechas") url=u accion=_("Añadir fecha") %}
 {% endif %}
 {% endblock %}

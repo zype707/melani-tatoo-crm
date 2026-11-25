@@ -7,7 +7,7 @@
       </a>
     {% endfor %}
     <div class="cal-horas" aria-hidden="true">
-      {% for h in horas %}<span style="grid-row: {{ h.fila }} / span 2">{% if h.hora == 0 %}12 am{% elif h.hora < 12 %}{{ h.hora }} am{% elif h.hora == 12 %}12 pm{% else %}{{ h.hora|add:"-12" }} pm{% endif %}</span>{% endfor %}
+      {% for h in horas %}<span style="grid-row: {{ h.fila }} / span 2">{% if h.hora == 0 %}{% translate "12 am" %}{% elif h.hora < 12 %}{% blocktranslate with hora=h.hora %}{{ hora }} am{% endblocktranslate %}{% elif h.hora == 12 %}{% translate "12 pm" %}{% else %}{% blocktranslate with hora=h.hora|add:"-12" %}{{ hora }} pm{% endblocktranslate %}{% endif %}</span>{% endfor %}
     </div>
     {% for col in columnas %}
       <div class="cal-dia{% if not col.laborable %} no-laborable{% endif %}{% if col.hoy %} es-hoy{% endif %}" aria-label="{{ col.dia|fecha_larga }}">
@@ -18,7 +18,7 @@
             <span class="cal-evento-hora">{{ e.cita.inicio|hora }}{% if e.cita.estado == "realizada" %} ✓{% endif %}</span>
             <strong>{{ e.cita.cliente.nombre }}</strong>
             <span class="cal-evento-tipo">{{ e.cita.tipo }}</span>
-            {% if e.cita.requiere_atencion %}<span class="estado estado-atencion">{% if e.cita.estado == "solicitada" %}Por confirmar{% else %}Pide cambio{% endif %}</span>{% endif %}
+            {% if e.cita.requiere_atencion %}<span class="estado estado-atencion">{% if e.cita.estado == "solicitada" %}{% translate "Por confirmar" %}{% else %}{% translate "Pide cambio" %}{% endif %}</span>{% endif %}
           </a>
         {% endfor %}
         {% if col.ahora is not None %}<div class="cal-ahora" style="top: {{ col.ahora }}%" aria-hidden="true"></div>{% endif %}
@@ -26,4 +26,4 @@
     {% endfor %}
   </div>
 </div>
-{% if not columnas.0.franjas %}<p class="texto-suave">Configura tu horario laboral para ver las horas.</p>{% endif %}
+{% if not columnas.0.franjas %}<p class="texto-suave">{% translate "Configura tu horario laboral para ver las horas." %}</p>{% endif %}

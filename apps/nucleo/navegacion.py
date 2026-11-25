@@ -5,11 +5,12 @@ las apps instaladas.
 """
 
 from django.urls import NoReverseMatch, reverse
+from django.utils.translation import gettext_lazy as _
 
 ITEMS = [
     {
         "url": "panel:inicio",
-        "etiqueta": "Hoy",
+        "etiqueta": _("Hoy"),
         "icono": "panel",
         "espacios": ["panel"],
         "atajo": "inicio",
@@ -17,7 +18,7 @@ ITEMS = [
     },
     {
         "url": "agenda:calendario",
-        "etiqueta": "Agenda",
+        "etiqueta": _("Agenda"),
         "icono": "agenda",
         "espacios": ["agenda"],
         "atajo": "agenda",
@@ -25,31 +26,37 @@ ITEMS = [
     },
     {
         "url": "mensajeria:bandeja",
-        "etiqueta": "Mensajes",
+        "etiqueta": _("Mensajes"),
         "icono": "mensajes",
         "espacios": ["mensajeria"],
         "insignia": "mensajes",
         "atajo": "mensajes",
         "movil": True,
     },
-    {"url": "clientes:lista", "etiqueta": "Clientes", "icono": "clientes", "espacios": ["clientes"], "movil": True},
+    {"url": "clientes:lista", "etiqueta": _("Clientes"), "icono": "clientes", "espacios": ["clientes"], "movil": True},
     {
         "url": "solicitudes:lista",
-        "etiqueta": "Solicitudes",
+        "etiqueta": _("Solicitudes"),
         "icono": "bandeja",
         "espacios": ["solicitudes"],
         "insignia": "solicitudes",
     },
-    {"url": "catalogo:lista", "etiqueta": "Flash", "icono": "flash", "espacios": ["catalogo"]},
+    {"url": "catalogo:lista", "etiqueta": _("Flash"), "icono": "flash", "espacios": ["catalogo"]},
     {
         "url": "finanzas:resumen",
-        "etiqueta": "Finanzas",
+        "etiqueta": _("Finanzas"),
         "icono": "dinero",
         "espacios": ["finanzas"],
         "propietaria": True,
     },
-    {"url": "ia:asistente", "etiqueta": "Asistente IA", "icono": "ia", "espacios": ["ia"]},
-    {"url": "nucleo:ajustes", "etiqueta": "Ajustes", "icono": "ajustes", "espacios": ["nucleo"], "propietaria": True},
+    {"url": "ia:asistente", "etiqueta": _("Asistente IA"), "icono": "ia", "espacios": ["ia"]},
+    {
+        "url": "nucleo:ajustes",
+        "etiqueta": _("Ajustes"),
+        "icono": "ajustes",
+        "espacios": ["nucleo"],
+        "propietaria": True,
+    },
 ]
 
 

@@ -1,6 +1,7 @@
 import functools
 
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import gettext as _
 
 
 def vista_publica(vista):
@@ -15,7 +16,7 @@ def solo_propietaria(vista):
     @functools.wraps(vista)
     def envoltura(request, *args, **kwargs):
         if not getattr(request.user, "es_propietaria", False):
-            raise PermissionDenied("Solo la propietaria del estudio puede hacer esto.")
+            raise PermissionDenied(_("Solo la propietaria del estudio puede hacer esto."))
         return vista(request, *args, **kwargs)
 
     return envoltura

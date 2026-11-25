@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -12,34 +12,36 @@
   <link rel="icon" href="{% static 'img/icono-192.png' %}" type="image/png">
   <link rel="apple-touch-icon" href="{% static 'img/icono-180.png' %}">
   <script src="{% static 'vendor/htmx-2.0.11.min.js' %}" defer></script>
+  <script src="{% url 'catalogo_js' %}" defer></script>
   <script src="{% static 'js/app.js' %}" defer></script>
   <script src="{% static 'js/dictado.js' %}" defer></script>
   {% block cabeza %}{% endblock %}
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' data-sw="/sw.js">
-  <a class="saltar" href="#principal">Saltar al contenido</a>
+  <a class="saltar" href="#principal">{% translate "Saltar al contenido" %}</a>
 
   <div class="app">
-    <aside class="barra-lateral" aria-label="Navegación principal">
+    <aside class="barra-lateral" aria-label="{% translate "Navegación principal" %}">
       {% include "componentes/marca.html" %}
       {% if nav.url_nueva_cita %}
-        <a class="btn btn-primario btn-bloque" href="{{ nav.url_nueva_cita }}" data-atajo="nueva-cita">{% icono "plus" %} Nueva cita</a>
+        <a class="btn btn-primario btn-bloque" href="{{ nav.url_nueva_cita }}" data-atajo="nueva-cita">{% icono "plus" %} {% translate "Nueva cita" %}</a>
       {% endif %}
-      <nav class="nav-lateral" aria-label="Secciones">
+      <nav class="nav-lateral" aria-label="{% translate "Secciones" %}">
         {% for item in nav.items %}
           <a class="nav-enlace" href="{{ item.href }}"{% if item.activo %} aria-current="page"{% endif %}{% if item.atajo %} data-atajo="{{ item.atajo }}"{% endif %}>
             {% icono item.icono %}<span>{{ item.etiqueta }}</span>
-            {% if item.cuenta %}<span class="insignia" aria-label="{{ item.cuenta }} pendientes">{{ item.cuenta }}</span>{% endif %}
+            {% if item.cuenta %}<span class="insignia" aria-label="{% blocktranslate with cuenta=item.cuenta %}{{ cuenta }} pendientes{% endblocktranslate %}">{{ item.cuenta }}</span>{% endif %}
           </a>
         {% endfor %}
       </nav>
       <div class="lateral-pie">
         <p class="lateral-usuaria">{{ user.nombre }}</p>
-        <a class="nav-enlace" href="{% url 'cuentas:cuenta' %}" {% nav_activo "cuentas" %}>{% icono "usuario" %}<span>Mi cuenta</span></a>
+        <a class="nav-enlace" href="{% url 'cuentas:cuenta' %}" {% nav_activo "cuentas" %}>{% icono "usuario" %}<span>{% translate "Mi cuenta" %}</span></a>
         <form method="post" action="{% url 'cuentas:salir' %}">{% csrf_token %}
-          <button type="submit" class="nav-enlace btn-fantasma btn-bloque">{% icono "salir" %}<span>Salir</span></button>
+          <button type="submit" class="nav-enlace btn-fantasma btn-bloque">{% icono "salir" %}<span>{% translate "Salir" %}</span></button>
         </form>
-        <button type="button" class="btn btn-fantasma btn-peq" data-abrir="dialogo-atajos">{% icono "teclado" %} Atajos <kbd>?</kbd></button>
+        {% include "componentes/idioma.html" %}
+        <button type="button" class="btn btn-fantasma btn-peq" data-abrir="dialogo-atajos">{% icono "teclado" %} {% translate "Atajos" %} <kbd>?</kbd></button>
       </div>
     </aside>
 
@@ -47,7 +49,7 @@
       {% include "componentes/marca.html" %}
       <div class="fila">
         {% if nav.url_nueva_cita %}
-          <a class="btn btn-primario btn-peq" href="{{ nav.url_nueva_cita }}">{% icono "plus" %}<span>Cita</span></a>
+          <a class="btn btn-primario btn-peq" href="{{ nav.url_nueva_cita }}">{% icono "plus" %}<span>{% translate "Cita" %}</span></a>
         {% endif %}
       </div>
     </header>
@@ -57,21 +59,21 @@
     </main>
   </div>
 
-  <nav class="nav-inferior" aria-label="Navegación">
+  <nav class="nav-inferior" aria-label="{% translate "Navegación" %}">
     {% for item in nav.movil %}
       <a href="{{ item.href }}"{% if item.activo %} aria-current="page"{% endif %}>
         {% icono item.icono %}<span>{{ item.etiqueta }}</span>
         {% if item.cuenta %}<span class="insignia">{{ item.cuenta }}</span>{% endif %}
       </a>
     {% endfor %}
-    <button type="button" data-abrir="menu-mas" aria-haspopup="dialog">{% icono "mas" %}<span>Más</span></button>
+    <button type="button" data-abrir="menu-mas" aria-haspopup="dialog">{% icono "mas" %}<span>{% translate "Más" %}</span></button>
   </nav>
 
-  <dialog id="menu-mas" class="hoja" aria-label="Más secciones">
+  <dialog id="menu-mas" class="hoja" aria-label="{% translate "Más secciones" %}">
     <div class="hoja-cuerpo">
       <div class="hoja-cabecera">
-        <h2>Más</h2>
-        <button type="button" class="btn btn-icono btn-fantasma" data-cerrar aria-label="Cerrar">{% icono "x" %}</button>
+        <h2>{% translate "Más" %}</h2>
+        <button type="button" class="btn btn-icono btn-fantasma" data-cerrar aria-label="{% translate "Cerrar" %}">{% icono "x" %}</button>
       </div>
       {% for item in nav.resto %}
         <a class="nav-enlace" href="{{ item.href }}"{% if item.activo %} aria-current="page"{% endif %}>
@@ -79,9 +81,10 @@
           {% if item.cuenta %}<span class="insignia">{{ item.cuenta }}</span>{% endif %}
         </a>
       {% endfor %}
-      <a class="nav-enlace" href="{% url 'cuentas:cuenta' %}">{% icono "usuario" %}<span>Mi cuenta</span></a>
+      <a class="nav-enlace" href="{% url 'cuentas:cuenta' %}">{% icono "usuario" %}<span>{% translate "Mi cuenta" %}</span></a>
+      {% include "componentes/idioma.html" %}
       <form method="post" action="{% url 'cuentas:salir' %}">{% csrf_token %}
-        <button type="submit" class="nav-enlace btn-fantasma btn-bloque">{% icono "salir" %}<span>Salir</span></button>
+        <button type="submit" class="nav-enlace btn-fantasma btn-bloque">{% icono "salir" %}<span>{% translate "Salir" %}</span></button>
       </form>
     </div>
   </dialog>
@@ -90,7 +93,7 @@
     {% for m in messages %}
       <div class="toast toast-{{ m.tags }}" role="{% if m.level >= 30 %}alert{% else %}status{% endif %}">
         <span>{{ m }}</span>
-        <button type="button" data-cerrar-aviso aria-label="Cerrar aviso">✕</button>
+        <button type="button" data-cerrar-aviso aria-label="{% translate "Cerrar aviso" %}">✕</button>
       </div>
     {% endfor %}
   </div>

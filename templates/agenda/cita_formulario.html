@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block titulo %}{% if cita %}Editar cita{% else %}Nueva cita{% endif %}{% endblock %}
+{% block titulo %}{% if cita %}{% translate "Editar cita" %}{% else %}{% translate "Nueva cita" %}{% endif %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
   <div>
-    <nav class="migas" aria-label="Migas"><a href="{% url 'agenda:calendario' %}">Agenda</a>{% if cita %}<span>/</span><a href="{% url 'agenda:detalle' cita.pk %}">{{ cita.cliente.nombre }}</a>{% endif %}</nav>
-    <h1>{% if cita %}Editar cita{% else %}Nueva cita{% endif %}</h1>
+    <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'agenda:calendario' %}">{% translate "Agenda" %}</a>{% if cita %}<span>/</span><a href="{% url 'agenda:detalle' cita.pk %}">{{ cita.cliente.nombre }}</a>{% endif %}</nav>
+    <h1>{% if cita %}{% translate "Editar cita" %}{% else %}{% translate "Nueva cita" %}{% endif %}</h1>
   </div>
 </header>
 
@@ -13,12 +13,12 @@
   {% if form.non_field_errors %}<div class="alerta" role="alert">{% icono "alerta" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div></div>{% endif %}
 
   <section class="bloque pila" aria-labelledby="t-quien">
-    <div class="bloque-titulo"><h2 id="t-quien">Quién</h2></div>
+    <div class="bloque-titulo"><h2 id="t-quien">{% translate "Quién" %}</h2></div>
     {% include "componentes/selector_cliente.html" %}
   </section>
 
   <section class="bloque" aria-labelledby="t-cuando">
-    <div class="bloque-titulo"><h2 id="t-cuando">Cuándo y qué</h2></div>
+    <div class="bloque-titulo"><h2 id="t-cuando">{% translate "Cuándo y qué" %}</h2></div>
     <div class="formulario-2">
       {{ form.tipo.as_field_group }}
       {{ form.estado.as_field_group }}
@@ -32,10 +32,10 @@
   </section>
 
   <section class="bloque" aria-labelledby="t-proyecto">
-    <div class="bloque-titulo"><h2 id="t-proyecto">Proyecto</h2></div>
+    <div class="bloque-titulo"><h2 id="t-proyecto">{% translate "Proyecto" %}</h2></div>
     <div class="formulario-2">
       <div class="campo{% if form.tatuaje.errors %} campo-con-error{% endif %}">
-        <label for="{{ form.tatuaje.id_for_label }}">Tatuaje <span class="requerido">(opcional)</span></label>
+        <label for="{{ form.tatuaje.id_for_label }}">{% translate "Tatuaje" %} <span class="requerido">{% translate "(opcional)" %}</span></label>
         {{ form.tatuaje }}
         {{ form.tatuaje.errors }}
       </div>
@@ -46,8 +46,8 @@
   </section>
 
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar cita</button>
-    <a class="btn btn-fantasma" href="{% if cita %}{% url 'agenda:detalle' cita.pk %}{% else %}{% url 'agenda:calendario' %}{% endif %}">Cancelar</a>
+    <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar cita" %}</button>
+    <a class="btn btn-fantasma" href="{% if cita %}{% url 'agenda:detalle' cita.pk %}{% else %}{% url 'agenda:calendario' %}{% endif %}">{% translate "Cancelar" %}</a>
   </div>
 </form>
 {% endblock %}

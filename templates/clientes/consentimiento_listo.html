@@ -1,11 +1,11 @@
 {% extends "base_kiosco.html" %}
-{% block titulo %}¡Gracias!{% endblock %}
+{% block titulo %}{% translate "¡Gracias!" %}{% endblock %}
 {% block contenido %}
 <div class="error-pagina pila">
   <p class="error-codigo">✓</p>
-  <h1>¡Gracias, {{ cliente.nombre }}!</h1>
-  <p>Tu consentimiento está firmado y guardado. Devuelve el dispositivo a {{ ajustes.firma }}.</p>
-  <p><a class="btn btn-primario" href="{% url 'clientes:ficha' cliente.pk %}">{% icono "flecha-der" %} Volver a la ficha</a></p>
-  <p class="texto-peq texto-suave">Documento n.º {{ c.pk }} · huella SHA-256 {{ c.hash_pdf|slice:":16" }}…</p>
+  <h1>{% blocktranslate with nombre=cliente.nombre %}¡Gracias, {{ nombre }}!{% endblocktranslate %}</h1>
+  <p>{% blocktranslate with firma=ajustes.firma %}Tu consentimiento está firmado y guardado. Devuelve el dispositivo a {{ firma }}.{% endblocktranslate %}</p>
+  <p><a class="btn btn-primario" href="{% url 'clientes:ficha' cliente.pk %}">{% icono "flecha-der" %} {% translate "Volver a la ficha" %}</a></p>
+  <p class="texto-peq texto-suave">{% blocktranslate with pk=c.pk hash_pdf=c.hash_pdf|slice:":16" %}Documento n.º {{ pk }} · huella SHA-256 {{ hash_pdf }}…{% endblocktranslate %}</p>
 </div>
 {% endblock %}

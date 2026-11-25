@@ -1,18 +1,19 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class UsoIA(models.Model):
     """Una llamada a la IA. Solo métricas: nunca se guarda lo enviado ni lo recibido."""
 
     class Funcion(models.TextChoices):
-        REDACTAR = "redactar", "Redactar mensaje"
-        TRIAJE = "triaje", "Triaje de solicitud"
-        RESUMEN = "resumen", "Resumen previo a la cita"
-        RETENCION = "retencion", "Sugerencias de retención"
-        BUSQUEDA = "busqueda", "Búsqueda en lenguaje natural"
-        RESPUESTA = "respuesta", "Respuesta sugerida"
+        REDACTAR = "redactar", _("Redactar mensaje")
+        TRIAJE = "triaje", _("Triaje de solicitud")
+        RESUMEN = "resumen", _("Resumen previo a la cita")
+        RETENCION = "retencion", _("Sugerencias de retención")
+        BUSQUEDA = "busqueda", _("Búsqueda en lenguaje natural")
+        RESPUESTA = "respuesta", _("Respuesta sugerida")
 
     funcion = models.CharField(max_length=12, choices=Funcion.choices)
     exito = models.BooleanField(default=False)
@@ -25,8 +26,8 @@ class UsoIA(models.Model):
 
     class Meta:
         ordering = ["-creado_en"]
-        verbose_name = "uso de IA"
-        verbose_name_plural = "usos de IA"
+        verbose_name = _("uso de IA")
+        verbose_name_plural = _("usos de IA")
 
     def __str__(self):
         return f"{self.get_funcion_display()} · {'ok' if self.exito else self.error}"

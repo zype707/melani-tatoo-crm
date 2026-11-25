@@ -1,20 +1,20 @@
 {% extends "base.html" %}
-{% block titulo %}Nueva campaña{% endblock %}
+{% block titulo %}{% translate "Nueva campaña" %}{% endblock %}
 {% block contenido %}
-<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'mensajeria:campanas' %}">Campañas</a></nav><h1>Nueva campaña</h1></div></header>
+<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'mensajeria:campanas' %}">{% translate "Campañas" %}</a></nav><h1>{% translate "Nueva campaña" %}</h1></div></header>
 <form method="post" class="rejilla-ficha" novalidate>
   {% csrf_token %}
   <section class="bloque formulario" hx-get="{% url 'mensajeria:recuento' %}" hx-trigger="change from:#id_segmento, input from:#id_por_dia delay:300ms" hx-target="#recuento" hx-include="#id_segmento, #id_por_dia">
     {{ form }}
     <div class="acciones-formulario">
-      <button type="submit" class="btn btn-primario" data-confirmar="Se prepararán los mensajes en tu bandeja, repartidos por días. ¿Lanzar campaña?" data-confirmar-si="Lanzar">{% icono "enviar" %} Lanzar campaña</button>
-      <a class="btn btn-fantasma" href="{% url 'mensajeria:campanas' %}">Cancelar</a>
+      <button type="submit" class="btn btn-primario" data-confirmar="{% translate "Se prepararán los mensajes en tu bandeja, repartidos por días. ¿Lanzar campaña?" %}" data-confirmar-si="{% translate "Lanzar" %}">{% icono "enviar" %} {% translate "Lanzar campaña" %}</button>
+      <a class="btn btn-fantasma" href="{% url 'mensajeria:campanas' %}">{% translate "Cancelar" %}</a>
     </div>
   </section>
   <aside class="pila">
-    <h2 class="titulo-seccion">Alcance</h2>
+    <h2 class="titulo-seccion">{% translate "Alcance" %}</h2>
     {% include "mensajeria/_recuento.html" %}
-    <div class="aviso">{% icono "escudo" %}<p class="texto-peq">Solo se incluyen clientes que aceptaron promociones y no pidieron «no contactar». Si alguien se da de baja después, su mensaje desaparece de la bandeja.</p></div>
+    <div class="aviso">{% icono "escudo" %}<p class="texto-peq">{% translate "Solo se incluyen clientes que aceptaron promociones y no pidieron «no contactar». Si alguien se da de baja después, su mensaje desaparece de la bandeja." %}</p></div>
   </aside>
 </form>
 {% endblock %}

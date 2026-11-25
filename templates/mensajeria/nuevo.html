@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block titulo %}Escribir mensaje{% endblock %}
+{% block titulo %}{% translate "Escribir mensaje" %}{% endblock %}
 {% block cabeza %}<script src="{% static 'js/mensajes.js' %}" defer></script>{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
-  <div><nav class="migas"><a href="{% url 'mensajeria:bandeja' %}">Mensajes</a></nav><h1>Escribir mensaje</h1></div>
+  <div><nav class="migas"><a href="{% url 'mensajeria:bandeja' %}">{% translate "Mensajes" %}</a></nav><h1>{% translate "Escribir mensaje" %}</h1></div>
 </header>
 <form method="post" class="pila-g ancho-formulario" novalidate>
   {% csrf_token %}
@@ -11,9 +11,9 @@
   <section class="bloque">{% include "componentes/selector_cliente.html" %}</section>
   <section class="bloque formulario">
     <div class="campo">
-      <label for="{{ form.plantilla.id_for_label }}">{{ form.plantilla.label }} <span class="requerido">(opcional)</span></label>
+      <label for="{{ form.plantilla.id_for_label }}">{{ form.plantilla.label }} <span class="requerido">{% translate "(opcional)" %}</span></label>
       <select name="plantilla" id="{{ form.plantilla.id_for_label }}" data-cargar-plantilla="{% url 'mensajeria:texto_plantilla' %}" data-destino="#{{ form.texto.id_for_label }}">
-        <option value="">— Escribir desde cero —</option>
+        <option value="">{% translate "— Escribir desde cero —" %}</option>
         {% for p in form.fields.plantilla.queryset %}<option value="{{ p.pk }}">{{ p.get_categoria_display }} · {{ p.nombre }}</option>{% endfor %}
       </select>
     </div>
@@ -21,8 +21,8 @@
     {% include "mensajeria/_ia_redactar.html" %}
   </section>
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "flecha-der" %} Preparar envío</button>
-    <a class="btn btn-fantasma" href="{% url 'mensajeria:bandeja' %}">Cancelar</a>
+    <button type="submit" class="btn btn-primario">{% icono "flecha-der" %} {% translate "Preparar envío" %}</button>
+    <a class="btn btn-fantasma" href="{% url 'mensajeria:bandeja' %}">{% translate "Cancelar" %}</a>
   </div>
 </form>
 {% endblock %}

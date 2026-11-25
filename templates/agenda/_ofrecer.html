@@ -1,3 +1,3 @@
 <form method="post" action="{% url 'mensajeria:ofrecer_hueco' cita.pk e.pk %}">{% csrf_token %}
-  <button type="submit" class="btn btn-peq {% if forloop.first %}btn-primario{% endif %}">{% icono "mensajes" %} {% if e.ofrecido_en %}Ofrecer otra vez{% else %}Ofrecer{% endif %}</button>
+  <button type="submit" class="btn btn-peq {% if forloop.first %}btn-primario{% endif %}">{% icono "mensajes" %} {% if e.ofrecido_en %}{% translate "Ofrecer otra vez" %}{% else %}{% translate "Ofrecer" %}{% endif %}</button>
 </form>

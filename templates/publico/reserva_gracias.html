@@ -1,10 +1,10 @@
 {% extends "base_publica.html" %}
-{% block titulo %}¡Recibido!{% endblock %}
+{% block titulo %}{% translate "¡Recibido!" %}{% endblock %}
 {% block contenido %}
 <div class="error-pagina pila">
   <p class="error-codigo">✓</p>
-  <h1>¡Solicitud enviada!</h1>
-  <p>Gracias por confiar en {{ ajustes.nombre_artista|default:ajustes.nombre }}. Reviso cada idea personalmente y te escribiré por WhatsApp o SMS en unos días.</p>
-  {% if ajustes.instagram %}<p><a class="btn" href="https://instagram.com/{{ ajustes.instagram }}" target="_blank" rel="noopener noreferrer">Mientras, mira mi trabajo en @{{ ajustes.instagram }}</a></p>{% endif %}
+  <h1>{% translate "¡Solicitud enviada!" %}</h1>
+  <p>{% blocktranslate with nombre_artista=ajustes.nombre_artista|default:ajustes.nombre %}Gracias por confiar en {{ nombre_artista }}. Reviso cada idea personalmente y te escribiré por WhatsApp o SMS en unos días.{% endblocktranslate %}</p>
+  {% if ajustes.instagram %}<p><a class="btn" href="https://instagram.com/{{ ajustes.instagram }}" target="_blank" rel="noopener noreferrer">{% blocktranslate with instagram=ajustes.instagram %}Mientras, mira mi trabajo en @{{ instagram }}{% endblocktranslate %}</a></p>{% endif %}
 </div>
 {% endblock %}

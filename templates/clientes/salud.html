@@ -1,20 +1,20 @@
 {% extends "base.html" %}
-{% block titulo %}Salud · {{ cliente.nombre }}{% endblock %}
+{% block titulo %}{% blocktranslate with nombre=cliente.nombre %}Salud · {{ nombre }}{% endblocktranslate %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
   <div>
-    <nav class="migas" aria-label="Migas"><a href="{% url 'clientes:lista' %}">Clientes</a><span>/</span><a href="{% url 'clientes:ficha' cliente.pk %}">{{ cliente.nombre }}</a></nav>
-    <h1>Datos de salud</h1>
+    <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'clientes:lista' %}">{% translate "Clientes" %}</a><span>/</span><a href="{% url 'clientes:ficha' cliente.pk %}">{{ cliente.nombre }}</a></nav>
+    <h1>{% translate "Datos de salud" %}</h1>
   </div>
 </header>
-<div class="aviso ancho-formulario">{% icono "candado" %}<p>Información sensible. Solo la ves tú, no se envía nunca a la IA y se elimina al anonimizar la ficha.</p></div>
+<div class="aviso ancho-formulario">{% icono "candado" %}<p>{% translate "Información sensible. Solo la ves tú, no se envía nunca a la IA y se elimina al anonimizar la ficha." %}</p></div>
 <form method="post" class="bloque formulario ancho-formulario espacio-arriba" novalidate>
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="alerta">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
   {{ form.alergias.as_field_group }}
   {{ form.medicacion.as_field_group }}
   <fieldset class="campo">
-    <legend>Marca lo que aplique</legend>
+    <legend>{% translate "Marca lo que aplique" %}</legend>
     <div class="formulario-2">
       {{ form.anticoagulantes.as_field_group }}
       {{ form.diabetes.as_field_group }}
@@ -26,8 +26,8 @@
   {{ form.condiciones_piel.as_field_group }}
   {{ form.otras.as_field_group }}
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
-    <a class="btn btn-fantasma" href="{% url 'clientes:ficha' cliente.pk %}">Cancelar</a>
+    <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar" %}</button>
+    <a class="btn btn-fantasma" href="{% url 'clientes:ficha' cliente.pk %}">{% translate "Cancelar" %}</a>
   </div>
 </form>
 {% endblock %}

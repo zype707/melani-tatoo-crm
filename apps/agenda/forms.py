@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core import signing
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.clientes.models import Cliente, Tatuaje
 from apps.clientes.servicios import normalizar_telefono
@@ -17,22 +18,22 @@ from .models import Bloqueo, Cita, EntradaListaEspera, EstadoCita, HorarioLabora
 
 class CitaForm(forms.ModelForm):
     cliente = forms.ModelChoiceField(queryset=Cliente.objects.activos(), required=False, widget=forms.HiddenInput)
-    nuevo_cliente_nombre = forms.CharField(label="Nombre", max_length=80, required=False)
+    nuevo_cliente_nombre = forms.CharField(label=_("Nombre"), max_length=80, required=False)
     nuevo_cliente_telefono = forms.CharField(
-        label="Teléfono", max_length=30, required=False, widget=forms.TextInput(attrs={"type": "tel"})
+        label=_("Teléfono"), max_length=30, required=False, widget=forms.TextInput(attrs={"type": "tel"})
     )
-    fecha = forms.DateField(label="Día", widget=EntradaFecha())
-    hora = forms.TimeField(label="Hora", widget=EntradaHora(attrs={"step": 900}))
+    fecha = forms.DateField(label=_("Día"), widget=EntradaFecha())
+    hora = forms.TimeField(label=_("Hora"), widget=EntradaHora(attrs={"step": 900}))
     duracion = forms.IntegerField(
-        label="Duración (min)",
+        label=_("Duración (min)"),
         min_value=15,
         max_value=12 * 60,
         widget=forms.NumberInput(attrs={"step": 15, "inputmode": "numeric"}),
     )
     nuevo_tatuaje = forms.CharField(
-        label="…o crea un tatuaje nuevo", max_length=120, required=False, help_text="Título del proyecto"
+        label=_("…o crea un tatuaje nuevo"), max_length=120, required=False, help_text=_("Título del proyecto")
     )
-    fuera_de_horario = forms.BooleanField(label="Sé que es fuera de mi horario", required=False)
+    fuera_de_horario = forms.BooleanField(label=_("Sé que es fuera de mi horario"), required=False)
 
     class Meta:
         model = Cita
@@ -58,7 +59,7 @@ class CitaForm(forms.ModelForm):
             Tatuaje.objects.filter(cliente_id=cliente_id) if str(cliente_id or "").isdigit() else Tatuaje.objects.none()
         )
         self.fields["tatuaje"].required = False
-        self.fields["tatuaje"].empty_label = "— Sin tatuaje asociado —"
+        self.fields["tatuaje"].empty_label = _("— Sin tatuaje asociado —")
         if self.instance.pk:
             local = timezone.localtime(self.instance.inicio)
             self.initial.setdefault("fecha", local.date())
@@ -81,7 +82,7 @@ class CitaForm(forms.ModelForm):
         if not cliente:
             nombre = (datos.get("nuevo_cliente_nombre") or "").strip()
             if not nombre:
-                raise forms.ValidationError("Elige un cliente o escribe el nombre de uno nuevo.")
+                raise forms.ValidationError(_("Elige un cliente o escribe el nombre de uno nuevo."))
             try:
                 datos["nuevo_cliente_telefono"] = normalizar_telefono(datos.get("nuevo_cliente_telefono", ""))
             except forms.ValidationError as exc:
@@ -97,11 +98,12 @@ class CitaForm(forms.ModelForm):
                 self.add_error(None, motivo)
             if servicios.fuera_de_horario(inicio, fin) and not datos.get("fuera_de_horario"):
                 self.add_error(
-                    "fuera_de_horario", "Está fuera de tu horario laboral. Marca la casilla si quieres guardarla igual."
+                    "fuera_de_horario",
+                    _("Está fuera de tu horario laboral. Marca la casilla si quieres guardarla igual."),
                 )
         tatuaje = datos.get("tatuaje")
         if tatuaje and cliente and tatuaje.cliente_id != cliente.pk:
-            self.add_error("tatuaje", "Ese tatuaje es de otro cliente.")
+            self.add_error("tatuaje", _("Ese tatuaje es de otro cliente."))
         return datos
 
     def save(self, commit=True):
@@ -120,9 +122,9 @@ class CitaForm(forms.ModelForm):
 
 
 class CancelarForm(forms.Form):
-    motivo = forms.CharField(label="Motivo", max_length=200, required=False)
+    motivo = forms.CharField(label=_("Motivo"), max_length=200, required=False)
     cancelada_por = forms.ChoiceField(
-        label="¿Quién cancela?",
+        label=_("¿Quién cancela?"),
         choices=Cita.CanceladaPor.choices,
         initial=Cita.CanceladaPor.CLIENTE,
         widget=forms.RadioSelect,
@@ -131,21 +133,21 @@ class CancelarForm(forms.Form):
 
 class CerrarSesionForm(forms.Form):
     importe = forms.DecimalField(
-        label="Cobrado hoy",
+        label=_("Cobrado hoy"),
         required=False,
         min_value=0,
         decimal_places=2,
         widget=forms.NumberInput(attrs={"step": "1", "inputmode": "decimal"}),
-        help_text="Sin contar la seña ya registrada.",
+        help_text=_("Sin contar la seña ya registrada."),
     )
-    metodo = forms.ChoiceField(label="Método", choices=Metodo.choices)
+    metodo = forms.ChoiceField(label=_("Método"), choices=Metodo.choices)
     notas_sesion = forms.CharField(
-        label="Notas de la sesión",
+        label=_("Notas de la sesión"),
         required=False,
         widget=forms.Textarea(attrs={"rows": 4}),
-        help_text="Tintas, agujas, cómo reaccionó la piel, qué falta…",
+        help_text=_("Tintas, agujas, cómo reaccionó la piel, qué falta…"),
     )
-    terminado = forms.BooleanField(label="El tatuaje queda terminado", required=False)
+    terminado = forms.BooleanField(label=_("El tatuaje queda terminado"), required=False)
 
 
 class PagoForm(forms.ModelForm):
@@ -166,10 +168,10 @@ class TipoCitaForm(forms.ModelForm):
 
 
 class BloqueoForm(forms.ModelForm):
-    desde_fecha = forms.DateField(label="Desde el día", widget=EntradaFecha())
-    desde_hora = forms.TimeField(label="Hora", required=False, widget=EntradaHora())
-    hasta_fecha = forms.DateField(label="Hasta el día", widget=EntradaFecha())
-    hasta_hora = forms.TimeField(label="Hora", required=False, widget=EntradaHora())
+    desde_fecha = forms.DateField(label=_("Desde el día"), widget=EntradaFecha())
+    desde_hora = forms.TimeField(label=_("Hora"), required=False, widget=EntradaHora())
+    hasta_fecha = forms.DateField(label=_("Hasta el día"), widget=EntradaFecha())
+    hasta_hora = forms.TimeField(label=_("Hora"), required=False, widget=EntradaHora())
 
     class Meta:
         model = Bloqueo
@@ -186,11 +188,15 @@ class BloqueoForm(forms.ModelForm):
         else:
             fin = timezone.make_aware(datetime.combine(datos["hasta_fecha"] + timedelta(days=1), datetime.min.time()))
         if fin <= inicio:
-            raise forms.ValidationError("El final debe ser posterior al inicio.")
+            raise forms.ValidationError(_("El final debe ser posterior al inicio."))
         datos["inicio"], datos["fin"] = inicio, fin
         ocupadas = Cita.objects.solapadas(inicio, fin).count()
         if ocupadas and not self.data.get("confirmar"):
-            self.add_error(None, f"Hay {ocupadas} cita(s) en ese periodo. Reprográmalas o pulsa «Bloquear igualmente».")
+            self.add_error(
+                None,
+                _("Hay %(ocupadas)s cita(s) en ese periodo. Reprográmalas o pulsa «Bloquear igualmente».")
+                % {"ocupadas": ocupadas},
+            )
             self.necesita_confirmar = True
         return datos
 
@@ -216,10 +222,14 @@ class HorarioForm(forms.Form):
             for n in (1, 2):
                 ini, fin = f"d{dia}_{n}_ini", f"d{dia}_{n}_fin"
                 self.fields[ini] = forms.TimeField(
-                    label=f"{nombre} tramo {n} desde", required=False, widget=EntradaHora()
+                    label=_("%(nombre)s tramo %(n)s desde") % {"nombre": nombre, "n": n},
+                    required=False,
+                    widget=EntradaHora(),
                 )
                 self.fields[fin] = forms.TimeField(
-                    label=f"{nombre} tramo {n} hasta", required=False, widget=EntradaHora()
+                    label=_("%(nombre)s tramo %(n)s hasta") % {"nombre": nombre, "n": n},
+                    required=False,
+                    widget=EntradaHora(),
                 )
                 actual = existentes.get(dia, [])
                 if len(actual) >= n:
@@ -236,11 +246,16 @@ class HorarioForm(forms.Form):
                 ini, fin = datos.get(f"d{dia}_{n}_ini"), datos.get(f"d{dia}_{n}_fin")
                 if ini and fin:
                     if fin <= ini:
-                        self.add_error(f"d{dia}_{n}_fin", f"{nombre}: la hora final debe ser posterior.")
+                        self.add_error(
+                            f"d{dia}_{n}_fin", _("%(nombre)s: la hora final debe ser posterior.") % {"nombre": nombre}
+                        )
                     else:
                         self.tramos.append(HorarioLaboral(dia_semana=dia, hora_inicio=ini, hora_fin=fin))
                 elif ini or fin:
-                    self.add_error(f"d{dia}_{n}_ini", f"{nombre}: completa las dos horas del tramo {n}.")
+                    self.add_error(
+                        f"d{dia}_{n}_ini",
+                        _("%(nombre)s: completa las dos horas del tramo %(n)s.") % {"nombre": nombre, "n": n},
+                    )
         return datos
 
     def save(self):
@@ -251,12 +266,12 @@ class HorarioForm(forms.Form):
 class ListaEsperaForm(forms.ModelForm):
     cliente = forms.ModelChoiceField(queryset=Cliente.objects.activos(), widget=forms.HiddenInput)
     dias = forms.TypedMultipleChoiceField(
-        label="Días que le van bien",
+        label=_("Días que le van bien"),
         choices=HorarioLaboral.Dia.choices,
         coerce=int,
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        help_text="Sin marcar = cualquier día.",
+        help_text=_("Sin marcar = cualquier día."),
     )
 
     class Meta:
@@ -272,14 +287,14 @@ class ListaEsperaForm(forms.ModelForm):
 
 class ReprogramarClienteForm(forms.Form):
     texto = forms.CharField(
-        label="¿Qué días u horas te vendrían mejor?",
+        label=_("¿Qué días u horas te vendrían mejor?"),
         max_length=300,
-        widget=forms.Textarea(attrs={"rows": 3, "placeholder": "Ej.: cualquier tarde de la semana que viene"}),
+        widget=forms.Textarea(attrs={"rows": 3, "placeholder": _("Ej.: cualquier tarde de la semana que viene")}),
     )
 
 
 class CancelarClienteForm(forms.Form):
-    motivo = forms.CharField(label="Motivo (opcional)", max_length=200, required=False)
+    motivo = forms.CharField(label=_("Motivo (opcional)"), max_length=200, required=False)
 
 
 # --- Página pública de reservas --------------------------------------------------------------
@@ -291,17 +306,17 @@ class SolicitudForm(forms.ModelForm):
     """Formulario público. Anti-spam: campo trampa invisible y tiempo mínimo de relleno."""
 
     imagenes = CampoImagenes(
-        label="Imágenes de referencia",
+        label=_("Imágenes de referencia"),
         required=False,
-        help_text="Hasta 5 imágenes (JPG, PNG o WebP). Se eliminan los datos de ubicación.",
+        help_text=_("Hasta 5 imágenes (JPG, PNG o WebP). Se eliminan los datos de ubicación."),
     )
-    acepta_privacidad = forms.BooleanField(label="He leído y acepto el aviso de privacidad")
+    acepta_privacidad = forms.BooleanField(label=_("He leído y acepto el aviso de privacidad"))
     acepta_marketing = forms.BooleanField(
-        label="Quiero recibir felicitaciones, flash disponibles y huecos libres", required=False
+        label=_("Quiero recibir felicitaciones, flash disponibles y huecos libres"), required=False
     )
     web = forms.CharField(
         required=False,
-        label="No rellenes este campo",
+        label=_("No rellenes este campo"),
         widget=forms.TextInput(attrs={"tabindex": "-1", "autocomplete": "off"}),
     )
     t = forms.CharField(widget=forms.HiddenInput)
@@ -335,10 +350,12 @@ class SolicitudForm(forms.ModelForm):
                 attrs={
                     "rows": 6,
                     "maxlength": 3000,
-                    "placeholder": "Qué quieres tatuarte, cómo lo imaginas, colores, significado…",
+                    "placeholder": _("Qué quieres tatuarte, cómo lo imaginas, colores, significado…"),
                 }
             ),
-            "fechas_preferidas": forms.TextInput(attrs={"placeholder": "Ej.: tardes entre semana, a partir de enero"}),
+            "fechas_preferidas": forms.TextInput(
+                attrs={"placeholder": _("Ej.: tardes entre semana, a partir de enero")}
+            ),
             "instagram": forms.TextInput(attrs={"placeholder": "tu_usuario"}),
         }
 
@@ -346,7 +363,7 @@ class SolicitudForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.edad_minima = edad_minima
         self.fields["email"].required = False
-        self.fields["descripcion"].label = "Cuéntame tu idea"
+        self.fields["descripcion"].label = _("Cuéntame tu idea")
         if not self.is_bound:
             self.initial["t"] = signing.TimestampSigner(salt=FIRMA_TIEMPO).sign(str(timezone.now().timestamp()))
 
@@ -355,14 +372,14 @@ class SolicitudForm(forms.ModelForm):
             signing.TimestampSigner(salt=FIRMA_TIEMPO).unsign(self.cleaned_data["t"], max_age=60 * 60 * 3)
             enviado = float(signing.TimestampSigner(salt=FIRMA_TIEMPO).unsign(self.cleaned_data["t"]))
         except (signing.BadSignature, ValueError) as exc:
-            raise forms.ValidationError("El formulario caducó. Recarga la página.") from exc
+            raise forms.ValidationError(_("El formulario caducó. Recarga la página.")) from exc
         if timezone.now().timestamp() - enviado < 3:
-            raise forms.ValidationError("Has ido demasiado rápido. Inténtalo otra vez.")
+            raise forms.ValidationError(_("Has ido demasiado rápido. Inténtalo otra vez."))
         return self.cleaned_data["t"]
 
     def clean_web(self):
         if self.cleaned_data.get("web"):
-            raise forms.ValidationError("Solicitud no válida.")
+            raise forms.ValidationError(_("Solicitud no válida."))
         return ""
 
     def clean_telefono(self):
@@ -376,10 +393,11 @@ class SolicitudForm(forms.ModelForm):
         hoy = timezone.localdate()
         edad = hoy.year - n.year - ((hoy.month, hoy.day) < (n.month, n.day))
         if edad > 110 or n > hoy:
-            raise forms.ValidationError("Revisa la fecha de nacimiento.")
+            raise forms.ValidationError(_("Revisa la fecha de nacimiento."))
         if edad < self.edad_minima:
             raise forms.ValidationError(
-                f"Para tatuarte en el estudio necesitas tener al menos {self.edad_minima} años."
+                _("Para tatuarte en el estudio necesitas tener al menos %(edad_minima)s años.")
+                % {"edad_minima": self.edad_minima}
             )
         return n
 
@@ -388,4 +406,4 @@ class SolicitudForm(forms.ModelForm):
 
 
 class RechazoForm(forms.Form):
-    motivo = forms.CharField(label="Motivo (solo para ti)", max_length=200, required=False)
+    motivo = forms.CharField(label=_("Motivo (solo para ti)"), max_length=200, required=False)

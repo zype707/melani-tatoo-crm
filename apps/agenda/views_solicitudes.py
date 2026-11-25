@@ -4,6 +4,8 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 from django.views.decorators.http import require_POST
 
 from apps.clientes.models import Cliente
@@ -23,10 +25,10 @@ from .models import ImagenSolicitud, SolicitudReserva
 
 Estado = SolicitudReserva.Estado
 PESTANAS = [
-    (Estado.NUEVA, "Nuevas"),
-    (Estado.APROBADA, "Aceptadas sin fecha"),
-    (Estado.CONVERTIDA, "Con cita"),
-    (Estado.RECHAZADA, "Rechazadas"),
+    (Estado.NUEVA, gettext_lazy("Nuevas")),
+    (Estado.APROBADA, gettext_lazy("Aceptadas sin fecha")),
+    (Estado.CONVERTIDA, gettext_lazy("Con cita")),
+    (Estado.RECHAZADA, gettext_lazy("Rechazadas")),
 ]
 
 
@@ -68,15 +70,15 @@ def gestionar_enlace(request):
     if accion == "renovar":
         tokens.revocar(tokens.EnlacePublico.Proposito.RESERVA)
         tokens.crear_enlace(tokens.EnlacePublico.Proposito.RESERVA, dias=365)
-        messages.success(request, "Enlace renovado. El anterior ya no funciona: actualízalo en tu Instagram.")
+        messages.success(request, _("Enlace renovado. El anterior ya no funciona: actualízalo en tu Instagram."))
     elif accion == "crear":
         tokens.crear_enlace(tokens.EnlacePublico.Proposito.RESERVA, dias=365)
-        messages.success(request, "Enlace de reservas creado.")
+        messages.success(request, _("Enlace de reservas creado."))
     elif accion in ("abrir", "cerrar"):
         ajustes.reservas_activas = accion == "abrir"
         ajustes.save(update_fields=["reservas_activas", "actualizado_en"])
         messages.success(
-            request, "Reservas abiertas." if ajustes.reservas_activas else "Reservas cerradas temporalmente."
+            request, _("Reservas abiertas.") if ajustes.reservas_activas else _("Reservas cerradas temporalmente.")
         )
     return redirect("solicitudes:lista")
 
@@ -125,18 +127,18 @@ def aprobar(request, pk):
         Plantilla.objects.filter(categoria=Categoria.SOLICITUD, activa=True).order_by("-predeterminada", "pk").first()
     )
     if plantilla:
-        m, _ = mensajes.preparar(
+        m, _x = mensajes.preparar(
             cliente,
             tipo=Categoria.SOLICITUD,
             clave=f"solicitud:{s.pk}:aprobada",
             plantilla=plantilla,
             promocional=False,
-            motivo="Solicitud aceptada",
+            motivo=_("Solicitud aceptada"),
         )
         if m:
-            messages.success(request, "Solicitud aceptada. Ficha y proyecto creados. Envíale la respuesta:")
+            messages.success(request, _("Solicitud aceptada. Ficha y proyecto creados. Envíale la respuesta:"))
             return redirect("mensajeria:enviar", m.pk)
-    messages.success(request, "Solicitud aceptada. Ficha y proyecto creados.")
+    messages.success(request, _("Solicitud aceptada. Ficha y proyecto creados."))
     return redirect("clientes:ficha", cliente.pk)
 
 
@@ -156,12 +158,12 @@ def rechazar(request, pk):
     form = RechazoForm(request.POST)
     motivo = form.cleaned_data["motivo"] if form.is_valid() else ""
     if request.POST.get("spam"):
-        solicitudes.marcar(s, Estado.SPAM, "Spam")
+        solicitudes.marcar(s, Estado.SPAM, _("Spam"))
         solicitudes.purgar(s)
-        messages.success(request, "Marcada como spam y eliminada.")
+        messages.success(request, _("Marcada como spam y eliminada."))
     else:
         solicitudes.marcar(s, Estado.RECHAZADA, motivo)
-        messages.success(request, "Solicitud rechazada. Sus datos se borrarán solos en 30 días.")
+        messages.success(request, _("Solicitud rechazada. Sus datos se borrarán solos en 30 días."))
     return redirect("solicitudes:lista")
 
 
@@ -213,7 +215,7 @@ def reserva_publica(request, token):
     else:
         inicial = {}
         if diseno:
-            inicial["descripcion"] = f"Me interesa el flash «{diseno.titulo}»."
+            inicial["descripcion"] = _("Me interesa el flash «%(titulo)s».") % {"titulo": diseno.titulo}
         form = SolicitudForm(edad_minima=ajustes.edad_minima, initial=inicial)
     return render(request, "publico/reserva.html", {"form": form, "diseno": diseno, "token": token})
 

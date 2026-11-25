@@ -4,6 +4,8 @@ from django.db.models import Count, Prefetch
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 from django.views.decorators.http import require_POST
 
 from apps.agenda.models import Cita, EstadoCita
@@ -24,11 +26,11 @@ from .forms import (
 from .models import Cliente, DatosSalud, Etiqueta, FotoTatuaje, NotaCliente, Tatuaje
 
 FILTROS = {
-    "todos": "Todos",
-    "proximas": "Con cita",
-    "vip": "VIP",
-    "nuevos": "Nuevos del mes",
-    "marketing": "Aceptan promociones",
+    "todos": gettext_lazy("Todos"),
+    "proximas": gettext_lazy("Con cita"),
+    "vip": gettext_lazy("VIP"),
+    "nuevos": gettext_lazy("Nuevos del mes"),
+    "marketing": gettext_lazy("Aceptan promociones"),
 }
 
 
@@ -87,7 +89,7 @@ def nuevo(request):
     if request.method == "POST" and form.is_valid():
         cliente = form.save(usuario=request.user)
         _avisar_duplicados(request, cliente)
-        messages.success(request, f"{cliente.nombre} añadido.")
+        messages.success(request, _("%(nombre)s añadido.") % {"nombre": cliente.nombre})
         return redirect("clientes:ficha", cliente.pk)
     return render(request, "clientes/formulario.html", {"form": form})
 
@@ -98,7 +100,7 @@ def editar(request, pk):
     if request.method == "POST" and form.is_valid():
         form.save(usuario=request.user)
         _avisar_duplicados(request, cliente)
-        messages.success(request, "Ficha actualizada.")
+        messages.success(request, _("Ficha actualizada."))
         return redirect("clientes:ficha", cliente.pk)
     return render(request, "clientes/formulario.html", {"form": form, "cliente": cliente})
 
@@ -107,7 +109,9 @@ def _avisar_duplicados(request, cliente):
     otros = list(servicios.duplicados(cliente)[:3])
     if otros:
         nombres = ", ".join(o.nombre_completo for o in otros)
-        messages.warning(request, f"Ojo: hay otras fichas con el mismo teléfono o email ({nombres}).")
+        messages.warning(
+            request, _("Ojo: hay otras fichas con el mismo teléfono o email (%(nombres)s).") % {"nombres": nombres}
+        )
 
 
 def ficha(request, pk):
@@ -142,7 +146,7 @@ def salud(request, pk):
     form = DatosSaludForm(request.POST or None, instance=instancia)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Datos de salud guardados.")
+        messages.success(request, _("Datos de salud guardados."))
         return redirect("clientes:ficha", cliente.pk)
     return render(request, "clientes/salud.html", {"form": form, "cliente": cliente})
 
@@ -154,11 +158,11 @@ def marketing(request, pk):
     if form.is_valid():
         if form.cleaned_data["accion"] == "alta":
             cliente.dar_consentimiento(form.cleaned_data["origen"], request.user, form.cleaned_data["notas"])
-            messages.success(request, "Consentimiento registrado.")
+            messages.success(request, _("Consentimiento registrado."))
         else:
             cliente.retirar_consentimiento(form.cleaned_data["origen"], request.user, form.cleaned_data["notas"])
             _descartar_promocionales(cliente)
-            messages.success(request, "Baja registrada: no recibirá mensajes promocionales.")
+            messages.success(request, _("Baja registrada: no recibirá mensajes promocionales."))
         registrar(request, Accion.CONSENTIMIENTO, form.cleaned_data["accion"], objeto=cliente)
     return redirect("clientes:ficha", cliente.pk)
 
@@ -180,7 +184,7 @@ def nota(request, pk):
         n = form.save(commit=False)
         n.cliente, n.autor = cliente, request.user
         n.save()
-        messages.success(request, "Nota guardada.")
+        messages.success(request, _("Nota guardada."))
     return redirect(reverse("clientes:ficha", args=[cliente.pk]) + "#linea")
 
 
@@ -189,7 +193,7 @@ def borrar_nota(request, pk):
     n = get_object_or_404(NotaCliente, pk=pk)
     cliente_id = n.cliente_id
     n.delete()
-    messages.success(request, "Nota borrada.")
+    messages.success(request, _("Nota borrada."))
     return redirect("clientes:ficha", cliente_id)
 
 
@@ -203,7 +207,7 @@ def tatuaje_nuevo(request, pk):
         t = form.save(commit=False)
         t.cliente = cliente
         t.save()
-        messages.success(request, "Tatuaje añadido.")
+        messages.success(request, _("Tatuaje añadido."))
         return redirect("clientes:tatuaje", t.pk)
     return render(request, "clientes/tatuaje_formulario.html", {"form": form, "cliente": cliente})
 
@@ -218,11 +222,11 @@ def tatuaje_editar(request, pk):
                 borrar_archivo(f.imagen)
                 borrar_archivo(f.miniatura)
             t.delete()
-            messages.success(request, "Tatuaje eliminado.")
+            messages.success(request, _("Tatuaje eliminado."))
             return redirect("clientes:ficha", cliente_id)
         if form.is_valid():
             form.save()
-            messages.success(request, "Tatuaje actualizado.")
+            messages.success(request, _("Tatuaje actualizado."))
             return redirect("clientes:tatuaje", t.pk)
     return render(request, "clientes/tatuaje_formulario.html", {"form": form, "cliente": t.cliente, "tatuaje": t})
 
@@ -254,7 +258,7 @@ def subir_fotos(request, pk):
                 imagen=principal,
                 miniatura=mini,
             )
-        messages.success(request, "Fotos subidas.")
+        messages.success(request, _("Fotos subidas."))
     else:
         for errores in form.errors.values():
             for e in errores:
@@ -274,7 +278,7 @@ def borrar_foto(request, pk):
     borrar_archivo(f.imagen)
     borrar_archivo(f.miniatura)
     f.delete()
-    messages.success(request, "Foto eliminada.")
+    messages.success(request, _("Foto eliminada."))
     return redirect("clientes:tatuaje", tatuaje_id)
 
 
@@ -286,11 +290,11 @@ def etiquetas(request):
     if request.method == "POST":
         if "borrar" in request.POST:
             Etiqueta.objects.filter(pk=request.POST.get("borrar")).delete()
-            messages.success(request, "Etiqueta eliminada.")
+            messages.success(request, _("Etiqueta eliminada."))
             return redirect("clientes:etiquetas")
         if form.is_valid():
             form.save()
-            messages.success(request, "Etiqueta creada.")
+            messages.success(request, _("Etiqueta creada."))
             return redirect("clientes:etiquetas")
     return render(
         request,
@@ -392,13 +396,13 @@ def anonimizar(request, pk):
     def _accion(request):
         cliente = get_object_or_404(Cliente.objects.activos(), pk=pk)
         if not _nombre_confirmado(request, cliente):
-            messages.error(request, "Escribe el nombre completo exactamente para confirmar.")
+            messages.error(request, _("Escribe el nombre completo exactamente para confirmar."))
             return redirect("clientes:ficha", pk)
         nombre = cliente.nombre_completo
         rgpd.anonimizar(cliente)
         registrar(request, Accion.ANONIMIZACION, f"Ficha anonimizada (antes: {nombre[:1]}…)", objeto=cliente)
         messages.success(
-            request, "Datos personales eliminados. Se conservan importes y consentimientos en plazo legal."
+            request, _("Datos personales eliminados. Se conservan importes y consentimientos en plazo legal.")
         )
         return redirect("clientes:lista")
 
@@ -415,17 +419,19 @@ def eliminar(request, pk):
     def _accion(request):
         cliente = get_object_or_404(Cliente, pk=pk)
         if not _nombre_confirmado(request, cliente):
-            messages.error(request, "Escribe el nombre completo exactamente para confirmar.")
+            messages.error(request, _("Escribe el nombre completo exactamente para confirmar."))
             return redirect("clientes:ficha", pk)
         if not rgpd.puede_eliminarse(cliente):
             messages.error(
                 request,
-                "Tiene consentimientos firmados que la normativa obliga a conservar. Anonimiza la ficha en su lugar.",
+                _(
+                    "Tiene consentimientos firmados que la normativa obliga a conservar. Anonimiza la ficha en su lugar."
+                ),
             )
             return redirect("clientes:ficha", pk)
         registrar(request, Accion.BORRADO, f"Cliente eliminado (id {cliente.pk})")
         rgpd.eliminar(cliente)
-        messages.success(request, "Cliente eliminado definitivamente.")
+        messages.success(request, _("Cliente eliminado definitivamente."))
         return redirect("clientes:lista")
 
     return _accion(request)

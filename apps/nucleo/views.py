@@ -14,9 +14,13 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.templatetags.static import static
 from django.utils import timezone
+from django.utils.translation import get_language
+from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_control
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.vary import vary_on_headers
+from django.views.i18n import JavaScriptCatalog, set_language
 
 from .archivos import borrar_archivo
 from .auditoria import Accion, registrar
@@ -100,15 +104,17 @@ def ajustes(request):
                     borrar_archivo(instancia.logo)
                     instancia.logo = logo_form.cleaned_data["logo"] or ""
                     instancia.save(update_fields=["logo", "actualizado_en"])
-                messages.success(request, "Logotipo actualizado.")
+                messages.success(request, _("Logotipo actualizado."))
                 return redirect(f"{request.path}?seccion=marca")
         elif form is not None and form.is_valid():
             cambios = form.changed_data
             form.save()
             registrar(request, Accion.AJUSTES, f"Ajustes · {SECCIONES[seccion][0]}", campos=cambios)
             if "texto_consentimiento" in cambios:
-                messages.warning(request, "Nuevo texto de consentimiento: las próximas firmas usarán la nueva versión.")
-            messages.success(request, "Ajustes guardados.")
+                messages.warning(
+                    request, _("Nuevo texto de consentimiento: las próximas firmas usarán la nueva versión.")
+                )
+            messages.success(request, _("Ajustes guardados."))
             return redirect(f"{request.path}?seccion={seccion}")
     return render(
         request,
@@ -138,7 +144,7 @@ def exportar_todo(request):
 
     form = ConfirmarCodigoForm(request.POST)
     if not _codigo_valido(request, form):
-        messages.error(request, "Código incorrecto. La exportación necesita tu código de la app autenticadora.")
+        messages.error(request, _("Código incorrecto. La exportación necesita tu código de la app autenticadora."))
         return redirect("/ajustes/?seccion=datos")
     tmp = tempfile.NamedTemporaryFile(prefix="exportacion-", suffix=".zip", delete=False)  # noqa: SIM115
     tmp.close()
@@ -159,14 +165,14 @@ def exportar_todo(request):
 def copias(request):
     form = ConfirmarCodigoForm(request.POST)
     if not _codigo_valido(request, form):
-        messages.error(request, "Código incorrecto.")
+        messages.error(request, _("Código incorrecto."))
         return redirect("/ajustes/?seccion=datos")
     if request.POST.get("accion") == "crear":
         from .exportacion import copia_de_seguridad
 
         destino = copia_de_seguridad()
         registrar(request, Accion.TAREA, f"Copia de seguridad manual {destino.name}")
-        messages.success(request, f"Copia creada: {destino.name}")
+        messages.success(request, _("Copia creada: %(name)s") % {"name": destino.name})
         return redirect("/ajustes/?seccion=datos")
     nombre = Path(request.POST.get("nombre", "")).name
     ruta = Path(settings.COPIAS_ROOT) / nombre
@@ -224,8 +230,8 @@ def manifest(request):
     datos = {
         "name": a.nombre,
         "short_name": a.nombre[:12],
-        "description": "Agenda, clientes y mensajes del estudio",
-        "lang": "es",
+        "description": _("Agenda, clientes y mensajes del estudio"),
+        "lang": get_language() or settings.LANGUAGE_CODE,
         "start_url": "/",
         "scope": "/",
         "display": "standalone",
@@ -242,8 +248,8 @@ def manifest(request):
             },
         ],
         "shortcuts": [
-            {"name": "Mensajes de hoy", "url": "/mensajes/"},
-            {"name": "Nueva cita", "url": "/agenda/nueva/"},
+            {"name": _("Mensajes de hoy"), "url": "/mensajes/"},
+            {"name": _("Nueva cita"), "url": "/agenda/nueva/"},
         ],
     }
     return HttpResponse(json.dumps(datos, ensure_ascii=False), content_type="application/manifest+json")
@@ -284,3 +290,24 @@ def service_worker(request):
 @require_GET
 def offline(request):
     return render(request, "nucleo/offline.html")
+
+
+# --- Idioma ----------------------------------------------------------------------------
+
+
+@vista_publica
+@require_POST
+def cambiar_idioma(request):
+    """Selector ES/EN: guarda la elección en una cookie y vuelve a la misma página."""
+    return set_language(request)
+
+
+_catalogo = JavaScriptCatalog.as_view(packages=["apps.nucleo"])
+
+
+@vista_publica
+@cache_control(public=True, max_age=86400)
+@vary_on_headers("Cookie", "Accept-Language")
+def catalogo_js(request):
+    """Traducciones para los textos de static/js (gettext en el navegador)."""
+    return _catalogo(request)

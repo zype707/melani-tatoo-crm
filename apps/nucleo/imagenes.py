@@ -18,6 +18,7 @@ from io import BytesIO
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
+from django.utils.translation import gettext as _
 from PIL import Image, ImageOps, UnidentifiedImageError
 
 MAX_PIXELES = 40_000_000
@@ -39,10 +40,12 @@ def _firma_valida(cabecera: bytes) -> bool:
 def _abrir(archivo) -> Image.Image:
     max_bytes = settings.SUBIDAS_MAX_MB * 1024 * 1024
     if getattr(archivo, "size", 0) > max_bytes:
-        raise ValidationError(f"La imagen supera {settings.SUBIDAS_MAX_MB} MB.")
+        raise ValidationError(
+            _("La imagen supera %(SUBIDAS_MAX_MB)s MB.") % {"SUBIDAS_MAX_MB": settings.SUBIDAS_MAX_MB}
+        )
     archivo.seek(0)
     if not _firma_valida(archivo.read(16)):
-        raise ValidationError("Solo se aceptan imágenes JPG, PNG o WebP.")
+        raise ValidationError(_("Solo se aceptan imágenes JPG, PNG o WebP."))
     try:
         archivo.seek(0)
         Image.open(archivo).verify()
@@ -50,11 +53,11 @@ def _abrir(archivo) -> Image.Image:
         imagen = Image.open(archivo)
         imagen.load()
     except (UnidentifiedImageError, Image.DecompressionBombError, OSError, SyntaxError, ValueError) as exc:
-        raise ValidationError("La imagen está dañada o no es válida.") from exc
+        raise ValidationError(_("La imagen está dañada o no es válida.")) from exc
     if imagen.format not in FORMATOS:
-        raise ValidationError("Solo se aceptan imágenes JPG, PNG o WebP.")
+        raise ValidationError(_("Solo se aceptan imágenes JPG, PNG o WebP."))
     if imagen.width * imagen.height > MAX_PIXELES:
-        raise ValidationError("La imagen es demasiado grande.")
+        raise ValidationError(_("La imagen es demasiado grande."))
     return imagen
 
 
@@ -102,7 +105,7 @@ def procesar_png_firma(datos: bytes) -> ContentFile:
     archivo.size = len(datos)
     imagen = _abrir(archivo)
     if imagen.format != "PNG" or imagen.width > 3000 or imagen.height > 2000:
-        raise ValidationError("Firma no válida.")
+        raise ValidationError(_("Firma no válida."))
     imagen = imagen.convert("RGBA")
     limpia = Image.new("RGB", imagen.size, (255, 255, 255))
     limpia.paste(imagen, mask=imagen.split()[-1])

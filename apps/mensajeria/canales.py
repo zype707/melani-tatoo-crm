@@ -13,6 +13,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from urllib.parse import quote
 
+from django.utils.translation import gettext as _
+
 from .models import Canal as CanalChoices
 
 
@@ -39,7 +41,7 @@ class Canal(ABC):
     def accion(self, cliente, texto: str, principal: bool = False) -> AccionEnvio: ...
 
     def enviar(self, mensaje) -> None:  # pragma: no cover - para canales automáticos futuros
-        raise NotImplementedError("Este canal no envía automáticamente.")
+        raise NotImplementedError(_("Este canal no envía automáticamente."))
 
 
 def _digitos(telefono: str) -> str:
@@ -63,7 +65,7 @@ class SMSEnlace(Canal):
     """`sms:` abre la app de mensajes del móvil, que usa RCS si está disponible."""
 
     clave = CanalChoices.SMS
-    nombre = "SMS / RCS"
+    nombre = _("SMS / RCS")
     icono = "sms"
 
     def disponible(self, cliente) -> bool:
@@ -77,7 +79,7 @@ class SMSEnlace(Canal):
 
 class Copia(Canal):
     clave = CanalChoices.COPIA
-    nombre = "Copiar"
+    nombre = _("Copiar")
     icono = "copiar"
 
     def disponible(self, cliente) -> bool:

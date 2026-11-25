@@ -2,6 +2,7 @@
    Nada de JS en línea: todo se engancha por atributos data-* (CSP estricta). */
 (function () {
   "use strict";
+  var gettext = function (s) { return window.gettext ? window.gettext(s) : s; };
 
   /* ---------- Avisos (toasts) ---------- */
   function cerrarAviso(el) { if (el && el.parentNode) el.parentNode.removeChild(el); }
@@ -55,7 +56,7 @@
   function confirmar(texto, etiquetaSi, accion) {
     if (!dialogo) { if (window.confirm(texto)) accion(); return; }
     textoDialogo.textContent = texto;
-    botonSi.textContent = etiquetaSi || "Sí, continuar";
+    botonSi.textContent = etiquetaSi || gettext("Sí, continuar");
     alConfirmar = accion;
     dialogo.showModal();
     botonSi.focus();
@@ -100,7 +101,7 @@
       copiar(texto).then(function () {
         avisar(t.dataset.copiado || "Copiado al portapapeles.", "success");
         t.dispatchEvent(new CustomEvent("estudio:copiado", { bubbles: true }));
-      }, function () { avisar("No se pudo copiar. Selecciona el texto y cópialo a mano.", "error"); });
+      }, function () { avisar(gettext("No se pudo copiar. Selecciona el texto y cópialo a mano."), "error"); });
       return;
     }
 
@@ -225,7 +226,7 @@
     else if (s === 403) avisar("No tienes permiso para hacer eso.", "error");
     else if (s !== 401) avisar("Algo ha fallado. Vuelve a intentarlo.", "error");
   });
-  document.addEventListener("htmx:sendError", function () { avisar("Sin conexión. Revisa tu red e inténtalo otra vez.", "error"); });
+  document.addEventListener("htmx:sendError", function () { avisar(gettext("Sin conexión. Revisa tu red e inténtalo otra vez."), "error"); });
   document.addEventListener("htmx:afterSwap", function (e) { iniciarAvisos(e.detail.target); });
   // Avisos enviados por el servidor en la cabecera HX-Trigger: {"aviso": {"texto": "...", "tipo": "success"}}
   document.addEventListener("aviso", function (e) { if (e.detail && e.detail.texto) avisar(e.detail.texto, e.detail.tipo); });

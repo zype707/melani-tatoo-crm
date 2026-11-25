@@ -3,6 +3,7 @@ from datetime import date, datetime, time, timedelta
 from django.db import IntegrityError, transaction
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from apps.nucleo import tokens
 from apps.nucleo.templatetags.ui import hora
@@ -21,9 +22,12 @@ def conflictos(inicio: datetime, fin: datetime, excluir_id: int | None = None) -
     """Motivos por los que [inicio, fin) no está libre (citas activas y bloqueos)."""
     motivos = []
     for c in Cita.objects.solapadas(inicio, fin, excluir_id).select_related("cliente"):
-        motivos.append(f"Se solapa con la cita de {c.cliente.nombre} ({hora(c.inicio)}–{hora(c.fin)}).")
+        motivos.append(
+            _("Se solapa con la cita de %(nombre)s (%(hora)s–%(hora2)s).")
+            % {"nombre": c.cliente.nombre, "hora": hora(c.inicio), "hora2": hora(c.fin)}
+        )
     for b in Bloqueo.objects.filter(inicio__lt=fin, fin__gt=inicio):
-        motivos.append(f"Ese hueco está bloqueado: {b}.")
+        motivos.append(_("Ese hueco está bloqueado: %(b)s.") % {"b": b})
     return motivos
 
 
@@ -78,7 +82,7 @@ def huecos_libres(desde: date, dias: int = 7, minimo_minutos: int = 120) -> list
 @transaction.atomic
 def cambiar_estado(cita: Cita, nuevo: str, *, por: str = Cita.CanceladaPor.ESTUDIO, motivo: str = "") -> Cita:
     if nuevo not in EstadoCita.values:
-        raise ValueError("Estado desconocido")
+        raise ValueError(_("Estado desconocido"))
     cita.estado = nuevo
     if nuevo == EstadoCita.CANCELADA:
         cita.cancelada_en = timezone.now()
@@ -93,7 +97,7 @@ def cambiar_estado(cita: Cita, nuevo: str, *, por: str = Cita.CanceladaPor.ESTUD
         with transaction.atomic():
             cita.save()
     except IntegrityError as exc:
-        raise ConflictoAgenda("Ese hueco ya está ocupado por otra cita.") from exc
+        raise ConflictoAgenda(_("Ese hueco ya está ocupado por otra cita.")) from exc
     if nuevo == EstadoCita.REALIZADA and cita.tatuaje_id:
         t = cita.tatuaje
         if not t.fecha_inicio:
@@ -137,7 +141,7 @@ def sugerencias_lista_espera(cita: Cita, limite: int = 5):
 
 def enlace_cita(cita: Cita) -> str:
     """Nuevo enlace para que el cliente confirme, cancele o pida cambio (sin cuenta)."""
-    _, token = tokens.crear_enlace(
+    _x, token = tokens.crear_enlace(
         tokens.EnlacePublico.Proposito.CITA,
         objeto_id=cita.pk,
         caduca_en=max(cita.fin, timezone.now()) + timedelta(days=2),

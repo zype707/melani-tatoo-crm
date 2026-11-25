@@ -1,11 +1,11 @@
 <div class="respuesta-ia" role="status">
-  <span class="etiqueta etiqueta-mini">{% icono "ia" %} Sugerencias de la IA</span>
+  <span class="etiqueta etiqueta-mini">{% icono "ia" %} {% translate "Sugerencias de la IA" %}</span>
   <ul class="lista-ideas">{% for idea in datos.ideas %}<li>{{ idea }}</li>{% endfor %}</ul>
   {% if datos.mensaje %}
     <p class="burbuja-previa texto-peq texto-pre" id="ret-{{ cliente.pk }}">{{ datos.mensaje }}</p>
     <div class="grupo-botones">
-      <button type="button" class="btn btn-peq" data-copiar="#ret-{{ cliente.pk }}">{% icono "copiar" %} Copiar</button>
-      <a class="btn btn-peq" href="{% url 'mensajeria:nuevo' %}?cliente={{ cliente.pk }}">{% icono "editar" %} Escribirle</a>
+      <button type="button" class="btn btn-peq" data-copiar="#ret-{{ cliente.pk }}">{% icono "copiar" %} {% translate "Copiar" %}</button>
+      <a class="btn btn-peq" href="{% url 'mensajeria:nuevo' %}?cliente={{ cliente.pk }}">{% icono "editar" %} {% translate "Escribirle" %}</a>
     </div>
   {% endif %}
 </div>

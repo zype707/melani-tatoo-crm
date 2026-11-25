@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block titulo %}Lista de espera{% endblock %}
+{% block titulo %}{% translate "Lista de espera" %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
-  <div><nav class="migas"><a href="{% url 'agenda:lista_espera' %}">Lista de espera</a></nav><h1>{% if entrada %}Editar entrada{% else %}Añadir a la lista{% endif %}</h1></div>
+  <div><nav class="migas"><a href="{% url 'agenda:lista_espera' %}">{% translate "Lista de espera" %}</a></nav><h1>{% if entrada %}{% translate "Editar entrada" %}{% else %}{% translate "Añadir a la lista" %}{% endif %}</h1></div>
 </header>
 <form method="post" class="pila-g ancho-formulario" novalidate>
   {% csrf_token %}
@@ -16,9 +16,9 @@
     {{ form.prioritaria.as_field_group }}
   </section>
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
-    <a class="btn btn-fantasma" href="{% url 'agenda:lista_espera' %}">Cancelar</a>
-    {% if entrada %}<button type="submit" name="quitar" value="1" class="btn btn-peligro empujar">Quitar de la lista</button>{% endif %}
+    <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar" %}</button>
+    <a class="btn btn-fantasma" href="{% url 'agenda:lista_espera' %}">{% translate "Cancelar" %}</a>
+    {% if entrada %}<button type="submit" name="quitar" value="1" class="btn btn-peligro empujar">{% translate "Quitar de la lista" %}</button>{% endif %}
   </div>
 </form>
 {% endblock %}

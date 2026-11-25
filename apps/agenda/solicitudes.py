@@ -7,6 +7,7 @@ from django.core.files.base import ContentFile
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from apps.clientes.models import Cliente, FotoTatuaje, OrigenConsentimiento, Tatuaje
 from apps.nucleo.archivos import borrar_archivo
@@ -51,7 +52,7 @@ def vincular_cliente(s: SolicitudReserva, usuario=None) -> Cliente:
         if cambios:
             cliente.save(update_fields=[*cambios, "actualizado_en"])
     if s.acepta_marketing and not cliente.marketing_consentimiento:
-        cliente.dar_consentimiento(OrigenConsentimiento.FORMULARIO, usuario, "Casilla del formulario de reserva")
+        cliente.dar_consentimiento(OrigenConsentimiento.FORMULARIO, usuario, _("Casilla del formulario de reserva"))
     s.cliente = cliente
     s.save(update_fields=["cliente"])
     return cliente
@@ -62,7 +63,9 @@ def crear_tatuaje(s: SolicitudReserva) -> Tatuaje:
     if s.tatuaje_id:
         return s.tatuaje
     cliente = s.cliente or vincular_cliente(s)
-    titulo = s.descripcion.strip().split("\n")[0][:60] or f"Proyecto de {s.get_zona_display().lower()}"
+    titulo = s.descripcion.strip().split("\n")[0][:60] or _("Proyecto de %(lower)s") % {
+        "lower": s.get_zona_display().lower()
+    }
     t = Tatuaje.objects.create(
         cliente=cliente,
         titulo=titulo,
@@ -97,7 +100,7 @@ def purgar(s: SolicitudReserva) -> None:
         borrar_archivo(img.imagen)
         borrar_archivo(img.miniatura)
         img.delete()
-    s.nombre, s.apellidos, s.telefono, s.email, s.instagram = "Solicitud", "eliminada", "", "", ""
+    s.nombre, s.apellidos, s.telefono, s.email, s.instagram = _("Solicitud"), "eliminada", "", "", ""
     s.descripcion = "(eliminada)"
     s.fechas_preferidas = s.presupuesto = ""
     s.huella_ip = ""
@@ -108,7 +111,7 @@ def purgar_antiguas(dias: int = 30) -> int:
     limite = timezone.now() - timezone.timedelta(days=dias)
     qs = SolicitudReserva.objects.filter(
         estado__in=[SolicitudReserva.Estado.RECHAZADA, SolicitudReserva.Estado.SPAM], revisada_en__lt=limite
-    ).exclude(descripcion="(eliminada)")
+    ).exclude(descripcion=_("(eliminada)"))
     n = 0
     for s in qs:
         purgar(s)

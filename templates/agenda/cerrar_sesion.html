@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block titulo %}Cerrar sesión de {{ cita.cliente.nombre }}{% endblock %}
+{% block titulo %}{% blocktranslate with nombre=cita.cliente.nombre %}Cerrar sesión de {{ nombre }}{% endblocktranslate %}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
   <div>
-    <nav class="migas" aria-label="Migas"><a href="{% url 'agenda:detalle' cita.pk %}">Cita de {{ cita.cliente.nombre }}</a></nav>
-    <h1>¿Cómo fue la sesión?</h1>
+    <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'agenda:detalle' cita.pk %}">{% blocktranslate with nombre=cita.cliente.nombre %}Cita de {{ nombre }}{% endblocktranslate %}</a></nav>
+    <h1>{% translate "¿Cómo fue la sesión?" %}</h1>
     <p class="texto-suave">{{ cita.tipo }} · {{ cita.inicio|fecha_larga }}{% if cita.tatuaje %} · {{ cita.tatuaje }}{% endif %}</p>
   </div>
 </header>
@@ -15,18 +15,18 @@
     {{ form.importe.as_field_group }}
     {{ form.metodo.as_field_group }}
   </div>
-  {% if cita.pagado %}<p class="texto-peq texto-suave">Ya registrado: {{ cita.pagado|dinero }}{% if cita.precio %} de {{ cita.precio|dinero }}{% endif %}.</p>{% endif %}
+  {% if cita.pagado %}<p class="texto-peq texto-suave">{% blocktranslate with pagado=cita.pagado|dinero %}Ya registrado: {{ pagado }}{% endblocktranslate %}{% if cita.precio %} {% blocktranslate with precio=cita.precio|dinero %}de {{ precio }}{% endblocktranslate %}{% endif %}.</p>{% endif %}
   <div class="campo">
-    <label for="{{ form.notas_sesion.id_for_label }}">{{ form.notas_sesion.label }} <span class="requerido">(opcional)</span></label>
+    <label for="{{ form.notas_sesion.id_for_label }}">{{ form.notas_sesion.label }} <span class="requerido">{% translate "(opcional)" %}</span></label>
     {{ form.notas_sesion }}
     <p class="ayuda">{{ form.notas_sesion.help_text }}</p>
-    <button type="button" class="btn btn-peq btn-fantasma oculto" data-dictado-para="{{ form.notas_sesion.id_for_label }}">{% icono "mic" %} <span>Dictar notas</span></button>
+    <button type="button" class="btn btn-peq btn-fantasma oculto" data-dictado-para="{{ form.notas_sesion.id_for_label }}">{% icono "mic" %} <span>{% translate "Dictar notas" %}</span></button>
   </div>
   {% if cita.tatuaje %}{{ form.terminado.as_field_group }}{% endif %}
-  <div class="aviso">{% icono "gota" %}<p>Al guardar, los mensajes de cuidados posteriores se prepararán automáticamente en su día.</p></div>
+  <div class="aviso">{% icono "gota" %}<p>{% translate "Al guardar, los mensajes de cuidados posteriores se prepararán automáticamente en su día." %}</p></div>
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "check" %} Marcar como realizada</button>
-    <a class="btn btn-fantasma" href="{% url 'agenda:detalle' cita.pk %}">Volver</a>
+    <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Marcar como realizada" %}</button>
+    <a class="btn btn-fantasma" href="{% url 'agenda:detalle' cita.pk %}">{% translate "Volver" %}</a>
   </div>
 </form>
 {% endblock %}

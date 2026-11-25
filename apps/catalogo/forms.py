@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from apps.nucleo.imagenes import procesar_imagen
 
@@ -7,9 +8,9 @@ from .models import DisenoFlash
 
 class DisenoForm(forms.ModelForm):
     archivo = forms.FileField(
-        label="Imagen",
+        label=_("Imagen"),
         required=False,
-        help_text="JPG, PNG o WebP. Se guarda sin datos de ubicación.",
+        help_text=_("JPG, PNG o WebP. Se guarda sin datos de ubicación."),
         widget=forms.FileInput(attrs={"accept": "image/jpeg,image/png,image/webp"}),
     )
 
@@ -32,7 +33,7 @@ class DisenoForm(forms.ModelForm):
         archivo = self.cleaned_data.get("archivo")
         if not archivo:
             if not self.instance.pk:
-                raise forms.ValidationError("Sube la imagen del diseño.")
+                raise forms.ValidationError(_("Sube la imagen del diseño."))
             return None
         return procesar_imagen(archivo, max_lado=2000, lado_miniatura=600)
 

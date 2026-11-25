@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -7,11 +7,12 @@
   <meta name="robots" content="noindex, nofollow">
   <title>{% block titulo %}{% endblock %} · {{ ajustes.nombre }}</title>
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script src="{% url 'catalogo_js' %}" defer></script>
   <script src="{% static 'js/app.js' %}" defer></script>
   {% block cabeza %}{% endblock %}
 </head>
 <body class="publico kiosco">
-  <header class="publico-cabecera">{% include "componentes/marca.html" %}</header>
+  <header class="publico-cabecera">{% include "componentes/marca.html" %}{% include "componentes/idioma.html" %}</header>
   <main id="principal" class="publico-cuerpo" tabindex="-1">{% block contenido %}{% endblock %}</main>
   <div id="avisos" class="avisos" aria-live="polite"></div>
   {% include "componentes/dialogos.html" %}

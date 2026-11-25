@@ -4,6 +4,7 @@ from datetime import timedelta
 
 from django.db.models import Count, Q
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from apps.agenda.models import Cita, EstadoCita, SolicitudReserva, limites_dia
 from apps.agenda.servicios import huecos_libres, semana_de
@@ -65,8 +66,8 @@ def datos_panel() -> dict:
     hoy = timezone.localdate()
     inicio_hoy, fin_hoy = limites_dia(hoy)
     semana = semana_de(hoy)
-    inicio_sem, _ = limites_dia(semana[0])
-    _, fin_sem = limites_dia(semana[-1])
+    inicio_sem, _x = limites_dia(semana[0])
+    _x, fin_sem = limites_dia(semana[-1])
 
     citas_hoy = Cita.objects.del_dia(hoy).exclude(estado=EstadoCita.CANCELADA).select_related("cliente", "tipo")
     citas_semana = Cita.objects.entre(inicio_sem, fin_sem).activas()
@@ -76,7 +77,7 @@ def datos_panel() -> dict:
     inicio_mes = hoy.replace(day=1)
     ingresos_mes = finanzas.ingresos(inicio_mes, hoy)
     mes_ant = finanzas.mes_anterior(hoy)
-    _, fin_mes_ant = finanzas.limites_mes(mes_ant.year, mes_ant.month)
+    _x, fin_mes_ant = finanzas.limites_mes(mes_ant.year, mes_ant.month)
     tramo_ant = mes_ant.replace(day=min(hoy.day, fin_mes_ant.day))
     ingresos_ant = finanzas.ingresos(mes_ant, tramo_ant)
     variacion = float((ingresos_mes - ingresos_ant) / ingresos_ant) if ingresos_ant else None
@@ -84,7 +85,7 @@ def datos_panel() -> dict:
     serie = finanzas.serie_mensual(hoy, 6)
     grafico = graficos.barras(
         [s["etiqueta"] for s in serie],
-        [{"nombre": "Ingresos", "valores": [s["ingresos"] for s in serie], "clase": "serie-a"}],
+        [{"nombre": _("Ingresos"), "valores": [s["ingresos"] for s in serie], "clase": "serie-a"}],
         ancho=520,
         alto=200,
         resaltar=len(serie) - 1,

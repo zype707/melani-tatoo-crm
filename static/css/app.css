@@ -933,7 +933,7 @@ details.menu > summary::-webkit-details-marker { display: none; }
 .miniaturas img { width: 4rem; height: 4rem; object-fit: cover; border: 2px solid var(--tinta); }
 .trampa { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 .reserva-cabecera { display: grid; gap: var(--e3); }
-.reserva-cabecera h1 { font-size: clamp(2.5rem, 10vw, 4rem); font-stretch: 120%; text-transform: uppercase; }
+.reserva-cabecera h1 { font-size: clamp(2rem, 8.5vw, 4rem); font-stretch: 120%; text-transform: uppercase; overflow-wrap: break-word; }
 .btn-grande { min-height: 3.75rem; font-size: 1.125rem; }
 .flash-mini { width: 6rem; height: 6rem; object-fit: cover; border: var(--borde-duro); }
 .publico-pie a { color: var(--texto-suave); }
@@ -1022,3 +1022,20 @@ code { font-family: var(--fuente-mono); font-size: 0.9em; background: var(--petr
 .cal-evento.compacto .estado { display: none; }
 .cal-evento.compacto .cal-evento-hora { white-space: nowrap; flex: none; }
 .cal-evento.compacto strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- Selector de idioma (ES / EN) ---------- */
+.selector-idioma { display: flex; gap: var(--e2); }
+.selector-idioma button {
+  min-width: 2.75rem; min-height: 2.75rem; padding: 0 var(--e2);
+  background: transparent; color: var(--hueso); border: 2px solid var(--hueso);
+  font: inherit; font-weight: 800; letter-spacing: 0.04em; cursor: pointer;
+}
+.selector-idioma button:hover { background: var(--petroleo-700); }
+.selector-idioma button[aria-pressed="true"] { background: var(--hueso); color: var(--tinta); }
+.publico-cabecera { display: flex; align-items: center; justify-content: space-between; gap: var(--e3); flex-wrap: wrap; }
+.publico-cabecera .marca { min-width: 0; }
+@media (min-width: 48rem) {
+  .publico-cabecera { justify-content: center; position: relative; }
+  .publico-cabecera .selector-idioma { position: absolute; right: var(--e4); }
+}
+.hoja-cuerpo .selector-idioma { padding: var(--e2) 0; }

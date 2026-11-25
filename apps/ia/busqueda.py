@@ -11,6 +11,8 @@ from datetime import timedelta
 
 from django.db.models import Count, Max, OuterRef, Q, Subquery, Sum
 from django.utils import timezone
+from django.utils.dates import MONTHS
+from django.utils.translation import gettext as _
 
 from apps.clientes.models import Cliente, Etiqueta, Tatuaje
 
@@ -237,32 +239,32 @@ def interpretar_local(frase: str) -> dict:
         filtros["orden"] = "gasto"
     if m := re.search(r"(?:mas de|\+)\s*\$?\s*(\d{2,6})", t):
         filtros["gasto_minimo"] = int(m.group(1))
-    _ = Etiqueta  # las etiquetas se validan al aplicar
+    _x = Etiqueta  # las etiquetas se validan al aplicar
     return filtros
 
 
 def describir(f: dict) -> list[str]:
     partes = []
     if f["estilos"]:
-        partes.append("Estilo: " + ", ".join(Tatuaje.Estilo(e).label for e in f["estilos"]))
+        partes.append(_("Estilo: %(v)s") % {"v": ", ".join(str(Tatuaje.Estilo(e).label) for e in f["estilos"])})
     if f["zonas"]:
-        partes.append("Zona: " + ", ".join(Tatuaje.Zona(z).label for z in f["zonas"]))
+        partes.append(_("Zona: %(v)s") % {"v": ", ".join(str(Tatuaje.Zona(z).label) for z in f["zonas"])})
     if f["tamanos"]:
-        partes.append("Tamaño: " + ", ".join(Tatuaje.Tamano(t).label for t in f["tamanos"]))
+        partes.append(_("Tamaño: %(v)s") % {"v": ", ".join(str(Tatuaje.Tamano(t).label) for t in f["tamanos"])})
     if f["estado_tatuaje"]:
-        partes.append("Tatuaje " + ("en proceso" if f["estado_tatuaje"] == "en_proceso" else "terminado"))
+        partes.append(_("Tatuaje en proceso") if f["estado_tatuaje"] == "en_proceso" else _("Tatuaje terminado"))
     if f["etiquetas"]:
-        partes.append("Etiqueta: " + ", ".join(f["etiquetas"]))
+        partes.append(_("Etiqueta: %(v)s") % {"v": ", ".join(f["etiquetas"])})
     if f["sin_visita_meses"]:
-        partes.append(f"Sin venir desde hace {f['sin_visita_meses']}+ meses")
+        partes.append(_("Sin venir desde hace %(n)s+ meses") % {"n": f["sin_visita_meses"]})
     if f["visita_ultimos_meses"]:
-        partes.append(f"Vino en los últimos {f['visita_ultimos_meses']} meses")
+        partes.append(_("Vino en los últimos %(n)s meses") % {"n": f["visita_ultimos_meses"]})
     if f["cumple_mes"]:
-        partes.append(f"Cumple en {MESES[f['cumple_mes'] - 1]}")
+        partes.append(_("Cumple en %(mes)s") % {"mes": MONTHS[f["cumple_mes"]]})
     if f["gasto_minimo"]:
-        partes.append(f"Gasto ≥ {f['gasto_minimo']:.0f}")
+        partes.append(_("Gasto ≥ %(n).0f") % {"n": f["gasto_minimo"]})
     if f["solo_promociones"]:
-        partes.append("Aceptan promociones")
+        partes.append(_("Aceptan promociones"))
     if f["texto"]:
-        partes.append(f"Texto: «{f['texto']}»")
+        partes.append(_("Texto: «%(t)s»") % {"t": f["texto"]})
     return partes

@@ -3,8 +3,11 @@
 import re
 from datetime import date
 
+from django.conf import settings
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone, translation
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy, ngettext
 
 from apps.nucleo import tokens
 from apps.nucleo.models import AjustesEstudio
@@ -13,24 +16,24 @@ from apps.nucleo.templatetags.ui import fecha_larga, hora
 PATRON = re.compile(r"\{([a-z_]+)\}")
 
 VARIABLES = {
-    "nombre": "Nombre del cliente",
-    "nombre_completo": "Nombre y apellidos",
-    "estudio": "Nombre del estudio",
-    "artista": "Tu nombre",
-    "fecha_cita": "Día de la cita (jueves 27 de noviembre)",
-    "hora_cita": "Hora de la cita (3:30 pm)",
-    "tipo_cita": "Tipo de cita",
-    "enlace_cita": "Enlace para confirmar, cancelar o cambiar la cita",
-    "tatuaje": "Título del tatuaje",
-    "zona": "Zona del tatuaje",
-    "aniversario": "Tiempo desde el tatuaje (1 año)",
-    "dias_sesion": "Días desde la sesión",
-    "fecha_destacada": "Nombre de la fecha destacada",
-    "enlace_reserva": "Enlace a tu página de reservas",
-    "instagram": "Tu Instagram (@usuario)",
-    "telefono_estudio": "Teléfono del estudio",
-    "direccion": "Dirección del estudio",
-    "cuidados": "Texto de cuidados generales",
+    "nombre": gettext_lazy("Nombre del cliente"),
+    "nombre_completo": gettext_lazy("Nombre y apellidos"),
+    "estudio": gettext_lazy("Nombre del estudio"),
+    "artista": gettext_lazy("Tu nombre"),
+    "fecha_cita": gettext_lazy("Día de la cita (jueves 27 de noviembre)"),
+    "hora_cita": gettext_lazy("Hora de la cita (3:30 pm)"),
+    "tipo_cita": gettext_lazy("Tipo de cita"),
+    "enlace_cita": gettext_lazy("Enlace para confirmar, cancelar o cambiar la cita"),
+    "tatuaje": gettext_lazy("Título del tatuaje"),
+    "zona": gettext_lazy("Zona del tatuaje"),
+    "aniversario": gettext_lazy("Tiempo desde el tatuaje (1 año)"),
+    "dias_sesion": gettext_lazy("Días desde la sesión"),
+    "fecha_destacada": gettext_lazy("Nombre de la fecha destacada"),
+    "enlace_reserva": gettext_lazy("Enlace a tu página de reservas"),
+    "instagram": gettext_lazy("Tu Instagram (@usuario)"),
+    "telefono_estudio": gettext_lazy("Teléfono del estudio"),
+    "direccion": gettext_lazy("Dirección del estudio"),
+    "cuidados": gettext_lazy("Texto de cuidados generales"),
 }
 
 
@@ -54,9 +57,9 @@ def renderizar(cuerpo: str, contexto: dict) -> str:
 def _tiempo(desde: date, hasta: date) -> str:
     anios = hasta.year - desde.year - ((hasta.month, hasta.day) < (desde.month, desde.day))
     if anios >= 1:
-        return "1 año" if anios == 1 else f"{anios} años"
-    meses = (hasta.year - desde.year) * 12 + hasta.month - desde.month
-    return "1 mes" if meses <= 1 else f"{meses} meses"
+        return ngettext("%(n)d año", "%(n)d años", anios) % {"n": anios}
+    meses = max(1, (hasta.year - desde.year) * 12 + hasta.month - desde.month)
+    return ngettext("%(n)d mes", "%(n)d meses", meses) % {"n": meses}
 
 
 def _enlace_reserva() -> str:
@@ -71,7 +74,16 @@ def _enlace_reserva() -> str:
 
 
 def contexto(cliente, *, cita=None, tatuaje=None, fecha_destacada=None, hoy: date | None = None) -> dict:
-    """Contexto de variables. Los valores costosos (enlaces) se calculan solo si se usan."""
+    """Contexto de variables. Los valores costosos (enlaces) se calculan solo si se usan.
+
+    Los valores van dentro de mensajes para clientes, así que se escriben en el idioma
+    del contenido (IDIOMA / LANGUAGE_CODE), no en el idioma de la interfaz de quien mira.
+    """
+    with translation.override(settings.LANGUAGE_CODE):
+        return _contexto(cliente, cita=cita, tatuaje=tatuaje, fecha_destacada=fecha_destacada, hoy=hoy)
+
+
+def _contexto(cliente, *, cita, tatuaje, fecha_destacada, hoy) -> dict:
     hoy = hoy or timezone.localdate()
     ajustes = AjustesEstudio.obtener()
     tatuaje = tatuaje or (cita.tatuaje if cita else None)
@@ -105,25 +117,26 @@ def contexto(cliente, *, cita=None, tatuaje=None, fecha_destacada=None, hoy: dat
 
 
 def contexto_ejemplo() -> dict:
-    """Para la vista previa de plantillas."""
+    """Para la vista previa de plantillas (en el idioma del contenido)."""
     ajustes = AjustesEstudio.obtener()
-    return {
-        "nombre": "Lucía",
-        "nombre_completo": "Lucía Méndez",
-        "estudio": ajustes.nombre,
-        "artista": ajustes.firma,
-        "fecha_cita": "jueves 27 de noviembre",
-        "hora_cita": "3:30 pm",
-        "tipo_cita": "Sesión",
-        "enlace_cita": "https://tu-estudio.onrender.com/c/…",
-        "tatuaje": "Manga botánica",
-        "zona": "antebrazo",
-        "aniversario": "1 año",
-        "dias_sesion": 3,
-        "fecha_destacada": "Navidad",
-        "enlace_reserva": _enlace_reserva() or "https://tu-estudio.onrender.com/r/…",
-        "instagram": f"@{ajustes.instagram}" if ajustes.instagram else "@tuestudio",
-        "telefono_estudio": ajustes.telefono or "(407) 555-0100",
-        "direccion": ajustes.direccion or "Calle Ejemplo 123",
-        "cuidados": ajustes.texto_cuidados,
-    }
+    with translation.override(settings.LANGUAGE_CODE):
+        return {
+            "nombre": "Lucía",
+            "nombre_completo": "Lucía Méndez",
+            "estudio": ajustes.nombre,
+            "artista": ajustes.firma,
+            "fecha_cita": _("jueves 27 de noviembre"),
+            "hora_cita": "3:30 pm",
+            "tipo_cita": _("Sesión"),
+            "enlace_cita": "https://tu-estudio.onrender.com/c/…",
+            "tatuaje": _("Manga botánica"),
+            "zona": _("antebrazo"),
+            "aniversario": ngettext("%(n)d año", "%(n)d años", 1) % {"n": 1},
+            "dias_sesion": 3,
+            "fecha_destacada": _("Navidad"),
+            "enlace_reserva": _enlace_reserva() or "https://tu-estudio.onrender.com/r/…",
+            "instagram": f"@{ajustes.instagram}" if ajustes.instagram else "@tuestudio",
+            "telefono_estudio": ajustes.telefono or "(407) 555-0100",
+            "direccion": ajustes.direccion or _("Calle Ejemplo 123"),
+            "cuidados": ajustes.texto_cuidados,
+        }

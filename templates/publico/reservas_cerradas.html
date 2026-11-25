@@ -1,9 +1,9 @@
 {% extends "base_publica.html" %}
-{% block titulo %}Agenda cerrada{% endblock %}
+{% block titulo %}{% translate "Agenda cerrada" %}{% endblock %}
 {% block contenido %}
 <div class="error-pagina pila">
   <p class="error-codigo">⏸</p>
-  <h1>Agenda cerrada por ahora</h1>
-  <p class="texto-suave">En este momento no estoy aceptando nuevas solicitudes.{% if ajustes.instagram %} Avisaré en @{{ ajustes.instagram }} cuando vuelva a abrir.{% endif %}</p>
+  <h1>{% translate "Agenda cerrada por ahora" %}</h1>
+  <p class="texto-suave">{% translate "En este momento no estoy aceptando nuevas solicitudes." %}{% if ajustes.instagram %} {% blocktranslate with instagram=ajustes.instagram %}Avisaré en @{{ instagram }} cuando vuelva a abrir.{% endblocktranslate %}{% endif %}</p>
 </div>
 {% endblock %}

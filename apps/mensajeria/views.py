@@ -9,10 +9,14 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.formats import date_format
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 from django.views.decorators.http import require_POST
 
 from apps.agenda.models import Cita, EntradaListaEspera
 from apps.clientes.models import Cliente
+from apps.nucleo import idioma
 
 from . import canales, generadores, segmentos, servicios, variables
 from .forms import CampanaForm, FechaDestacadaForm, MensajeLibreForm, PasoCuidadoForm, PlantillaForm
@@ -52,6 +56,7 @@ def bandeja(request):
         pendientes = [m for m in pendientes if m.tipo == tipo]
     enviados_hoy = MensajePreparado.objects.filter(estado=Estado.ENVIADO, enviado_en__date=hoy).count()
     contexto = {
+        "hoy": hoy,
         "mensajes": [_contexto_mensaje(m) for m in pendientes],
         "recuento": [
             (k, Categoria(k).label, ICONOS[k], n)
@@ -74,7 +79,11 @@ def generar_ahora(request):
         if isinstance(v, int) and k not in ("caducados", "descartados", "campanas_cerradas")
     )
     messages.success(
-        request, f"Bandeja actualizada: {nuevos} mensaje{'s' if nuevos != 1 else ''} nuevo{'s' if nuevos != 1 else ''}."
+        request,
+        ngettext(
+            "Bandeja actualizada: %(nuevos)s mensaje nuevo.", "Bandeja actualizada: %(nuevos)s mensajes nuevos.", nuevos
+        )
+        % {"nuevos": nuevos},
     )
     return redirect("mensajeria:bandeja")
 
@@ -107,15 +116,17 @@ def enviado(request, pk):
         servicios.marcar_enviado(m, request.POST.get("canal"))
     except servicios.EnvioNoPermitido as exc:
         respuesta = HttpResponse(status=409)
-        respuesta["HX-Trigger"] = json.dumps({"aviso": {"texto": f"No se puede enviar: {exc}", "tipo": "error"}})
+        respuesta["HX-Trigger"] = json.dumps(
+            {"aviso": {"texto": _("No se puede enviar: %(exc)s") % {"exc": exc}, "tipo": "error"}}
+        )
         if request.headers.get("HX-Request"):
             return respuesta
-        messages.error(request, f"No se puede enviar: {exc}")
+        messages.error(request, _("No se puede enviar: %(exc)s") % {"exc": exc})
         return redirect("mensajeria:bandeja")
     if not request.headers.get("HX-Request"):
-        messages.success(request, "Mensaje registrado como enviado.")
+        messages.success(request, _("Mensaje registrado como enviado."))
         return redirect(request.POST.get("volver") or "mensajeria:bandeja")
-    return _tarjeta(request, m, aviso="Guardado en el historial.")
+    return _tarjeta(request, m, aviso=_("Guardado en el historial."))
 
 
 @require_POST
@@ -133,13 +144,18 @@ def posponer(request, pk):
     except ValueError:
         dias = 1
     servicios.posponer(m, dias)
-    return _quitar(f"Pospuesto hasta el {m.fecha_programada:%d/%m}.")
+    return _quitar(_("Pospuesto hasta el %(fecha)s.") % {"fecha": date_format(m.fecha_programada, _("d/m"))})
 
 
 @require_POST
 def descartar(request, pk):
-    servicios.descartar(_mensaje(pk), "Descartado a mano")
-    return _quitar("Mensaje descartado.")
+    servicios.descartar(_mensaje(pk), _("Descartado a mano"))
+    return _quitar(_("Mensaje descartado."))
+
+
+def _texto_hueco(nombre: str) -> str:
+    with idioma.contenido():
+        return _("¡Hola %(nombre)s! Se ha liberado un hueco. ¿Te interesa?") % {"nombre": nombre}
 
 
 # --- Mensaje libre y huecos -------------------------------------------------------------------
@@ -154,14 +170,14 @@ def nuevo(request):
     form = MensajeLibreForm(request.POST or None, initial=inicial)
     if request.method == "POST" and form.is_valid():
         c = form.cleaned_data["cliente"]
-        m, _ = servicios.preparar(
+        m, _x = servicios.preparar(
             c,
             tipo=Categoria.GENERAL,
             clave=f"manual:{uuid.uuid4().hex}",
             texto=form.cleaned_data["texto"],
             plantilla=form.cleaned_data.get("plantilla"),
             promocional=False,
-            motivo="Mensaje escrito a mano",
+            motivo=_("Mensaje escrito a mano"),
         )
         if m is None:
             _permitido, motivo = servicios.puede_recibir(c, False)
@@ -193,19 +209,19 @@ def ofrecer_hueco(request, cita_pk, entrada_pk):
     cita = get_object_or_404(Cita, pk=cita_pk)
     entrada = get_object_or_404(EntradaListaEspera.objects.select_related("cliente"), pk=entrada_pk)
     plantilla = Plantilla.para(Categoria.LISTA_ESPERA)
-    m, _ = servicios.preparar(
+    m, _x = servicios.preparar(
         entrada.cliente,
         tipo=Categoria.LISTA_ESPERA,
         clave=f"hueco:{cita.pk}:{entrada.pk}",
         plantilla=plantilla,
-        texto=None if plantilla else f"¡Hola {entrada.cliente.nombre}! Se ha liberado un hueco. ¿Te interesa?",
+        texto=None if plantilla else _texto_hueco(entrada.cliente.nombre),
         cita=cita,
         caduca_el=timezone.localtime(cita.inicio).date(),
-        motivo="Hueco liberado por una cancelación",
+        motivo=_("Hueco liberado por una cancelación"),
         promocional=False,
     )
     if m is None:
-        messages.error(request, "No se puede contactar a esta persona.")
+        messages.error(request, _("No se puede contactar a esta persona."))
         return redirect("agenda:detalle", cita.pk)
     entrada.ofrecido_en = timezone.now()
     entrada.save(update_fields=["ofrecido_en"])
@@ -270,15 +286,15 @@ def plantilla_formulario(request, pk=None):
         if plantilla and "borrar" in request.POST:
             try:
                 plantilla.delete()
-                messages.success(request, "Plantilla eliminada.")
+                messages.success(request, _("Plantilla eliminada."))
                 return redirect("mensajeria:plantillas")
             except ProtectedError:
                 messages.error(
-                    request, "Esta plantilla se usa en los cuidados o en una campaña. Desactívala en su lugar."
+                    request, _("Esta plantilla se usa en los cuidados o en una campaña. Desactívala en su lugar.")
                 )
         elif form.is_valid():
             form.save()
-            messages.success(request, "Plantilla guardada.")
+            messages.success(request, _("Plantilla guardada."))
             return redirect("mensajeria:plantillas")
     cuerpo = form["cuerpo"].value() or ""
     return render(
@@ -316,11 +332,11 @@ def cuidados(request, pk=None):
     if request.method == "POST":
         if paso and "borrar" in request.POST:
             paso.delete()
-            messages.success(request, "Paso eliminado.")
+            messages.success(request, _("Paso eliminado."))
             return redirect("mensajeria:cuidados")
         if form.is_valid():
             form.save()
-            messages.success(request, "Secuencia de cuidados actualizada.")
+            messages.success(request, _("Secuencia de cuidados actualizada."))
             return redirect("mensajeria:cuidados")
     return render(
         request,
@@ -348,11 +364,11 @@ def fecha_formulario(request, pk=None):
     if request.method == "POST":
         if fecha and "borrar" in request.POST:
             fecha.delete()
-            messages.success(request, "Fecha eliminada.")
+            messages.success(request, _("Fecha eliminada."))
             return redirect("mensajeria:fechas")
         if form.is_valid():
             form.save()
-            messages.success(request, "Fecha guardada.")
+            messages.success(request, _("Fecha guardada."))
             return redirect("mensajeria:fechas")
     return render(request, "mensajeria/fecha_formulario.html", {"form": form, "fecha": fecha})
 
@@ -376,7 +392,13 @@ def campana_nueva(request):
         creados = generadores.lanzar_campana(campana)
         dias = -(-creados // max(1, campana.por_dia)) if creados else 0
         messages.success(
-            request, f"Campaña lanzada: {creados} mensajes repartidos en {dias} día{'s' if dias != 1 else ''}."
+            request,
+            ngettext(
+                "Campaña lanzada: %(creados)s mensajes repartidos en %(dias)s día.",
+                "Campaña lanzada: %(creados)s mensajes repartidos en %(dias)s días.",
+                dias,
+            )
+            % {"creados": creados, "dias": dias},
         )
         return redirect("mensajeria:campana", campana.pk)
     clave = form["segmento"].value() or "marketing"
@@ -405,16 +427,16 @@ def campana(request, pk):
     if request.method == "POST":
         if "cancelar" in request.POST:
             n = c.mensajes.filter(estado=Estado.PENDIENTE).update(
-                estado=Estado.DESCARTADO, descartado_en=timezone.now(), motivo_descarte="Campaña cancelada"
+                estado=Estado.DESCARTADO, descartado_en=timezone.now(), motivo_descarte=_("Campaña cancelada")
             )
             c.estado = Campana.Estado.CANCELADA
             c.save(update_fields=["estado"])
-            messages.success(request, f"Campaña cancelada. {n} mensajes pendientes descartados.")
+            messages.success(request, _("Campaña cancelada. %(n)s mensajes pendientes descartados.") % {"n": n})
         elif "ampliar" in request.POST:
             n = generadores.lanzar_campana(c)
             messages.success(
                 request,
-                f"{n} cliente{'s' if n != 1 else ''} nuevo{'s' if n != 1 else ''} añadido{'s' if n != 1 else ''}.",
+                ngettext("%(n)s cliente nuevo añadido.", "%(n)s clientes nuevos añadidos.", n) % {"n": n},
             )
         return redirect("mensajeria:campana", c.pk)
     estados = dict.fromkeys(Estado.values, 0)

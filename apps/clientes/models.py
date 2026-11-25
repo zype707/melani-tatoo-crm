@@ -5,12 +5,13 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.functions import Lower
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.nucleo.archivos import ruta_tatuajes
 
 
 class Etiqueta(models.Model):
-    nombre = models.CharField("Nombre", max_length=40)
+    nombre = models.CharField(_("Nombre"), max_length=40)
     creado_en = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -22,11 +23,11 @@ class Etiqueta(models.Model):
 
 
 class OrigenConsentimiento(models.TextChoices):
-    FORMULARIO = "formulario", "Formulario de reserva"
-    PRESENCIAL = "presencial", "En persona"
-    VERBAL = "verbal", "De palabra / llamada"
-    MENSAJE = "mensaje", "Por mensaje"
-    PETICION_BAJA = "peticion_baja", "Pidió la baja"
+    FORMULARIO = "formulario", _("Formulario de reserva")
+    PRESENCIAL = "presencial", _("En persona")
+    VERBAL = "verbal", _("De palabra / llamada")
+    MENSAJE = "mensaje", _("Por mensaje")
+    PETICION_BAJA = "peticion_baja", _("Pidió la baja")
 
 
 class ClienteQuerySet(models.QuerySet):
@@ -59,32 +60,36 @@ class ClienteQuerySet(models.QuerySet):
 
 class Cliente(models.Model):
     class Canal(models.TextChoices):
-        WHATSAPP = "whatsapp", "WhatsApp"
-        SMS = "sms", "SMS / RCS"
+        WHATSAPP = "whatsapp", _("WhatsApp")
+        SMS = "sms", _("SMS / RCS")
 
     class Origen(models.TextChoices):
-        INSTAGRAM = "instagram", "Instagram"
-        RECOMENDACION = "recomendacion", "Recomendación"
-        WEB = "web", "Formulario web"
-        ESTUDIO = "estudio", "Pasó por el estudio"
-        EVENTO = "evento", "Convención / evento"
-        OTRO = "otro", "Otro"
+        INSTAGRAM = "instagram", _("Instagram")
+        RECOMENDACION = "recomendacion", _("Recomendación")
+        WEB = "web", _("Formulario web")
+        ESTUDIO = "estudio", _("Pasó por el estudio")
+        EVENTO = "evento", _("Convención / evento")
+        OTRO = "otro", _("Otro")
 
-    nombre = models.CharField("Nombre", max_length=80)
-    apellidos = models.CharField("Apellidos", max_length=120, blank=True)
-    telefono = models.CharField("Teléfono", max_length=20, blank=True, help_text="Con prefijo si no es de EE. UU.")
-    email = models.EmailField("Email", blank=True)
-    instagram = models.CharField("Instagram", max_length=60, blank=True)
-    fecha_nacimiento = models.DateField("Fecha de nacimiento", null=True, blank=True)
-    canal_preferido = models.CharField("Canal preferido", max_length=10, choices=Canal.choices, default=Canal.WHATSAPP)
-    contacto_bloqueado = models.BooleanField(
-        "No contactar", default=False, help_text="No se le preparará ningún mensaje, ni siquiera recordatorios."
+    nombre = models.CharField(_("Nombre"), max_length=80)
+    apellidos = models.CharField(_("Apellidos"), max_length=120, blank=True)
+    telefono = models.CharField(
+        _("Teléfono"), max_length=20, blank=True, help_text=_("Con prefijo si no es de EE. UU.")
     )
-    marketing_consentimiento = models.BooleanField("Acepta mensajes promocionales", default=False)
+    email = models.EmailField(_("Email"), blank=True)
+    instagram = models.CharField(_("Instagram"), max_length=60, blank=True)
+    fecha_nacimiento = models.DateField(_("Fecha de nacimiento"), null=True, blank=True)
+    canal_preferido = models.CharField(
+        _("Canal preferido"), max_length=10, choices=Canal.choices, default=Canal.WHATSAPP
+    )
+    contacto_bloqueado = models.BooleanField(
+        _("No contactar"), default=False, help_text=_("No se le preparará ningún mensaje, ni siquiera recordatorios.")
+    )
+    marketing_consentimiento = models.BooleanField(_("Acepta mensajes promocionales"), default=False)
     marketing_fecha = models.DateTimeField(null=True, blank=True)
     marketing_origen = models.CharField(max_length=20, choices=OrigenConsentimiento.choices, blank=True)
-    origen = models.CharField("Cómo llegó", max_length=20, choices=Origen.choices, blank=True)
-    notas = models.TextField("Notas privadas", blank=True)
+    origen = models.CharField(_("Cómo llegó"), max_length=20, choices=Origen.choices, blank=True)
+    notas = models.TextField(_("Notas privadas"), blank=True)
     etiquetas = models.ManyToManyField(Etiqueta, blank=True, related_name="clientes")
     anonimizado_en = models.DateTimeField(null=True, blank=True)
     creado_en = models.DateTimeField(default=timezone.now)
@@ -168,8 +173,8 @@ class EventoConsentimiento(models.Model):
     """Historial inmutable de altas y bajas del consentimiento de marketing."""
 
     class Tipo(models.TextChoices):
-        ALTA = "alta", "Alta"
-        BAJA = "baja", "Baja"
+        ALTA = "alta", _("Alta")
+        BAJA = "baja", _("Baja")
 
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="eventos_consentimiento")
     tipo = models.CharField(max_length=4, choices=Tipo.choices)
@@ -189,101 +194,101 @@ class DatosSalud(models.Model):
     """Datos de salud. Tabla separada a propósito: nunca se envían a la IA."""
 
     cliente = models.OneToOneField(Cliente, on_delete=models.CASCADE, related_name="salud")
-    alergias = models.TextField("Alergias", blank=True, help_text="Látex, pigmentos, antibióticos, cremas…")
-    medicacion = models.TextField("Medicación actual", blank=True)
-    anticoagulantes = models.BooleanField("Toma anticoagulantes", default=False)
-    diabetes = models.BooleanField("Diabetes", default=False)
-    epilepsia = models.BooleanField("Epilepsia", default=False)
-    problemas_cardiacos = models.BooleanField("Problemas cardíacos", default=False)
-    embarazo_lactancia = models.BooleanField("Embarazo o lactancia", default=False)
+    alergias = models.TextField(_("Alergias"), blank=True, help_text=_("Látex, pigmentos, antibióticos, cremas…"))
+    medicacion = models.TextField(_("Medicación actual"), blank=True)
+    anticoagulantes = models.BooleanField(_("Toma anticoagulantes"), default=False)
+    diabetes = models.BooleanField(_("Diabetes"), default=False)
+    epilepsia = models.BooleanField(_("Epilepsia"), default=False)
+    problemas_cardiacos = models.BooleanField(_("Problemas cardíacos"), default=False)
+    embarazo_lactancia = models.BooleanField(_("Embarazo o lactancia"), default=False)
     condiciones_piel = models.TextField(
-        "Condiciones de la piel", blank=True, help_text="Psoriasis, queloides, dermatitis…"
+        _("Condiciones de la piel"), blank=True, help_text=_("Psoriasis, queloides, dermatitis…")
     )
-    otras = models.TextField("Otras observaciones", blank=True)
+    otras = models.TextField(_("Otras observaciones"), blank=True)
     actualizado_en = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "datos de salud"
+        verbose_name = _("datos de salud")
 
     def __str__(self):
-        return f"Salud de {self.cliente}"
+        return _("Salud de %(cliente)s") % {"cliente": self.cliente}
 
     def alertas(self) -> list[str]:
         lista = []
         if self.alergias.strip():
-            lista.append("Alergias")
+            lista.append(_("Alergias"))
         if self.anticoagulantes:
-            lista.append("Anticoagulantes")
+            lista.append(_("Anticoagulantes"))
         if self.diabetes:
-            lista.append("Diabetes")
+            lista.append(_("Diabetes"))
         if self.epilepsia:
-            lista.append("Epilepsia")
+            lista.append(_("Epilepsia"))
         if self.problemas_cardiacos:
-            lista.append("Cardíaco")
+            lista.append(_("Cardíaco"))
         if self.embarazo_lactancia:
-            lista.append("Embarazo/lactancia")
+            lista.append(_("Embarazo/lactancia"))
         if self.condiciones_piel.strip():
-            lista.append("Piel")
+            lista.append(_("Piel"))
         return lista
 
 
 class Tatuaje(models.Model):
     class Estado(models.TextChoices):
-        EN_PROCESO = "en_proceso", "En proceso"
-        TERMINADO = "terminado", "Terminado"
+        EN_PROCESO = "en_proceso", _("En proceso")
+        TERMINADO = "terminado", _("Terminado")
 
     class Zona(models.TextChoices):
-        BRAZO = "brazo", "Brazo"
-        ANTEBRAZO = "antebrazo", "Antebrazo"
-        MANO = "mano", "Mano / dedos"
-        HOMBRO = "hombro", "Hombro"
-        ESPALDA = "espalda", "Espalda"
-        PECHO = "pecho", "Pecho"
-        COSTILLAS = "costillas", "Costillas"
-        ABDOMEN = "abdomen", "Abdomen"
-        CADERA = "cadera", "Cadera"
-        MUSLO = "muslo", "Muslo"
-        PIERNA = "pierna", "Pierna / gemelo"
-        TOBILLO = "tobillo", "Tobillo / pie"
-        CUELLO = "cuello", "Cuello / nuca"
-        CARA = "cara", "Cara / cabeza"
-        OREJA = "oreja", "Oreja"
-        OTRA = "otra", "Otra"
+        BRAZO = "brazo", _("Brazo")
+        ANTEBRAZO = "antebrazo", _("Antebrazo")
+        MANO = "mano", _("Mano / dedos")
+        HOMBRO = "hombro", _("Hombro")
+        ESPALDA = "espalda", _("Espalda")
+        PECHO = "pecho", _("Pecho")
+        COSTILLAS = "costillas", _("Costillas")
+        ABDOMEN = "abdomen", _("Abdomen")
+        CADERA = "cadera", _("Cadera")
+        MUSLO = "muslo", _("Muslo")
+        PIERNA = "pierna", _("Pierna / gemelo")
+        TOBILLO = "tobillo", _("Tobillo / pie")
+        CUELLO = "cuello", _("Cuello / nuca")
+        CARA = "cara", _("Cara / cabeza")
+        OREJA = "oreja", _("Oreja")
+        OTRA = "otra", _("Otra")
 
     class Estilo(models.TextChoices):
-        FINE_LINE = "fine_line", "Fine line"
-        BLACKWORK = "blackwork", "Blackwork"
-        REALISMO = "realismo", "Realismo"
-        TRADICIONAL = "tradicional", "Tradicional"
-        NEOTRADICIONAL = "neotradicional", "Neotradicional"
-        ACUARELA = "acuarela", "Acuarela"
-        GEOMETRICO = "geometrico", "Geométrico"
-        LETTERING = "lettering", "Lettering"
-        MINIMALISTA = "minimalista", "Minimalista"
-        JAPONES = "japones", "Japonés"
-        DOTWORK = "dotwork", "Dotwork"
-        OTRO = "otro", "Otro"
+        FINE_LINE = "fine_line", _("Fine line")
+        BLACKWORK = "blackwork", _("Blackwork")
+        REALISMO = "realismo", _("Realismo")
+        TRADICIONAL = "tradicional", _("Tradicional")
+        NEOTRADICIONAL = "neotradicional", _("Neotradicional")
+        ACUARELA = "acuarela", _("Acuarela")
+        GEOMETRICO = "geometrico", _("Geométrico")
+        LETTERING = "lettering", _("Lettering")
+        MINIMALISTA = "minimalista", _("Minimalista")
+        JAPONES = "japones", _("Japonés")
+        DOTWORK = "dotwork", _("Dotwork")
+        OTRO = "otro", _("Otro")
 
     class Tamano(models.TextChoices):
-        MINI = "mini", "Mini (< 5 cm)"
-        PEQUENO = "pequeno", "Pequeño (5-10 cm)"
-        MEDIANO = "mediano", "Mediano (10-20 cm)"
-        GRANDE = "grande", "Grande (20-30 cm)"
-        XL = "xl", "Muy grande (> 30 cm)"
+        MINI = "mini", _("Mini (< 5 cm)")
+        PEQUENO = "pequeno", _("Pequeño (5-10 cm)")
+        MEDIANO = "mediano", _("Mediano (10-20 cm)")
+        GRANDE = "grande", _("Grande (20-30 cm)")
+        XL = "xl", _("Muy grande (> 30 cm)")
 
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="tatuajes")
-    titulo = models.CharField("Título", max_length=120)
-    zona = models.CharField("Zona", max_length=20, choices=Zona.choices, blank=True)
-    estilo = models.CharField("Estilo", max_length=20, choices=Estilo.choices, blank=True)
-    tamano = models.CharField("Tamaño", max_length=10, choices=Tamano.choices, blank=True)
-    medidas = models.CharField("Medidas", max_length=40, blank=True, help_text="Ej.: 12 × 8 cm")
-    estado = models.CharField("Estado", max_length=12, choices=Estado.choices, default=Estado.EN_PROCESO)
-    fecha_inicio = models.DateField("Primera sesión", null=True, blank=True)
-    fecha_fin = models.DateField("Terminado el", null=True, blank=True)
-    sesiones_previstas = models.PositiveSmallIntegerField("Sesiones previstas", null=True, blank=True)
-    precio_total = models.DecimalField("Precio acordado", max_digits=10, decimal_places=2, null=True, blank=True)
-    retoque_hecho = models.BooleanField("Retoque hecho", default=False)
-    notas = models.TextField("Notas", blank=True)
+    titulo = models.CharField(_("Título"), max_length=120)
+    zona = models.CharField(_("Zona"), max_length=20, choices=Zona.choices, blank=True)
+    estilo = models.CharField(_("Estilo"), max_length=20, choices=Estilo.choices, blank=True)
+    tamano = models.CharField(_("Tamaño"), max_length=10, choices=Tamano.choices, blank=True)
+    medidas = models.CharField(_("Medidas"), max_length=40, blank=True, help_text=_("Ej.: 12 × 8 cm"))
+    estado = models.CharField(_("Estado"), max_length=12, choices=Estado.choices, default=Estado.EN_PROCESO)
+    fecha_inicio = models.DateField(_("Primera sesión"), null=True, blank=True)
+    fecha_fin = models.DateField(_("Terminado el"), null=True, blank=True)
+    sesiones_previstas = models.PositiveSmallIntegerField(_("Sesiones previstas"), null=True, blank=True)
+    precio_total = models.DecimalField(_("Precio acordado"), max_digits=10, decimal_places=2, null=True, blank=True)
+    retoque_hecho = models.BooleanField(_("Retoque hecho"), default=False)
+    notas = models.TextField(_("Notas"), blank=True)
     creado_en = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -312,9 +317,9 @@ class Tatuaje(models.Model):
 
 class FotoTatuaje(models.Model):
     class Tipo(models.TextChoices):
-        REFERENCIA = "referencia", "Referencia"
-        RESULTADO = "resultado", "Recién hecho"
-        CICATRIZADO = "cicatrizado", "Cicatrizado"
+        REFERENCIA = "referencia", _("Referencia")
+        RESULTADO = "resultado", _("Recién hecho")
+        CICATRIZADO = "cicatrizado", _("Cicatrizado")
 
     tatuaje = models.ForeignKey(Tatuaje, on_delete=models.CASCADE, related_name="fotos")
     tipo = models.CharField(max_length=12, choices=Tipo.choices, default=Tipo.RESULTADO)
@@ -332,15 +337,15 @@ class FotoTatuaje(models.Model):
 
 class NotaCliente(models.Model):
     class Origen(models.TextChoices):
-        MANUAL = "manual", "Nota"
-        DICTADO = "dictado", "Dictado"
-        SESION = "sesion", "Tras la sesión"
+        MANUAL = "manual", _("Nota")
+        DICTADO = "dictado", _("Dictado")
+        SESION = "sesion", _("Tras la sesión")
 
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="notas_cliente")
     cita = models.ForeignKey(
         "agenda.Cita", null=True, blank=True, on_delete=models.SET_NULL, related_name="notas_cliente"
     )
-    texto = models.TextField("Nota")
+    texto = models.TextField(_("Nota"))
     origen = models.CharField(max_length=10, choices=Origen.choices, default=Origen.MANUAL)
     autor = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
     creado_en = models.DateTimeField(default=timezone.now)
@@ -361,7 +366,7 @@ class ConsentimientoInformado(models.Model):
     )
     version_texto = models.PositiveIntegerField()
     texto = models.TextField()
-    respuestas = models.JSONField(default=dict, help_text="Salud y autorizaciones declaradas al firmar.")
+    respuestas = models.JSONField(default=dict, help_text=_("Salud y autorizaciones declaradas al firmar."))
     nombre_firmante = models.CharField(max_length=200)
     firma = models.ImageField(upload_to="privado/consentimientos/%Y/%m/")
     pdf = models.FileField(upload_to="privado/consentimientos/%Y/%m/")
@@ -372,8 +377,8 @@ class ConsentimientoInformado(models.Model):
 
     class Meta:
         ordering = ["-firmado_en"]
-        verbose_name = "consentimiento informado"
-        verbose_name_plural = "consentimientos informados"
+        verbose_name = _("consentimiento informado")
+        verbose_name_plural = _("consentimientos informados")
 
     def __str__(self):
         return f"Consentimiento de {self.nombre_firmante} ({self.firmado_en:%d/%m/%Y})"

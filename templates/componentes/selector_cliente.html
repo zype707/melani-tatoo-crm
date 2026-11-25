@@ -1,15 +1,15 @@
 <div class="selector-cliente" data-selector-cliente>
   {{ form.cliente }}
   <div class="campo{% if form.cliente.errors %} campo-con-error{% endif %}">
-    <label for="buscar-cliente">Cliente</label>
+    <label for="buscar-cliente">{% translate "Cliente" %}</label>
     <div class="cliente-elegido{% if not cliente %} oculto{% endif %}" data-cliente-elegido>
       <span class="avatar" data-iniciales>{{ cliente.nombre_completo|iniciales }}</span>
       <strong data-nombre>{{ cliente.nombre_completo }}</strong>
-      <button type="button" class="btn btn-peq empujar" data-cambiar-cliente>Cambiar</button>
+      <button type="button" class="btn btn-peq empujar" data-cambiar-cliente>{% translate "Cambiar" %}</button>
     </div>
     <div class="buscador{% if cliente %} oculto{% endif %}" data-buscador-cliente>
       {% icono "buscar" %}
-      <input type="search" id="buscar-cliente" name="q" autocomplete="off" placeholder="Busca por nombre, teléfono o @instagram"
+      <input type="search" id="buscar-cliente" name="q" autocomplete="off" placeholder="{% translate "Busca por nombre, teléfono o @instagram" %}"
              hx-get="{% url 'clientes:buscar' %}" hx-trigger="input changed delay:250ms, search"
              hx-target="#resultados-cliente" hx-swap="innerHTML" hx-sync="this:replace">
     </div>
@@ -18,7 +18,7 @@
   </div>
   {% if form.nuevo_cliente_nombre %}
   <details class="desplegable{% if cliente %} oculto{% endif %}" data-nuevo-cliente {% if form.nuevo_cliente_nombre.value %}open{% endif %}>
-    <summary>{% icono "plus" %} Cliente nuevo</summary>
+    <summary>{% icono "plus" %} {% translate "Cliente nuevo" %}</summary>
     <div class="formulario-2">
       {{ form.nuevo_cliente_nombre.as_field_group }}
       {{ form.nuevo_cliente_telefono.as_field_group }}

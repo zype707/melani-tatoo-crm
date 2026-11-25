@@ -9,6 +9,7 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.http import require_POST
@@ -34,7 +35,9 @@ def _siguiente_seguro(request, url: str) -> str:
 
 def _mensaje_bloqueo(segundos: int) -> str:
     minutos = max(1, round(segundos / 60))
-    return f"Demasiados intentos. Por seguridad, espera {minutos} min antes de volver a probar."
+    return _("Demasiados intentos. Por seguridad, espera %(minutos)s min antes de volver a probar.") % {
+        "minutos": minutos
+    }
 
 
 # --- Acceso --------------------------------------------------------------------------
@@ -60,7 +63,7 @@ def acceso(request):
                 servicios.registrar_intento(email, ip, False)
                 motivo = "Contraseña incorrecta" if permitidos.esta_permitido(email) else "Correo no permitido"
                 registrar(request, Accion.LOGIN_FALLO, f"{motivo}: {email}")
-                form.add_error(None, "Email o contraseña incorrectos.")
+                form.add_error(None, _("Email o contraseña incorrectos."))
             else:
                 servicios.registrar_intento(email, ip, True)
                 servicios.iniciar_preauth(request, usuario, request.GET.get("next", ""))
@@ -95,7 +98,7 @@ def alta(request):
             # Mismo mensaje para código malo, correo no permitido o cuenta ya existente.
             servicios.registrar_intento(email, ip, False)
             registrar(request, Accion.LOGIN_FALLO, f"Alta rechazada: {email}")
-            form.add_error(None, "No se pudo crear la cuenta. Revisa el correo y el código de alta.")
+            form.add_error(None, _("No se pudo crear la cuenta. Revisa el correo y el código de alta."))
         else:
             nombre = form.cleaned_data["nombre"].strip()
             password = form.cleaned_data["password1"]
@@ -122,7 +125,7 @@ def alta(request):
 def verificar(request):
     usuario = servicios.usuario_preauth(request)
     if usuario is None:
-        messages.info(request, "Tu sesión de acceso caducó. Vuelve a escribir tu contraseña.")
+        messages.info(request, _("Tu sesión de acceso caducó. Vuelve a escribir tu contraseña."))
         return redirect("cuentas:login")
     if not servicios.tiene_2fa(usuario):
         return redirect("cuentas:configurar_2fa")
@@ -151,14 +154,16 @@ def verificar(request):
                     registrar(request, Accion.CODIGO_RECUPERACION, f"Quedan {restantes}")
                     messages.warning(
                         request,
-                        f"Has usado un código de recuperación. Te quedan {restantes}. "
-                        "Si perdiste el móvil, reconfigura la app autenticadora en Mi cuenta.",
+                        _(
+                            "Has usado un código de recuperación. Te quedan %(restantes)s. Si perdiste el móvil, reconfigura la app autenticadora en Mi cuenta."
+                        )
+                        % {"restantes": restantes},
                     )
                 return redirect(_siguiente_seguro(request, siguiente))
             servicios.registrar_intento(usuario.email, ip, False, IntentoAcceso.Fase.DOSFA)
             registrar(request, Accion.DOSFA_FALLO, "Código incorrecto", usuario=usuario)
             form.add_error(
-                None, "Código incorrecto o caducado. Si fallas varias veces tendrás que esperar unos segundos."
+                None, _("Código incorrecto o caducado. Si fallas varias veces tendrás que esperar unos segundos.")
             )
     return render(request, "cuentas/verificar.html", {"form": form, "modo": modo, "usuario_preauth": usuario})
 
@@ -171,7 +176,7 @@ def configurar_2fa(request):
     if reconfigurando:
         marca = request.session.get(CLAVE_RECONFIGURAR, 0)
         if time.time() - marca > 300:
-            messages.info(request, "Confirma primero tu código actual.")
+            messages.info(request, _("Confirma primero tu código actual."))
             return redirect("cuentas:cuenta")
         usuario = request.user
     else:
@@ -205,7 +210,7 @@ def configurar_2fa(request):
             request.session[servicios.CLAVE_CODIGOS] = codigos
             registrar(request, Accion.DOSFA_ACTIVADA, "App autenticadora configurada", usuario=usuario)
             return redirect("cuentas:codigos")
-        form.add_error("codigo", "Ese código no coincide. Comprueba que la hora del móvil es automática.")
+        form.add_error("codigo", _("Ese código no coincide. Comprueba que la hora del móvil es automática."))
 
     return render(
         request,
@@ -226,7 +231,7 @@ def codigos(request):
         return redirect("cuentas:cuenta")
     if request.method == "POST":
         request.session.pop(servicios.CLAVE_CODIGOS, None)
-        messages.success(request, "Listo. Guarda esos códigos en un lugar seguro.")
+        messages.success(request, _("Listo. Guarda esos códigos en un lugar seguro."))
         return redirect("panel:inicio")
     return render(request, "cuentas/codigos.html", {"codigos": codigos})
 
@@ -235,7 +240,7 @@ def codigos(request):
 def salir(request):
     registrar(request, Accion.LOGOUT)
     logout(request)
-    messages.info(request, "Has cerrado sesión.")
+    messages.info(request, _("Has cerrado sesión."))
     return redirect("cuentas:login")
 
 
@@ -256,7 +261,7 @@ def cuenta(request):
             if perfil.is_valid():
                 request.user.nombre = perfil.cleaned_data["nombre"]
                 request.user.save(update_fields=["nombre"])
-                messages.success(request, "Nombre actualizado.")
+                messages.success(request, _("Nombre actualizado."))
                 return redirect("cuentas:cuenta")
         elif accion == "password":
             password = PasswordChangeForm(request.user, request.POST)
@@ -264,7 +269,7 @@ def cuenta(request):
                 usuario = password.save()
                 update_session_auth_hash(request, usuario)
                 registrar(request, Accion.PASSWORD_CAMBIADA)
-                messages.success(request, "Contraseña cambiada.")
+                messages.success(request, _("Contraseña cambiada."))
                 return redirect("cuentas:cuenta")
         elif accion in ("regenerar", "reconfigurar"):
             confirmar = FormularioCodigo(request.POST)
@@ -278,7 +283,7 @@ def cuenta(request):
                 request.session.pop(CLAVE_DISPOSITIVO_NUEVO, None)
                 return redirect("cuentas:configurar_2fa")
             if confirmar.is_valid():
-                confirmar.add_error("codigo", "Código incorrecto.")
+                confirmar.add_error("codigo", _("Código incorrecto."))
 
     confirmar.fields["codigo"].widget.attrs.pop("autofocus", None)
     return render(

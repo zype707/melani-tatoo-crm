@@ -4,6 +4,7 @@ from datetime import date, timedelta
 
 from django.db import IntegrityError, transaction
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from . import canales, variables
 from .models import Canal, MensajePreparado, Plantilla
@@ -17,13 +18,13 @@ class EnvioNoPermitido(Exception):
 
 def puede_recibir(cliente, promocional: bool) -> tuple[bool, str]:
     if cliente.anonimizado:
-        return False, "Ficha anonimizada."
+        return False, _("Ficha anonimizada.")
     if cliente.contacto_bloqueado:
-        return False, "Pidió no ser contactado."
+        return False, _("Pidió no ser contactado.")
     if promocional and not cliente.marketing_consentimiento:
-        return False, "No ha aceptado mensajes promocionales."
+        return False, _("No ha aceptado mensajes promocionales.")
     if not (cliente.telefono or cliente.email or cliente.instagram):
-        return False, "No tiene ningún dato de contacto."
+        return False, _("No tiene ningún dato de contacto.")
     return True, ""
 
 
@@ -56,7 +57,7 @@ def preparar(
     if plantilla is not None and not plantilla.activa:
         return None, False
     es_promo = promocional if promocional is not None else bool(plantilla and plantilla.es_promocional)
-    permitido, _ = puede_recibir(cliente, es_promo)
+    permitido, _x = puede_recibir(cliente, es_promo)
     if not permitido:
         return None, False
     hoy = timezone.localdate()

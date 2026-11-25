@@ -1,27 +1,27 @@
 {% extends "base.html" %}
-{% block titulo %}Mensajes de hoy{% endblock %}
+{% block titulo %}{% translate "Mensajes de hoy" %}{% endblock %}
 {% block cabeza %}<script src="{% static 'js/mensajes.js' %}" defer></script>{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
   <div>
-    <span class="antetitulo">{% now "l j \d\e F" %}</span>
-    <h1>Mensajes de hoy</h1>
+    <span class="antetitulo">{{ hoy|fecha_larga|capfirst }}</span>
+    <h1>{% translate "Mensajes de hoy" %}</h1>
   </div>
   <div class="acciones">
-    <a class="btn" href="{% url 'mensajeria:nuevo' %}">{% icono "editar" %} Escribir mensaje</a>
+    <a class="btn" href="{% url 'mensajeria:nuevo' %}">{% icono "editar" %} {% translate "Escribir mensaje" %}</a>
   </div>
 </header>
 {% include "mensajeria/_subnav.html" with seccion="bandeja" %}
 
 <div class="bandeja-resumen">
-  <div><span class="cifra {% if total %}cifra-critica{% endif %}" data-contador-bandeja>{{ total }}</span><span class="cifra-etiqueta">Por enviar</span></div>
-  <div><span class="cifra">{{ enviados_hoy }}</span><span class="cifra-etiqueta">Enviados hoy</span></div>
-  <p class="texto-suave texto-peq">Nada se envía solo: pulsa WhatsApp o SMS, envía desde tu móvil y vuelve para marcarlo. Todo queda en el historial.</p>
+  <div><span class="cifra {% if total %}cifra-critica{% endif %}" data-contador-bandeja>{{ total }}</span><span class="cifra-etiqueta">{% translate "Por enviar" %}</span></div>
+  <div><span class="cifra">{{ enviados_hoy }}</span><span class="cifra-etiqueta">{% translate "Enviados hoy" %}</span></div>
+  <p class="texto-suave texto-peq">{% translate "Nada se envía solo: pulsa WhatsApp o SMS, envía desde tu móvil y vuelve para marcarlo. Todo queda en el historial." %}</p>
 </div>
 
 {% if recuento|length > 1 %}
-<nav class="chips chips-desplazables espacio-abajo" aria-label="Filtrar por tipo">
-  <a class="chip" href="{% url 'mensajeria:bandeja' %}"><span{% if not tipo %} class="activo"{% endif %}>Todos · {{ total }}</span></a>
+<nav class="chips chips-desplazables espacio-abajo" aria-label="{% translate "Filtrar por tipo" %}">
+  <a class="chip" href="{% url 'mensajeria:bandeja' %}"><span{% if not tipo %} class="activo"{% endif %}>{% blocktranslate %}Todos · {{ total }}{% endblocktranslate %}</span></a>
   {% for clave, nombre, icono, n in recuento %}
     <a class="chip" href="?tipo={{ clave }}"><span{% if tipo == clave %} class="activo"{% endif %}>{% icono icono %} {{ nombre }} · {{ n }}</span></a>
   {% endfor %}
@@ -35,14 +35,14 @@
 {% endif %}
 <div class="vacio{% if mensajes %} oculto{% endif %}" data-bandeja-vacia>
   {% icono "check" "icono-xl" %}
-  <h3>Todo al día</h3>
-  <p>No quedan mensajes para hoy.{% if proximos %} Hay {{ proximos }} preparado{{ proximos|pluralize }} para los próximos días.{% endif %}</p>
-  <a class="btn" href="{% url 'mensajeria:nuevo' %}">{% icono "editar" %} Escribir a alguien</a>
+  <h3>{% translate "Todo al día" %}</h3>
+  <p>{% translate "No quedan mensajes para hoy." %}{% if proximos %} {% blocktranslate count n=proximos %}Hay {{ n }} preparado para los próximos días.{% plural %}Hay {{ n }} preparados para los próximos días.{% endblocktranslate %}{% endif %}</p>
+  <a class="btn" href="{% url 'mensajeria:nuevo' %}">{% icono "editar" %} {% translate "Escribir a alguien" %}</a>
 </div>
 
 <form method="post" action="{% url 'mensajeria:generar' %}" class="espacio-arriba fila">
   {% csrf_token %}
-  <button type="submit" class="btn btn-peq btn-fantasma">{% icono "refrescar" %} Volver a revisar hoy</button>
-  <span class="texto-peq texto-suave">La bandeja se prepara sola cada mañana. Esto solo comprueba si falta algo (no duplica).</span>
+  <button type="submit" class="btn btn-peq btn-fantasma">{% icono "refrescar" %} {% translate "Volver a revisar hoy" %}</button>
+  <span class="texto-peq texto-suave">{% translate "La bandeja se prepara sola cada mañana. Esto solo comprueba si falta algo (no duplica)." %}</span>
 </form>
 {% endblock %}

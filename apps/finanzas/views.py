@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from apps.clientes.models import Cliente
@@ -35,8 +36,8 @@ def resumen(request):
     grafico = graficos.barras(
         [s["etiqueta"] for s in serie],
         [
-            {"nombre": "Ingresos", "valores": [s["ingresos"] for s in serie], "clase": "serie-a"},
-            {"nombre": "Gastos", "valores": [s["gastos"] for s in serie], "clase": "serie-b"},
+            {"nombre": _("Ingresos"), "valores": [s["ingresos"] for s in serie], "clase": "serie-a"},
+            {"nombre": _("Gastos"), "valores": [s["gastos"] for s in serie], "clase": "serie-b"},
         ],
         resaltar=len(serie) - 1,
     )
@@ -68,11 +69,11 @@ def gasto_formulario(request, pk=None):
     if request.method == "POST":
         if gasto and "borrar" in request.POST:
             gasto.delete()
-            messages.success(request, "Gasto eliminado.")
+            messages.success(request, _("Gasto eliminado."))
             return redirect("finanzas:resumen")
         if form.is_valid():
             g = form.save()
-            messages.success(request, "Gasto guardado.")
+            messages.success(request, _("Gasto guardado."))
             return redirect(f"/finanzas/?mes={g.fecha:%Y-%m}")
     return render(request, "finanzas/gasto_formulario.html", {"form": form, "gasto": gasto})
 
@@ -84,11 +85,11 @@ def pago_formulario(request, pk=None):
     if request.method == "POST":
         if pago and "borrar" in request.POST:
             pago.delete()
-            messages.success(request, "Ingreso eliminado.")
+            messages.success(request, _("Ingreso eliminado."))
             return redirect("finanzas:resumen")
         if form.is_valid():
             p = form.save()
-            messages.success(request, "Ingreso guardado.")
+            messages.success(request, _("Ingreso guardado."))
             return redirect(f"/finanzas/?mes={p.fecha:%Y-%m}")
     cliente_id = form["cliente"].value()
     cliente = Cliente.objects.filter(pk=cliente_id).first() if str(cliente_id or "").isdigit() else None
@@ -100,7 +101,7 @@ def pago_formulario(request, pk=None):
 def exportar(request):
     form = ExportarForm(request.POST)
     if not form.is_valid():
-        messages.error(request, "Revisa las fechas de la exportación.")
+        messages.error(request, _("Revisa las fechas de la exportación."))
         return redirect("finanzas:resumen")
     desde, hasta = form.cleaned_data["desde"], form.cleaned_data["hasta"]
     respuesta = HttpResponse(content_type="text/csv; charset=utf-8")

@@ -1,10 +1,10 @@
 {% extends "base_publica.html" %}
-{% block titulo %}Demasiado rápido{% endblock %}
+{% block titulo %}{% translate "Demasiado rápido" %}{% endblock %}
 {% block contenido %}
 <div class="error-pagina pila">
   <p class="error-codigo">429</p>
-  <h1>Demasiado rápido</h1>
-  <p class="texto-suave">Has hecho muchas peticiones seguidas. Espera unos minutos y vuelve a intentarlo.</p>
-  <p><a class="btn btn-primario" href="/">Volver</a></p>
+  <h1>{% translate "Demasiado rápido" %}</h1>
+  <p class="texto-suave">{% translate "Has hecho muchas peticiones seguidas. Espera unos minutos y vuelve a intentarlo." %}</p>
+  <p><a class="btn btn-primario" href="/">{% translate "Volver" %}</a></p>
 </div>
 {% endblock %}

@@ -1,19 +1,19 @@
 <section class="bloque" aria-labelledby="t-consent">
-  <div class="bloque-titulo"><h2 id="t-consent">Consentimiento</h2></div>
+  <div class="bloque-titulo"><h2 id="t-consent">{% translate "Consentimiento" %}</h2></div>
   {% with ultimos=cliente.consentimientos.all|slice:":3" %}
     {% if ultimos %}
       <ul class="lista">
         {% for c in ultimos %}
           <li class="fila-lista">
-            <span class="fila-cuerpo"><span class="fila-titulo">{{ c.firmado_en|date:"j/m/Y" }}</span><span class="fila-sub">Versión {{ c.version_texto }}{% if c.cita %} · {{ c.cita.tipo }}{% endif %}</span></span>
+            <span class="fila-cuerpo"><span class="fila-titulo">{{ c.firmado_en|date:"SHORT_DATE_FORMAT" }}</span><span class="fila-sub">{% blocktranslate with version_texto=c.version_texto %}Versión {{ version_texto }}{% endblocktranslate %}{% if c.cita %} · {{ c.cita.tipo }}{% endif %}</span></span>
             <a class="btn btn-peq" href="{% url 'clientes:consentimiento_pdf' c.pk %}" target="_blank" rel="noopener">{% icono "documento" %} PDF</a>
           </li>
         {% endfor %}
       </ul>
-      {% if ultimos.0.version_texto != ajustes.version_consentimiento %}<p class="error texto-peq">El texto ha cambiado desde su última firma.</p>{% endif %}
+      {% if ultimos.0.version_texto != ajustes.version_consentimiento %}<p class="error texto-peq">{% translate "El texto ha cambiado desde su última firma." %}</p>{% endif %}
     {% else %}
-      <p class="texto-suave">Sin consentimiento firmado.</p>
+      <p class="texto-suave">{% translate "Sin consentimiento firmado." %}</p>
     {% endif %}
   {% endwith %}
-  <a class="btn btn-peq espacio-arriba" href="{% url 'clientes:consentimiento' cliente.pk %}">{% icono "firma" %} Firmar ahora (tablet)</a>
+  <a class="btn btn-peq espacio-arriba" href="{% url 'clientes:consentimiento' cliente.pk %}">{% icono "firma" %} {% translate "Firmar ahora (tablet)" %}</a>
 </section>

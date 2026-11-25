@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from apps.clientes.models import Cliente
 from apps.nucleo.formularios import EntradaFecha
@@ -29,11 +30,11 @@ class PagoSueltoForm(forms.ModelForm):
 
 
 class ExportarForm(forms.Form):
-    desde = forms.DateField(label="Desde", widget=EntradaFecha(attrs={"class": "select-compacto"}))
-    hasta = forms.DateField(label="Hasta", widget=EntradaFecha(attrs={"class": "select-compacto"}))
+    desde = forms.DateField(label=_("Desde"), widget=EntradaFecha(attrs={"class": "select-compacto"}))
+    hasta = forms.DateField(label=_("Hasta"), widget=EntradaFecha(attrs={"class": "select-compacto"}))
 
     def clean(self):
         datos = super().clean()
         if datos.get("desde") and datos.get("hasta") and datos["hasta"] < datos["desde"]:
-            raise forms.ValidationError("La fecha final es anterior a la inicial.")
+            raise forms.ValidationError(_("La fecha final es anterior a la inicial."))
         return datos

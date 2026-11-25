@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-{% block titulo %}Enviar mensaje{% endblock %}
+{% block titulo %}{% translate "Enviar mensaje" %}{% endblock %}
 {% block cabeza %}<script src="{% static 'js/mensajes.js' %}" defer></script>{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
   <div>
-    <nav class="migas" aria-label="Migas"><a href="{% url 'mensajeria:bandeja' %}">Mensajes</a></nav>
-    <h1>Enviar a {{ m.cliente.nombre }}</h1>
+    <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'mensajeria:bandeja' %}">{% translate "Mensajes" %}</a></nav>
+    <h1>{% blocktranslate with nombre=m.cliente.nombre %}Enviar a {{ nombre }}{% endblocktranslate %}</h1>
   </div>
 </header>
 <div class="ancho-formulario pila-g">
   {% include "mensajeria/_mensaje.html" %}
-  <p class="texto-suave texto-peq">Si no lo envías ahora, lo tienes en <a href="{% url 'mensajeria:bandeja' %}">Mensajes de hoy</a>.</p>
+  <p class="texto-suave texto-peq">{% translate "Si no lo envías ahora, lo tienes en" %} <a href="{% url 'mensajeria:bandeja' %}">{% translate "Mensajes de hoy" %}</a>.</p>
 </div>
 {% endblock %}

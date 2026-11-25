@@ -2,33 +2,33 @@
 {% block titulo %}{{ campana.nombre }}{% endblock %}
 {% block contenido %}
 <header class="cabecera-pagina">
-  <div><nav class="migas"><a href="{% url 'mensajeria:campanas' %}">Campañas</a></nav><h1>{{ campana.nombre }}</h1>
+  <div><nav class="migas"><a href="{% url 'mensajeria:campanas' %}">{% translate "Campañas" %}</a></nav><h1>{{ campana.nombre }}</h1>
     <p class="texto-suave">{{ segmento.nombre|default:campana.segmento }} · {{ campana.plantilla }}</p></div>
   <span class="estado estado-xl {% if campana.estado == 'activa' %}estado-ok{% elif campana.estado == 'cancelada' %}estado-apagado{% endif %}">{{ campana.get_estado_display }}</span>
 </header>
 <div class="rejilla-cifras">
-  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ campana.total }}</span><span class="cifra-etiqueta">Mensajes</span></div>
-  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ estados.enviado }}</span><span class="cifra-etiqueta">Enviados</span></div>
-  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ estados.pendiente }}</span><span class="cifra-etiqueta">Pendientes</span></div>
-  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ estados.descartado|add:estados.caducado }}</span><span class="cifra-etiqueta">Descartados</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ campana.total }}</span><span class="cifra-etiqueta">{% translate "Mensajes" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ estados.enviado }}</span><span class="cifra-etiqueta">{% translate "Enviados" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ estados.pendiente }}</span><span class="cifra-etiqueta">{% translate "Pendientes" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ estados.descartado|add:estados.caducado }}</span><span class="cifra-etiqueta">{% translate "Descartados" %}</span></div>
 </div>
 <div class="rejilla-ficha espacio-arriba">
   <section class="bloque">
-    <div class="bloque-titulo"><h2>Reparto por días</h2></div>
+    <div class="bloque-titulo"><h2>{% translate "Reparto por días" %}</h2></div>
     <ul class="lista">
       {% for dia, d in por_dia %}
         <li class="fila-lista"><span class="fila-cuerpo"><span class="fila-titulo">{{ dia|fecha_larga|capfirst }}</span></span>
-          <span class="barra-progreso" role="img" aria-label="{{ d.enviados }} de {{ d.total }}"><span style="width: {% widthratio d.enviados d.total 100 %}%"></span></span>
+          <span class="barra-progreso" role="img" aria-label="{% blocktranslate with enviados=d.enviados total=d.total %}{{ enviados }} de {{ total }}{% endblocktranslate %}"><span style="width: {% widthratio d.enviados d.total 100 %}%"></span></span>
           <span class="numerico">{{ d.enviados }}/{{ d.total }}</span></li>
-      {% empty %}<li class="texto-suave">Ningún cliente del segmento acepta promociones.</li>{% endfor %}
+      {% empty %}<li class="texto-suave">{% translate "Ningún cliente del segmento acepta promociones." %}</li>{% endfor %}
     </ul>
   </section>
   <aside class="pila-g">
-    <section class="bloque"><div class="bloque-titulo"><h2>Texto</h2></div><p class="texto-pre texto-peq">{{ campana.plantilla.cuerpo }}</p></section>
+    <section class="bloque"><div class="bloque-titulo"><h2>{% translate "Texto" %}</h2></div><p class="texto-pre texto-peq">{{ campana.plantilla.cuerpo }}</p></section>
     {% if campana.estado == "activa" %}
     <form method="post" class="bloque pila">{% csrf_token %}
-      <button type="submit" name="ampliar" value="1" class="btn btn-bloque">{% icono "plus" %} Añadir clientes nuevos del segmento</button>
-      <button type="submit" name="cancelar" value="1" class="btn btn-peligro btn-bloque" data-confirmar="Se descartarán los mensajes pendientes de esta campaña.">Cancelar campaña</button>
+      <button type="submit" name="ampliar" value="1" class="btn btn-bloque">{% icono "plus" %} {% translate "Añadir clientes nuevos del segmento" %}</button>
+      <button type="submit" name="cancelar" value="1" class="btn btn-peligro btn-bloque" data-confirmar="{% translate "Se descartarán los mensajes pendientes de esta campaña." %}">{% translate "Cancelar campaña" %}</button>
     </form>
     {% endif %}
   </aside>

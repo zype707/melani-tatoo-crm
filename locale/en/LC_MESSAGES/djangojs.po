@@ -1,0 +1,46 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-25 15:25-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: static/js/app.js:59
+msgid "Sí, continuar"
+msgstr "Yes, continue"
+
+#: static/js/app.js:104
+msgid "No se pudo copiar. Selecciona el texto y cópialo a mano."
+msgstr "Couldn't copy. Select the text and copy it by hand."
+
+#: static/js/app.js:229
+msgid "Sin conexión. Revisa tu red e inténtalo otra vez."
+msgstr "No connection. Check your network and try again."
+
+#: static/js/dictado.js:15
+msgid "Consejo: usa el micrófono del teclado de tu móvil para dictar."
+msgstr "Tip: use your phone keyboard's microphone to dictate."
+
+#: static/js/dictado.js:36
+msgid "Permite el micrófono para dictar."
+msgstr "Allow the microphone to dictate."
+
+#: static/js/dictado.js:36
+msgid "No se pudo usar el dictado."
+msgstr "Dictation couldn't be used."
+
+#: static/js/mensajes.js:79
+msgid "¿Sustituir el texto actual por la plantilla?"
+msgstr "Replace the current text with the template?"
