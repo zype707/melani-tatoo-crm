@@ -2,5 +2,6 @@
 pytest==9.2.0
 pytest-django==4.14.0
 ruff==0.17.6
+polib==1.2.0  # scripts/i18n.py
 # Opcional, solo para scripts/capturar.py (capturas de pantalla con Chrome):
 # playwright==1.65.2

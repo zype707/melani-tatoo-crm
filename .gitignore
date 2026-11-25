@@ -9,3 +9,4 @@ copias/
 .pytest_cache/
 .ruff_cache/
 /tmp/
+.claude/settings.local.json

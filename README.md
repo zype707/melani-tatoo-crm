@@ -48,7 +48,7 @@ Más capturas en [`docs/capturas/`](docs/capturas/). Todos los datos que aparece
 | **Seguridad** | Solo correos autorizados (`CORREOS_PERMITIDOS`), Argon2, 2FA TOTP obligatorio, códigos de recuperación, bloqueo de accesos, CSP estricta sin scripts inline |
 | **Integraciones** | Solo la API de OpenAI, para el asistente (opcional) |
 | **Mensajes** | Enlaces `wa.me` y `sms:`, o copiar. Cada envío queda registrado. |
-| **Calidad** | 222 pruebas (pytest), ruff sin avisos, contraste WCAG AA verificado por script |
+| **Calidad** | 250 pruebas (pytest), ruff sin avisos, contraste WCAG AA verificado por script |
 
 ## 2. Mapa de pantallas
 
@@ -585,7 +585,7 @@ Todo ocurre en el servidor. La clave nunca llega al navegador. **La IA propone y
 ## 18. Pruebas y calidad
 
 ```bash
-pytest                    # 222 pruebas · ~15 s (usa PostgreSQL: crea una BD de pruebas)
+pytest                    # 250 pruebas · ~15 s (usa PostgreSQL: crea una BD de pruebas)
 ruff check . && ruff format --check .
 python scripts/contraste.py
 python manage.py check --deploy --settings=estudio.settings.prod   # con las variables de prod
