@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block titulo %}Clientes{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div>
+    <span class="antetitulo">{{ total }} cliente{{ total|pluralize }}</span>
+    <h1>Clientes</h1>
+  </div>
+  <div class="acciones">
+    <a class="btn" href="{% url 'clientes:etiquetas' %}">{% icono "etiqueta" %} Etiquetas</a>
+    <a class="btn btn-primario" href="{% url 'clientes:nuevo' %}" data-atajo="nuevo-cliente">{% icono "plus" %} Nuevo cliente</a>
+  </div>
+</header>
+
+<form method="get" class="filtros" role="search"
+      hx-get="{% url 'clientes:lista' %}" hx-target="#resultados" hx-swap="outerHTML"
+      hx-trigger="input changed delay:250ms from:input[name=q], change from:select, submit">
+  <div class="buscador">
+    {% icono "buscar" %}
+    <label for="q" class="solo-lectores">Buscar clientes</label>
+    <input type="search" id="q" name="q" value="{{ q }}" placeholder="Nombre, teléfono, email o @instagram" autocomplete="off" data-atajo-buscar>
+  </div>
+  <div class="fila">
+    <div class="chips" role="group" aria-label="Filtro rápido">
+      {% for clave, nombre in filtros.items %}
+        <label class="chip"><input type="radio" name="filtro" value="{{ clave }}" {% if clave == filtro %}checked{% endif %} data-autoenviar><span>{{ nombre }}</span></label>
+      {% endfor %}
+    </div>
+    <div class="fila empujar">
+      {% if etiquetas %}
+        <label class="solo-lectores" for="f-etiqueta">Etiqueta</label>
+        <select id="f-etiqueta" name="etiqueta" class="select-compacto">
+          <option value="">Todas las etiquetas</option>
+          {% for e in etiquetas %}<option value="{{ e.pk }}" {% if e.pk|stringformat:"s" == etiqueta %}selected{% endif %}>{{ e.nombre }} ({{ e.n }})</option>{% endfor %}
+        </select>
+      {% endif %}
+      <label class="solo-lectores" for="f-orden">Ordenar</label>
+      <select id="f-orden" name="orden" class="select-compacto">
+        <option value="nombre" {% if orden == "nombre" %}selected{% endif %}>A-Z</option>
+        <option value="reciente" {% if orden == "reciente" %}selected{% endif %}>Más recientes</option>
+        <option value="visita" {% if orden == "visita" %}selected{% endif %}>Última visita</option>
+        <option value="gasto" {% if orden == "gasto" %}selected{% endif %}>Mayor gasto</option>
+      </select>
+    </div>
+  </div>
+  <noscript><button class="btn" type="submit">Filtrar</button></noscript>
+</form>
+
+{% partialdef resultados inline %}
+<section id="resultados" aria-live="polite">
+  {% if pagina.object_list %}
+    <ul class="lista bloque bloque-lista">
+      {% for c in pagina %}
+        <li>
+          <a class="fila-lista" href="{% url 'clientes:ficha' c.pk %}">
+            <span class="avatar">{{ c.nombre_completo|iniciales }}</span>
+            <span class="fila-cuerpo">
+              <span class="fila-titulo">{{ c.nombre_completo }}{% for e in c.etiquetas.all %} <span class="etiqueta etiqueta-mini">{{ e }}</span>{% endfor %}</span>
+              <span class="fila-sub">{{ c.telefono|telefono|default:c.email|default:"Sin contacto" }}{% if c.instagram %} · @{{ c.instagram }}{% endif %}</span>
+            </span>
+            <span class="fila-meta">
+              {% if c.proxima_cita %}<span class="estado estado-ok">{{ c.proxima_cita|fecha_corta }}</span>
+              {% elif c.ultima_visita %}<span class="texto-suave">Vino {{ c.ultima_visita|relativo }}</span>
+              {% else %}<span class="texto-suave">Sin visitas</span>{% endif %}
+              {% if c.gasto %}<span class="fila-sub numerico">{{ c.gasto|dinero }}</span>{% endif %}
+            </span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+    {% if pagina.has_other_pages %}
+      <nav class="paginacion" aria-label="Páginas">
+        {% if pagina.has_previous %}<a class="btn" href="?{% querystring pagina=pagina.previous_page_number %}">{% icono "flecha-izq" %} Anterior</a>{% endif %}
+        <span class="texto-suave">Página {{ pagina.number }} de {{ pagina.paginator.num_pages }}</span>
+        {% if pagina.has_next %}<a class="btn" href="?{% querystring pagina=pagina.next_page_number %}">Siguiente {% icono "flecha-der" %}</a>{% endif %}
+      </nav>
+    {% endif %}
+  {% elif q or filtro != "todos" or etiqueta %}
+    {% include "componentes/vacio.html" with icono="buscar" titulo="Nadie coincide" texto="Prueba con otro nombre, un trozo del teléfono o quita los filtros." %}
+  {% else %}
+    {% url 'clientes:nuevo' as url_nuevo %}
+    {% include "componentes/vacio.html" with icono="clientes" titulo="Aún no hay clientes" texto="Añade tu primera clienta o espera a que lleguen solicitudes desde tu página de reservas." url=url_nuevo accion="Añadir cliente" principal=True %}
+  {% endif %}
+</section>
+{% endpartialdef %}
+{% endblock %}

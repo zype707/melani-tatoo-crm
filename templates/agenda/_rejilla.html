@@ -1,0 +1,29 @@
+<div class="cal-envoltura">
+  <div class="cal-rejilla" style="--filas: {{ filas }}; --columnas: {{ columnas|length }}">
+    <div class="cal-esquina" aria-hidden="true"></div>
+    {% for col in columnas %}
+      <a class="cal-cabecera{% if col.hoy %} es-hoy{% endif %}" href="?vista=dia&fecha={{ col.dia|date:'Y-m-d' }}">
+        <span>{{ col.dia|date:"D" }}</span><strong>{{ col.dia|date:"j" }}</strong>
+      </a>
+    {% endfor %}
+    <div class="cal-horas" aria-hidden="true">
+      {% for h in horas %}<span style="grid-row: {{ h.fila }} / span 2">{% if h.hora == 0 %}12 am{% elif h.hora < 12 %}{{ h.hora }} am{% elif h.hora == 12 %}12 pm{% else %}{{ h.hora|add:"-12" }} pm{% endif %}</span>{% endfor %}
+    </div>
+    {% for col in columnas %}
+      <div class="cal-dia{% if not col.laborable %} no-laborable{% endif %}{% if col.hoy %} es-hoy{% endif %}" aria-label="{{ col.dia|fecha_larga }}">
+        {% for f in col.franjas %}<a class="cal-franja{% if not f.laboral %} fuera{% endif %}" style="grid-row: {{ f.fila }}" href="{% url 'agenda:nueva' %}?inicio={{ f.momento|date:'Y-m-d\TH:i' }}" tabindex="-1" aria-hidden="true"></a>{% endfor %}
+        {% for b in col.bloqueos %}<div class="cal-bloqueo" style="grid-row: {{ b.fila }} / span {{ b.span }}"><span>{{ b.bloqueo }}</span></div>{% endfor %}
+        {% for e in col.eventos %}
+          <a class="cal-evento tipo-{{ e.cita.tipo.color }} estado-{{ e.cita.estado }}{% if e.span <= 2 %} compacto{% endif %}" style="grid-row: {{ e.fila }} / span {{ e.span }}" href="{% url 'agenda:detalle' e.cita.pk %}">
+            <span class="cal-evento-hora">{{ e.cita.inicio|hora }}{% if e.cita.estado == "realizada" %} ✓{% endif %}</span>
+            <strong>{{ e.cita.cliente.nombre }}</strong>
+            <span class="cal-evento-tipo">{{ e.cita.tipo }}</span>
+            {% if e.cita.requiere_atencion %}<span class="estado estado-atencion">{% if e.cita.estado == "solicitada" %}Por confirmar{% else %}Pide cambio{% endif %}</span>{% endif %}
+          </a>
+        {% endfor %}
+        {% if col.ahora is not None %}<div class="cal-ahora" style="top: {{ col.ahora }}%" aria-hidden="true"></div>{% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% if not columnas.0.franjas %}<p class="texto-suave">Configura tu horario laboral para ver las horas.</p>{% endif %}

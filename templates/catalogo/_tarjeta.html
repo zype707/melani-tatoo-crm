@@ -1,0 +1,15 @@
+<article class="tarjeta-flash estado-flash-{{ d.estado }}" id="flash-{{ d.pk }}">
+  <a href="{% url 'catalogo:editar' d.pk %}" class="tarjeta-flash-imagen">
+    <img src="{% url 'catalogo:imagen' d.pk %}" alt="{{ d.titulo }}" loading="lazy" width="300" height="300">
+    {% if d.estado != "disponible" %}<span class="sello">{{ d.get_estado_display }}</span>{% endif %}
+  </a>
+  <div class="tarjeta-flash-texto">
+    <div class="fila-entre"><strong>{{ d.titulo }}</strong>{% if d.precio %}<span class="numerico">{{ d.precio|dinero }}</span>{% endif %}</div>
+    <span class="texto-peq texto-suave">{{ d.tamano|default:"" }}{% if d.repetible %} · repetible{% endif %}{% if not d.publico %} · privado{% endif %}{% if d.n_solicitudes %} · {{ d.n_solicitudes }} solicitud{{ d.n_solicitudes|pluralize:"es" }}{% endif %}</span>
+    <form class="segmentos segmentos-peq" hx-post="{% url 'catalogo:estado' d.pk %}" hx-target="#flash-{{ d.pk }}" aria-label="Estado de {{ d.titulo }}">
+      <button type="submit" name="estado" value="disponible" {% if d.estado == "disponible" %}aria-selected="true"{% endif %}>Disponible</button>
+      <button type="submit" name="estado" value="reservado" {% if d.estado == "reservado" %}aria-selected="true"{% endif %}>Reservado</button>
+      <button type="submit" name="estado" value="vendido" {% if d.estado == "vendido" %}aria-selected="true"{% endif %}>Vendido</button>
+    </form>
+  </div>
+</article>

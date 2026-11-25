@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block titulo %}Solicitud de {{ s.nombre }}{% endblock %}
+{% block cabeza %}<script src="{% static 'js/mensajes.js' %}" defer></script>{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div>
+    <nav class="migas"><a href="{% url 'solicitudes:lista' %}?estado={{ s.estado }}">Solicitudes</a></nav>
+    <h1>{{ s.nombre_completo }}</h1>
+    <p class="texto-suave">Recibida {{ s.creado_en|relativo }} · {{ s.creado_en|fecha_corta }} {{ s.creado_en|hora }}</p>
+  </div>
+  <span class="estado estado-xl {% if s.estado == 'nueva' %}estado-atencion{% elif s.estado == 'convertida' %}estado-ok{% elif s.estado == 'rechazada' or s.estado == 'spam' %}estado-apagado{% endif %}">{{ s.get_estado_display }}</span>
+</header>
+
+{% if s.estado == "nueva" or s.estado == "aprobada" %}
+<section class="bloque espacio-abajo" aria-labelledby="t-decidir">
+  <div class="bloque-titulo"><h2 id="t-decidir">¿Qué hacemos?</h2></div>
+  <div class="grupo-botones">
+    <form method="post" action="{% url 'solicitudes:convertir' s.pk %}">{% csrf_token %}<button class="btn btn-primario">{% icono "agenda" %} Dar cita</button></form>
+    {% if s.estado == "nueva" %}<form method="post" action="{% url 'solicitudes:aprobar' s.pk %}">{% csrf_token %}<button class="btn">{% icono "check" %} Aceptar sin fecha</button></form>{% endif %}
+    <button type="button" class="btn btn-peligro" data-abrir="dialogo-rechazo">Rechazar</button>
+  </div>
+  <p class="texto-peq texto-suave espacio-arriba">
+    {% if existente %}Ya existe la ficha de <a href="{% url 'clientes:ficha' existente.pk %}">{{ existente.nombre_completo }}</a> con ese teléfono o email: se usará esa.{% else %}Al aceptar o dar cita se crea su ficha y el proyecto con las imágenes de referencia.{% endif %}
+  </p>
+</section>
+{% endif %}
+
+<div class="rejilla-ficha">
+  <div class="pila-g">
+    <section class="bloque" aria-labelledby="t-idea">
+      <div class="bloque-titulo"><h2 id="t-idea">La idea</h2></div>
+      <p class="texto-pre">{{ s.descripcion }}</p>
+      <dl class="datos bloque-pie">
+        {% if s.zona %}<dt>Zona</dt><dd>{{ s.get_zona_display }}</dd>{% endif %}
+        {% if s.tamano %}<dt>Tamaño</dt><dd>{{ s.get_tamano_display }}</dd>{% endif %}
+        {% if s.medidas %}<dt>Medidas</dt><dd>{{ s.medidas }}</dd>{% endif %}
+        {% if s.estilo %}<dt>Estilo</dt><dd>{{ s.get_estilo_display }}</dd>{% endif %}
+        {% if s.fechas_preferidas %}<dt>Cuándo</dt><dd>{{ s.fechas_preferidas }}</dd>{% endif %}
+        {% if s.presupuesto %}<dt>Presupuesto</dt><dd>{{ s.presupuesto }}</dd>{% endif %}
+        <dt>Primer tatuaje</dt><dd>{{ s.primer_tatuaje|yesno:"Sí,No" }}</dd>
+      </dl>
+    </section>
+    {% if s.imagenes.all %}
+    <section class="bloque" aria-labelledby="t-ref">
+      <div class="bloque-titulo"><h2 id="t-ref">Referencias</h2></div>
+      <div class="galeria">
+        {% for i in s.imagenes.all %}<a href="{% url 'solicitudes:imagen' i.pk %}" target="_blank" rel="noopener"><img src="{% url 'solicitudes:imagen_mini' i.pk %}" alt="Referencia {{ forloop.counter }}" loading="lazy" width="240" height="240"></a>{% endfor %}
+      </div>
+    </section>
+    {% endif %}
+    {% include "solicitudes/_triaje.html" %}
+  </div>
+  <aside class="pila-g">
+    <section class="bloque" aria-labelledby="t-contacto">
+      <div class="bloque-titulo"><h2 id="t-contacto">Contacto</h2></div>
+      <dl class="datos">
+        <dt>Teléfono</dt><dd><a href="tel:{{ s.telefono }}">{{ s.telefono|telefono }}</a></dd>
+        {% if s.email %}<dt>Email</dt><dd>{{ s.email }}</dd>{% endif %}
+        {% if s.instagram %}<dt>Instagram</dt><dd>@{{ s.instagram }}</dd>{% endif %}
+        <dt>Edad</dt><dd>{{ s.edad }} años</dd>
+        <dt>Promociones</dt><dd>{{ s.acepta_marketing|yesno:"Acepta,No acepta" }}</dd>
+      </dl>
+    </section>
+    {% if respuestas %}
+    <section class="bloque" aria-labelledby="t-resp">
+      <div class="bloque-titulo"><h2 id="t-resp">Responder rápido</h2></div>
+      {% for r in respuestas %}
+        <details class="desplegable">
+          <summary>{% icono "mensajes" %} {{ r.plantilla.nombre }}</summary>
+          <p class="burbuja-previa texto-peq texto-pre">{{ r.texto }}</p>
+          <div class="grupo-botones espacio-arriba">
+            {% for a in r.acciones %}{% if a.url %}<a class="btn btn-peq" href="{{ a.url }}" target="_blank" rel="noopener noreferrer">{% icono a.icono %} {{ a.etiqueta }}</a>{% else %}<button type="button" class="btn btn-peq" data-copiar-texto="{{ r.texto }}">{% icono "copiar" %} Copiar</button>{% endif %}{% endfor %}
+          </div>
+        </details>
+      {% endfor %}
+    </section>
+    {% endif %}
+    {% if s.cita %}<a class="btn btn-bloque" href="{% url 'agenda:detalle' s.cita.pk %}">{% icono "agenda" %} Ver cita</a>{% endif %}
+    {% if s.cliente %}<a class="btn btn-bloque" href="{% url 'clientes:ficha' s.cliente.pk %}">{% icono "usuario" %} Ver ficha</a>{% endif %}
+  </aside>
+</div>
+
+<dialog id="dialogo-rechazo" class="dialogo" aria-labelledby="t-rechazo">
+  <form method="post" action="{% url 'solicitudes:rechazar' s.pk %}" class="dialogo-cuerpo">
+    {% csrf_token %}
+    <h2 id="t-rechazo">Rechazar solicitud</h2>
+    {{ rechazo_form }}
+    <p class="texto-peq texto-suave">Si quieres avisar, usa «Responder rápido» antes. Los datos se borran solos a los 30 días.</p>
+    <div class="dialogo-acciones">
+      <button type="submit" name="spam" value="1" class="btn btn-fantasma">Es spam</button>
+      <button type="button" class="btn" data-cerrar>Volver</button>
+      <button type="submit" class="btn btn-solido">Rechazar</button>
+    </div>
+  </form>
+</dialog>
+{% endblock %}

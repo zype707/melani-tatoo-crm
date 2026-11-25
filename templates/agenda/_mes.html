@@ -1,0 +1,19 @@
+<div class="cal-mes" role="grid" aria-label="Mes">
+  <div class="cal-mes-cabecera" role="row">
+    {% for d in "LMXJVSD" %}<span role="columnheader">{{ d }}</span>{% endfor %}
+  </div>
+  {% for semana in semanas %}
+    <div class="cal-mes-semana" role="row">
+      {% for d in semana %}
+        <a role="gridcell" href="?vista=dia&fecha={{ d.dia|date:'Y-m-d' }}" class="cal-mes-dia{% if d.otro_mes %} otro-mes{% endif %}{% if d.hoy %} es-hoy{% endif %}{% if d.bloqueado %} bloqueado{% endif %}" aria-label="{{ d.dia|fecha_larga }}: {{ d.total }} cita{{ d.total|pluralize }}">
+          <span class="cal-mes-num">{{ d.dia|date:"j" }}</span>
+          {% for c in d.citas %}
+            <span class="cal-mes-cita tipo-{{ c.tipo.color }}{% if c.estado == 'solicitada' %} por-confirmar{% endif %}"><span class="numerico">{{ c.inicio|hora }}</span> {{ c.cliente.nombre }}</span>
+          {% endfor %}
+          {% if d.mas %}<span class="texto-peq">+{{ d.mas }} más</span>{% endif %}
+          {% if d.total %}<span class="cal-mes-total">{{ d.total }}</span>{% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>

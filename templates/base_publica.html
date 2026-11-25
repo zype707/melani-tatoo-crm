@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#01161b">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="htmx-config" content='{"includeIndicatorStyles":false,"allowEval":false,"allowScriptTags":false,"historyCacheSize":0,"selfRequestsOnly":true}'>
+  <title>{% block titulo %}{% endblock %} · {{ ajustes.nombre }}</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <link rel="icon" href="{% static 'img/icono-192.png' %}" type="image/png">
+  <script src="{% static 'js/app.js' %}" defer></script>
+  {% block cabeza %}{% endblock %}
+</head>
+<body class="publico">
+  <a class="saltar" href="#principal">Saltar al contenido</a>
+  <header class="publico-cabecera">{% include "componentes/marca.html" %}</header>
+  <main id="principal" class="publico-cuerpo" tabindex="-1">
+    {% block contenido %}{% endblock %}
+  </main>
+  <footer class="publico-pie">
+    {% block pie %}{{ ajustes.nombre }}{% if ajustes.instagram %} · @{{ ajustes.instagram }}{% endif %}{% endblock %}
+  </footer>
+  <div id="avisos" class="avisos" aria-live="polite">
+    {% for m in messages %}
+      <div class="toast toast-{{ m.tags }}" role="status"><span>{{ m }}</span><button type="button" data-cerrar-aviso aria-label="Cerrar aviso">✕</button></div>
+    {% endfor %}
+  </div>
+  {% include "componentes/dialogos.html" %}
+</body>
+</html>

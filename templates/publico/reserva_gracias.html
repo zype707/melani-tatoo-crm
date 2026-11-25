@@ -1,0 +1,10 @@
+{% extends "base_publica.html" %}
+{% block titulo %}¡Recibido!{% endblock %}
+{% block contenido %}
+<div class="error-pagina pila">
+  <p class="error-codigo">✓</p>
+  <h1>¡Solicitud enviada!</h1>
+  <p>Gracias por confiar en {{ ajustes.nombre_artista|default:ajustes.nombre }}. Reviso cada idea personalmente y te escribiré por WhatsApp o SMS en unos días.</p>
+  {% if ajustes.instagram %}<p><a class="btn" href="https://instagram.com/{{ ajustes.instagram }}" target="_blank" rel="noopener noreferrer">Mientras, mira mi trabajo en @{{ ajustes.instagram }}</a></p>{% endif %}
+</div>
+{% endblock %}

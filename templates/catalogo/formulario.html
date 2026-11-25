@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block titulo %}{% if diseno %}{{ diseno.titulo }}{% else %}Nuevo diseño{% endif %}{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'catalogo:lista' %}">Flash</a></nav><h1>{% if diseno %}{{ diseno.titulo }}{% else %}Nuevo diseño{% endif %}</h1></div></header>
+<form method="post" enctype="multipart/form-data" class="rejilla-ficha" novalidate>
+  {% csrf_token %}
+  <section class="bloque">
+    <div class="formulario-2">
+      <div class="ancho-completo">{{ form.titulo.as_field_group }}</div>
+      {{ form.precio.as_field_group }}
+      {{ form.tamano.as_field_group }}
+      {{ form.zona_sugerida.as_field_group }}
+      {{ form.estado.as_field_group }}
+      <div class="ancho-completo">{{ form.descripcion.as_field_group }}</div>
+      <div class="ancho-completo">{{ form.archivo.as_field_group }}</div>
+      {{ form.repetible.as_field_group }}
+      {{ form.publico.as_field_group }}
+      {{ form.orden.as_field_group }}
+    </div>
+    <div class="acciones-formulario">
+      <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
+      <a class="btn btn-fantasma" href="{% url 'catalogo:lista' %}">Cancelar</a>
+      {% if diseno %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="¿Eliminar este diseño?">{% icono "basura" %} Eliminar</button>{% endif %}
+    </div>
+  </section>
+  {% if diseno %}<aside><img class="flash-grande" src="{% url 'catalogo:imagen_grande' diseno.pk %}" alt="{{ diseno.titulo }}"></aside>{% endif %}
+</form>
+{% endblock %}

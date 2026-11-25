@@ -1,0 +1,34 @@
+{% extends "base_publica.html" %}
+{% block titulo %}Flash disponibles{% endblock %}
+{% block contenido %}
+<div class="pila-g">
+  <header class="reserva-cabecera">
+    <span class="texto-suave">{{ ajustes.nombre_artista|default:ajustes.nombre }}</span>
+    <h1>Flash</h1>
+    <p>Diseños listos para tatuar. Elige uno y te escribo para darte fecha.</p>
+  </header>
+  {% if disenos %}
+    <div class="rejilla-flash">
+      {% for d in disenos %}
+        <article class="tarjeta-flash estado-flash-{{ d.estado }}">
+          <div class="tarjeta-flash-imagen">
+            <img src="{% url 'flash_publico_imagen' token=token pk=d.pk %}" alt="{{ d.titulo }}" loading="lazy" width="300" height="300">
+            {% if d.estado == "reservado" %}<span class="sello">Reservado</span>{% endif %}
+          </div>
+          <div class="tarjeta-flash-texto">
+            <div class="fila-entre"><strong>{{ d.titulo }}</strong>{% if d.precio %}<span class="numerico">{{ d.precio|dinero }}</span>{% endif %}</div>
+            <span class="texto-peq texto-suave">{{ d.tamano }}{% if d.zona_sugerida %} · {{ d.get_zona_sugerida_display|lower }}{% endif %}{% if not d.repetible %} · pieza única{% endif %}</span>
+            {% if d.descripcion %}<p class="texto-peq">{{ d.descripcion }}</p>{% endif %}
+            {% if d.estado == "disponible" and reserva %}
+              <a class="btn btn-primario btn-bloque" href="{% url 'reserva_publica' reserva.token_visible %}?flash={{ d.pk }}">Lo quiero</a>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    {% if not reserva %}<p class="texto-suave">La agenda está cerrada ahora mismo.{% if ajustes.instagram %} Escríbeme por Instagram @{{ ajustes.instagram }}.{% endif %}</p>{% endif %}
+  {% else %}
+    <p class="texto-suave">No hay diseños disponibles en este momento. ¡Vuelve pronto!</p>
+  {% endif %}
+</div>
+{% endblock %}

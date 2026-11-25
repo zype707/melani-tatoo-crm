@@ -1,0 +1,19 @@
+{% extends "base_publica.html" %}
+{% block titulo %}Acceso{% endblock %}
+{% block contenido %}
+<div class="acceso-caja pila-g">
+  <div>
+    <h1>Entrar</h1>
+    <p class="texto-suave">Acceso privado del estudio.</p>
+  </div>
+  <form method="post" class="formulario bloque" novalidate>
+    {% csrf_token %}
+    {{ form }}
+    <div class="acciones-formulario">
+      <button type="submit" class="btn btn-primario btn-bloque">{% icono "candado" %} Continuar</button>
+    </div>
+  </form>
+  <p class="texto-suave texto-peq">Después te pediremos el código de tu app autenticadora.</p>
+</div>
+{% endblock %}
+{% block pie %}{{ ajustes.nombre }}{% endblock %}

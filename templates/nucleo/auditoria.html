@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block titulo %}Registro de actividad{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div><nav class="migas"><a href="{% url 'nucleo:ajustes' %}?seccion=datos">Ajustes</a></nav><h1>Registro de actividad</h1></div>
+</header>
+<form method="get" class="fila espacio-abajo">
+  <label for="f-accion" class="solo-lectores">Acción</label>
+  <select id="f-accion" name="accion" class="select-compacto" data-autoenviar>
+    <option value="">Todas las acciones</option>
+    {% for k, v in acciones %}<option value="{{ k }}" {% if k == accion %}selected{% endif %}>{{ v }}</option>{% endfor %}
+  </select>
+</form>
+<div class="tabla-envoltura">
+  <table class="tabla">
+    <thead><tr><th>Cuándo</th><th>Acción</th><th>Detalle</th><th>Quién</th><th>IP</th></tr></thead>
+    <tbody>
+      {% for r in pagina %}
+        <tr>
+          <td class="numerico">{{ r.creado_en|date:"d/m/Y H:i" }}</td>
+          <td><span class="estado {% if r.accion == 'login_fallo' or r.accion == 'login_bloqueado' or r.accion == '2fa_fallo' %}estado-atencion{% endif %}">{{ r.get_accion_display }}</span></td>
+          <td>{{ r.descripcion }}</td>
+          <td>{{ r.usuario|default:"—" }}</td>
+          <td class="mono texto-peq">{{ r.ip|default:"" }}</td>
+        </tr>
+      {% empty %}<tr><td colspan="5" class="texto-suave">Sin registros.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% if pagina.has_other_pages %}
+  <nav class="paginacion">
+    {% if pagina.has_previous %}<a class="btn" href="?{% querystring pagina=pagina.previous_page_number %}">{% icono "flecha-izq" %}</a>{% endif %}
+    <span class="texto-suave">{{ pagina.number }} / {{ pagina.paginator.num_pages }}</span>
+    {% if pagina.has_next %}<a class="btn" href="?{% querystring pagina=pagina.next_page_number %}">{% icono "flecha-der" %}</a>{% endif %}
+  </nav>
+{% endif %}
+{% endblock %}

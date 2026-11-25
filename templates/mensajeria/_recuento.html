@@ -1,0 +1,6 @@
+<div id="recuento" class="bloque bloque-plano" aria-live="polite">
+  <span class="cifra">{{ recuento.con_consentimiento }}</span>
+  <span class="cifra-etiqueta">Destinatarios</span>
+  {% if recuento.total != recuento.con_consentimiento %}<p class="texto-peq texto-suave">De {{ recuento.total }} en el segmento.</p>{% endif %}
+  {% if recuento.dias %}<p class="texto-peq">Repartidos en <strong>{{ recuento.dias }}</strong> día{{ recuento.dias|pluralize }}.</p>{% endif %}
+</div>

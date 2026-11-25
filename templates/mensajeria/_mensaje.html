@@ -1,0 +1,25 @@
+<article class="mensaje{% if m.estado != 'pendiente' %} mensaje-hecho{% endif %}" id="mensaje-{{ m.pk }}" data-mensaje="{{ m.pk }}">
+  <header class="mensaje-cabecera">
+    <span class="mensaje-icono" aria-hidden="true">{% icono m.icono %}</span>
+    <div class="fila-cuerpo">
+      <a class="fila-titulo" href="{% url 'clientes:ficha' m.cliente.pk %}">{{ m.cliente.nombre_completo }}</a>
+      <span class="fila-sub">{{ m.get_tipo_display }}{% if m.motivo %} · {{ m.motivo }}{% endif %}</span>
+    </div>
+    {% if m.es_promocional %}<span class="etiqueta etiqueta-mini" title="Solo para quien aceptó promociones">Promo</span>{% endif %}
+  </header>
+  {% if m.estado == "enviado" %}
+    <div class="mensaje-enviado">
+      <span>{% icono "check" %} Enviado por {{ m.get_canal_usado_display }} · {{ m.enviado_en|hora }}</span>
+      <button type="button" class="btn btn-peq btn-fantasma" hx-post="{% url 'mensajeria:deshacer' m.pk %}" hx-target="#mensaje-{{ m.pk }}">Deshacer</button>
+    </div>
+  {% elif m.estado == "pendiente" %}
+    <label class="solo-lectores" for="texto-{{ m.pk }}">Mensaje para {{ m.cliente.nombre }}</label>
+    <textarea id="texto-{{ m.pk }}" name="texto" class="mensaje-texto" rows="4" maxlength="4000"
+              hx-post="{% url 'mensajeria:texto' m.pk %}" hx-trigger="input changed delay:700ms"
+              hx-target="#acciones-{{ m.pk }}">{{ m.texto }}</textarea>
+    {% if error_ia %}<p class="error" role="alert">{{ error_ia }}</p>{% endif %}
+    {% include "mensajeria/_acciones.html" %}
+  {% else %}
+    <p class="texto-suave">{{ m.get_estado_display }}{% if m.motivo_descarte %} · {{ m.motivo_descarte }}{% endif %}</p>
+  {% endif %}
+</article>

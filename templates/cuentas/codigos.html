@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block titulo %}Códigos de recuperación{% endblock %}
+{% block contenido %}
+<div class="pila-g ancho-texto">
+  <header class="cabecera-pagina">
+    <div>
+      <span class="antetitulo">Guárdalos ahora</span>
+      <h1>Códigos de recuperación</h1>
+    </div>
+  </header>
+  <div class="alerta">{% icono "alerta" %}<p>Solo se muestran esta vez. Si pierdes el móvil, estos códigos son la única forma de entrar. Cada uno sirve una sola vez.</p></div>
+  <div class="bloque pila">
+    <ul class="lista-codigos" id="codigos">
+      {% for c in codigos %}<li>{{ c }}</li>{% endfor %}
+    </ul>
+    <div class="grupo-botones no-imprimir">
+      <button type="button" class="btn" data-copiar="#codigos" data-copiado="Códigos copiados.">{% icono "copiar" %} Copiar</button>
+      <button type="button" class="btn" data-imprimir>{% icono "documento" %} Imprimir</button>
+    </div>
+  </div>
+  <form method="post" class="no-imprimir">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primario">{% icono "check" %} Ya los he guardado</button>
+  </form>
+</div>
+{% endblock %}

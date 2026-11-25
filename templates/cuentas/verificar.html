@@ -1,0 +1,31 @@
+{% extends "base_publica.html" %}
+{% block titulo %}Verificación{% endblock %}
+{% block contenido %}
+<div class="acceso-caja pila-g">
+  <div>
+    <h1>{% if modo == "recuperacion" %}Código de recuperación{% else %}Segundo paso{% endif %}</h1>
+    <p class="texto-suave">
+      {% if modo == "recuperacion" %}
+        Escribe uno de los códigos que guardaste al activar la verificación.
+      {% else %}
+        Abre tu app autenticadora y escribe el código de 6 dígitos de <strong>{{ ajustes.nombre }}</strong>.
+      {% endif %}
+    </p>
+  </div>
+  <form method="post" class="formulario bloque" novalidate>
+    {% csrf_token %}
+    {{ form }}
+    <div class="acciones-formulario">
+      <button type="submit" class="btn btn-primario btn-bloque">{% icono "check" %} Verificar</button>
+    </div>
+  </form>
+  <div class="fila-entre texto-peq">
+    {% if modo == "recuperacion" %}
+      <a href="{% url 'cuentas:verificar' %}">Usar la app autenticadora</a>
+    {% else %}
+      <a href="?modo=recuperacion">¿Sin móvil? Usa un código de recuperación</a>
+    {% endif %}
+    <a href="{% url 'cuentas:login' %}">Volver</a>
+  </div>
+</div>
+{% endblock %}

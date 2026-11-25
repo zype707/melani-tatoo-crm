@@ -1,0 +1,9 @@
+{% extends "base_publica.html" %}
+{% block titulo %}Enlace no válido{% endblock %}
+{% block contenido %}
+<div class="error-pagina pila">
+  <p class="error-codigo">⨯</p>
+  <h1>Este enlace ya no funciona</h1>
+  <p class="texto-suave">Puede que haya caducado o que lo hayamos renovado.{% if ajustes.telefono %} Escríbenos al {{ ajustes.telefono }} y te enviamos uno nuevo.{% endif %}</p>
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block titulo %}Finanzas{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div>
+    <span class="antetitulo">Finanzas</span>
+    <h1>{{ mes|date:"F Y"|capfirst }}</h1>
+  </div>
+  <div class="acciones">
+    <a class="btn btn-icono" href="?mes={{ mes_anterior|date:'Y-m' }}" aria-label="Mes anterior">{% icono "flecha-izq" %}</a>
+    {% if mes_siguiente %}<a class="btn btn-icono" href="?mes={{ mes_siguiente|date:'Y-m' }}" aria-label="Mes siguiente">{% icono "flecha-der" %}</a>{% endif %}
+    <a class="btn" href="{% url 'finanzas:pago_nuevo' %}">{% icono "plus" %} Ingreso</a>
+    <a class="btn btn-primario" href="{% url 'finanzas:gasto_nuevo' %}">{% icono "plus" %} Gasto</a>
+  </div>
+</header>
+
+<div class="rejilla-cifras">
+  <div class="bloque">
+    <span class="cifra">{{ datos.ingresos|dinero }}</span>
+    <span class="cifra-etiqueta">Ingresos</span>
+    {% if variacion is not None %}<span class="variacion">{% if variacion >= 0 %}▲{% else %}▼{% endif %} {{ variacion|porcentaje }} vs. {{ mes_anterior|date:"F" }}</span>{% endif %}
+  </div>
+  <div class="bloque"><span class="cifra">{{ datos.gastos|dinero }}</span><span class="cifra-etiqueta">Gastos</span></div>
+  <div class="bloque"><span class="cifra {% if datos.balance < 0 %}cifra-critica{% endif %}">{{ datos.balance|dinero }}</span><span class="cifra-etiqueta">Balance</span></div>
+  <div class="bloque"><span class="cifra">{{ anterior.balance|dinero }}</span><span class="cifra-etiqueta">Balance {{ mes_anterior|date:"F" }}</span></div>
+</div>
+
+<section class="bloque espacio-arriba" aria-labelledby="t-grafico">
+  <div class="bloque-titulo"><h2 id="t-grafico">Últimos 12 meses</h2></div>
+  {% include "componentes/grafico_barras.html" with g=grafico id="g-finanzas" titulo="Ingresos y gastos de los últimos 12 meses" %}
+</section>
+
+<div class="rejilla-2 espacio-arriba">
+  <section class="bloque" aria-labelledby="t-ing">
+    <div class="bloque-titulo"><h2 id="t-ing">Ingresos por concepto</h2></div>
+    {% if datos.por_tipo %}
+      <ul class="lista">{% for nombre, total in datos.por_tipo.items %}<li class="fila-lista"><span class="fila-cuerpo">{{ nombre }}</span><span class="barra-progreso" aria-hidden="true"><span style="width: {% widthratio total datos.ingresos 100 %}%"></span></span><strong class="numerico">{{ total|dinero }}</strong></li>{% endfor %}</ul>
+    {% else %}<p class="texto-suave">Sin ingresos este mes.</p>{% endif %}
+  </section>
+  <section class="bloque" aria-labelledby="t-gas">
+    <div class="bloque-titulo"><h2 id="t-gas">Gastos por categoría</h2></div>
+    {% if datos.por_categoria %}
+      <ul class="lista">{% for nombre, total in datos.por_categoria.items %}<li class="fila-lista"><span class="fila-cuerpo">{{ nombre }}</span><span class="barra-progreso barra-trama" aria-hidden="true"><span style="width: {% widthratio total datos.gastos 100 %}%"></span></span><strong class="numerico">{{ total|dinero }}</strong></li>{% endfor %}</ul>
+    {% else %}<p class="texto-suave">Sin gastos registrados.</p>{% endif %}
+  </section>
+</div>
+
+<section class="espacio-arriba" aria-labelledby="t-mov">
+  <div class="fila-entre espacio-abajo">
+    <h2 id="t-mov" class="titulo-seccion">Movimientos</h2>
+    <form method="post" action="{% url 'finanzas:exportar' %}" class="fila">
+      {% csrf_token %}
+      <label class="solo-lectores" for="{{ exportar.desde.id_for_label }}">Desde</label>{{ exportar.desde }}
+      <label class="solo-lectores" for="{{ exportar.hasta.id_for_label }}">Hasta</label>{{ exportar.hasta }}
+      <button type="submit" class="btn btn-peq">{% icono "descargar" %} Exportar CSV</button>
+    </form>
+  </div>
+  {% if movimientos %}
+    <div class="tabla-envoltura">
+      <table class="tabla">
+        <thead><tr><th>Fecha</th><th>Concepto</th><th>Cliente</th><th>Método</th><th class="num">Importe</th></tr></thead>
+        <tbody>
+          {% for m in movimientos %}
+            <tr>
+              <td class="numerico">{{ m.fecha|date:"d/m" }}</td>
+              <td><a href="{% if m.es_pago %}{% url 'finanzas:pago_editar' m.obj.pk %}{% else %}{% url 'finanzas:gasto_editar' m.obj.pk %}{% endif %}">{{ m.concepto }}</a>{% if m.devuelto %} <span class="estado estado-apagado">Devuelto</span>{% endif %}</td>
+              <td>{{ m.persona }}</td>
+              <td class="texto-suave">{{ m.metodo }}</td>
+              <td class="num">{{ m.importe|dinero:"2" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot><tr><td colspan="4">Balance</td><td class="num">{{ datos.balance|dinero:"2" }}</td></tr></tfoot>
+      </table>
+    </div>
+  {% else %}
+    {% url 'finanzas:gasto_nuevo' as u %}
+    {% include "componentes/vacio.html" with icono="dinero" titulo="Sin movimientos" texto="Los cobros de sesiones y señas aparecen solos. Añade aquí tus gastos para ver el balance real." url=u accion="Añadir gasto" %}
+  {% endif %}
+</section>
+{% endblock %}

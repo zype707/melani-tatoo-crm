@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block titulo %}Fecha destacada{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'mensajeria:fechas' %}">Fechas destacadas</a></nav><h1>{% if fecha %}{{ fecha.nombre }}{% else %}Nueva fecha{% endif %}</h1></div></header>
+<form method="post" class="bloque ancho-formulario" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alerta espacio-abajo">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
+  <div class="formulario-2">
+    <div class="ancho-completo">{{ form.nombre.as_field_group }}</div>
+    <div class="ancho-completo">{{ form.regla.as_field_group }}</div>
+    {{ form.mes.as_field_group }}
+    {{ form.dia.as_field_group }}
+    {{ form.semana.as_field_group }}
+    {{ form.dia_semana.as_field_group }}
+    {{ form.fecha.as_field_group }}
+    {{ form.dias_ventana.as_field_group }}
+    {{ form.plantilla.as_field_group }}
+    {{ form.segmento.as_field_group }}
+    <div>{{ form.generar_campana.as_field_group }}</div>
+    <div>{{ form.activa.as_field_group }}</div>
+  </div>
+  <p class="ayuda espacio-arriba">Ejemplos: Día de la Madre en EE. UU. = «N-ésimo», mayo, semana 2, domingo. Acción de Gracias = noviembre, semana 4, jueves.</p>
+  <div class="acciones-formulario">
+    <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
+    <a class="btn btn-fantasma" href="{% url 'mensajeria:fechas' %}">Cancelar</a>
+    {% if fecha %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="¿Eliminar esta fecha?">{% icono "basura" %} Eliminar</button>{% endif %}
+  </div>
+</form>
+{% endblock %}

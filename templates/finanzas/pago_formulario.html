@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block titulo %}{% if pago %}Editar ingreso{% else %}Nuevo ingreso{% endif %}{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'finanzas:resumen' %}">Finanzas</a></nav><h1>{% if pago %}Editar ingreso{% else %}Nuevo ingreso{% endif %}</h1></div></header>
+<form method="post" class="pila-g ancho-formulario" novalidate>
+  {% csrf_token %}
+  <section class="bloque">{% include "componentes/selector_cliente.html" %}<p class="ayuda">Opcional: un flash pagado en efectivo o una crema vendida pueden no tener ficha.</p></section>
+  <section class="bloque">
+    <div class="formulario-2">
+      {{ form.tipo.as_field_group }}
+      {{ form.importe.as_field_group }}
+      {{ form.metodo.as_field_group }}
+      {{ form.fecha.as_field_group }}
+      <div class="ancho-completo">{{ form.notas.as_field_group }}</div>
+    </div>
+    {% if pago.cita %}<p class="texto-peq espacio-arriba">Vinculado a la <a href="{% url 'agenda:detalle' pago.cita.pk %}">cita del {{ pago.cita.inicio|fecha_corta }}</a>.</p>{% endif %}
+  </section>
+  <div class="acciones-formulario">
+    <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
+    <a class="btn btn-fantasma" href="{% url 'finanzas:resumen' %}">Cancelar</a>
+    {% if pago %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="¿Eliminar este ingreso?">{% icono "basura" %} Eliminar</button>{% endif %}
+  </div>
+</form>
+{% endblock %}

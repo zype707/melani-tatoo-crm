@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block titulo %}Horario y tipos de cita{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div><nav class="migas"><a href="{% url 'agenda:calendario' %}">Agenda</a></nav><h1>Horario y tipos</h1></div>
+</header>
+
+<div class="rejilla-ficha">
+  <section class="bloque" aria-labelledby="t-horario">
+    <div class="bloque-titulo"><h2 id="t-horario">Horario laboral</h2></div>
+    <p class="texto-suave texto-peq espacio-abajo">Hasta dos tramos por día. Deja vacíos los días que no trabajas.</p>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if horario_form.errors %}<div class="alerta espacio-abajo">{% icono "alerta" %}<div>{% for campo, errores in horario_form.errors.items %}{% for e in errores %}<p>{{ e }}</p>{% endfor %}{% endfor %}</div></div>{% endif %}
+      <table class="tabla tabla-horario">
+        <thead><tr><th scope="col">Día</th><th scope="col">Tramo 1</th><th scope="col">Tramo 2</th></tr></thead>
+        <tbody>
+          {% for nombre, tramos in horario_form.dias %}
+            <tr>
+              <th scope="row">{{ nombre }}</th>
+              {% for ini, fin in tramos %}
+                <td><div class="tramo">{{ ini }}<span aria-hidden="true">–</span>{{ fin }}</div></td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="acciones-formulario"><button type="submit" class="btn btn-primario">{% icono "check" %} Guardar horario</button></div>
+    </form>
+  </section>
+
+  <div class="pila-g">
+    <section class="bloque" aria-labelledby="t-tipos">
+      <div class="bloque-titulo"><h2 id="t-tipos">Tipos de cita</h2><a href="{% url 'agenda:tipo_nuevo' %}">{% icono "plus" %} Nuevo</a></div>
+      <ul class="lista">
+        {% for t in tipos %}
+          <li><a class="fila-lista" href="{% url 'agenda:tipo_editar' t.pk %}">
+            <span class="tipo-marca tipo-{{ t.color }}" aria-hidden="true"></span>
+            <span class="fila-cuerpo"><span class="fila-titulo">{{ t.nombre }}{% if not t.activo %} <span class="estado estado-apagado">Inactivo</span>{% endif %}</span><span class="fila-sub">{{ t.get_categoria_display }} · {{ t.duracion_minutos|duracion }}{% if t.deposito_sugerido %} · seña {{ t.deposito_sugerido|dinero }}{% endif %}</span></span>
+          </a></li>
+        {% empty %}<li class="texto-suave">Crea al menos un tipo de cita.</li>{% endfor %}
+      </ul>
+    </section>
+
+    <section class="bloque" aria-labelledby="t-bloqueos">
+      <div class="bloque-titulo"><h2 id="t-bloqueos">Días libres y bloqueos</h2><a href="{% url 'agenda:bloqueo_nuevo' %}">{% icono "plus" %} Nuevo</a></div>
+      <ul class="lista">
+        {% for b in bloqueos %}
+          <li class="fila-lista">
+            <span class="fila-cuerpo"><span class="fila-titulo">{{ b }}</span><span class="fila-sub">{{ b.inicio|fecha_corta }} {{ b.inicio|hora }} → {{ b.fin|fecha_corta }} {{ b.fin|hora }}</span></span>
+            <form method="post" action="{% url 'agenda:bloqueo_borrar' b.pk %}">{% csrf_token %}<button class="btn btn-icono btn-fantasma btn-peq" aria-label="Eliminar bloqueo" data-confirmar="¿Eliminar este bloqueo?">{% icono "basura" %}</button></form>
+          </li>
+        {% empty %}<li class="texto-suave">Sin bloqueos próximos.</li>{% endfor %}
+      </ul>
+    </section>
+  </div>
+</div>
+{% endblock %}

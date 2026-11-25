@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block titulo %}Ajustes{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div><span class="antetitulo">Estudio</span><h1>Ajustes</h1></div>
+</header>
+<nav class="pestanas" aria-label="Secciones de ajustes">
+  {% for clave, datos in secciones.items %}<a href="?seccion={{ clave }}"{% if clave == seccion %} aria-current="page"{% endif %}>{{ datos.0 }}</a>{% endfor %}
+  <a href="?seccion=datos"{% if seccion == "datos" %} aria-current="page"{% endif %}>Datos y seguridad</a>
+</nav>
+
+{% if seccion == "marca" %}
+<div class="rejilla-ficha">
+  <form method="post" class="bloque" novalidate>
+    {% csrf_token %}
+    <div class="formulario-2">
+      {% for campo in form %}<div class="{% if campo.name == 'direccion' or campo.name == 'eslogan' %}ancho-completo{% endif %}">{{ campo.as_field_group }}</div>{% endfor %}
+    </div>
+    <div class="acciones-formulario"><button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button></div>
+  </form>
+  <form method="post" enctype="multipart/form-data" class="bloque formulario" novalidate>
+    {% csrf_token %}<input type="hidden" name="accion" value="logo">
+    <div class="bloque-titulo"><h2>Logotipo</h2></div>
+    {% if ajustes_obj.logo %}<img class="logo-vista" src="{% url 'logo' %}" alt="Logotipo actual" width="160" height="160">{% else %}<span class="marca-sello logo-vista" aria-hidden="true">{{ ajustes_obj.nombre|iniciales }}</span>{% endif %}
+    {{ logo_form }}
+    <div><button type="submit" class="btn">{% icono "subir" %} Actualizar logotipo</button></div>
+    <p class="ayuda">Aparece en tu página de reservas, el catálogo y la app.</p>
+  </form>
+</div>
+
+{% elif seccion == "datos" %}
+<div class="rejilla-2">
+  <section class="bloque pila" aria-labelledby="t-exp">
+    <div class="bloque-titulo"><h2 id="t-exp">{% icono "descargar" %} Exportar todos tus datos</h2></div>
+    <p class="texto-peq">Un .zip con todos los registros (JSON) y archivos: fotos, referencias, firmas y PDFs. No incluye contraseñas ni claves 2FA. Contiene datos de salud: guárdalo en un lugar seguro.</p>
+    <form method="post" action="{% url 'nucleo:exportar' %}" class="formulario">
+      {% csrf_token %}{{ confirmar }}
+      <button type="submit" class="btn btn-primario">{% icono "descargar" %} Descargar exportación</button>
+    </form>
+  </section>
+  <section class="bloque pila" aria-labelledby="t-copias">
+    <div class="bloque-titulo"><h2 id="t-copias">{% icono "caja" %} Copias de seguridad</h2></div>
+    <p class="texto-peq">Se crean solas cada noche en el disco del servidor (se conservan las últimas). Además, Render guarda copias de la base de datos.</p>
+    {% if copias %}
+      <ul class="lista">{% for c in copias %}<li class="fila-lista"><span class="fila-cuerpo"><span class="fila-titulo mono texto-peq">{{ c.nombre }}</span><span class="fila-sub">{{ c.fecha|fecha_corta }} {{ c.fecha|hora }} · {{ c.bytes|filesizeformat }}</span></span>
+        <form method="post" action="{% url 'nucleo:copias' %}" class="fila">{% csrf_token %}<input type="hidden" name="nombre" value="{{ c.nombre }}"><input type="text" name="codigo" inputmode="numeric" autocomplete="one-time-code" placeholder="Código" aria-label="Código 2FA" class="select-compacto entrada-mini"><button class="btn btn-peq" type="submit">{% icono "descargar" %}</button></form></li>{% endfor %}</ul>
+    {% else %}<p class="texto-suave">Aún no hay copias.</p>{% endif %}
+    <form method="post" action="{% url 'nucleo:copias' %}" class="fila bloque-pie">{% csrf_token %}<input type="hidden" name="accion" value="crear">
+      <input type="text" name="codigo" inputmode="numeric" autocomplete="one-time-code" placeholder="Código 2FA" aria-label="Código 2FA" class="select-compacto entrada-mini">
+      <button class="btn btn-peq" type="submit">{% icono "plus" %} Crear copia ahora</button>
+    </form>
+  </section>
+  <section class="bloque" aria-labelledby="t-seg">
+    <div class="bloque-titulo"><h2 id="t-seg">{% icono "escudo" %} Seguridad</h2></div>
+    <ul class="lista">
+      <li><a class="fila-lista" href="{% url 'cuentas:cuenta' %}"><span class="fila-cuerpo"><span class="fila-titulo">Mi cuenta y 2FA</span><span class="fila-sub">Contraseña, códigos de recuperación, cambiar de móvil</span></span>{% icono "flecha-der" %}</a></li>
+      <li><a class="fila-lista" href="{% url 'nucleo:auditoria' %}"><span class="fila-cuerpo"><span class="fila-titulo">Registro de actividad</span><span class="fila-sub">Accesos, exportaciones y borrados</span></span>{% icono "flecha-der" %}</a></li>
+    </ul>
+  </section>
+  <section class="bloque" aria-labelledby="t-mas">
+    <div class="bloque-titulo"><h2 id="t-mas">Más configuración</h2></div>
+    <ul class="lista">
+      <li><a class="fila-lista" href="{% url 'agenda:configuracion' %}"><span class="fila-cuerpo"><span class="fila-titulo">Horario y tipos de cita</span></span>{% icono "flecha-der" %}</a></li>
+      <li><a class="fila-lista" href="{% url 'mensajeria:plantillas' %}"><span class="fila-cuerpo"><span class="fila-titulo">Plantillas de mensajes</span></span>{% icono "flecha-der" %}</a></li>
+      <li><a class="fila-lista" href="{% url 'mensajeria:cuidados' %}"><span class="fila-cuerpo"><span class="fila-titulo">Secuencia de cuidados</span></span>{% icono "flecha-der" %}</a></li>
+      <li><a class="fila-lista" href="{% url 'mensajeria:fechas' %}"><span class="fila-cuerpo"><span class="fila-titulo">Fechas destacadas</span></span>{% icono "flecha-der" %}</a></li>
+    </ul>
+  </section>
+</div>
+
+{% else %}
+<form method="post" class="bloque ancho-formulario formulario" novalidate>
+  {% csrf_token %}
+  {% if seccion == "legal" %}<div class="aviso">{% icono "documento" %}<p class="texto-peq">Versión actual: <strong>{{ ajustes_obj.version_consentimiento }}</strong>. Al cambiar el texto se crea una versión nueva; los consentimientos ya firmados conservan el texto que se firmó. Revísalo con tu asesoría: es una plantilla de partida.</p></div>{% endif %}
+  {% if seccion == "ia" %}<div class="aviso">{% icono "ia" %}<p class="texto-peq">Modelo configurado en el servidor (IA_MODELO). Los ejemplos se limpian de emails y teléfonos antes de enviarse; no pegues datos de clientes.</p></div>{% endif %}
+  {{ form }}
+  <div class="acciones-formulario"><button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button></div>
+</form>
+{% endif %}
+{% endblock %}

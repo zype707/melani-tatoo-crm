@@ -1,0 +1,75 @@
+{% extends "base_publica.html" %}
+{% block titulo %}Pide tu cita{% endblock %}
+{% block contenido %}
+<div class="pila-g">
+  <header class="reserva-cabecera">
+    <span class="texto-suave">{{ ajustes.nombre_artista|default:ajustes.nombre }}{% if ajustes.eslogan %} · {{ ajustes.eslogan }}{% endif %}</span>
+    <h1>Pide tu cita</h1>
+    <p class="texto-pre">{{ ajustes.reserva_bienvenida }}</p>
+  </header>
+
+  {% if diseno %}
+    <div class="bloque bloque-hueso fila">
+      <img class="flash-mini" src="{% url 'flash_publico_imagen' token=token pk=diseno.pk %}" alt="" width="96" height="96">
+      <div><span class="texto-peq">Flash elegido</span><p class="cifra-peq"><strong>{{ diseno.titulo }}</strong></p>{% if diseno.precio %}<p>{{ diseno.precio|dinero }}</p>{% endif %}</div>
+    </div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" class="pila-g" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors or form.t.errors or form.web.errors %}
+      <div class="alerta" role="alert">{% icono "alerta" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}{% for e in form.t.errors %}<p>{{ e }}</p>{% endfor %}{% for e in form.web.errors %}<p>{{ e }}</p>{% endfor %}</div></div>
+    {% elif form.errors %}
+      <div class="alerta" role="alert">{% icono "alerta" %}<p>Revisa los campos marcados.</p></div>
+    {% endif %}
+    {{ form.t }}
+    <div class="trampa" aria-hidden="true">{{ form.web.label_tag }}{{ form.web }}</div>
+
+    <section class="bloque" aria-labelledby="t-tu">
+      <div class="bloque-titulo"><h2 id="t-tu">Sobre ti</h2></div>
+      <div class="formulario-2">
+        {{ form.nombre.as_field_group }}
+        {{ form.apellidos.as_field_group }}
+        {{ form.telefono.as_field_group }}
+        {{ form.email.as_field_group }}
+        {{ form.instagram.as_field_group }}
+        {{ form.fecha_nacimiento.as_field_group }}
+      </div>
+      <p class="ayuda espacio-arriba">Te contestaré por WhatsApp o SMS. Hace falta tener al menos {{ ajustes.edad_minima }} años.</p>
+    </section>
+
+    <section class="bloque" aria-labelledby="t-idea">
+      <div class="bloque-titulo"><h2 id="t-idea">Tu tatuaje</h2></div>
+      <div class="formulario">
+        {{ form.descripcion.as_field_group }}
+        <div class="formulario-2">
+          {{ form.zona.as_field_group }}
+          {{ form.tamano.as_field_group }}
+          {{ form.estilo.as_field_group }}
+          {{ form.medidas.as_field_group }}
+        </div>
+        {{ form.imagenes.as_field_group }}
+        {{ form.primer_tatuaje.as_field_group }}
+      </div>
+    </section>
+
+    <section class="bloque" aria-labelledby="t-cuando">
+      <div class="bloque-titulo"><h2 id="t-cuando">Cuándo</h2></div>
+      <div class="formulario-2">
+        {{ form.fechas_preferidas.as_field_group }}
+        {{ form.presupuesto.as_field_group }}
+      </div>
+      {% if ajustes.politica_senas %}<p class="ayuda espacio-arriba texto-pre">{{ ajustes.politica_senas }}</p>{% endif %}
+    </section>
+
+    <section class="bloque formulario" aria-label="Privacidad">
+      <p class="texto-peq texto-pre">{{ ajustes.texto_privacidad }}</p>
+      {{ form.acepta_privacidad.as_field_group }}
+      {{ form.acepta_marketing.as_field_group }}
+    </section>
+
+    <button type="submit" class="btn btn-primario btn-bloque btn-grande">{% icono "enviar" %} Enviar solicitud</button>
+  </form>
+</div>
+{% endblock %}
+{% block pie %}{{ ajustes.nombre }}{% if ajustes.instagram %} · <a href="https://instagram.com/{{ ajustes.instagram }}" rel="noopener noreferrer" target="_blank">@{{ ajustes.instagram }}</a>{% endif %}{% if ajustes.direccion %} · {{ ajustes.direccion }}{% endif %}{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block titulo %}Lista de espera{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div><nav class="migas"><a href="{% url 'agenda:lista_espera' %}">Lista de espera</a></nav><h1>{% if entrada %}Editar entrada{% else %}Añadir a la lista{% endif %}</h1></div>
+</header>
+<form method="post" class="pila-g ancho-formulario" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alerta">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
+  <section class="bloque">{% include "componentes/selector_cliente.html" %}</section>
+  <section class="bloque formulario">
+    {{ form.tipo.as_field_group }}
+    {{ form.dias.as_field_group }}
+    {{ form.franja.as_field_group }}
+    {{ form.notas.as_field_group }}
+    {{ form.prioritaria.as_field_group }}
+  </section>
+  <div class="acciones-formulario">
+    <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
+    <a class="btn btn-fantasma" href="{% url 'agenda:lista_espera' %}">Cancelar</a>
+    {% if entrada %}<button type="submit" name="quitar" value="1" class="btn btn-peligro empujar">Quitar de la lista</button>{% endif %}
+  </div>
+</form>
+{% endblock %}

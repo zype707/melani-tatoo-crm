@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#01161b">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="htmx-config" content='{"includeIndicatorStyles":false,"allowEval":false,"allowScriptTags":false,"historyCacheSize":0,"selfRequestsOnly":true,"defaultSwapStyle":"outerHTML"}'>
+  <title>{% block titulo %}{% endblock %} · {{ ajustes.nombre }}</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="{% static 'img/icono-192.png' %}" type="image/png">
+  <link rel="apple-touch-icon" href="{% static 'img/icono-180.png' %}">
+  <script src="{% static 'vendor/htmx-2.0.11.min.js' %}" defer></script>
+  <script src="{% static 'js/app.js' %}" defer></script>
+  <script src="{% static 'js/dictado.js' %}" defer></script>
+  {% block cabeza %}{% endblock %}
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' data-sw="/sw.js">
+  <a class="saltar" href="#principal">Saltar al contenido</a>
+
+  <div class="app">
+    <aside class="barra-lateral" aria-label="Navegación principal">
+      {% include "componentes/marca.html" %}
+      {% if nav.url_nueva_cita %}
+        <a class="btn btn-primario btn-bloque" href="{{ nav.url_nueva_cita }}" data-atajo="nueva-cita">{% icono "plus" %} Nueva cita</a>
+      {% endif %}
+      <nav class="nav-lateral" aria-label="Secciones">
+        {% for item in nav.items %}
+          <a class="nav-enlace" href="{{ item.href }}"{% if item.activo %} aria-current="page"{% endif %}{% if item.atajo %} data-atajo="{{ item.atajo }}"{% endif %}>
+            {% icono item.icono %}<span>{{ item.etiqueta }}</span>
+            {% if item.cuenta %}<span class="insignia" aria-label="{{ item.cuenta }} pendientes">{{ item.cuenta }}</span>{% endif %}
+          </a>
+        {% endfor %}
+      </nav>
+      <div class="lateral-pie">
+        <p class="lateral-usuaria">{{ user.nombre }}</p>
+        <a class="nav-enlace" href="{% url 'cuentas:cuenta' %}" {% nav_activo "cuentas" %}>{% icono "usuario" %}<span>Mi cuenta</span></a>
+        <form method="post" action="{% url 'cuentas:salir' %}">{% csrf_token %}
+          <button type="submit" class="nav-enlace btn-fantasma btn-bloque">{% icono "salir" %}<span>Salir</span></button>
+        </form>
+        <button type="button" class="btn btn-fantasma btn-peq" data-abrir="dialogo-atajos">{% icono "teclado" %} Atajos <kbd>?</kbd></button>
+      </div>
+    </aside>
+
+    <header class="barra-superior">
+      {% include "componentes/marca.html" %}
+      <div class="fila">
+        {% if nav.url_nueva_cita %}
+          <a class="btn btn-primario btn-peq" href="{{ nav.url_nueva_cita }}">{% icono "plus" %}<span>Cita</span></a>
+        {% endif %}
+      </div>
+    </header>
+
+    <main id="principal" class="contenido" tabindex="-1">
+      {% block contenido %}{% endblock %}
+    </main>
+  </div>
+
+  <nav class="nav-inferior" aria-label="Navegación">
+    {% for item in nav.movil %}
+      <a href="{{ item.href }}"{% if item.activo %} aria-current="page"{% endif %}>
+        {% icono item.icono %}<span>{{ item.etiqueta }}</span>
+        {% if item.cuenta %}<span class="insignia">{{ item.cuenta }}</span>{% endif %}
+      </a>
+    {% endfor %}
+    <button type="button" data-abrir="menu-mas" aria-haspopup="dialog">{% icono "mas" %}<span>Más</span></button>
+  </nav>
+
+  <dialog id="menu-mas" class="hoja" aria-label="Más secciones">
+    <div class="hoja-cuerpo">
+      <div class="hoja-cabecera">
+        <h2>Más</h2>
+        <button type="button" class="btn btn-icono btn-fantasma" data-cerrar aria-label="Cerrar">{% icono "x" %}</button>
+      </div>
+      {% for item in nav.resto %}
+        <a class="nav-enlace" href="{{ item.href }}"{% if item.activo %} aria-current="page"{% endif %}>
+          {% icono item.icono %}<span>{{ item.etiqueta }}</span>
+          {% if item.cuenta %}<span class="insignia">{{ item.cuenta }}</span>{% endif %}
+        </a>
+      {% endfor %}
+      <a class="nav-enlace" href="{% url 'cuentas:cuenta' %}">{% icono "usuario" %}<span>Mi cuenta</span></a>
+      <form method="post" action="{% url 'cuentas:salir' %}">{% csrf_token %}
+        <button type="submit" class="nav-enlace btn-fantasma btn-bloque">{% icono "salir" %}<span>Salir</span></button>
+      </form>
+    </div>
+  </dialog>
+
+  <div id="avisos" class="avisos" aria-live="polite">
+    {% for m in messages %}
+      <div class="toast toast-{{ m.tags }}" role="{% if m.level >= 30 %}alert{% else %}status{% endif %}">
+        <span>{{ m }}</span>
+        <button type="button" data-cerrar-aviso aria-label="Cerrar aviso">✕</button>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% include "componentes/dialogos.html" %}
+  {% block final %}{% endblock %}
+</body>
+</html>

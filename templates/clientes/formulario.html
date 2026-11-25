@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block titulo %}{% if cliente %}Editar {{ cliente.nombre }}{% else %}Nuevo cliente{% endif %}{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div>
+    <nav class="migas" aria-label="Migas"><a href="{% url 'clientes:lista' %}">Clientes</a>{% if cliente %}<span>/</span><a href="{% url 'clientes:ficha' cliente.pk %}">{{ cliente.nombre }}</a>{% endif %}</nav>
+    <h1>{% if cliente %}Editar ficha{% else %}Nuevo cliente{% endif %}</h1>
+  </div>
+</header>
+
+<form method="post" class="pila-g ancho-formulario" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alerta" role="alert">{% icono "alerta" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div></div>{% endif %}
+
+  <section class="bloque" aria-labelledby="t-datos">
+    <div class="bloque-titulo"><h2 id="t-datos">Datos</h2></div>
+    <div class="formulario-2">
+      {{ form.nombre.as_field_group }}
+      {{ form.apellidos.as_field_group }}
+      {{ form.telefono.as_field_group }}
+      {{ form.email.as_field_group }}
+      {{ form.instagram.as_field_group }}
+      {{ form.fecha_nacimiento.as_field_group }}
+      {{ form.origen.as_field_group }}
+      <div>{{ form.canal_preferido.as_field_group }}</div>
+    </div>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-contacto">
+    <div class="bloque-titulo"><h2 id="t-contacto">Mensajes</h2></div>
+    <div class="formulario">
+      {{ form.marketing.as_field_group }}
+      {{ form.marketing_origen.as_field_group }}
+      <p class="ayuda">Sin este consentimiento solo recibirá mensajes de servicio (recordatorios y cuidados), nunca promociones ni felicitaciones.</p>
+      {{ form.contacto_bloqueado.as_field_group }}
+    </div>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-etiquetas">
+    <div class="bloque-titulo"><h2 id="t-etiquetas">Etiquetas y notas</h2></div>
+    <div class="formulario">
+      {{ form.etiquetas.as_field_group }}
+      {{ form.nuevas_etiquetas.as_field_group }}
+      {{ form.notas.as_field_group }}
+    </div>
+  </section>
+
+  <div class="acciones-formulario">
+    <button type="submit" class="btn btn-primario">{% icono "check" %} Guardar</button>
+    <a class="btn btn-fantasma" href="{% if cliente %}{% url 'clientes:ficha' cliente.pk %}{% else %}{% url 'clientes:lista' %}{% endif %}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

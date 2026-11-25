@@ -1,0 +1,36 @@
+{% extends reconfigurando|yesno:"base.html,base_publica.html" %}
+{% block titulo %}Activar verificación en dos pasos{% endblock %}
+{% block contenido %}
+<div class="{% if not reconfigurando %}acceso-caja {% endif %}pila-g ancho-texto">
+  <div>
+    <span class="texto-suave texto-peq">{% if reconfigurando %}Mi cuenta{% else %}Obligatorio · solo una vez{% endif %}</span>
+    <h1>Protege tu cuenta</h1>
+    <p class="texto-suave">Aquí guardas datos de salud y firmas de tus clientes. Con la verificación en dos pasos, nadie podrá entrar solo con tu contraseña.</p>
+  </div>
+  <div class="bloque pila">
+    <ol class="pasos">
+      <li><div><strong>Instala una app autenticadora</strong><br><span class="texto-suave">Google Authenticator, Microsoft Authenticator, 1Password o la app Contraseñas del iPhone.</span></div></li>
+      <li>
+        <div class="pila">
+          <strong>Escanea este código QR</strong>
+          <div class="qr" role="img" aria-label="Código QR para la app autenticadora">{{ qr|safe }}</div>
+          <details>
+            <summary>¿No puedes escanearlo? Escribe la clave a mano</summary>
+            <p class="clave-secreta" aria-label="Clave secreta">{{ clave }}</p>
+          </details>
+        </div>
+      </li>
+      <li>
+        <div class="pila">
+          <strong>Escribe el código que aparece</strong>
+          <form method="post" class="formulario" novalidate>
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" class="btn btn-primario btn-bloque">{% icono "escudo" %} Activar</button>
+          </form>
+        </div>
+      </li>
+    </ol>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block titulo %}Campañas{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div><span class="antetitulo">Mensajería</span><h1>Campañas</h1></div>
+  <div class="acciones"><a class="btn btn-primario" href="{% url 'mensajeria:campana_nueva' %}">{% icono "plus" %} Nueva campaña</a></div>
+</header>
+{% include "mensajeria/_subnav.html" with seccion="campanas" %}
+
+<h2 class="titulo-seccion">Segmentos automáticos</h2>
+<div class="rejilla">
+  {% for s in segmentos %}
+    <a class="bloque tarjeta-segmento" href="{% url 'mensajeria:campana_nueva' %}?segmento={{ s.segmento.clave }}">
+      <span class="cifra cifra-peq">{{ s.con_consentimiento }}</span>
+      <strong>{{ s.segmento.nombre }}</strong>
+      <span class="texto-peq texto-suave">{{ s.segmento.descripcion }}{% if s.total != s.con_consentimiento %} {{ s.total }} en total; solo {{ s.con_consentimiento }} aceptan promociones.{% endif %}</span>
+    </a>
+  {% endfor %}
+</div>
+
+<h2 class="titulo-seccion">Campañas</h2>
+{% if campanas %}
+  <ul class="lista bloque bloque-lista">
+    {% for c in campanas %}
+      <li><a class="fila-lista" href="{% url 'mensajeria:campana' c.pk %}">
+        <span class="mensaje-icono" aria-hidden="true">{% if c.fecha_destacada %}{% icono "estrella" %}{% else %}{% icono "enviar" %}{% endif %}</span>
+        <span class="fila-cuerpo"><span class="fila-titulo">{{ c.nombre }}</span><span class="fila-sub">{{ c.plantilla }} · desde {{ c.fecha_inicio|fecha_corta }}</span></span>
+        <span class="fila-meta"><span class="numerico"><strong>{{ c.enviados }}</strong>/{{ c.total }}</span><span class="fila-sub">{{ c.get_estado_display }}</span></span>
+      </a></li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="texto-suave">Aún no hay campañas. Las fechas destacadas crean la suya automáticamente.</p>
+{% endif %}
+{% endblock %}

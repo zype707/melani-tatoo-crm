@@ -1,0 +1,6 @@
+<div class="vacio">
+  {% icono icono|default:"caja" "icono-xl" %}
+  <h3>{{ titulo }}</h3>
+  {% if texto %}<p>{{ texto }}</p>{% endif %}
+  {% if url %}<a class="btn {% if principal %}btn-primario{% endif %}" href="{{ url }}">{% icono "plus" %} {{ accion }}</a>{% endif %}
+</div>

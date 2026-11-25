@@ -1,0 +1,19 @@
+{% if ia_disponible %}
+<section class="bloque" aria-labelledby="t-resumen-ia">
+  <div class="bloque-titulo"><h2 id="t-resumen-ia">{% icono "ia" %} Antes de la cita</h2></div>
+  <div id="resumen-ia"><p class="texto-peq texto-suave">Ficha rápida de quién viene y qué recordar.</p></div>
+  <button type="button" class="btn btn-peq espacio-arriba" hx-post="{% url 'ia:resumen' cita.pk %}" hx-target="#resumen-ia" hx-swap="innerHTML" hx-disabled-elt="this">{% icono "ia" %} Preparar resumen <span class="cargando htmx-indicator"><span></span></span></button>
+</section>
+{% endif %}
+<section class="bloque" aria-labelledby="t-consent-cita">
+  <div class="bloque-titulo"><h2 id="t-consent-cita">Consentimiento</h2></div>
+  {% with firmado=cita.consentimientos.first %}
+    {% if firmado %}
+      <p><span class="estado estado-ok">Firmado</span> <span class="texto-peq texto-suave">{{ firmado.firmado_en|date:"j/m/Y H:i" }}</span></p>
+      <a class="btn btn-peq espacio-arriba" href="{% url 'clientes:consentimiento_pdf' firmado.pk %}" target="_blank" rel="noopener">{% icono "documento" %} Ver PDF</a>
+    {% else %}
+      {% if cita.tipo.genera_cuidados %}<p class="texto-peq">Pásale la tablet para que lo firme antes de empezar.</p>{% endif %}
+      <a class="btn btn-peq {% if cita.tipo.genera_cuidados and cita.pendiente %}btn-primario{% endif %}" href="{% url 'clientes:consentimiento' cita.cliente.pk %}?cita={{ cita.pk }}">{% icono "firma" %} Firmar consentimiento</a>
+    {% endif %}
+  {% endwith %}
+</section>

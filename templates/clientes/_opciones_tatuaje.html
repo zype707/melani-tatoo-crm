@@ -1,0 +1,2 @@
+<option value="">— Sin tatuaje asociado —</option>
+{% for t in tatuajes %}<option value="{{ t.pk }}">{{ t.titulo }}{% if t.estado == "en_proceso" %} (en proceso){% endif %}</option>{% endfor %}

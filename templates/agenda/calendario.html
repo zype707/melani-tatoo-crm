@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block titulo %}Agenda{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div>
+    <span class="antetitulo">Agenda</span>
+    <h1>
+      {% if vista == "dia" %}{{ fecha|fecha_larga|capfirst }}
+      {% elif vista == "semana" %}{{ dias.0|date:"j M" }} – {{ dias.6|date:"j M Y" }}
+      {% elif vista == "mes" %}{{ fecha|date:"F Y"|capfirst }}
+      {% else %}Próximos 30 días{% endif %}
+    </h1>
+  </div>
+  <div class="acciones">
+    <a class="btn" href="{% url 'agenda:lista_espera' %}">{% icono "lista" %} Lista de espera</a>
+    <a class="btn" href="{% url 'agenda:configuracion' %}">{% icono "ajustes" %} Horario y tipos</a>
+  </div>
+</header>
+
+{% if por_confirmar or cambios_pedidos %}
+  <div class="alerta espacio-abajo">{% icono "alerta" %}
+    <p>{% if por_confirmar %}{{ por_confirmar }} cita{{ por_confirmar|pluralize }} por confirmar. {% endif %}{% if cambios_pedidos %}{{ cambios_pedidos }} cliente{{ cambios_pedidos|pluralize }} pide{{ cambios_pedidos|pluralize:"n" }} cambiar la fecha.{% endif %}
+    <a href="?vista=lista&estado=solicitada">Ver</a></p>
+  </div>
+{% endif %}
+
+{% partialdef calendario inline %}
+<div id="calendario" class="calendario">
+  <div class="cal-barra">
+    <nav class="segmentos" aria-label="Vista">
+      {% for clave, nombre in vistas.items %}<a href="?vista={{ clave }}&fecha={{ fecha|date:'Y-m-d' }}"{% if clave == vista %} aria-current="page"{% endif %}>{{ nombre }}</a>{% endfor %}
+    </nav>
+    <div class="fila">
+      <a class="btn btn-icono" href="?vista={{ vista }}&fecha={{ anterior|date:'Y-m-d' }}" aria-label="Anterior">{% icono "flecha-izq" %}</a>
+      <a class="btn" href="?vista={{ vista }}&fecha={{ hoy|date:'Y-m-d' }}">Hoy</a>
+      <a class="btn btn-icono" href="?vista={{ vista }}&fecha={{ siguiente|date:'Y-m-d' }}" aria-label="Siguiente">{% icono "flecha-der" %}</a>
+      <form method="get" class="fila">
+        <input type="hidden" name="vista" value="{{ vista }}">
+        <label for="ir-fecha" class="solo-lectores">Ir a una fecha</label>
+        <input type="date" id="ir-fecha" name="fecha" value="{{ fecha|date:'Y-m-d' }}" class="select-compacto" data-autoenviar>
+      </form>
+    </div>
+  </div>
+
+  {% if vista == "dia" or vista == "semana" %}
+    {% include "agenda/_rejilla.html" %}
+  {% elif vista == "mes" %}
+    {% include "agenda/_mes.html" %}
+  {% else %}
+    {% include "agenda/_lista.html" %}
+  {% endif %}
+
+  {% if tipos %}
+    <ul class="leyenda" aria-label="Tipos de cita">
+      {% for t in tipos %}<li><span class="tipo-marca tipo-{{ t.color }}" aria-hidden="true"></span>{{ t.nombre }}</li>{% endfor %}
+      <li><span class="tipo-marca marca-bloqueo" aria-hidden="true"></span>Bloqueado</li>
+    </ul>
+  {% endif %}
+</div>
+{% endpartialdef %}
+{% endblock %}

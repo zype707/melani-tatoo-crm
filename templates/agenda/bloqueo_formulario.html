@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block titulo %}Nuevo bloqueo{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div><nav class="migas"><a href="{% url 'agenda:configuracion' %}">Horario y tipos</a></nav><h1>Bloquear agenda</h1></div>
+</header>
+<form method="post" class="bloque ancho-formulario" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alerta espacio-abajo">{% icono "alerta" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div></div>{% endif %}
+  <div class="formulario-2">
+    {{ form.tipo.as_field_group }}
+    {{ form.motivo.as_field_group }}
+    {{ form.desde_fecha.as_field_group }}
+    {{ form.desde_hora.as_field_group }}
+    {{ form.hasta_fecha.as_field_group }}
+    {{ form.hasta_hora.as_field_group }}
+  </div>
+  <p class="ayuda espacio-arriba">Sin horas = días completos.</p>
+  <div class="acciones-formulario">
+    <button type="submit" class="btn btn-primario">{% icono "candado" %} Bloquear</button>
+    {% if form.necesita_confirmar %}<button type="submit" name="confirmar" value="1" class="btn">Bloquear igualmente</button>{% endif %}
+    <a class="btn btn-fantasma" href="{% url 'agenda:configuracion' %}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

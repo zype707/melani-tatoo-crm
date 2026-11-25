@@ -1,0 +1,10 @@
+{% extends "base_publica.html" %}
+{% block titulo %}La página caducó{% endblock %}
+{% block contenido %}
+<div class="error-pagina pila">
+  <p class="error-codigo">403</p>
+  <h1>La página caducó</h1>
+  <p class="texto-suave">Por seguridad, el formulario ya no es válido. Recarga la página e inténtalo de nuevo.</p>
+  <p><a class="btn btn-primario" href="/">Volver al inicio</a></p>
+</div>
+{% endblock %}

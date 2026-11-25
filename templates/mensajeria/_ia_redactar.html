@@ -1,0 +1,11 @@
+{% if ia_disponible %}
+<details class="desplegable caja-ia">
+  <summary>{% icono "ia" %} Redactar con IA</summary>
+  <div class="formulario">
+    <div class="campo"><label for="ia-objetivo">¿Para qué es el mensaje?</label><input type="text" id="ia-objetivo" name="objetivo" placeholder="Ej.: felicitar por su tatuaje cicatrizado y ofrecer flash"></div>
+    <div class="campo"><label for="ia-indicaciones">Indicaciones <span class="requerido">(opcional)</span></label><input type="text" id="ia-indicaciones" name="indicaciones" placeholder="Más corto, menciona que tengo hueco el sábado…"></div>
+    <div><button type="button" class="btn btn-peq" hx-post="{% url 'ia:redactar' %}" hx-include="[name=cliente], #id_texto, #ia-objetivo, #ia-indicaciones" hx-target="#id_texto" hx-swap="outerHTML" hx-disabled-elt="this">{% icono "ia" %} Generar borrador <span class="cargando htmx-indicator"><span></span></span></button></div>
+    <p class="ayuda">La IA solo recibe su nombre de pila, sus tatuajes y visitas. Nunca datos de salud ni de contacto.</p>
+  </div>
+</details>
+{% endif %}

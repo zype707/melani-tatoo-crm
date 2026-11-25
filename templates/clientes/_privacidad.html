@@ -1,0 +1,37 @@
+{% if ia_disponible and not proximas %}
+<section class="bloque" aria-labelledby="t-ret">
+  <div class="bloque-titulo"><h2 id="t-ret">{% icono "ia" %} Que vuelva</h2></div>
+  <div id="retencion-ia"><p class="texto-peq texto-suave">Ideas y un mensaje para retomar el contacto.</p></div>
+  <button type="button" class="btn btn-peq espacio-arriba" hx-post="{% url 'ia:retencion' cliente.pk %}" hx-target="#retencion-ia" hx-swap="innerHTML" hx-disabled-elt="this">{% icono "ia" %} Pedir ideas <span class="cargando htmx-indicator"><span></span></span></button>
+</section>
+{% endif %}
+<section class="bloque" aria-labelledby="t-priv">
+  <div class="bloque-titulo"><h2 id="t-priv">Privacidad</h2></div>
+  <div class="pila-p">
+    <a class="btn btn-peq btn-bloque" href="{% url 'clientes:exportar' cliente.pk %}">{% icono "descargar" %} Exportar sus datos</a>
+    {% if user.es_propietaria %}
+      <button type="button" class="btn btn-peq btn-peligro btn-bloque" data-abrir="dialogo-anonimizar">Anonimizar</button>
+      <button type="button" class="btn btn-peq btn-peligro btn-bloque" data-abrir="dialogo-eliminar">Eliminar definitivamente</button>
+    {% endif %}
+  </div>
+</section>
+{% if user.es_propietaria %}
+<dialog id="dialogo-anonimizar" class="dialogo" aria-labelledby="t-anon">
+  <form method="post" action="{% url 'clientes:anonimizar' cliente.pk %}" class="dialogo-cuerpo">
+    {% csrf_token %}
+    <h2 id="t-anon">Anonimizar ficha</h2>
+    <p class="texto-peq">Se borran nombre, contacto, salud, notas, fotos y mensajes. Se conservan los importes (contabilidad) y los consentimientos firmados durante el plazo legal ({{ ajustes.retencion_consentimientos_anios }} años); después se borran solos.</p>
+    <div class="campo"><label for="conf-anon">Escribe «{{ cliente.nombre_completo }}» para confirmar</label><input type="text" id="conf-anon" name="confirmar_nombre" autocomplete="off" required></div>
+    <div class="dialogo-acciones"><button type="button" class="btn" data-cerrar>Cancelar</button><button type="submit" class="btn btn-solido">Anonimizar</button></div>
+  </form>
+</dialog>
+<dialog id="dialogo-eliminar" class="dialogo" aria-labelledby="t-elim">
+  <form method="post" action="{% url 'clientes:eliminar' cliente.pk %}" class="dialogo-cuerpo">
+    {% csrf_token %}
+    <h2 id="t-elim">Eliminar definitivamente</h2>
+    <p class="texto-peq">Borra la ficha, sus citas, tatuajes, fotos y mensajes. No se puede deshacer. Si tiene consentimientos que hay que conservar por ley, no se permitirá: anonimiza en su lugar.</p>
+    <div class="campo"><label for="conf-elim">Escribe «{{ cliente.nombre_completo }}» para confirmar</label><input type="text" id="conf-elim" name="confirmar_nombre" autocomplete="off" required></div>
+    <div class="dialogo-acciones"><button type="button" class="btn" data-cerrar>Cancelar</button><button type="submit" class="btn btn-solido">Eliminar</button></div>
+  </form>
+</dialog>
+{% endif %}

@@ -1,0 +1,5 @@
+{% if form.non_field_errors %}
+  <div class="alerta errores-formulario" role="alert">{% icono "alerta" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div></div>
+{% endif %}
+{% for field in form.hidden_fields %}{{ field }}{% for e in field.errors %}<p class="error">{{ field.label }}: {{ e }}</p>{% endfor %}{% endfor %}
+{% for field in form.visible_fields %}{{ field.as_field_group }}{% endfor %}

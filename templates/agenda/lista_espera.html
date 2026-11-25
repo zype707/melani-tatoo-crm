@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block titulo %}Lista de espera{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div><nav class="migas"><a href="{% url 'agenda:calendario' %}">Agenda</a></nav><h1>Lista de espera</h1></div>
+  <div class="acciones"><a class="btn btn-primario" href="{% url 'agenda:espera_nueva' %}">{% icono "plus" %} Añadir</a></div>
+</header>
+<p class="texto-suave espacio-abajo">Cuando se cancele una cita, te sugeriremos a quién ofrecer el hueco según sus días, franja y tipo de cita.</p>
+{% if entradas %}
+  <ul class="lista bloque bloque-lista">
+    {% for e in entradas %}
+      <li><a class="fila-lista" href="{% url 'agenda:espera_editar' e.pk %}">
+        <span class="avatar">{{ e.cliente.nombre_completo|iniciales }}</span>
+        <span class="fila-cuerpo"><span class="fila-titulo">{{ e.cliente.nombre_completo }}{% if e.prioritaria %} <span class="estado estado-atencion">Prioritaria</span>{% endif %}</span><span class="fila-sub">{{ e.tipo|default:"Cualquier cita" }} · {{ e.dias_legibles }} · {{ e.get_franja_display|lower }}{% if e.notas %} · {{ e.notas }}{% endif %}</span></span>
+        <span class="fila-meta texto-suave">Desde {{ e.creado_en|relativo }}</span>
+      </a></li>
+    {% endfor %}
+  </ul>
+{% else %}
+  {% url 'agenda:espera_nueva' as url_nueva %}
+  {% include "componentes/vacio.html" with icono="lista" titulo="Lista de espera vacía" texto="Apunta aquí a quien quiere cita antes de lo que tienes libre." url=url_nueva accion="Añadir a alguien" %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,108 @@
+# Blueprint de Render · CRM del estudio de tatuaje
+#
+# Crea: 1 web service con disco persistente (archivos privados y copias),
+#       1 base de datos Postgres solo accesible por red privada,
+#       2 cron jobs (bandeja diaria y mantenimiento nocturno).
+# Los horarios de los cron están en UTC. Orlando = UTC-5 (invierno) / UTC-4 (verano).
+#
+# Al crear el Blueprint, Render pedirá los valores marcados con «sync: false»:
+#   SITE_URL        → la URL pública del servicio, p. ej. https://tinta-crm.onrender.com
+#                     (la misma en los tres servicios; necesaria para los enlaces de los mensajes)
+#   OPENAI_API_KEY  → opcional; vacío = asistente de IA desactivado
+
+envVarGroups:
+  - name: tinta-comun
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: estudio.settings.prod
+      - key: SECRET_KEY
+        generateValue: true
+      - key: TAREAS_SECRETO
+        generateValue: true
+      - key: TIME_ZONE
+        value: America/New_York
+      - key: REGION_TELEFONO
+        value: US
+      - key: MONEDA
+        value: USD
+      - key: SIMBOLO_MONEDA
+        value: "$"
+      - key: IA_MODELO
+        value: gpt-6-luna
+      - key: IA_LIMITE_MENSUAL
+        value: "300"
+      - key: PROXIES_DE_CONFIANZA
+        value: "1"
+
+databases:
+  - name: tinta-db
+    plan: 0.1c-256mb
+    region: virginia
+    postgresMajorVersion: "17"
+    databaseName: estudio
+    user: estudio
+    ipAllowList: []  # sin acceso desde internet: solo los servicios de Render
+
+services:
+  - type: web
+    name: tinta-crm
+    runtime: python
+    region: virginia
+    plan: 0.5c-512mb  # de pago: necesario para el disco persistente y el pre-deploy
+    buildCommand: bash build.sh
+    preDeployCommand: python manage.py migrate --noinput && python manage.py createcachetable && python manage.py inicializar_estudio
+    startCommand: gunicorn estudio.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 --access-logfile -
+    healthCheckPath: /salud/
+    disk:
+      name: archivos
+      mountPath: /var/data
+      sizeGB: 5
+    envVars:
+      - fromGroup: tinta-comun
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tinta-db
+          property: connectionString
+      - key: MEDIA_ROOT
+        value: /var/data/media
+      - key: COPIAS_ROOT
+        value: /var/data/copias
+      - key: SITE_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+
+  # Cada mañana (10:00 UTC = 5:00/6:00 en Orlando): prepara «Mensajes de hoy».
+  - type: cron
+    name: tinta-bandeja-diaria
+    runtime: python
+    region: virginia
+    schedule: "0 10 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python manage.py tareas_diarias
+    envVars:
+      - fromGroup: tinta-comun
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tinta-db
+          property: connectionString
+      - key: SITE_URL
+        sync: false
+
+  # Cada noche (8:30 UTC = 3:30/4:30 en Orlando): copia de seguridad y limpieza de archivos.
+  # Los cron jobs no pueden montar el disco, así que piden al web service que lo haga.
+  - type: cron
+    name: tinta-mantenimiento
+    runtime: python
+    region: virginia
+    schedule: "30 8 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python manage.py disparar_tarea copia_seguridad && python manage.py disparar_tarea limpiar_archivos
+    envVars:
+      - fromGroup: tinta-comun
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tinta-db
+          property: connectionString
+      - key: SITE_URL
+        sync: false

@@ -1,0 +1,41 @@
+[project]
+name = "tinta-crm"
+version = "1.0.0"
+description = "CRM de gestión y fidelización para un estudio de tatuaje"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "estudio.settings.test"
+python_files = ["test_*.py"]
+testpaths = ["apps"]
+addopts = "--strict-markers"
+filterwarnings = ["ignore::DeprecationWarning:reportlab.*", "ignore:No directory at:UserWarning"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["*/migrations/*", "staticfiles", "media_privado", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "DJ", "S", "C4", "SIM", "RUF"]
+ignore = [
+  "E501",    # el formateador ajusta el código; solo quedan cadenas largas en español
+  "S101",    # assert en tests
+  "S311",    # random en datos de demo (los tokens usan secrets)
+  "RUF001", "RUF002", "RUF003",  # caracteres tipográficos en español
+  "RUF012",  # atributos mutables en Meta/forms de Django
+  "DJ001",   # CharField null=True puntual
+  "SIM108",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"*/tests/*" = ["S105", "S106", "S108"]
+"scripts/*" = ["S603", "S607", "E402", "S105", "S108"]
+"estudio/settings/*" = ["F403", "F405", "S105"]
+"apps/*/textos.py" = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["apps", "estudio"]
+
+[tool.ruff.format]
+quote-style = "double"

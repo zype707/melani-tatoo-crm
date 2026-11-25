@@ -1,0 +1,8 @@
+<a class="marca" href="{% if user.is_authenticated %}{% url 'panel:inicio' %}{% else %}#{% endif %}">
+  {% if ajustes.logo %}
+    <img class="marca-logo" src="{% url 'logo' %}" alt="" width="36" height="36">
+  {% else %}
+    <span class="marca-sello" aria-hidden="true">{{ ajustes.nombre|iniciales }}</span>
+  {% endif %}
+  <span>{{ ajustes.nombre }}</span>
+</a>

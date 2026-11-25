@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block titulo %}Mi cuenta{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div>
+    <span class="antetitulo">{{ user.get_rol_display }}</span>
+    <h1>Mi cuenta</h1>
+  </div>
+</header>
+
+<div class="rejilla-2">
+  <section class="bloque" aria-labelledby="t-perfil">
+    <div class="bloque-titulo"><h2 id="t-perfil">Perfil</h2></div>
+    <form method="post" class="formulario" novalidate>
+      {% csrf_token %}<input type="hidden" name="accion" value="perfil">
+      {{ perfil }}
+      <p class="texto-suave texto-peq">Email de acceso: <strong>{{ user.email }}</strong></p>
+      <div class="acciones-formulario"><button type="submit" class="btn">Guardar</button></div>
+    </form>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-2fa">
+    <div class="bloque-titulo"><h2 id="t-2fa">Verificación en dos pasos</h2><span class="estado estado-ok">Activa</span></div>
+    <p>Te quedan <strong class="{% if restantes <= 2 %}cifra-critica{% endif %}">{{ restantes }}</strong> códigos de recuperación.</p>
+    {% if restantes <= 2 %}<p class="error">Genera códigos nuevos cuanto antes.</p>{% endif %}
+    <form method="post" class="formulario bloque-pie" novalidate>
+      {% csrf_token %}
+      <p class="texto-suave texto-peq">Para cambiar algo, confirma con tu código actual.</p>
+      {{ confirmar }}
+      <div class="grupo-botones">
+        <button type="submit" name="accion" value="regenerar" class="btn">{% icono "refrescar" %} Nuevos códigos</button>
+        <button type="submit" name="accion" value="reconfigurar" class="btn">{% icono "telefono" %} Cambiar de móvil</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-pass">
+    <div class="bloque-titulo"><h2 id="t-pass">Contraseña</h2></div>
+    <form method="post" class="formulario" novalidate>
+      {% csrf_token %}<input type="hidden" name="accion" value="password">
+      {{ password }}
+      <div class="acciones-formulario"><button type="submit" class="btn">Cambiar contraseña</button></div>
+    </form>
+  </section>
+</div>
+{% endblock %}

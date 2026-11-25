@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#01161b">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{% block titulo %}{% endblock %} · {{ ajustes.nombre }}</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script src="{% static 'js/app.js' %}" defer></script>
+  {% block cabeza %}{% endblock %}
+</head>
+<body class="publico kiosco">
+  <header class="publico-cabecera">{% include "componentes/marca.html" %}</header>
+  <main id="principal" class="publico-cuerpo" tabindex="-1">{% block contenido %}{% endblock %}</main>
+  <div id="avisos" class="avisos" aria-live="polite"></div>
+  {% include "componentes/dialogos.html" %}
+</body>
+</html>

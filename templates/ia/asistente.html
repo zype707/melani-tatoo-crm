@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block titulo %}Asistente{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div><span class="antetitulo">Asistente</span><h1>Pregunta a tu CRM</h1></div>
+  <div class="uso-ia">
+    {% if estado.configurada and estado.activa %}
+      <span class="cifra cifra-peq {% if estado.usos >= estado.limite %}cifra-critica{% endif %}">{{ estado.usos }}/{{ estado.limite }}</span>
+      <span class="cifra-etiqueta">Consultas de IA este mes</span>
+    {% else %}
+      <span class="estado">IA desactivada</span>
+    {% endif %}
+  </div>
+</header>
+
+{% if not disponible %}
+  <div class="aviso espacio-abajo">{% icono "ia" %}<p>{% if not estado.configurada %}La IA no está configurada (falta <code>OPENAI_API_KEY</code>). La búsqueda funciona igual con un intérprete básico.{% else %}El asistente está desactivado en Ajustes.{% endif %}</p></div>
+{% endif %}
+
+<div class="rejilla-ficha">
+  <section class="bloque" aria-labelledby="t-buscar">
+    <div class="bloque-titulo"><h2 id="t-buscar">{% icono "buscar" %} Buscar con tus palabras</h2></div>
+    <form method="get" class="formulario" hx-get="{% url 'ia:buscar' %}" hx-target="#resultados-ia" hx-swap="outerHTML" hx-indicator="#buscando">
+      <div class="buscador">{% icono "buscar" %}<label for="q-ia" class="solo-lectores">¿A quién buscas?</label>
+        <input type="search" id="q-ia" name="q" value="{{ q }}" placeholder="Ej.: clientes con fine line en el antebrazo que no vienen desde hace 6 meses" data-atajo-buscar>
+      </div>
+      <div class="fila"><button type="submit" class="btn">{% icono "buscar" %} Buscar</button><span id="buscando" class="cargando htmx-indicator"><span></span></span></div>
+      <div class="sugerencias">
+        <button type="button" class="etiqueta boton-variable" data-rellenar="#q-ia" data-texto="VIP que cumplen en diciembre">VIP que cumplen en diciembre</button>
+        <button type="button" class="etiqueta boton-variable" data-rellenar="#q-ia" data-texto="proyectos a medias de blackwork">proyectos a medias de blackwork</button>
+        <button type="button" class="etiqueta boton-variable" data-rellenar="#q-ia" data-texto="no vienen desde hace 8 meses y aceptan promociones">no vienen desde hace 8 meses</button>
+      </div>
+    </form>
+    <div class="espacio-arriba">{% include "ia/_resultados.html" %}</div>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-resp">
+    <div class="bloque-titulo"><h2 id="t-resp">{% icono "mensajes" %} Responder un mensaje</h2></div>
+    {% if disponible %}
+      <form class="formulario" hx-post="{% url 'ia:respuesta' %}" hx-target="#respuesta-ia" hx-swap="innerHTML" hx-indicator="#pensando">
+        <div class="campo"><label for="recibido">Pega el mensaje que te han enviado</label><textarea id="recibido" name="recibido" rows="5" placeholder="Hola! Cuánto costaría un tatuaje pequeño en la muñeca?"></textarea></div>
+        <div class="campo"><label for="indicaciones-resp">Indicaciones <span class="requerido">(opcional)</span></label><input type="text" id="indicaciones-resp" name="indicaciones" placeholder="Mis mini empiezan en $120, tengo hueco en enero"></div>
+        <div class="campo">
+          <label for="cliente-resp">¿De quién es? <span class="requerido">(opcional)</span></label>
+          <select id="cliente-resp" name="cliente"><option value="">— Persona nueva —</option>{% for c in clientes_recientes %}<option value="{{ c.pk }}">{{ c }}</option>{% endfor %}</select>
+          <p class="ayuda">Si es clienta, la IA tiene en cuenta sus tatuajes y visitas (nunca salud ni contacto).</p>
+        </div>
+        <div class="fila"><button type="submit" class="btn btn-primario">{% icono "ia" %} Proponer respuesta</button><span id="pensando" class="cargando htmx-indicator"><span></span></span></div>
+      </form>
+      <div id="respuesta-ia" class="espacio-arriba"></div>
+    {% else %}
+      <p class="texto-suave">Disponible cuando se configure la IA.</p>
+    {% endif %}
+  </section>
+</div>
+
+<section class="bloque espacio-arriba" aria-labelledby="t-priv">
+  <div class="bloque-titulo"><h2 id="t-priv">{% icono "escudo" %} Qué ve la IA</h2></div>
+  <p class="texto-peq">Solo el mínimo: nombre de pila, tatuajes (zona, estilo, tamaño), número de visitas y fechas aproximadas. <strong>Nunca</strong> datos de salud, fecha de nacimiento, teléfono, email, notas privadas, firmas, consentimientos ni imágenes. Los textos libres se limpian de emails, teléfonos y enlaces antes de salir. OpenAI recibe la petición con <code>store=false</code> y modelo <code>{{ estado.modelo }}</code>. La IA propone; tú decides y envías.</p>
+</section>
+{% endblock %}

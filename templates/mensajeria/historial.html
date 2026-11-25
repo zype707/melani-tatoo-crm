@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block titulo %}Historial de mensajes{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div><span class="antetitulo">Mensajería</span><h1>Historial</h1></div>
+</header>
+{% include "mensajeria/_subnav.html" with seccion="historial" %}
+
+{% if por_canal %}
+<div class="rejilla-cifras espacio-abajo">
+  {% for c in por_canal %}<div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ c.n }}</span><span class="cifra-etiqueta">{% if c.canal_usado == "whatsapp_link" %}WhatsApp{% elif c.canal_usado == "sms_link" %}SMS / RCS{% else %}Copiados{% endif %} · 30 días</span></div>{% endfor %}
+</div>
+{% endif %}
+
+<form method="get" class="filtros">
+  <div class="buscador">{% icono "buscar" %}<label for="q" class="solo-lectores">Buscar</label><input type="search" id="q" name="q" value="{{ q }}" placeholder="Cliente o texto del mensaje" data-atajo-buscar></div>
+  <div class="fila">
+    <select name="tipo" class="select-compacto" data-autoenviar aria-label="Tipo">
+      <option value="">Todos los tipos</option>
+      {% for k, v in tipos %}<option value="{{ k }}" {% if k == tipo %}selected{% endif %}>{{ v }}</option>{% endfor %}
+    </select>
+    <select name="canal" class="select-compacto" data-autoenviar aria-label="Canal">
+      <option value="">Todos los canales</option>
+      {% for k, v in canales %}{% if k %}<option value="{{ k }}" {% if k == canal %}selected{% endif %}>{{ v }}</option>{% endif %}{% endfor %}
+    </select>
+    <button class="btn btn-peq" type="submit">Filtrar</button>
+  </div>
+</form>
+
+{% if pagina.object_list %}
+  <ul class="lista bloque bloque-lista">
+    {% for m in pagina %}
+      <li class="fila-lista fila-historial">
+        <span class="mensaje-icono" aria-hidden="true">{% icono m.icono %}</span>
+        <span class="fila-cuerpo">
+          <a class="fila-titulo" href="{% url 'clientes:ficha' m.cliente.pk %}">{{ m.cliente.nombre_completo }}</a>
+          <span class="historial-texto">{{ m.texto|truncatechars:180 }}</span>
+        </span>
+        <span class="fila-meta"><span class="etiqueta etiqueta-mini">{{ m.get_canal_usado_display }}</span><span class="fila-sub">{{ m.enviado_en|fecha_corta }} · {{ m.enviado_en|hora }}</span></span>
+      </li>
+    {% endfor %}
+  </ul>
+  {% if pagina.has_other_pages %}
+    <nav class="paginacion">
+      {% if pagina.has_previous %}<a class="btn" href="?{% querystring pagina=pagina.previous_page_number %}">{% icono "flecha-izq" %} Anterior</a>{% endif %}
+      <span class="texto-suave">{{ pagina.number }} / {{ pagina.paginator.num_pages }}</span>
+      {% if pagina.has_next %}<a class="btn" href="?{% querystring pagina=pagina.next_page_number %}">Siguiente {% icono "flecha-der" %}</a>{% endif %}
+    </nav>
+  {% endif %}
+{% else %}
+  {% include "componentes/vacio.html" with icono="enviar" titulo="Sin mensajes enviados" texto="Cada mensaje que marques como enviado quedará aquí y en la ficha del cliente." %}
+{% endif %}
+{% endblock %}

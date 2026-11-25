@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block titulo %}Solicitudes{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div><span class="antetitulo">Página pública</span><h1>Solicitudes</h1></div>
+</header>
+
+<section class="bloque enlace-publico espacio-abajo" aria-labelledby="t-enlace">
+  <div class="bloque-titulo">
+    <h2 id="t-enlace">Tu enlace de reservas</h2>
+    {% if ajustes.reservas_activas %}<span class="estado estado-ok">Abierto</span>{% else %}<span class="estado estado-atencion">Cerrado</span>{% endif %}
+  </div>
+  {% if url_publica %}
+    <div class="fila enlace-fila">
+      <input type="text" id="url-reservas" class="mono" value="{{ url_publica }}" readonly aria-label="Enlace de reservas">
+      <button type="button" class="btn" data-copiar="#url-reservas" data-copiado="Enlace copiado. Pégalo en tu bio de Instagram.">{% icono "copiar" %} Copiar</button>
+      <a class="btn btn-fantasma" href="{{ url_publica }}" target="_blank" rel="noopener">{% icono "externo" %} Ver</a>
+    </div>
+    <p class="texto-peq texto-suave">Caduca el {{ enlace.caduca_en|date:"j/m/Y" }} · {{ enlace.usos }} visita{{ enlace.usos|pluralize }}.</p>
+  {% else %}
+    <p class="texto-suave">Aún no tienes enlace público.</p>
+  {% endif %}
+  <form method="post" action="{% url 'solicitudes:enlace' %}" class="grupo-botones bloque-pie">
+    {% csrf_token %}
+    {% if url_publica %}
+      <button type="submit" name="accion" value="renovar" class="btn btn-peq" data-confirmar="El enlace actual dejará de funcionar. Tendrás que cambiarlo en tu Instagram.">{% icono "refrescar" %} Renovar enlace</button>
+    {% else %}
+      <button type="submit" name="accion" value="crear" class="btn btn-primario btn-peq">{% icono "enlace" %} Crear enlace</button>
+    {% endif %}
+    {% if ajustes.reservas_activas %}
+      <button type="submit" name="accion" value="cerrar" class="btn btn-peq btn-fantasma">{% icono "candado" %} Cerrar agenda</button>
+    {% else %}
+      <button type="submit" name="accion" value="abrir" class="btn btn-peq btn-primario">Abrir agenda</button>
+    {% endif %}
+  </form>
+</section>
+
+<nav class="pestanas" aria-label="Estado">
+  {% for e, nombre, n in pestanas %}
+    <a href="?estado={{ e }}"{% if e == estado %} aria-current="page"{% endif %}>{{ nombre }}{% if n %} <span class="{% if e == 'nueva' %}insignia{% else %}texto-suave{% endif %}">{{ n }}</span>{% endif %}</a>
+  {% endfor %}
+</nav>
+
+{% if solicitudes %}
+  <div class="rejilla">
+    {% for s in solicitudes %}
+      <a class="bloque tarjeta-solicitud" href="{% url 'solicitudes:detalle' s.pk %}">
+        <div class="fila-entre">
+          <strong>{{ s.nombre_completo }}</strong>
+          <span class="texto-peq texto-suave">{{ s.creado_en|relativo }}</span>
+        </div>
+        <p class="texto-peq">{{ s.descripcion|truncatechars:140 }}</p>
+        <div class="etiquetas">
+          {% if s.zona %}<span class="etiqueta etiqueta-mini">{{ s.get_zona_display }}</span>{% endif %}
+          {% if s.tamano %}<span class="etiqueta etiqueta-mini">{{ s.get_tamano_display }}</span>{% endif %}
+          {% if s.estilo %}<span class="etiqueta etiqueta-mini">{{ s.get_estilo_display }}</span>{% endif %}
+          {% if s.primer_tatuaje %}<span class="etiqueta etiqueta-mini">Primer tatuaje</span>{% endif %}
+        </div>
+        {% if s.imagenes.all %}
+          <div class="miniaturas">{% for i in s.imagenes.all|slice:":4" %}<img src="{% url 'solicitudes:imagen_mini' i.pk %}" alt="" loading="lazy" width="64" height="64">{% endfor %}</div>
+        {% endif %}
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  {% include "componentes/vacio.html" with icono="bandeja" titulo="Nada por aquí" texto="Comparte tu enlace de reservas en Instagram: las solicitudes llegan a esta bandeja." %}
+{% endif %}
+{% endblock %}

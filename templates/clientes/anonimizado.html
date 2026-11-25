@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block titulo %}Ficha anonimizada{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina"><div><nav class="migas"><a href="{% url 'clientes:lista' %}">Clientes</a></nav><h1>Ficha anonimizada</h1></div></header>
+<div class="aviso ancho-texto">{% icono "candado" %}<p>Los datos personales de esta ficha se eliminaron el {{ cliente.anonimizado_en|date:"j/m/Y" }} a petición del cliente. Solo se conservan importes para la contabilidad{% if cliente.consentimientos.exists %} y los consentimientos firmados durante el plazo legal{% endif %}.</p></div>
+{% endblock %}

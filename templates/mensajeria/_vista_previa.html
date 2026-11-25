@@ -1,0 +1,5 @@
+<div id="vista-previa" class="burbuja-previa" aria-live="polite">
+  <p class="texto-pre">{{ vista_previa|default:"Escribe el texto para verlo aquí." }}</p>
+  {% if desconocidas %}<p class="error">Variables que no existen: {% for v in desconocidas %}{{ "{" }}{{ v }}{{ "}" }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+  {% if caracteres %}<span class="texto-peq">{{ caracteres }} caracteres</span>{% endif %}
+</div>

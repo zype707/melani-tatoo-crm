@@ -1,0 +1,34 @@
+<form method="get" class="fila espacio-abajo">
+  <input type="hidden" name="vista" value="lista"><input type="hidden" name="fecha" value="{{ fecha|date:'Y-m-d' }}">
+  <label for="f-estado" class="solo-lectores">Estado</label>
+  <select id="f-estado" name="estado" class="select-compacto" data-autoenviar>
+    <option value="">Todas (sin canceladas)</option>
+    <option value="solicitada" {% if estado == "solicitada" %}selected{% endif %}>Por confirmar</option>
+    <option value="confirmada" {% if estado == "confirmada" %}selected{% endif %}>Confirmadas</option>
+    <option value="realizada" {% if estado == "realizada" %}selected{% endif %}>Realizadas</option>
+    <option value="cancelada" {% if estado == "cancelada" %}selected{% endif %}>Canceladas</option>
+    <option value="no_show" {% if estado == "no_show" %}selected{% endif %}>No vino</option>
+  </select>
+</form>
+{% if grupos %}
+  <div class="pila-g">
+    {% for dia, citas in grupos %}
+      <section aria-labelledby="dia-{{ dia|date:'Ymd' }}">
+        <h2 class="titulo-dia" id="dia-{{ dia|date:'Ymd' }}">{{ dia|fecha_larga|capfirst }} <span class="texto-suave">· {{ dia|relativo }}</span></h2>
+        <ul class="lista bloque bloque-lista">
+          {% for c in citas %}
+            <li><a class="fila-lista" href="{% url 'agenda:detalle' c.pk %}">
+              <span class="hora-grande">{{ c.inicio|hora }}</span>
+              <span class="tipo-marca tipo-{{ c.tipo.color }}" aria-hidden="true"></span>
+              <span class="fila-cuerpo"><span class="fila-titulo">{{ c.cliente.nombre_completo }}</span><span class="fila-sub">{{ c.tipo }} · {{ c.duracion_minutos|duracion }}{% if c.descripcion %} · {{ c.descripcion }}{% endif %}</span></span>
+              <span class="estado {% if c.requiere_atencion %}estado-atencion{% elif c.estado == 'realizada' or c.estado == 'confirmada' %}estado-ok{% elif c.estado == 'cancelada' or c.estado == 'no_show' %}estado-apagado{% endif %}">{{ c.get_estado_display }}</span>
+            </a></li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  </div>
+{% else %}
+  {% url 'agenda:nueva' as url_nueva %}
+  {% include "componentes/vacio.html" with icono="agenda" titulo="Nada en estos 30 días" texto="Cuando reserves citas aparecerán aquí, agrupadas por día." url=url_nueva accion="Nueva cita" principal=True %}
+{% endif %}

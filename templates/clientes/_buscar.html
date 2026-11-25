@@ -1,0 +1,8 @@
+{% for c in resultados %}
+  <button type="button" class="resultado" data-elegir-cliente data-id="{{ c.pk }}" data-nombre="{{ c.nombre_completo }}">
+    <span class="avatar">{{ c.nombre_completo|iniciales }}</span>
+    <span class="fila-cuerpo"><span class="fila-titulo">{{ c.nombre_completo }}</span><span class="fila-sub">{{ c.telefono|telefono|default:c.email }}</span></span>
+  </button>
+{% empty %}
+  {% if q|length >= 2 %}<p class="texto-suave texto-peq">Nadie con «{{ q }}». Créalo abajo.</p>{% endif %}
+{% endfor %}

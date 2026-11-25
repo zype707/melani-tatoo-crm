@@ -1,0 +1,10 @@
+{% extends "base_publica.html" %}
+{% block titulo %}No puedes ver esto{% endblock %}
+{% block contenido %}
+<div class="error-pagina pila">
+  <p class="error-codigo">403</p>
+  <h1>No puedes ver esto</h1>
+  <p class="texto-suave">No tienes permiso para esta página o acción.</p>
+  <p><a class="btn btn-primario" href="/">Volver al inicio</a></p>
+</div>
+{% endblock %}

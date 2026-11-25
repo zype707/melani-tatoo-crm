@@ -1,0 +1,35 @@
+<figure class="grafico" aria-labelledby="{{ id }}-titulo">
+  <figcaption id="{{ id }}-titulo" class="solo-lectores">{{ titulo }}</figcaption>
+  {% if g.series|length > 1 %}
+    <ul class="leyenda grafico-leyenda">
+      {% for s in g.series %}<li><span class="muestra {{ s.clase }}" aria-hidden="true"></span>{{ s.nombre }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+  <svg viewBox="0 0 {{ g.ancho }} {{ g.alto }}" role="img" aria-label="{{ titulo }}" preserveAspectRatio="none" class="grafico-svg">
+    <defs>
+      <pattern id="{{ id }}-trama" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="6" class="trama-linea"></line>
+      </pattern>
+    </defs>
+    {% for l in g.lineas %}
+      <line x1="{{ g.izq }}" x2="{{ g.der }}" y1="{{ l.y }}" y2="{{ l.y }}" class="{% if forloop.first %}grafico-base{% else %}grafico-rejilla{% endif %}"></line>
+      <text x="{{ g.izq|add:'-8' }}" y="{{ l.y }}" class="grafico-eje" text-anchor="end" dominant-baseline="middle">{{ l.valor|dinero }}</text>
+    {% endfor %}
+    {% for grupo in g.grupos %}
+      {% for b in grupo.barras %}
+        <g class="grafico-barra">
+          <rect x="{{ b.x }}" y="{{ b.y }}" width="{{ b.ancho }}" height="{{ b.alto }}" class="{{ b.clase }}"{% if b.clase == "serie-b" %} fill="url(#{{ id }}-trama)"{% endif %}></rect>
+          <rect x="{{ b.x|add:'-4' }}" y="0" width="{{ b.ancho|add:'8' }}" height="{{ g.base_y }}" class="grafico-diana"><title>{{ grupo.etiqueta }} · {{ b.nombre }}: {{ b.valor|dinero }}</title></rect>
+        </g>
+      {% endfor %}
+      <text x="{{ grupo.x }}" y="{{ g.etiqueta_y }}" class="grafico-eje{% if grupo.resaltado %} grafico-eje-actual{% endif %}" text-anchor="middle">{{ grupo.etiqueta }}</text>
+    {% endfor %}
+  </svg>
+  <details class="grafico-tabla">
+    <summary>Ver datos en tabla</summary>
+    <table class="tabla">
+      <thead><tr><th scope="col">Periodo</th>{% for s in g.series %}<th scope="col" class="num">{{ s.nombre }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for grupo in g.grupos %}<tr><th scope="row">{{ grupo.etiqueta }}</th>{% for b in grupo.barras %}<td class="num">{{ b.valor|dinero }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+    </table>
+  </details>
+</figure>
