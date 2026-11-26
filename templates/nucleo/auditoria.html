@@ -18,7 +18,7 @@
       {% for r in pagina %}
         <tr>
           <td class="numerico">{{ r.creado_en|date:"SHORT_DATETIME_FORMAT" }}</td>
-          <td><span class="estado {% if r.accion == 'login_fallo' or r.accion == 'login_bloqueado' or r.accion == '2fa_fallo' %}estado-atencion{% endif %}">{{ r.get_accion_display }}</span></td>
+          <td><span class="estado {% if r.accion == 'login_fallo' or r.accion == 'login_bloqueado' %}estado-atencion{% endif %}">{{ r.get_accion_display }}</span></td>
           <td>{{ r.descripcion }}</td>
           <td>{{ r.usuario|default:"—" }}</td>
           <td class="mono texto-peq">{{ r.ip|default:"" }}</td>

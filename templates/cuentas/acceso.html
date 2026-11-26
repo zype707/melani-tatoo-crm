@@ -4,19 +4,16 @@
 <div class="acceso-caja pila-g">
   <div>
     <h1>{% translate "Entrar" %}</h1>
-    <p class="texto-suave">{% translate "Acceso privado del estudio." %}</p>
+    <p class="texto-suave">{% blocktranslate with estudio=ajustes.nombre %}Acceso privado de {{ estudio }}.{% endblocktranslate %}</p>
   </div>
   <form method="post" class="formulario bloque" novalidate>
     {% csrf_token %}
     {{ form }}
     <div class="acciones-formulario">
-      <button type="submit" class="btn btn-primario btn-bloque">{% icono "candado" %} {% translate "Continuar" %}</button>
+      <button type="submit" class="btn btn-primario btn-bloque">{% icono "candado" %} {% translate "Entrar" %}</button>
     </div>
   </form>
-  <p class="texto-suave texto-peq">{% translate "Después te pediremos el código de tu app autenticadora." %}</p>
-  {% if alta_habilitada %}
-    <p class="texto-peq"><a href="{% url 'cuentas:alta' %}">{% translate "¿Primer acceso? Crea tu cuenta" %}</a></p>
-  {% endif %}
+  <p class="texto-suave texto-peq">{% translate "Deja que el navegador guarde tu contraseña: la próxima vez se rellenará sola y la sesión se mantiene abierta en este dispositivo." %}</p>
 </div>
 {% endblock %}
 {% block pie %}{{ ajustes.nombre }}{% endblock %}

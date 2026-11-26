@@ -1,6 +1,6 @@
-# Tinta · CRM para un estudio de tatuaje
+# ink_mels · CRM del estudio de tatuaje
 
-CRM completo para una tatuadora que trabaja sola. Cubre agenda, fichas de clientes, consentimientos firmados, mensajería, finanzas, catálogo flash y un asistente de IA.
+CRM completo de **ink_mels**, el estudio de una tatuadora que trabaja sola. Cubre agenda, fichas de clientes, consentimientos firmados, mensajería, finanzas, catálogo flash y un asistente de IA.
 
 El centro del producto son los **mensajes**. Cada día prepara el trabajo de mensajería: recordatorios, cuidados, retoques, cumpleaños, aniversarios del tatuaje, campañas y reactivaciones. La tatuadora los revisa, los edita si quiere y los envía con un toque por WhatsApp o SMS desde su móvil. **Nunca se envía nada automáticamente.**
 
@@ -26,7 +26,7 @@ Más capturas en [`docs/capturas/`](docs/capturas/). Todos los datos que aparece
 9. [Instalación local](#9-instalación-local)
 10. [Variables de entorno](#10-variables-de-entorno)
 11. [Despliegue en Render paso a paso](#11-despliegue-en-render-paso-a-paso)
-12. [Primera cuenta y 2FA](#12-primera-cuenta-y-2fa)
+12. [Cuentas y acceso](#12-cuentas-y-acceso)
 13. [Uso diario](#13-uso-diario)
 14. [Tareas programadas](#14-tareas-programadas)
 15. [Copias de seguridad y restauración](#15-copias-de-seguridad-y-restauración)
@@ -44,16 +44,16 @@ Más capturas en [`docs/capturas/`](docs/capturas/). Todos los datos que aparece
 |---|---|
 | **Para quién** | Una tatuadora autónoma en Orlando, Florida (EE. UU.). Interfaz bilingüe **español / inglés** (selector ES/EN). |
 | **Stack** | Django 6.1 · PostgreSQL 17 · plantillas en servidor + HTMX 2 · CSS propio (sin Node ni build) |
-| **Servidor** | Gunicorn + WhiteNoise, desplegado en Render con Blueprint (`render.yaml`) |
-| **Seguridad** | Solo correos autorizados (`CORREOS_PERMITIDOS`), Argon2, 2FA TOTP obligatorio, códigos de recuperación, bloqueo de accesos, CSP estricta sin scripts inline |
+| **Servidor** | Gunicorn + WhiteNoise, desplegado en Render (plan de pago) con Blueprint (`render.yaml`) |
+| **Seguridad** | Acceso con usuario y contraseña (sin registro público), Argon2, bloqueo de accesos, CSP estricta sin scripts inline |
 | **Integraciones** | Solo la API de OpenAI, para el asistente (opcional) |
 | **Mensajes** | Enlaces `wa.me` y `sms:`, o copiar. Cada envío queda registrado. |
-| **Calidad** | 250 pruebas (pytest), ruff sin avisos, contraste WCAG AA verificado por script |
+| **Calidad** | 242 pruebas (pytest), ruff sin avisos, contraste WCAG AA verificado por script |
 
 ## 2. Mapa de pantallas
 
 ```
-Acceso ── Verificación 2FA ── (primera vez) Configurar 2FA → Códigos de recuperación
+Acceso (usuario + contraseña, la guarda el navegador)
 │
 ├─ Hoy (panel)               resumen del día, avisos, gráficos de ingresos y citas
 ├─ Agenda                    día · semana · mes · lista
@@ -164,8 +164,8 @@ Atajos de teclado: <kbd>/</kbd> buscar · <kbd>n</kbd> nueva cita · <kbd>c</kbd
 ### Extras
 - **Dictado por voz** en las notas y los textos largos (Web Speech API del navegador, `es-US`).
 - **PWA instalable:** manifiesto, iconos, service worker y página sin conexión. El service worker **no** guarda en caché páginas con datos personales.
-- **Exportación total** (zip con JSON y archivos) y **copias de seguridad** descargables. Ambas piden el código 2FA.
-- **Registro de auditoría:** accesos, fallos, bloqueos, 2FA, exportaciones, borrados, anonimizaciones, acceso a documentos, cambios de ajustes, tareas y uso de IA.
+- **Exportación total** (zip con JSON y archivos) y **copias de seguridad** descargables. Ambas piden repetir la contraseña.
+- **Registro de auditoría:** accesos, fallos, bloqueos, cambios de contraseña, exportaciones, borrados, anonimizaciones, acceso a documentos, cambios de ajustes, tareas y uso de IA.
 - **Ajustes del estudio:** marca y logo, datos de contacto, reservas, edad mínima, textos legales (consentimiento con versionado, privacidad, política de señales, cuidados), retención y parámetros de mensajería y de IA.
 
 ## 4. Decisiones de diseño
@@ -189,7 +189,7 @@ estudio/            configuración (settings base/dev/test/prod, urls, wsgi, for
 apps/
   nucleo/           ajustes, auditoría, tokens, límites, imágenes, archivos privados, exportación,
                     copias, limpieza, gráficos SVG, PWA, endpoint de tareas, comandos de sistema
-  cuentas/          usuaria, acceso en dos pasos, TOTP, códigos de recuperación, bloqueo
+  cuentas/          usuaria, acceso con usuario y contraseña, bloqueo por intentos, crear_cuenta
   clientes/         ficha, salud, tatuajes, fotos, notas, consentimiento firmado, exportar/anonimizar
   agenda/           tipos, citas, horario, bloqueos, lista de espera, solicitudes públicas
   mensajeria/       plantillas, variables, canales, segmentos, generadores, bandeja, campañas
@@ -211,8 +211,7 @@ scripts/            contraste.py (WCAG), generar_iconos.py, capturar.py (captura
 ## 6. Modelo de datos
 
 ```
-Usuario ─┬─ TOTPDevice / DispositivoRecuperacion ── CodigoRecuperacion (hash Argon2)
-         └─ IntentoAcceso · RegistroAuditoria · UsoIA
+Usuario ── IntentoAcceso · RegistroAuditoria · UsoIA
 
 Cliente ─┬─ DatosSalud (1:1)
          ├─ EventoConsentimiento (historial de marketing)
@@ -238,21 +237,19 @@ Restricciones importantes:
 - `cita_sin_solapes`: `EXCLUDE USING gist (tstzrange(inicio, fin) WITH &&)` para las citas activas.
 - `MensajePreparado.clave` es única.
 - `Campana` es única por (fecha destacada, año).
-- El email de `Usuario` es único sin distinguir mayúsculas.
+- El nombre de usuario (`Usuario.usuario`) es único sin distinguir mayúsculas.
 - La búsqueda ignora tildes con la extensión `unaccent`.
 
 ## 7. Seguridad
 
 **Acceso**
-- **Solo entran los correos de `CORREOS_PERMITIDOS`** (lista separada por comas; el primero es la propietaria, el resto ayudantes). El backend `apps/cuentas/backends.py` rechaza cualquier otro correo y quitar uno de la lista corta su sesión en la siguiente petición.
-- No hay registro público. Las cuentas se crean en `/acceso/alta/` con el código secreto `CODIGO_ALTA` (solo para correos de la lista; vacío = alta desactivada) o por consola (`crear_cuenta`, que también exige que el correo esté en la lista).
-- Contraseñas con **Argon2**, mínimo 12 caracteres y validadores de Django.
-- **Acceso en dos pasos:** la sesión solo existe después de verificar el 2FA. Hasta entonces hay un estado «pre-autenticado» que caduca a los 10 minutos.
-- **2FA TOTP obligatorio**, con QR en SVG generado en el servidor y la clave legible por si se prefiere teclearla. Los códigos usados no se aceptan dos veces y hay límite de intentos (throttling).
-- **8 códigos de recuperación** de un solo uso. Se guardan con hash Argon2 y se muestran una sola vez.
-- **Bloqueo de accesos:** 5 fallos por email + IP en 15 minutos, 20 por IP en una hora y 30 por email en una hora. Se registran todos los intentos.
-- Cookies `Secure`, `HttpOnly` y `SameSite=Lax`. La sesión dura 72 horas.
-- En los formularios de acceso no se revela si un email existe.
+- **Usuario y contraseña**, con el `ModelBackend` estándar de Django. El formulario usa `autocomplete="username"` / `"current-password"` para que el gestor de contraseñas del navegador ofrezca guardarla y la rellene solo.
+- **No hay registro público.** Las cuentas se crean por consola (`crear_cuenta`) o, en el despliegue, con `PROPIETARIA_USUARIO` y `PROPIETARIA_PASSWORD` (el pre-deploy crea esa cuenta si no existe y nunca la modifica después).
+- Contraseñas con **Argon2**, mínimo 12 caracteres y validadores de Django (incluido el que rechaza contraseñas parecidas al usuario o al nombre).
+- **Bloqueo de accesos:** 5 fallos por usuario + IP en 15 minutos, 20 por IP en una hora y 30 por usuario en una hora. Se registran todos los intentos.
+- Cookies `Secure`, `HttpOnly` y `SameSite=Lax`. La sesión sobrevive al cierre del navegador y dura 30 días (`SESION_HORAS`); una cuenta desactivada pierde la sesión en la siguiente petición.
+- Exportar todos los datos y descargar copias pide repetir la contraseña, aunque haya sesión abierta.
+- En el formulario de acceso no se revela si un usuario existe.
 
 **Cabeceras y navegador**
 - **CSP estricta:** `default-src 'self'`, sin scripts ni estilos inline (solo atributos `style`), `object-src 'none'`, `base-uri 'none'`, `frame-ancestors 'none'` y `form-action 'self'`.
@@ -274,7 +271,7 @@ Restricciones importantes:
 
 **Archivos privados**
 - Fotos, firmas, imágenes de solicitudes y PDFs viven fuera de `static/`, en `MEDIA_ROOT` (el disco persistente).
-- Solo se sirven a través de vistas que exigen sesión verificada, con `Content-Disposition` y `X-Content-Type-Options: nosniff`.
+- Solo se sirven a través de vistas que exigen sesión iniciada, con `Content-Disposition` y `X-Content-Type-Options: nosniff`.
 - `MEDIA_URL` no está enrutada.
 - La descarga de PDFs de consentimiento queda auditada.
 
@@ -286,7 +283,7 @@ Restricciones importantes:
   - solo acepta POST con `Authorization: Bearer <TAREAS_SECRETO>` (mínimo 32 caracteres, comparación en tiempo constante);
   - solo ejecuta tareas de una lista blanca;
   - tiene límite de peticiones.
-- La copia de seguridad se escribe con permisos `600`. Exportar y descargar copias exige el código 2FA.
+- La copia de seguridad se escribe con permisos `600`. Exportar y descargar copias exige repetir la contraseña.
 
 ## 8. Guía estética
 
@@ -359,9 +356,8 @@ python manage.py migrate
 python manage.py createcachetable
 python manage.py inicializar_estudio       # plantillas, cuidados, fechas, tipos, horario
 
-# 4. Cuenta (la contraseña se lee de una variable para no dejarla en el historial)
-read -s CLAVE && export CLAVE
-python manage.py crear_cuenta --email tu@correo.example --nombre "Tu Nombre" --password-env CLAVE
+# 4. Cuenta (la contraseña se pide sin mostrarla; o usa --password-env VARIABLE)
+python manage.py crear_cuenta --usuario ink_mels --nombre "Tu Nombre"
 
 # 5. (Opcional) datos ficticios para probar
 python manage.py seed_demo                 # --limpiar para empezar de cero
@@ -369,9 +365,9 @@ python manage.py seed_demo                 # --limpiar para empezar de cero
 python manage.py runserver
 ```
 
-Abre http://localhost:8000, entra y escanea el QR con tu app de autenticación (Google Authenticator, 1Password, Authy…).
+Abre http://localhost:8000 y entra con ese usuario y contraseña (deja que el navegador la guarde).
 
-`seed_demo` crea «Tinta Brava Studio» con 40 clientes ficticios, todos con teléfonos `555-01XX`, el rango reservado para ficción. Añade 18 meses de historial, citas para las próximas 3 semanas, fotos generadas, pagos, gastos, solicitudes, flash, consentimientos firmados y la bandeja del día ya preparada. Con `DEBUG=False` se niega a ejecutarse salvo con `--forzar`.
+`seed_demo` rellena el estudio «ink_mels» con 40 clientes ficticios, todos con teléfonos `555-01XX`, el rango reservado para ficción. Añade 18 meses de historial, citas para las próximas 3 semanas, fotos generadas, pagos, gastos, solicitudes, flash, consentimientos firmados y la bandeja del día ya preparada. Con `DEBUG=False` se niega a ejecutarse salvo con `--forzar`.
 
 ## 10. Variables de entorno
 
@@ -391,13 +387,13 @@ Abre http://localhost:8000, entra y escanea el QR con tu app de autenticación (
 | `COPIAS_A_CONSERVAR` | no | `14` | Número de copias nocturnas que se guardan |
 | `TAREAS_SECRETO` | en prod | — | ≥ 32 caracteres. Autentica cron → web. Render la genera sola. |
 | `PROXIES_DE_CONFIANZA` | no | `0` (dev) / `1` (prod) | Proxies delante de la app, para leer bien la IP |
-| `SESION_HORAS` | no | `72` | Duración de la sesión |
-| `ACCESO_MAX_FALLOS_EMAIL_IP` / `_IP` / `_EMAIL` | no | `5` / `20` / `30` | Umbrales de bloqueo |
-| `ACCESO_VENTANA_MINUTOS` | no | `15` | Ventana del bloqueo por email + IP |
+| `SESION_HORAS` | no | `720` (30 días) | Duración de la sesión iniciada. Sobrevive al cierre del navegador. |
+| `ACCESO_MAX_FALLOS_USUARIO_IP` / `_IP` / `_USUARIO` | no | `5` / `20` / `30` | Umbrales de bloqueo |
+| `ACCESO_VENTANA_MINUTOS` | no | `15` | Ventana del bloqueo por usuario + IP |
 | `SUBIDAS_MAX_MB` / `SUBIDAS_MAX_IMAGENES` | no | `8` / `5` | Límites de las subidas públicas |
 | `HSTS_SEGUNDOS` | no | `31536000` | |
-| `CORREOS_PERMITIDOS` | sí | vacío (nadie entra) | Correos que pueden iniciar sesión, separados por comas. El primero es la propietaria. |
-| `CODIGO_ALTA` | no | vacío (alta desactivada) | Código secreto (≥ 16 caracteres) para crear cuentas en `/acceso/alta/` |
+| `PROPIETARIA_USUARIO` / `PROPIETARIA_PASSWORD` | en el primer despliegue | vacío | Cuenta de la propietaria que crea `crear_cuenta --desde-entorno` (pre-deploy) si aún no existe. Nunca modifica una cuenta existente. |
+| `PROPIETARIA_NOMBRE` | no | el usuario | Nombre que muestra la app para esa cuenta |
 | `IDIOMA` | no | `es` | Idioma del contenido para clientes (mensajes, PDF de consentimiento, textos legales y plantillas de partida): `es` o `en`. La interfaz la elige cada persona. |
 | `OPENAI_API_KEY` | no | vacío | Sin clave, el asistente se desactiva y todo lo demás funciona igual |
 | `IA_MODELO` | no | `gpt-6-luna` | Modelo de OpenAI. **Verifica el ID vigente** antes de desplegar (ver §17). |
@@ -408,45 +404,37 @@ Ningún valor real va en el repositorio. `.env` está en `.gitignore`.
 
 ## 11. Despliegue en Render paso a paso
 
-Hay dos Blueprints, cada uno con su guía:
-
-| Archivo | Para qué | Guía |
-|---|---|---|
-| `render-free.yaml` | Probar sin método de pago (base de datos que caduca a los 30 días, sin disco ni cron) | [DEPLOY_RENDER_FREE.md](DEPLOY_RENDER_FREE.md) |
-| `render.yaml` | Producción | [DEPLOY_RENDER_PAGO.md](DEPLOY_RENDER_PAGO.md) |
-
-Resumen del despliegue de producción. El `render.yaml` crea todo:
+Todo se despliega en un plan de pago de Render con `render.yaml`. Guía detallada: [DEPLOY_RENDER_PAGO.md](DEPLOY_RENDER_PAGO.md). El Blueprint crea todo:
 
 | Recurso | Plan | Para qué |
 |---|---|---|
-| `tinta-crm` (web) | `0.5c-512mb` (de pago) | La aplicación, con un **disco de 5 GB** en `/var/data` |
-| `tinta-db` (PostgreSQL 17) | `0.1c-256mb` (de pago) | Base de datos sin acceso desde internet, con recuperación a un momento dado |
-| `tinta-bandeja-diaria` (cron) | — | Prepara «Mensajes de hoy» cada mañana |
-| `tinta-mantenimiento` (cron) | — | Copia de seguridad y limpieza de archivos cada noche |
+| `ink-mels` (web) | `0.5c-512mb` | La aplicación, con un **disco de 5 GB** en `/var/data` |
+| `ink-mels-db` (PostgreSQL 17) | `0.1c-256mb` | Base de datos sin acceso desde internet, con recuperación a un momento dado |
+| `ink-mels-bandeja-diaria` (cron) | — | Prepara «Mensajes de hoy» cada mañana |
+| `ink-mels-mantenimiento` (cron) | — | Copia de seguridad y limpieza de archivos cada noche |
 
-Los planes gratuitos no sirven aquí: el plan web gratuito no admite disco persistente ni pre-deploy, y la base de datos gratuita no tiene copias de seguridad. Consulta los precios actuales en render.com/pricing.
+El disco persistente, el pre-deploy, los cron jobs y las copias de la base de datos necesitan planes de pago. Consulta los precios actuales en render.com/pricing.
 
 **Pasos**
 
 1. Sube el proyecto a un repositorio privado de GitHub o GitLab.
 2. En Render: **New → Blueprint**, elige el repositorio y la rama. Render lee `render.yaml`.
 3. Render pide los valores marcados como `sync: false`:
-   - `SITE_URL` en los **tres** servicios, con el mismo valor. Usa `https://tinta-crm.onrender.com` (o el nombre que asigne Render) o tu dominio propio.
-   - `CORREOS_PERMITIDOS` en el web service: los correos que podrán entrar.
+   - `SITE_URL` en los **tres** servicios, con el mismo valor. Usa `https://ink-mels.onrender.com` (o el nombre que asigne Render) o tu dominio propio.
+   - `PROPIETARIA_USUARIO` y `PROPIETARIA_PASSWORD` en el web service: el usuario y la contraseña con los que entrarás.
    - `OPENAI_API_KEY` en el web service. Puedes dejarlo vacío.
 4. **Apply.** Render crea la base de datos y despliega el web service:
    - `build.sh` instala las dependencias con Python 3.13 (fijado en `.python-version`) y ejecuta `collectstatic`.
-   - El pre-deploy aplica las migraciones, crea la tabla de caché y el contenido inicial.
-   - Por último arranca Gunicorn. `SECRET_KEY` y `TAREAS_SECRETO` se generan solas y se comparten por el grupo `tinta-comun`.
+   - El pre-deploy aplica las migraciones, crea la tabla de caché, el contenido inicial y la cuenta de la propietaria.
+   - Por último arranca Gunicorn. `SECRET_KEY` y `TAREAS_SECRETO` se generan solas y se comparten por el grupo `ink-mels-comun`.
 5. Si la URL final no coincide con la que pusiste, corrige `SITE_URL` en los tres servicios.
-6. Crea la cuenta en `/acceso/alta/` con `CODIGO_ALTA`, o desde la **Shell** (ver §12).
-7. Entra en `SITE_URL`, configura el 2FA y guarda los códigos de recuperación.
-8. **Dominio propio (opcional):**
+6. Entra en `SITE_URL` con tu usuario y contraseña y deja que el navegador la guarde (ver §12).
+7. **Dominio propio (opcional):**
    - Añádelo en *Settings → Custom Domains* del web service.
    - Configura el DNS como indica Render.
    - Cambia `SITE_URL` al dominio nuevo en los tres servicios.
    - Los enlaces ya enviados con el dominio antiguo de Render siguen funcionando.
-9. Comprueba en *Logs* de cada cron que la primera ejecución termina bien. Puedes lanzarlas a mano con **Trigger Run**.
+8. Comprueba en *Logs* de cada cron que la primera ejecución termina bien. Puedes lanzarlas a mano con **Trigger Run**.
 
 **Cómo encaja el disco**
 - Render hace un snapshot diario del disco y lo conserva 7 días. Se puede restaurar desde la página *Disk*.
@@ -465,22 +453,23 @@ Los planes gratuitos no sirven aquí: el plan web gratuito no admite disco persi
 
 **Horario de los cron.** Están en UTC: la bandeja a las 10:00 UTC (5:00 en Orlando en invierno, 6:00 en verano) y el mantenimiento a las 8:30 UTC. Ajusta `schedule` en `render.yaml` si quieres otra hora.
 
-## 12. Primera cuenta y 2FA
+## 12. Cuentas y acceso
 
-La forma más sencilla es la web: abre `/acceso/alta/` con el valor de `CODIGO_ALTA` (Render lo genera; está en *Environment*) y un correo de `CORREOS_PERMITIDOS`. Desde la consola:
+Se entra con **usuario y contraseña**. No hay registro, alta ni segundo factor.
 
-```bash
-# En la Shell del web service de Render (o en local)
-read -s CLAVE && export CLAVE          # teclea la contraseña (no se ve ni queda en el historial)
-python manage.py crear_cuenta --email tu@correo.example --nombre "Vale Ríos" --password-env CLAVE
-unset CLAVE
-```
+- **Cuenta de la propietaria:** en Render la crea el pre-deploy con `PROPIETARIA_USUARIO` y `PROPIETARIA_PASSWORD`. Si la cuenta ya existe no la toca, así que la contraseña que cambies en *Mi cuenta* se respeta y puedes borrar `PROPIETARIA_PASSWORD` después del primer despliegue.
+- **Desde la consola** (Shell de Render o local):
 
-- En el primer acceso, el sistema obliga a configurar el 2FA: escanea el QR, introduce el código y **guarda los 8 códigos de recuperación** (en un gestor de contraseñas o impresos). Solo se muestran una vez.
-- **Si pierdes el móvil:** entra con un código de recuperación («¿Sin móvil? Usa un código de recuperación» en la pantalla del 2FA). Después, en *Mi cuenta*, reconfigura el 2FA y genera códigos nuevos.
-- **Si pierdes el móvil y los códigos:** desde la Shell de Render, `python manage.py restablecer_2fa --email tu@correo.example`. En el siguiente acceso se pedirá configurar el 2FA de nuevo.
-- **Cambiar la contraseña:** en *Mi cuenta*, o con `python manage.py changepassword tu@correo.example` desde la Shell.
+  ```bash
+  read -s CLAVE && export CLAVE          # teclea la contraseña (no se ve ni queda en el historial)
+  python manage.py crear_cuenta --usuario ink_mels --nombre "Mels" --password-env CLAVE
+  unset CLAVE
+  ```
+
+- **Comodidad:** el formulario está preparado para el gestor de contraseñas del navegador (guarda y rellena solo), y la sesión dura 30 días en cada dispositivo aunque se cierre el navegador (`SESION_HORAS`).
+- **Cambiar la contraseña:** en *Mi cuenta* (el navegador ofrece actualizar la guardada), o con `python manage.py changepassword <usuario>` desde la Shell si la olvidaste.
 - **Cuenta de ayudante (opcional):** `crear_cuenta --rol ayudante` crea una cuenta sin acceso a Finanzas, Ajustes, copias y auditoría, ni a anonimizar o eliminar clientes.
+- **Quitar el acceso a alguien:** desactiva su cuenta (`is_active=False`, ver [DEPLOY_RENDER_PAGO.md](DEPLOY_RENDER_PAGO.md#acceso)). Pierde la sesión en la siguiente petición.
 
 ## 13. Uso diario
 
@@ -502,7 +491,7 @@ Todas son **idempotentes**: si se ejecutan dos veces el mismo día, no duplican 
 | Tarea | Dónde | Qué hace |
 |---|---|---|
 | `tareas_diarias` | cron → base de datos | Caduca los mensajes vencidos, descarta los que ya no están permitidos y genera recordatorios, cuidados, retoques, cumpleaños, aniversarios, reactivaciones (con cupo), fechas destacadas y tramos de campaña. Cierra las campañas terminadas. Limpia los enlaces caducados, las sesiones expiradas y los intentos de acceso antiguos. |
-| `copia_seguridad` | cron → web (disco) | Zip con todos los datos (incluidas la cuenta y el 2FA) y los archivos. Permisos `600`. Conserva las últimas 14. |
+| `copia_seguridad` | cron → web (disco) | Zip con todos los datos (incluidas las cuentas) y los archivos. Permisos `600`. Conserva las últimas 14. |
 | `limpiar_archivos` | cron → web (disco) | Purga las solicitudes rechazadas o de spam con más de 30 días y sus imágenes. Marca los consentimientos cuyo plazo de retención ha vencido. Borra los archivos huérfanos con más de 24 horas. |
 
 En local:
@@ -520,7 +509,7 @@ Al final de la bandeja, **«Volver a revisar hoy»** ejecuta los generadores al 
 **Tres capas:**
 1. **PITR de Render Postgres** (3–7 días) para errores en la base de datos.
 2. **Snapshots diarios del disco** de Render (7 días) para los archivos.
-3. **Copia nocturna propia** (datos y archivos en un solo zip, 14 días) en el disco. Descárgala desde *Ajustes → Datos y copias*, que pide el código 2FA.
+3. **Copia nocturna propia** (datos y archivos en un solo zip, 14 días) en el disco. Descárgala desde *Ajustes → Datos y copias*, que pide repetir la contraseña.
 
 > Las capas 2 y 3 viven en Render. **Descarga una copia al mes** (o tras cambios importantes) y guárdala cifrada fuera de Render, por ejemplo en un disco externo o en una carpeta cifrada de tu nube. Contiene datos de salud.
 
@@ -539,9 +528,10 @@ python manage.py restaurar_copia /ruta/copia-AAAAMMDD-HHMMSS.zip
 `restaurar_copia`:
 - comprueba que el zip es válido y no contiene rutas peligrosas;
 - vacía la base de datos y carga `datos.json` en una transacción (si falla, no cambia nada);
+- adapta las copias anteriores al acceso por usuario (descarta el 2FA y usa como usuario lo que había antes de la @ del email);
 - copia los archivos a `MEDIA_ROOT`.
 
-Después se entra con la cuenta y el 2FA que había en la copia. Este proceso se ha verificado de principio a fin: la copia del estudio de demostración restaurada en una base de datos nueva conserva el mismo número de clientes, citas, tatuajes, mensajes, consentimientos y archivos.
+Después se entra con el usuario y la contraseña que había en la copia. Este proceso se ha verificado de principio a fin: la copia del estudio de demostración restaurada en una base de datos nueva conserva el mismo número de clientes, citas, tatuajes, mensajes, consentimientos y archivos.
 
 **Exportación de datos** (*Ajustes → Datos → Exportar todo*, o `python manage.py exportar_datos`). Es un zip legible con `LEEME.txt`, `datos.json` y `archivos/`. Sirve para llevarse sus datos a otro sistema. No incluye credenciales.
 
@@ -585,14 +575,14 @@ Todo ocurre en el servidor. La clave nunca llega al navegador. **La IA propone y
 ## 18. Pruebas y calidad
 
 ```bash
-pytest                    # 250 pruebas · ~15 s (usa PostgreSQL: crea una BD de pruebas)
+pytest                    # 242 pruebas · ~20 s (usa PostgreSQL: crea una BD de pruebas)
 ruff check . && ruff format --check .
 python scripts/contraste.py
 python manage.py check --deploy --settings=estudio.settings.prod   # con las variables de prod
 ```
 
 Las pruebas cubren los caminos críticos:
-- **Acceso:** 2FA obligatorio, recuperación, bloqueo y sesión preautenticada.
+- **Acceso:** usuario y contraseña, bloqueo por intentos, sesión persistente, `crear_cuenta` (también desde variables de entorno) y la migración de cuentas por email a cuentas por usuario.
 - **Seguridad:** CSP y cabeceras, archivos privados, endpoint interno, tokens (caducidad, revocación, formato) y límites de peticiones.
 - **Subidas:** bombas de descompresión, falsos tipos y EXIF.
 - **Agenda:** solapes a nivel de base de datos.

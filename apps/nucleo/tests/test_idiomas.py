@@ -47,8 +47,8 @@ class TestInterfaz:
         assert "Yes, continue" in r.content.decode()
 
     def test_errores_de_formulario_traducidos(self, client):
-        r = client.post(reverse("cuentas:login"), {"email": "x@ejemplo.com", "password": "mala"}, **EN)
-        assert "Wrong email or password." in r.content.decode()
+        r = client.post(reverse("cuentas:login"), {"usuario": "nadie", "password": "mala"}, **EN)
+        assert "Wrong username or password." in r.content.decode()
 
 
 class TestContenidoParaClientes:

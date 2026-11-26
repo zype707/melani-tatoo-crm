@@ -1,5 +1,5 @@
-# Blueprint de Render · CRM del estudio de tatuaje · PLAN DE PAGO (producción)
-# Guía paso a paso: DEPLOY_RENDER_PAGO.md  ·  Para probar gratis: render-free.yaml
+# Blueprint de Render · ink_mels · CRM del estudio de tatuaje (plan de pago)
+# Guía paso a paso: DEPLOY_RENDER_PAGO.md
 #
 # Crea: 1 web service con disco persistente (archivos privados y copias),
 #       1 base de datos Postgres solo accesible por red privada,
@@ -7,13 +7,15 @@
 # Los horarios de los cron están en UTC. Orlando = UTC-5 (invierno) / UTC-4 (verano).
 #
 # Al crear el Blueprint, Render pedirá los valores marcados con «sync: false»:
-#   SITE_URL        → la URL pública del servicio, p. ej. https://tinta-crm.onrender.com
-#                     (la misma en los tres servicios; necesaria para los enlaces de los mensajes)
-#   OPENAI_API_KEY  → opcional; vacío = asistente de IA desactivado
-#   CORREOS_PERMITIDOS → correos que pueden entrar, separados por comas (el primero es la propietaria)
+#   SITE_URL             → la URL pública del servicio, p. ej. https://ink-mels.onrender.com
+#                          (la misma en los tres servicios; necesaria para los enlaces de los mensajes)
+#   OPENAI_API_KEY       → opcional; vacío = asistente de IA desactivado
+#   PROPIETARIA_USUARIO  → usuario con el que entrarás (p. ej. ink_mels)
+#   PROPIETARIA_PASSWORD → su contraseña (mín. 12 caracteres). Solo se usa para crear la cuenta en el
+#                          primer despliegue; después cámbiala en «Mi cuenta» y puedes borrar la variable.
 
 envVarGroups:
-  - name: tinta-comun
+  - name: ink-mels-comun
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: estudio.settings.prod
@@ -41,7 +43,7 @@ envVarGroups:
         value: "1"
 
 databases:
-  - name: tinta-db
+  - name: ink-mels-db
     plan: 0.1c-256mb
     region: virginia
     postgresMajorVersion: "17"
@@ -51,12 +53,18 @@ databases:
 
 services:
   - type: web
-    name: tinta-crm
+    name: ink-mels
     runtime: python
     region: virginia
     plan: 0.5c-512mb  # de pago: necesario para el disco persistente y el pre-deploy
     buildCommand: bash build.sh
-    preDeployCommand: python manage.py migrate --noinput && python manage.py createcachetable && python manage.py inicializar_estudio
+    # El último paso crea la cuenta de la propietaria con PROPIETARIA_USUARIO/PROPIETARIA_PASSWORD
+    # (no hace nada si ya existe o si las variables están vacías).
+    preDeployCommand: >-
+      python manage.py migrate --noinput &&
+      python manage.py createcachetable &&
+      python manage.py inicializar_estudio &&
+      python manage.py crear_cuenta --desde-entorno
     startCommand: gunicorn estudio.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 --access-logfile -
     healthCheckPath: /salud/
     disk:
@@ -64,10 +72,10 @@ services:
       mountPath: /var/data
       sizeGB: 5
     envVars:
-      - fromGroup: tinta-comun
+      - fromGroup: ink-mels-comun
       - key: DATABASE_URL
         fromDatabase:
-          name: tinta-db
+          name: ink-mels-db
           property: connectionString
       - key: MEDIA_ROOT
         value: /var/data/media
@@ -77,25 +85,24 @@ services:
         sync: false
       - key: OPENAI_API_KEY
         sync: false
-      - key: CORREOS_PERMITIDOS
+      - key: PROPIETARIA_USUARIO
         sync: false
-      # Código para crear las cuentas en el primer acceso (/acceso/alta/). Vacíalo después si quieres.
-      - key: CODIGO_ALTA
-        generateValue: true
+      - key: PROPIETARIA_PASSWORD
+        sync: false
 
   # Cada mañana (10:00 UTC = 5:00/6:00 en Orlando): prepara «Mensajes de hoy».
   - type: cron
-    name: tinta-bandeja-diaria
+    name: ink-mels-bandeja-diaria
     runtime: python
     region: virginia
     schedule: "0 10 * * *"
     buildCommand: pip install -r requirements.txt
     startCommand: python manage.py tareas_diarias
     envVars:
-      - fromGroup: tinta-comun
+      - fromGroup: ink-mels-comun
       - key: DATABASE_URL
         fromDatabase:
-          name: tinta-db
+          name: ink-mels-db
           property: connectionString
       - key: SITE_URL
         sync: false
@@ -103,17 +110,17 @@ services:
   # Cada noche (8:30 UTC = 3:30/4:30 en Orlando): copia de seguridad y limpieza de archivos.
   # Los cron jobs no pueden montar el disco, así que piden al web service que lo haga.
   - type: cron
-    name: tinta-mantenimiento
+    name: ink-mels-mantenimiento
     runtime: python
     region: virginia
     schedule: "30 8 * * *"
     buildCommand: pip install -r requirements.txt
     startCommand: python manage.py disparar_tarea copia_seguridad && python manage.py disparar_tarea limpiar_archivos
     envVars:
-      - fromGroup: tinta-comun
+      - fromGroup: ink-mels-comun
       - key: DATABASE_URL
         fromDatabase:
-          name: tinta-db
+          name: ink-mels-db
           property: connectionString
       - key: SITE_URL
         sync: false

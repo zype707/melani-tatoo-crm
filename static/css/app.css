@@ -171,7 +171,7 @@ hr { border: 0; border-top: var(--borde-duro); margin: var(--e5) 0; }
 .marca {
   display: flex; align-items: center; gap: var(--e3);
   font-family: var(--fuente-titulo); font-weight: 900; font-stretch: 115%;
-  font-size: 1.125rem; text-transform: uppercase; letter-spacing: 0.02em;
+  font-size: 1.125rem; letter-spacing: 0.02em; /* el nombre se muestra tal cual se escribe: «ink_mels» */
   text-decoration: none; line-height: 1;
 }
 .marca-logo { width: 2.25rem; height: 2.25rem; object-fit: cover; border: 2px solid var(--hueso); }
@@ -531,7 +531,6 @@ input[type="radio"]:checked::after { content: ""; width: 0.65rem; height: 0.65re
 .campo-con-error input, .campo-con-error select, .campo-con-error textarea { border-color: var(--amarillo); border-width: 3px; }
 .errores-formulario { margin-bottom: var(--e2); }
 .acciones-formulario { display: flex; flex-wrap: wrap; gap: var(--e3); align-items: center; padding-top: var(--e2); }
-.entrada-codigo { font-family: var(--fuente-titulo) !important; font-size: 1.75rem !important; font-weight: 900; letter-spacing: 0.35em; text-align: center; font-variant-numeric: tabular-nums; }
 fieldset { border: 0; padding: 0; min-width: 0; }
 .buscador { position: relative; }
 .buscador .icono { position: absolute; left: var(--e4); top: 50%; transform: translateY(-50%); color: var(--texto-suave); pointer-events: none; }
@@ -601,28 +600,16 @@ dialog.dialogo::backdrop { background: rgb(1 22 27 / 0.82); }
 .publico-pie { padding: var(--e5) var(--e4); text-align: center; color: var(--texto-suave); font-size: 0.875rem; border-top: 2px solid var(--linea); }
 .acceso-caja { max-width: 27rem; margin: var(--e6) auto 0; }
 .acceso-caja h1 { font-size: 2.25rem; margin-bottom: var(--e2); }
-.qr { background: var(--hueso); padding: var(--e3); border: var(--borde-duro); width: 15rem; margin: 0 auto; }
-.qr svg { width: 100%; height: auto; }
-.clave-secreta { font-family: var(--fuente-mono); font-size: 1rem; letter-spacing: 0.08em; word-break: break-all; background: var(--petroleo-950); padding: var(--e3); border: 2px solid var(--niebla); }
-.lista-codigos { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--e2); list-style: none; padding: 0; }
-.lista-codigos li { font-family: var(--fuente-mono); font-size: 1.125rem; font-weight: 700; background: var(--hueso); color: var(--tinta); padding: var(--e3); text-align: center; letter-spacing: 0.06em; }
-.pasos { counter-reset: paso; list-style: none; padding: 0; display: grid; gap: var(--e4); }
-.pasos > li { counter-increment: paso; display: grid; grid-template-columns: 2.5rem 1fr; gap: var(--e3); }
-.pasos > li::before {
-  content: counter(paso); display: grid; place-items: center; width: 2.5rem; height: 2.5rem;
-  background: var(--hueso); color: var(--tinta); font-family: var(--fuente-titulo); font-weight: 900;
-}
 
 /* --- Páginas de error ------------------------------------------------------------------ */
 .error-pagina { max-width: 34rem; margin: 12vh auto; padding: var(--e5); }
 .error-codigo { font-family: var(--fuente-titulo); font-weight: 900; font-stretch: 125%; font-size: clamp(5rem, 22vw, 9rem); line-height: 0.9; }
 
-/* --- Impresión (códigos de recuperación, fichas) ------------------------------------------ */
+/* --- Impresión (fichas) --------------------------------------------------------------------- */
 @media print {
   body { background: #fff; color: #000; }
   .barra-superior, .barra-lateral, .nav-inferior, .avisos, .no-imprimir { display: none !important; }
   .bloque { box-shadow: none; border: 2px solid #000; background: #fff; color: #000; }
-  .lista-codigos li { background: #fff; border: 2px solid #000; }
 }
 
 @media (prefers-reduced-motion: reduce) {

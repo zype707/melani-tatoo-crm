@@ -116,8 +116,8 @@ class TestLimites:
 class TestComandos:
     def test_crear_cuenta(self, monkeypatch):
         monkeypatch.setenv("CLAVE_PRUEBA", "Otra-clave-muy-larga-2026")
-        call_command("crear_cuenta", email="Ana@Ejemplo.com", nombre="Ana", password_env="CLAVE_PRUEBA")
-        u = Usuario.objects.get(email="ana@ejemplo.com")
+        call_command("crear_cuenta", usuario="Ana", nombre="Ana", password_env="CLAVE_PRUEBA")
+        u = Usuario.objects.get(usuario="ana")
         assert u.password.startswith(("argon2", "md5"))
         assert u.es_propietaria
 
@@ -126,7 +126,7 @@ class TestComandos:
 
         monkeypatch.setenv("CLAVE_PRUEBA", "123")
         with pytest.raises(CommandError):
-            call_command("crear_cuenta", email="b@ejemplo.com", password_env="CLAVE_PRUEBA")
+            call_command("crear_cuenta", usuario="b", password_env="CLAVE_PRUEBA")
 
     def test_argon2_en_produccion(self):
         from django.contrib.auth.hashers import make_password

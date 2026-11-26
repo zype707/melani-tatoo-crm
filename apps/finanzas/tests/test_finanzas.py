@@ -52,14 +52,8 @@ class TestFinanzas:
         assert RegistroAuditoria.objects.filter(accion="exportacion").exists()
 
     def test_ayudante_no_ve_finanzas(self, client, db):
-        from django_otp.plugins.otp_totp.models import TOTPDevice
-
-        ayudante = Usuario.objects.create_user("ayu@ejemplo.com", "Clave-ayudante-2026", nombre="Ayu", rol="ayudante")
-        d = TOTPDevice.objects.create(user=ayudante, confirmed=True)
+        ayudante = Usuario.objects.create_user("ayu", "Clave-ayudante-2026", nombre="Ayu", rol="ayudante")
         client.force_login(ayudante)
-        s = client.session
-        s["otp_device_id"] = d.persistent_id
-        s.save()
         assert client.get(reverse("finanzas:resumen")).status_code == 403
         assert "Finanzas" not in client.get("/").content.decode()
 

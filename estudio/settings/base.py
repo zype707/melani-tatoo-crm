@@ -70,8 +70,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.postgres",
     "django.forms",
-    "django_otp",
-    "django_otp.plugins.otp_totp",
     "apps.nucleo",
     "apps.cuentas",
     "apps.clientes",
@@ -92,7 +90,6 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django_otp.middleware.OTPMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.csp.ContentSecurityPolicyMiddleware",
@@ -145,15 +142,11 @@ CACHES = {
 
 # --- Autenticación ----------------------------------------------------------
 
+# Acceso con usuario y contraseña. No hay registro público: las cuentas se crean con
+# `crear_cuenta` (o con PROPIETARIA_USUARIO/PROPIETARIA_PASSWORD en el pre-deploy).
 AUTH_USER_MODEL = "cuentas.Usuario"
-AUTHENTICATION_BACKENDS = ["apps.cuentas.backends.BackendCorreosPermitidos"]
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 LOGIN_URL = "cuentas:login"
-
-# Solo estos correos pueden entrar (separados por comas). El primero es la propietaria.
-# Vacía = nadie puede entrar. Ver apps/cuentas/permitidos.py.
-CORREOS_PERMITIDOS = [c.lower() for c in env_lista("CORREOS_PERMITIDOS")]
-# Código secreto para crear la cuenta en el primer acceso (/acceso/alta/). Vacío = alta desactivada.
-CODIGO_ALTA = env("CODIGO_ALTA", "")
 LOGIN_REDIRECT_URL = "panel:inicio"
 
 PASSWORD_HASHERS = [
@@ -162,7 +155,10 @@ PASSWORD_HASHERS = [
 ]
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "OPTIONS": {"user_attributes": ("usuario", "nombre")},
+    },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
         "OPTIONS": {"min_length": 12},
@@ -171,30 +167,20 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-
-def _emisor_totp(dispositivo):
-    """Nombre que verá la usuaria en su app autenticadora."""
-    from apps.nucleo.models import AjustesEstudio
-
-    return AjustesEstudio.obtener().nombre or "Estudio"
-
-
-OTP_TOTP_ISSUER = _emisor_totp
-OTP_TOTP_THROTTLE_FACTOR = 1
-
-# Bloqueo de acceso (ver apps/cuentas/servicios.py)
-ACCESO_MAX_FALLOS_EMAIL_IP = env_int("ACCESO_MAX_FALLOS_EMAIL_IP", 5)
+# Bloqueo de acceso por fuerza bruta (ver apps/cuentas/servicios.py)
+ACCESO_MAX_FALLOS_USUARIO_IP = env_int("ACCESO_MAX_FALLOS_USUARIO_IP", 5)
 ACCESO_MAX_FALLOS_IP = env_int("ACCESO_MAX_FALLOS_IP", 20)
-ACCESO_MAX_FALLOS_EMAIL = env_int("ACCESO_MAX_FALLOS_EMAIL", 30)
+ACCESO_MAX_FALLOS_USUARIO = env_int("ACCESO_MAX_FALLOS_USUARIO", 30)
 ACCESO_VENTANA_MINUTOS = env_int("ACCESO_VENTANA_MINUTOS", 15)
-ACCESO_PREAUTH_MINUTOS = 10
 
 # --- Sesiones y cookies ------------------------------------------------------
 
 SESSION_COOKIE_NAME = "estudio_sesion"
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_AGE = env_int("SESION_HORAS", 72) * 3600
+# Sesión cómoda: la cookie sobrevive al cierre del navegador y dura SESION_HORAS desde
+# que se inicia sesión (720 h = 30 días). Después basta con el autorrelleno del navegador.
+SESSION_COOKIE_AGE = env_int("SESION_HORAS", 720) * 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = "Lax"

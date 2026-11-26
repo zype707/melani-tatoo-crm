@@ -77,11 +77,11 @@ class LogoForm(forms.Form):
         return procesar_logo(archivo) if archivo else None
 
 
-class ConfirmarCodigoForm(forms.Form):
-    codigo = forms.CharField(
-        label=_("Código de tu app autenticadora"),
-        max_length=8,
-        widget=forms.TextInput(
-            attrs={"autocomplete": "one-time-code", "inputmode": "numeric", "class": "entrada-codigo"}
-        ),
+class ConfirmarPasswordForm(forms.Form):
+    """Las acciones que sacan todos los datos del servidor piden repetir la contraseña."""
+
+    password = forms.CharField(
+        label=_("Tu contraseña"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
     )

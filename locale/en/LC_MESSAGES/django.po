@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tinta-crm 1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-25 15:32-0500\n"
+"POT-Creation-Date: 2026-11-26 09:14-0500\n"
 "PO-Revision-Date: 2026-11-25 16:00-0400\n"
 "Last-Translator: Claude\n"
 "Language-Team: English\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: apps/agenda/forms.py:21 apps/agenda/models.py:32 apps/agenda/models.py:258
 #: apps/clientes/forms.py:89 apps/clientes/models.py:14
-#: apps/clientes/models.py:74 apps/cuentas/models.py:40
+#: apps/clientes/models.py:74 apps/cuentas/models.py:51
 #: apps/mensajeria/models.py:56 apps/mensajeria/models.py:83
 #: apps/mensajeria/models.py:118 apps/mensajeria/models.py:204
 msgid "Nombre"
@@ -27,7 +27,7 @@ msgstr "Name"
 
 #: apps/agenda/forms.py:23 apps/agenda/models.py:260
 #: apps/clientes/consentimiento.py:104 apps/clientes/forms.py:90
-#: apps/clientes/models.py:77 apps/nucleo/models.py:17
+#: apps/clientes/models.py:77 apps/nucleo/models.py:19
 #: templates/clientes/ficha.html:120 templates/solicitudes/detalle.html:57
 msgid "Teléfono"
 msgstr "Phone"
@@ -479,14 +479,13 @@ msgid "Apellidos"
 msgstr "Last name"
 
 #: apps/agenda/models.py:261 apps/clientes/models.py:79
-#: apps/cuentas/forms.py:7 apps/cuentas/forms.py:57 apps/cuentas/models.py:39
-#: apps/nucleo/models.py:18 templates/clientes/ficha.html:121
+#: apps/nucleo/models.py:20 templates/clientes/ficha.html:121
 #: templates/solicitudes/detalle.html:58
 msgid "Email"
 msgstr "Email"
 
 #: apps/agenda/models.py:262 apps/clientes/models.py:67
-#: apps/clientes/models.py:80 apps/nucleo/models.py:20
+#: apps/clientes/models.py:80 apps/nucleo/models.py:22
 msgid "Instagram"
 msgstr "Instagram"
 
@@ -1516,87 +1515,45 @@ msgstr ""
 msgid "Cliente eliminado definitivamente."
 msgstr "Client permanently deleted."
 
-#: apps/cuentas/forms.py:12 apps/cuentas/forms.py:72
-#: apps/cuentas/models.py:116 templates/cuentas/cuenta.html:38
+#: apps/cuentas/forms.py:16 apps/cuentas/models.py:45
+msgid "Usuario"
+msgstr "Username"
+
+#: apps/cuentas/forms.py:21 templates/cuentas/cuenta.html:23
+#: templates/nucleo/ajustes.html:46 templates/nucleo/ajustes.html:49
 msgid "Contraseña"
 msgstr "Password"
 
-#: apps/cuentas/forms.py:20
-msgid "Código de 6 dígitos"
-msgstr "6-digit code"
-
-#: apps/cuentas/forms.py:36
-msgid "Escribe los 6 dígitos que muestra tu app."
-msgstr "Type the 6 digits shown in your app."
-
-#: apps/cuentas/forms.py:42 templates/cuentas/verificar.html:6
-msgid "Código de recuperación"
-msgstr "Recovery code"
-
-#: apps/cuentas/forms.py:44
-msgid "Formato xxxxx-xxxxx. Cada código solo sirve una vez."
-msgstr "Format xxxxx-xxxxx. Each code works only once."
-
-#: apps/cuentas/forms.py:50 apps/cuentas/forms.py:63
-#: apps/mensajeria/variables.py:22
+#: apps/cuentas/forms.py:28 apps/mensajeria/variables.py:22
 msgid "Tu nombre"
 msgstr "Your name"
 
-#: apps/cuentas/forms.py:59
-msgid "Debe ser uno de los correos autorizados del estudio."
-msgstr "It must be one of the studio's authorized emails."
+#: apps/cuentas/models.py:20
+msgid "El nombre de usuario es obligatorio."
+msgstr "A username is required."
 
-#: apps/cuentas/forms.py:66
-msgid "Código de alta"
-msgstr "Sign-up code"
-
-#: apps/cuentas/forms.py:68
-msgid "Te lo da quien administra el despliegue (variable CODIGO_ALTA)."
-msgstr "Ask whoever manages the deployment for it (CODIGO_ALTA variable)."
-
-#: apps/cuentas/forms.py:74
-msgid "Mínimo 12 caracteres."
-msgstr "At least 12 characters."
-
-#: apps/cuentas/forms.py:78
-msgid "Repite la contraseña"
-msgstr "Repeat the password"
-
-#: apps/cuentas/forms.py:86
-msgid "Las contraseñas no coinciden."
-msgstr "The passwords don't match."
-
-#: apps/cuentas/models.py:15
-msgid "El email es obligatorio."
-msgstr "Email is required."
-
-#: apps/cuentas/models.py:36
+#: apps/cuentas/models.py:41
 msgid "Propietaria"
 msgstr "Owner"
 
-#: apps/cuentas/models.py:37
+#: apps/cuentas/models.py:42
 msgid "Ayudante"
 msgstr "Assistant"
 
-#: apps/cuentas/models.py:41
+#: apps/cuentas/models.py:49
+msgid "Letras, números y . _ - @ (sin espacios)."
+msgstr "Letters, numbers and . _ - @ (no spaces)."
+
+#: apps/cuentas/models.py:52
 msgid "Rol"
 msgstr "Role"
 
-#: apps/cuentas/models.py:42 apps/mensajeria/models.py:67
-#: apps/mensajeria/models.py:135 templates/cuentas/cuenta.html:23
-#: templates/mensajeria/fechas.html:21
+#: apps/cuentas/models.py:53 apps/mensajeria/models.py:67
+#: apps/mensajeria/models.py:135 templates/mensajeria/fechas.html:21
 msgid "Activa"
 msgstr "Active"
 
-#: apps/cuentas/models.py:76
-msgid "códigos de recuperación"
-msgstr "recovery codes"
-
-#: apps/cuentas/models.py:117
-msgid "Segundo factor"
-msgstr "Second factor"
-
-#: apps/cuentas/views.py:38
+#: apps/cuentas/views.py:29
 #, python-format
 msgid ""
 "Demasiados intentos. Por seguridad, espera %(minutos)s min antes de volver a"
@@ -1604,64 +1561,21 @@ msgid ""
 msgstr ""
 "Too many attempts. For security, wait %(minutos)s min before trying again."
 
-#: apps/cuentas/views.py:66
-msgid "Email o contraseña incorrectos."
-msgstr "Wrong email or password."
+#: apps/cuentas/views.py:59
+msgid "Usuario o contraseña incorrectos."
+msgstr "Wrong username or password."
 
-#: apps/cuentas/views.py:101
-msgid "No se pudo crear la cuenta. Revisa el correo y el código de alta."
-msgstr ""
-"The account could not be created. Check the email and the sign-up code."
-
-#: apps/cuentas/views.py:128
-msgid "Tu sesión de acceso caducó. Vuelve a escribir tu contraseña."
-msgstr "Your sign-in session expired. Enter your password again."
-
-#: apps/cuentas/views.py:158
-#, python-format
-msgid ""
-"Has usado un código de recuperación. Te quedan %(restantes)s. Si perdiste el"
-" móvil, reconfigura la app autenticadora en Mi cuenta."
-msgstr ""
-"You used a recovery code. You have %(restantes)s left. If you lost your "
-"phone, set up the authenticator app again in My account."
-
-#: apps/cuentas/views.py:166
-msgid ""
-"Código incorrecto o caducado. Si fallas varias veces tendrás que esperar "
-"unos segundos."
-msgstr ""
-"Wrong or expired code. If you fail several times you'll have to wait a few "
-"seconds."
-
-#: apps/cuentas/views.py:179
-msgid "Confirma primero tu código actual."
-msgstr "Confirm your current code first."
-
-#: apps/cuentas/views.py:213
-msgid "Ese código no coincide. Comprueba que la hora del móvil es automática."
-msgstr ""
-"That code doesn't match. Check that your phone's clock is set automatically."
-
-#: apps/cuentas/views.py:234
-msgid "Listo. Guarda esos códigos en un lugar seguro."
-msgstr "Done. Keep those codes somewhere safe."
-
-#: apps/cuentas/views.py:243
+#: apps/cuentas/views.py:72
 msgid "Has cerrado sesión."
 msgstr "You have signed out."
 
-#: apps/cuentas/views.py:264
+#: apps/cuentas/views.py:92
 msgid "Nombre actualizado."
 msgstr "Name updated."
 
-#: apps/cuentas/views.py:272
+#: apps/cuentas/views.py:100
 msgid "Contraseña cambiada."
 msgstr "Password changed."
-
-#: apps/cuentas/views.py:286 apps/nucleo/views.py:168
-msgid "Código incorrecto."
-msgstr "Wrong code."
 
 #: apps/finanzas/forms.py:39
 msgid "La fecha final es anterior a la inicial."
@@ -1938,9 +1852,8 @@ msgid "Este canal no envía automáticamente."
 msgstr "This channel doesn't send automatically."
 
 #: apps/mensajeria/canales.py:82 templates/agenda/_enlace.html:4
-#: templates/catalogo/lista.html:14 templates/cuentas/codigos.html:17
-#: templates/ia/_respuesta.html:5 templates/ia/_retencion.html:7
-#: templates/mensajeria/_acciones.html:18
+#: templates/catalogo/lista.html:14 templates/ia/_respuesta.html:5
+#: templates/ia/_retencion.html:7 templates/mensajeria/_acciones.html:18
 #: templates/solicitudes/detalle.html:72 templates/solicitudes/lista.html:16
 msgid "Copiar"
 msgstr "Copy"
@@ -2334,7 +2247,7 @@ msgstr "Has no contact details."
 msgid "Nombre del cliente"
 msgstr "Client's first name"
 
-#: apps/mensajeria/variables.py:21 apps/nucleo/models.py:13
+#: apps/mensajeria/variables.py:21 apps/nucleo/models.py:15
 msgid "Nombre del estudio"
 msgstr "Studio name"
 
@@ -2391,14 +2304,14 @@ msgid "Texto de cuidados generales"
 msgstr "General aftercare text"
 
 #: apps/mensajeria/variables.py:60 apps/mensajeria/variables.py:134
-#: apps/nucleo/templatetags/ui.py:152
+#: apps/nucleo/templatetags/ui.py:153
 #, python-format
 msgid "%(n)d año"
 msgid_plural "%(n)d años"
 msgstr[0] "%(n)d year"
 msgstr[1] "%(n)d years"
 
-#: apps/mensajeria/variables.py:62 apps/nucleo/templatetags/ui.py:149
+#: apps/mensajeria/variables.py:62 apps/nucleo/templatetags/ui.py:150
 #, python-format
 msgid "%(n)d mes"
 msgid_plural "%(n)d meses"
@@ -2554,7 +2467,7 @@ msgstr "Brand and contact"
 msgid "Reservas y textos"
 msgstr "Bookings and texts"
 
-#: apps/nucleo/forms.py:23 apps/nucleo/models.py:115
+#: apps/nucleo/forms.py:23 apps/nucleo/models.py:112
 #: templates/agenda/_extras_detalle.html:9
 #: templates/clientes/_consentimientos.html:2
 msgid "Consentimiento"
@@ -2572,7 +2485,7 @@ msgstr "AI assistant"
 msgid "En Florida no se puede tatuar a menores de 16 años en ningún caso."
 msgstr "In Florida, minors under 16 can never be tattooed."
 
-#: apps/nucleo/forms.py:68 apps/nucleo/models.py:16
+#: apps/nucleo/forms.py:68 apps/nucleo/models.py:18
 #: templates/nucleo/ajustes.html:23
 msgid "Logotipo"
 msgstr "Logo"
@@ -2585,9 +2498,10 @@ msgstr "Square PNG, ideally with a transparent background."
 msgid "Quitar el logotipo"
 msgstr "Remove the logo"
 
-#: apps/nucleo/forms.py:82
-msgid "Código de tu app autenticadora"
-msgstr "Code from your authenticator app"
+#: apps/nucleo/forms.py:84 templates/nucleo/ajustes.html:46
+#: templates/nucleo/ajustes.html:49
+msgid "Tu contraseña"
+msgstr "Your password"
 
 #: apps/nucleo/formularios.py:58
 #, python-format
@@ -2615,100 +2529,100 @@ msgstr "The image is too large."
 msgid "Firma no válida."
 msgstr "Invalid signature."
 
-#: apps/nucleo/models.py:14
+#: apps/nucleo/models.py:16
 msgid "Nombre de la artista"
 msgstr "Artist name"
 
-#: apps/nucleo/models.py:15
+#: apps/nucleo/models.py:17
 msgid "Frase corta"
 msgstr "Short tagline"
 
-#: apps/nucleo/models.py:19
+#: apps/nucleo/models.py:21
 msgid "Dirección"
 msgstr "Address"
 
-#: apps/nucleo/models.py:20
+#: apps/nucleo/models.py:22
 msgid "Sin @"
 msgstr "Without @"
 
-#: apps/nucleo/models.py:21
+#: apps/nucleo/models.py:23
 msgid "Web"
 msgstr "Website"
 
-#: apps/nucleo/models.py:24
+#: apps/nucleo/models.py:26
 msgid "Edad mínima"
 msgstr "Minimum age"
 
-#: apps/nucleo/models.py:28
+#: apps/nucleo/models.py:30
 msgid "Texto del consentimiento informado"
 msgstr "Informed consent text"
 
-#: apps/nucleo/models.py:31
+#: apps/nucleo/models.py:33
 msgid "Aviso de privacidad"
 msgstr "Privacy notice"
 
-#: apps/nucleo/models.py:32
+#: apps/nucleo/models.py:34
 msgid "Política de señas y cancelación"
 msgstr "Deposit and cancellation policy"
 
-#: apps/nucleo/models.py:33
+#: apps/nucleo/models.py:35
 msgid "Cuidados generales"
 msgstr "General aftercare"
 
-#: apps/nucleo/models.py:35
+#: apps/nucleo/models.py:37
 msgid "Años de conservación de consentimientos"
 msgstr "Years to keep consents"
 
-#: apps/nucleo/models.py:37
+#: apps/nucleo/models.py:39
 msgid ""
 "Florida exige conservar los registros de clientes 2 años (FAC 64E-28.007)."
 msgstr "Florida requires keeping client records for 2 years (FAC 64E-28.007)."
 
-#: apps/nucleo/models.py:41
+#: apps/nucleo/models.py:43
 msgid "Aceptar solicitudes de reserva"
 msgstr "Accept booking requests"
 
-#: apps/nucleo/models.py:42
+#: apps/nucleo/models.py:44
 msgid "Texto de bienvenida"
 msgstr "Welcome text"
 
-#: apps/nucleo/models.py:43
+#: apps/nucleo/models.py:45
 msgid "Publicar catálogo de flash"
 msgstr "Publish flash catalog"
 
-#: apps/nucleo/models.py:46
+#: apps/nucleo/models.py:48
 msgid "Meses sin volver para considerar inactivo"
 msgstr "Months without returning to count as inactive"
 
-#: apps/nucleo/models.py:47
+#: apps/nucleo/models.py:49
 msgid "Reactivaciones por día"
 msgstr "Win-backs per day"
 
-#: apps/nucleo/models.py:48
+#: apps/nucleo/models.py:50
 msgid "Mensajes de campaña por día"
 msgstr "Campaign messages per day"
 
-#: apps/nucleo/models.py:49
+#: apps/nucleo/models.py:51
 msgid "Gasto acumulado para VIP"
 msgstr "Total spend for VIP"
 
-#: apps/nucleo/models.py:50
+#: apps/nucleo/models.py:52
 msgid "Recordar cita con (días)"
 msgstr "Remind appointment (days before)"
 
-#: apps/nucleo/models.py:53
+#: apps/nucleo/models.py:55
 msgid "Usar asistente de IA"
 msgstr "Use AI assistant"
 
-#: apps/nucleo/models.py:54
+#: apps/nucleo/models.py:56
 msgid "Tono de voz"
 msgstr "Tone of voice"
 
-#: apps/nucleo/models.py:56
+#: apps/nucleo/models.py:58
 msgid "Ejemplos de mensajes tuyos"
 msgstr "Examples of your messages"
 
-#: apps/nucleo/models.py:58
+#: apps/nucleo/models.py:60
 msgid ""
 "Pega 3-5 mensajes reales tuyos (sin datos de clientes) para imitar tu "
 "estilo."
@@ -2716,95 +2630,79 @@ msgstr ""
 "Paste 3-5 real messages of yours (without client data) to imitate your "
 "style."
 
-#: apps/nucleo/models.py:61
+#: apps/nucleo/models.py:63
 msgid "Límite mensual de consultas"
 msgstr "Monthly query limit"
 
-#: apps/nucleo/models.py:61
+#: apps/nucleo/models.py:63
 msgid "Vacío = valor del servidor."
 msgstr "Empty = server value."
 
-#: apps/nucleo/models.py:67 apps/nucleo/models.py:68
+#: apps/nucleo/models.py:69 apps/nucleo/models.py:70
 msgid "ajustes del estudio"
 msgstr "studio settings"
 
-#: apps/nucleo/models.py:101
+#: apps/nucleo/models.py:102
 msgid "Inicio de sesión"
 msgstr "Sign-in"
 
-#: apps/nucleo/models.py:102
+#: apps/nucleo/models.py:103
 msgid "Intento fallido"
 msgstr "Failed attempt"
 
-#: apps/nucleo/models.py:103
+#: apps/nucleo/models.py:104
 msgid "Acceso bloqueado"
 msgstr "Access blocked"
 
-#: apps/nucleo/models.py:104
+#: apps/nucleo/models.py:105
 msgid "Cierre de sesión"
 msgstr "Sign-out"
 
-#: apps/nucleo/models.py:105
-msgid "2FA activada"
-msgstr "2FA enabled"
-
 #: apps/nucleo/models.py:106
-msgid "Código 2FA incorrecto"
-msgstr "Wrong 2FA code"
-
-#: apps/nucleo/models.py:107
-msgid "Código de recuperación usado"
-msgstr "Recovery code used"
-
-#: apps/nucleo/models.py:108
-msgid "Códigos regenerados"
-msgstr "Codes regenerated"
-
-#: apps/nucleo/models.py:109
 msgid "Contraseña cambiada"
 msgstr "Password changed"
 
-#: apps/nucleo/models.py:110
+#: apps/nucleo/models.py:107
 msgid "Exportación de datos"
 msgstr "Data export"
 
-#: apps/nucleo/models.py:111
+#: apps/nucleo/models.py:108
 msgid "Borrado"
 msgstr "Deletion"
 
-#: apps/nucleo/models.py:112
+#: apps/nucleo/models.py:109
 msgid "Anonimización"
 msgstr "Anonymization"
 
-#: apps/nucleo/models.py:113
+#: apps/nucleo/models.py:110
 msgid "Acceso a documento sensible"
 msgstr "Access to sensitive document"
 
-#: apps/nucleo/models.py:114
+#: apps/nucleo/models.py:111
 msgid "Cambio de ajustes"
 msgstr "Settings change"
 
-#: apps/nucleo/models.py:116
+#: apps/nucleo/models.py:113
 msgid "Tarea programada"
 msgstr "Scheduled task"
 
-#: apps/nucleo/models.py:117
+#: apps/nucleo/models.py:114
 msgid "Consulta de IA"
 msgstr "AI query"
 
-#: apps/nucleo/models.py:134
+#: apps/nucleo/models.py:131
 msgid "registro de auditoría"
 msgstr "audit log"
 
-#: apps/nucleo/models.py:149
+#: apps/nucleo/models.py:146
 msgid "Solicitud de reserva"
 msgstr "Booking request"
 
-#: apps/nucleo/models.py:150
+#: apps/nucleo/models.py:147
 msgid "Catálogo de flash"
 msgstr "Flash catalog"
 
-#: apps/nucleo/models.py:151
+#: apps/nucleo/models.py:148
 msgid "Gestión de cita"
 msgstr "Appointment management"
 
@@ -2850,87 +2748,89 @@ msgstr "Finances"
 msgid "Ajustes"
 msgstr "Settings"
 
-#: apps/nucleo/templatetags/ui.py:106
+#: apps/nucleo/templatetags/ui.py:107
 msgid "D j M"
 msgstr "D, M j"
 
-#: apps/nucleo/templatetags/ui.py:118
+#: apps/nucleo/templatetags/ui.py:119
 msgid "l j \\d\\e F"
 msgstr "l, F j"
 
-#: apps/nucleo/templatetags/ui.py:120
+#: apps/nucleo/templatetags/ui.py:121
 #, python-format
 msgid " de %(anio)s"
 msgstr ", %(anio)s"
 
-#: apps/nucleo/templatetags/ui.py:127
+#: apps/nucleo/templatetags/ui.py:128
 msgid "d/m/Y"
 msgstr "m/d/Y"
 
-#: apps/nucleo/templatetags/ui.py:139
+#: apps/nucleo/templatetags/ui.py:140
 msgid "hoy"
 msgstr "today"
 
-#: apps/nucleo/templatetags/ui.py:141
+#: apps/nucleo/templatetags/ui.py:142
 msgid "mañana"
 msgstr "tomorrow"
 
-#: apps/nucleo/templatetags/ui.py:143
+#: apps/nucleo/templatetags/ui.py:144
 msgid "ayer"
 msgstr "yesterday"
 
-#: apps/nucleo/templatetags/ui.py:146
+#: apps/nucleo/templatetags/ui.py:147
 #, python-format
 msgid "%(n)d día"
 msgid_plural "%(n)d días"
 msgstr[0] "%(n)d day"
 msgstr[1] "%(n)d days"
 
-#: apps/nucleo/templatetags/ui.py:153
+#: apps/nucleo/templatetags/ui.py:154
 #, python-format
 msgid "en %(cantidad)s"
 msgstr "in %(cantidad)s"
 
-#: apps/nucleo/templatetags/ui.py:153
+#: apps/nucleo/templatetags/ui.py:154
 #, python-format
 msgid "hace %(cantidad)s"
 msgstr "%(cantidad)s ago"
 
-#: apps/nucleo/views.py:107
+#: apps/nucleo/views.py:102
 msgid "Logotipo actualizado."
 msgstr "Logo updated."
 
-#: apps/nucleo/views.py:115
+#: apps/nucleo/views.py:110
 msgid ""
 "Nuevo texto de consentimiento: las próximas firmas usarán la nueva versión."
 msgstr "New consent text: upcoming signatures will use the new version."
 
-#: apps/nucleo/views.py:117
+#: apps/nucleo/views.py:112
 msgid "Ajustes guardados."
 msgstr "Settings saved."
 
-#: apps/nucleo/views.py:147
-msgid ""
-"Código incorrecto. La exportación necesita tu código de la app "
-"autenticadora."
-msgstr "Wrong code. Exporting requires the code from your authenticator app."
+#: apps/nucleo/views.py:142
+msgid "Contraseña incorrecta. La exportación necesita tu contraseña."
+msgstr "Wrong password. The export needs your password."
 
-#: apps/nucleo/views.py:175
+#: apps/nucleo/views.py:163
+msgid "Contraseña incorrecta."
+msgstr "Wrong password."
+
+#: apps/nucleo/views.py:170
 #, python-format
 msgid "Copia creada: %(name)s"
 msgstr "Backup created: %(name)s"
 
-#: apps/nucleo/views.py:233
+#: apps/nucleo/views.py:228
 msgid "Agenda, clientes y mensajes del estudio"
 msgstr "Studio calendar, clients and messages"
 
-#: apps/nucleo/views.py:251 templates/componentes/dialogos.html:23
+#: apps/nucleo/views.py:246 templates/componentes/dialogos.html:23
 #: templates/mensajeria/bandeja.html:2 templates/mensajeria/bandeja.html:8
 #: templates/mensajeria/enviar.html:13
 msgid "Mensajes de hoy"
 msgstr "Today's messages"
 
-#: apps/nucleo/views.py:252 templates/agenda/_lista.html:33
+#: apps/nucleo/views.py:247 templates/agenda/_lista.html:33
 #: templates/agenda/cita_formulario.html:2
 #: templates/agenda/cita_formulario.html:7 templates/base.html:27
 #: templates/clientes/ficha.html:18 templates/componentes/dialogos.html:19
@@ -3213,9 +3113,8 @@ msgid "Marcar como realizada"
 msgstr "Mark as done"
 
 #: templates/agenda/cerrar_sesion.html:29
-#: templates/agenda/cita_detalle.html:134 templates/cuentas/verificar.html:28
-#: templates/errores/413.html:8 templates/errores/429.html:8
-#: templates/solicitudes/detalle.html:91
+#: templates/agenda/cita_detalle.html:134 templates/errores/413.html:8
+#: templates/errores/429.html:8 templates/solicitudes/detalle.html:91
 msgid "Volver"
 msgstr "Back"
 
@@ -3530,8 +3429,8 @@ msgid "%(cuenta)s pendientes"
 msgstr "%(cuenta)s pending"
 
 #: templates/base.html:39 templates/base.html:84
-#: templates/cuentas/configurar_2fa.html:6 templates/cuentas/cuenta.html:2
-#: templates/cuentas/cuenta.html:7
+#: templates/cuentas/cuenta.html:2 templates/cuentas/cuenta.html:7
+#: templates/nucleo/ajustes.html:56
 msgid "Mi cuenta"
 msgstr "My account"
 
@@ -4340,195 +4239,34 @@ msgstr "New client"
 msgid "Acceso"
 msgstr "Sign in"
 
-#: templates/cuentas/acceso.html:6
+#: templates/cuentas/acceso.html:6 templates/cuentas/acceso.html:13
 msgid "Entrar"
 msgstr "Sign in"
 
 #: templates/cuentas/acceso.html:7
-msgid "Acceso privado del estudio."
-msgstr "Private studio access."
-
-#: templates/cuentas/acceso.html:13
-msgid "Continuar"
-msgstr "Continue"
+#, python-format
+msgid "Acceso privado de %(estudio)s."
+msgstr "Private access for %(estudio)s."
 
 #: templates/cuentas/acceso.html:16
-msgid "Después te pediremos el código de tu app autenticadora."
-msgstr "Next we'll ask for the code from your authenticator app."
-
-#: templates/cuentas/acceso.html:18
-msgid "¿Primer acceso? Crea tu cuenta"
-msgstr "First time? Create your account"
-
-#: templates/cuentas/alta.html:2 templates/cuentas/alta.html:6
-#: templates/cuentas/alta.html:13
-msgid "Crear cuenta"
-msgstr "Create account"
-
-#: templates/cuentas/alta.html:7
 msgid ""
-"Solo para los correos autorizados del estudio. Necesitas el código de alta."
-msgstr "Only for the studio's authorized emails. You need the sign-up code."
-
-#: templates/cuentas/alta.html:16
-msgid "Después configurarás la app autenticadora (2FA obligatoria)."
-msgstr "Next you'll set up the authenticator app (2FA is required)."
-
-#: templates/cuentas/alta.html:18
-msgid "Ya tengo cuenta"
-msgstr "I already have an account"
-
-#: templates/cuentas/codigos.html:2 templates/cuentas/codigos.html:8
-msgid "Códigos de recuperación"
-msgstr "Recovery codes"
-
-#: templates/cuentas/codigos.html:7
-msgid "Guárdalos ahora"
-msgstr "Save them now"
-
-#: templates/cuentas/codigos.html:11
-msgid ""
-"Solo se muestran esta vez. Si pierdes el móvil, estos códigos son la única "
-"forma de entrar. Cada uno sirve una sola vez."
+"Deja que el navegador guarde tu contraseña: la próxima vez se rellenará sola"
+" y la sesión se mantiene abierta en este dispositivo."
 msgstr ""
-"They're shown only this once. If you lose your phone, these codes are the "
-"only way in. Each one works only once."
-
-#: templates/cuentas/codigos.html:17
-msgid "Códigos copiados."
-msgstr "Codes copied."
-
-#: templates/cuentas/codigos.html:18
-msgid "Imprimir"
-msgstr "Print"
-
-#: templates/cuentas/codigos.html:23
-msgid "Ya los he guardado"
-msgstr "I've saved them"
-
-#: templates/cuentas/configurar_2fa.html:2
-msgid "Activar verificación en dos pasos"
-msgstr "Turn on two-step verification"
-
-#: templates/cuentas/configurar_2fa.html:6
-msgid "Obligatorio · solo una vez"
-msgstr "Required · only once"
-
-#: templates/cuentas/configurar_2fa.html:7
-msgid "Protege tu cuenta"
-msgstr "Protect your account"
-
-#: templates/cuentas/configurar_2fa.html:8
-msgid ""
-"Aquí guardas datos de salud y firmas de tus clientes. Con la verificación en"
-" dos pasos, nadie podrá entrar solo con tu contraseña."
-msgstr ""
-"You keep your clients' health data and signatures here. With two-step "
-"verification, nobody can get in with just your password."
-
-#: templates/cuentas/configurar_2fa.html:12
-msgid "Instala una app autenticadora"
-msgstr "Install an authenticator app"
-
-#: templates/cuentas/configurar_2fa.html:12
-msgid ""
-"Google Authenticator, Microsoft Authenticator, 1Password o la app "
-"Contraseñas del iPhone."
-msgstr ""
-"Google Authenticator, Microsoft Authenticator, 1Password or the iPhone "
-"Passwords app."
-
-#: templates/cuentas/configurar_2fa.html:15
-msgid "Escanea este código QR"
-msgstr "Scan this QR code"
-
-#: templates/cuentas/configurar_2fa.html:16
-msgid "Código QR para la app autenticadora"
-msgstr "QR code for the authenticator app"
-
-#: templates/cuentas/configurar_2fa.html:18
-msgid "¿No puedes escanearlo? Escribe la clave a mano"
-msgstr "Can't scan it? Type the key by hand"
-
-#: templates/cuentas/configurar_2fa.html:19
-msgid "Clave secreta"
-msgstr "Secret key"
-
-#: templates/cuentas/configurar_2fa.html:25
-msgid "Escribe el código que aparece"
-msgstr "Type the code that appears"
-
-#: templates/cuentas/configurar_2fa.html:29
-msgid "Activar"
-msgstr "Turn on"
+"Let your browser save your password: next time it fills in automatically, "
+"and you stay signed in on this device."
 
 #: templates/cuentas/cuenta.html:13
 msgid "Perfil"
 msgstr "Profile"
 
 #: templates/cuentas/cuenta.html:17
-msgid "Email de acceso:"
-msgstr "Sign-in email:"
+msgid "Usuario de acceso:"
+msgstr "Sign-in username:"
 
-#: templates/cuentas/cuenta.html:23
-msgid "Verificación en dos pasos"
-msgstr "Two-step verification"
-
-#: templates/cuentas/cuenta.html:24
-msgid "Te quedan"
-msgstr "You have"
-
-#: templates/cuentas/cuenta.html:24
-msgid "códigos de recuperación."
-msgstr "recovery codes left."
-
-#: templates/cuentas/cuenta.html:25
-msgid "Genera códigos nuevos cuanto antes."
-msgstr "Generate new codes as soon as possible."
-
-#: templates/cuentas/cuenta.html:28
-msgid "Para cambiar algo, confirma con tu código actual."
-msgstr "To change anything, confirm with your current code."
-
-#: templates/cuentas/cuenta.html:31
-msgid "Nuevos códigos"
-msgstr "New codes"
-
-#: templates/cuentas/cuenta.html:32
-msgid "Cambiar de móvil"
-msgstr "Change phone"
-
-#: templates/cuentas/cuenta.html:42
+#: templates/cuentas/cuenta.html:29
 msgid "Cambiar contraseña"
 msgstr "Change password"
-
-#: templates/cuentas/verificar.html:2
-msgid "Verificación"
-msgstr "Verification"
-
-#: templates/cuentas/verificar.html:6
-msgid "Segundo paso"
-msgstr "Second step"
-
-#: templates/cuentas/verificar.html:9
-msgid "Escribe uno de los códigos que guardaste al activar la verificación."
-msgstr "Type one of the codes you saved when you turned on verification."
-
-#: templates/cuentas/verificar.html:11
-msgid "Abre tu app autenticadora y escribe el código de 6 dígitos de"
-msgstr "Open your authenticator app and type the 6-digit code for"
-
-#: templates/cuentas/verificar.html:19
-msgid "Verificar"
-msgstr "Verify"
-
-#: templates/cuentas/verificar.html:24
-msgid "Usar la app autenticadora"
-msgstr "Use the authenticator app"
-
-#: templates/cuentas/verificar.html:26
-msgid "¿Sin móvil? Usa un código de recuperación"
-msgstr "No phone? Use a recovery code"
 
 #: templates/errores/403.html:2 templates/errores/403.html:6
 msgid "No puedes ver esto"
@@ -5450,12 +5188,12 @@ msgstr "Export all your data"
 #: templates/nucleo/ajustes.html:35
 msgid ""
 "Un .zip con todos los registros (JSON) y archivos: fotos, referencias, "
-"firmas y PDFs. No incluye contraseñas ni claves 2FA. Contiene datos de "
-"salud: guárdalo en un lugar seguro."
+"firmas y PDFs. No incluye contraseñas. Contiene datos de salud: guárdalo en "
+"un lugar seguro."
 msgstr ""
-"A .zip with all records (JSON) and files: photos, references, signatures and"
-" PDFs. It doesn't include passwords or 2FA keys. It contains health data: "
-"keep it somewhere safe."
+"A .zip with every record (JSON) and file: photos, references, signatures and"
+" PDFs. Passwords are not included. It contains health data: keep it "
+"somewhere safe."
 
 #: templates/nucleo/ajustes.html:38
 msgid "Descargar exportación"
@@ -5473,14 +5211,6 @@ msgstr ""
 "They're created automatically every night on the server disk (the latest "
 "ones are kept). Render also keeps database backups."
 
-#: templates/nucleo/ajustes.html:46
-msgid "Código"
-msgstr "Code"
-
-#: templates/nucleo/ajustes.html:46 templates/nucleo/ajustes.html:49
-msgid "Código 2FA"
-msgstr "2FA code"
-
 #: templates/nucleo/ajustes.html:47
 msgid "Aún no hay copias."
 msgstr "No backups yet."
@@ -5494,12 +5224,8 @@ msgid "Seguridad"
 msgstr "Security"
 
 #: templates/nucleo/ajustes.html:56
-msgid "Mi cuenta y 2FA"
-msgstr "My account and 2FA"
-
-#: templates/nucleo/ajustes.html:56
-msgid "Contraseña, códigos de recuperación, cambiar de móvil"
-msgstr "Password, recovery codes, change phone"
+msgid "Nombre y contraseña"
+msgstr "Name and password"
 
 #: templates/nucleo/ajustes.html:57 templates/nucleo/auditoria.html:2
 #: templates/nucleo/auditoria.html:5

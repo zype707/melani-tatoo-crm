@@ -1,7 +1,7 @@
 """Exportación completa y copias de seguridad.
 
-- Exportación: datos de negocio (JSON) + archivos, SIN credenciales (hashes,
-  secretos 2FA). Es lo que la tatuadora descarga para llevarse sus datos.
+- Exportación: datos de negocio (JSON) + archivos, SIN credenciales (hashes de
+  contraseñas). Es lo que la tatuadora descarga para llevarse sus datos.
 - Copia de seguridad: todo lo necesario para restaurar (incluye cuentas),
   guardada en el disco persistente con rotación.
 """
@@ -18,7 +18,7 @@ from django.utils import timezone
 
 APPS_NEGOCIO = ["nucleo", "clientes", "agenda", "mensajeria", "finanzas", "catalogo", "ia"]
 EXCLUIR_EXPORTACION = {"nucleo.enlacepublico"}
-APPS_COPIA = ["cuentas", "otp_totp", *APPS_NEGOCIO]
+APPS_COPIA = ["cuentas", *APPS_NEGOCIO]
 
 LEEME = """Exportación de {estudio} · {fecha}
 

@@ -5,12 +5,14 @@ from django.utils.translation import gettext_lazy as _
 
 from . import textos
 
+NOMBRE_MARCA = "ink_mels"
+
 
 class AjustesEstudio(models.Model):
     """Configuración única del estudio (siempre pk=1)."""
 
     # Marca y contacto
-    nombre = models.CharField(_("Nombre del estudio"), max_length=120, default="Mi estudio")
+    nombre = models.CharField(_("Nombre del estudio"), max_length=120, default=NOMBRE_MARCA)
     nombre_artista = models.CharField(_("Nombre de la artista"), max_length=120, blank=True)
     eslogan = models.CharField(_("Frase corta"), max_length=160, blank=True)
     logo = models.ImageField(_("Logotipo"), upload_to="marca/", blank=True)
@@ -83,7 +85,6 @@ class AjustesEstudio(models.Model):
 
             for campo, texto in textos_en.POR_CAMPO.items():
                 setattr(obj, campo, texto)
-            obj.nombre = "My studio"
             obj.save()
         return obj
 
@@ -102,10 +103,6 @@ class RegistroAuditoria(models.Model):
         LOGIN_FALLO = "login_fallo", _("Intento fallido")
         LOGIN_BLOQUEADO = "login_bloqueado", _("Acceso bloqueado")
         LOGOUT = "logout", _("Cierre de sesión")
-        DOSFA_ACTIVADA = "2fa_activada", _("2FA activada")
-        DOSFA_FALLO = "2fa_fallo", _("Código 2FA incorrecto")
-        CODIGO_RECUPERACION = "codigo_recuperacion", _("Código de recuperación usado")
-        CODIGOS_REGENERADOS = "codigos_regenerados", _("Códigos regenerados")
         PASSWORD_CAMBIADA = "password_cambiada", _("Contraseña cambiada")
         EXPORTACION = "exportacion", _("Exportación de datos")
         BORRADO = "borrado", _("Borrado")

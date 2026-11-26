@@ -13,7 +13,7 @@ from django.urls import reverse
 from apps.clientes.models import Cliente, DatosSalud
 from apps.cuentas.models import Usuario
 from apps.nucleo.models import AjustesEstudio, RegistroAuditoria
-from conftest import codigo_totp
+from conftest import CLAVE
 
 pytestmark = pytest.mark.django_db
 URL_TAREA = "/interno/tareas/limpiar_archivos/"
@@ -43,12 +43,6 @@ class TestTareasInternas:
         r = client.post(URL_TAREA, HTTP_AUTHORIZATION=f"Bearer {SECRETO}")
         assert r.status_code == 200 and r.json()["tarea"] == "limpiar_archivos"
 
-    def test_tareas_diarias_desde_cron_externo(self, client, settings):
-        """Plan gratis de Render: sin cron jobs, un cron externo puede preparar la bandeja."""
-        settings.TAREAS_SECRETO = SECRETO
-        r = client.post("/interno/tareas/tareas_diarias/", HTTP_AUTHORIZATION=f"Bearer {SECRETO}")
-        assert r.status_code == 200 and r.json()["tarea"] == "tareas_diarias"
-
 
 class TestArchivos:
     def test_borra_huerfanos_antiguos(self):
@@ -75,20 +69,24 @@ class TestArchivos:
 
 
 class TestExportacion:
-    def test_requiere_codigo_y_excluye_credenciales(self, cliente_verificado, dispositivo):
+    def test_requiere_password_y_excluye_credenciales(self, cliente_verificado):
         Cliente.objects.create(nombre="Eva", telefono="+14075550111")
-        r = cliente_verificado.post(reverse("nucleo:exportar"), {"codigo": "000000"})
+        r = cliente_verificado.post(reverse("nucleo:exportar"), {"password": "mala"})
         assert r.status_code == 302
-        dispositivo.refresh_from_db()
-        dispositivo.throttle_reset()
-        r = cliente_verificado.post(reverse("nucleo:exportar"), {"codigo": codigo_totp(dispositivo)})
+        r = cliente_verificado.post(reverse("nucleo:exportar"), {"password": CLAVE})
         assert r.status_code == 200
         with zipfile.ZipFile(io.BytesIO(b"".join(r.streaming_content))) as z:
             datos = json.loads(z.read("datos.json"))
         modelos = {d["model"] for d in datos}
         assert "clientes.cliente" in modelos
-        assert not any(m.startswith(("cuentas.", "otp_totp.")) for m in modelos)
+        assert not any(m.startswith("cuentas.") for m in modelos)
         assert RegistroAuditoria.objects.filter(accion="exportacion").exists()
+
+    def test_confirmar_password_tiene_limite_de_intentos(self, cliente_verificado):
+        for _ in range(10):
+            cliente_verificado.post(reverse("nucleo:exportar"), {"password": "mala"})
+        r = cliente_verificado.post(reverse("nucleo:exportar"), {"password": CLAVE})
+        assert r.status_code == 302  # bloqueada aunque ahora acierte
 
     def test_comando_exportar(self, tmp_path):
         destino = tmp_path / "e.zip"
@@ -150,14 +148,8 @@ class TestAjustesYPWA:
         assert "16 años" in r.content.decode()
 
     def test_ayudante_sin_ajustes(self, client):
-        from django_otp.plugins.otp_totp.models import TOTPDevice
-
-        u = Usuario.objects.create_user("a@b.com", "Clave-larguisima-2026", nombre="A", rol="ayudante")
-        d = TOTPDevice.objects.create(user=u, confirmed=True)
+        u = Usuario.objects.create_user("ayudante", "Clave-larguisima-2026", nombre="A", rol="ayudante")
         client.force_login(u)
-        s = client.session
-        s["otp_device_id"] = d.persistent_id
-        s.save()
         assert client.get(reverse("nucleo:ajustes")).status_code == 403
 
     def test_manifest_y_service_worker(self, client, db):

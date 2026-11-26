@@ -1,5 +1,6 @@
 """Etiquetas y filtros de interfaz (cargados como builtins en todas las plantillas)."""
 
+import re
 from datetime import date, datetime
 from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 
@@ -195,7 +196,8 @@ def telefono(valor):
 
 @register.filter
 def iniciales(texto):
-    partes = [p for p in str(texto or "").split() if p[:1].isalpha()]
+    # «ink_mels» → «IM»: guiones bajos, puntos y guiones también separan palabras.
+    partes = [p for p in re.split(r"[\s_.\-]+", str(texto or "")) if p[:1].isalpha()]
     return ("".join(p[0] for p in partes[:2]) or "·").upper()
 
 

@@ -1,34 +1,39 @@
-from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.db import models, transaction
+from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.db import models
 from django.db.models.functions import Lower
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django_otp.models import Device, ThrottlingMixin
+
+
+def normalizar_usuario(usuario: str | None) -> str:
+    """Los nombres de usuario no distinguen mayúsculas ni espacios alrededor."""
+    return (usuario or "").strip().lower()
 
 
 class GestorUsuarios(BaseUserManager):
     use_in_migrations = True
 
-    def _crear(self, email, password, **extra):
-        if not email:
-            raise ValueError(_("El email es obligatorio."))
-        usuario = self.model(email=self.normalize_email(email).lower(), **extra)
-        usuario.set_password(password)
-        usuario.save(using=self._db)
-        return usuario
+    def _crear(self, usuario, password, **extra):
+        usuario = normalizar_usuario(usuario)
+        if not usuario:
+            raise ValueError(_("El nombre de usuario es obligatorio."))
+        cuenta = self.model(usuario=usuario, **extra)
+        cuenta.set_password(password)
+        cuenta.save(using=self._db)
+        return cuenta
 
-    def create_user(self, email, password=None, **extra):
+    def create_user(self, usuario, password=None, **extra):
         extra.setdefault("is_staff", False)
         extra.setdefault("is_superuser", False)
-        return self._crear(email, password, **extra)
+        return self._crear(usuario, password, **extra)
 
-    def create_superuser(self, email, password=None, **extra):
+    def create_superuser(self, usuario, password=None, **extra):
         extra.update(is_staff=True, is_superuser=True)
-        return self._crear(email, password, **extra)
+        return self._crear(usuario, password, **extra)
 
     def get_by_natural_key(self, username):
-        return self.get(email__iexact=username)
+        return self.get(usuario__iexact=normalizar_usuario(username))
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
@@ -36,7 +41,13 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         PROPIETARIA = "propietaria", _("Propietaria")
         AYUDANTE = "ayudante", _("Ayudante")
 
-    email = models.EmailField(_("Email"), unique=True)
+    usuario = models.CharField(
+        _("Usuario"),
+        max_length=150,
+        unique=True,
+        validators=[UnicodeUsernameValidator()],
+        help_text=_("Letras, números y . _ - @ (sin espacios)."),
+    )
     nombre = models.CharField(_("Nombre"), max_length=120)
     rol = models.CharField(_("Rol"), max_length=16, choices=Rol.choices, default=Rol.PROPIETARIA)
     is_active = models.BooleanField(_("Activa"), default=True)
@@ -45,16 +56,15 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     objects = GestorUsuarios()
 
-    USERNAME_FIELD = "email"
-    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "usuario"
     REQUIRED_FIELDS = ["nombre"]
 
     class Meta:
         verbose_name = "usuaria"
-        constraints = [models.UniqueConstraint(Lower("email"), name="usuario_email_unico_ci")]
+        constraints = [models.UniqueConstraint(Lower("usuario"), name="usuario_usuario_unico_ci")]
 
     def __str__(self):
-        return self.nombre or self.email
+        return self.nombre or self.usuario
 
     @property
     def es_propietaria(self) -> bool:
@@ -62,71 +72,22 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     @property
     def primer_nombre(self) -> str:
-        return (self.nombre or self.email).split()[0]
-
-
-class DispositivoRecuperacion(ThrottlingMixin, Device):
-    """Códigos de recuperación de un solo uso integrados en django-otp.
-
-    Los códigos se guardan con hash Argon2 (el plugin estático de django-otp
-    los guarda en claro, por eso no se usa).
-    """
-
-    class Meta:
-        verbose_name = _("códigos de recuperación")
-
-    def get_throttle_factor(self):
-        return 1
-
-    @property
-    def restantes(self) -> int:
-        return self.codigos.filter(usado_en__isnull=True).count()
-
-    def verify_token(self, token):
-        from .servicios import normalizar_codigo
-
-        permitido, _x = self.verify_is_allowed()
-        if not permitido:
-            return False
-        normal = normalizar_codigo(token)
-        if normal:
-            with transaction.atomic():
-                for codigo in self.codigos.select_for_update().filter(usado_en__isnull=True):
-                    if check_password(normal, codigo.codigo_hash):
-                        codigo.usado_en = timezone.now()
-                        codigo.save(update_fields=["usado_en"])
-                        self.throttle_reset()
-                        return True
-        self.throttle_increment()
-        return False
-
-
-class CodigoRecuperacion(models.Model):
-    dispositivo = models.ForeignKey(DispositivoRecuperacion, on_delete=models.CASCADE, related_name="codigos")
-    codigo_hash = models.CharField(max_length=255)
-    creado_en = models.DateTimeField(auto_now_add=True)
-    usado_en = models.DateTimeField(null=True, blank=True)
-
-    def __str__(self):
-        return f"Código {'usado' if self.usado_en else 'disponible'}"
+        return (self.nombre or self.usuario).split()[0]
 
 
 class IntentoAcceso(models.Model):
-    class Fase(models.TextChoices):
-        PASSWORD = "password", _("Contraseña")
-        DOSFA = "2fa", _("Segundo factor")
+    """Cada intento de inicio de sesión, para el bloqueo por fuerza bruta (ver servicios.py)."""
 
-    email = models.CharField(max_length=254)
+    usuario = models.CharField(max_length=150)
     ip = models.GenericIPAddressField(null=True, blank=True)
     exito = models.BooleanField(default=False)
-    fase = models.CharField(max_length=10, choices=Fase.choices, default=Fase.PASSWORD)
     creado_en = models.DateTimeField(default=timezone.now)
 
     class Meta:
         indexes = [
-            models.Index(fields=["email", "creado_en"]),
+            models.Index(fields=["usuario", "creado_en"]),
             models.Index(fields=["ip", "creado_en"]),
         ]
 
     def __str__(self):
-        return f"{self.email} · {'ok' if self.exito else 'fallo'} · {self.creado_en:%Y-%m-%d %H:%M}"
+        return f"{self.usuario} · {'ok' if self.exito else 'fallo'} · {self.creado_en:%Y-%m-%d %H:%M}"

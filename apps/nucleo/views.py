@@ -25,7 +25,7 @@ from django.views.i18n import JavaScriptCatalog, set_language
 from .archivos import borrar_archivo
 from .auditoria import Accion, registrar
 from .decoradores import solo_propietaria, vista_publica
-from .forms import SECCIONES, ConfirmarCodigoForm, LogoForm, formulario_ajustes
+from .forms import SECCIONES, ConfirmarPasswordForm, LogoForm, formulario_ajustes
 from .limites import superado
 from .models import AjustesEstudio, RegistroAuditoria
 
@@ -77,13 +77,11 @@ def error_500(request):
 # --- Ajustes del estudio ---------------------------------------------------------------------
 
 
-def _codigo_valido(request, form) -> bool:
-    from apps.cuentas.servicios import dispositivo_totp
-
-    dispositivo = dispositivo_totp(request.user)
-    return bool(
-        form.is_valid() and dispositivo and dispositivo.verify_token(form.cleaned_data["codigo"].replace(" ", ""))
-    )
+def _password_valida(request, form) -> bool:
+    """Confirma la contraseña de quien tiene la sesión. Máx. 10 intentos cada 15 min por cuenta."""
+    if superado(f"confirmar-password:{request.user.pk}", limite=10, ventana_segundos=900):
+        return False
+    return form.is_valid() and request.user.check_password(form.cleaned_data["password"])
 
 
 @solo_propietaria
@@ -124,7 +122,7 @@ def ajustes(request):
             "logo_form": logo_form,
             "seccion": seccion,
             "secciones": SECCIONES,
-            "confirmar": ConfirmarCodigoForm(),
+            "confirmar": ConfirmarPasswordForm(),
             "copias": _copias(),
             "ajustes_obj": instancia,
         },
@@ -142,9 +140,9 @@ def _copias():
 def exportar_todo(request):
     from .exportacion import exportar
 
-    form = ConfirmarCodigoForm(request.POST)
-    if not _codigo_valido(request, form):
-        messages.error(request, _("Código incorrecto. La exportación necesita tu código de la app autenticadora."))
+    form = ConfirmarPasswordForm(request.POST)
+    if not _password_valida(request, form):
+        messages.error(request, _("Contraseña incorrecta. La exportación necesita tu contraseña."))
         return redirect("/ajustes/?seccion=datos")
     tmp = tempfile.NamedTemporaryFile(prefix="exportacion-", suffix=".zip", delete=False)  # noqa: SIM115
     tmp.close()
@@ -163,9 +161,9 @@ def exportar_todo(request):
 @solo_propietaria
 @require_POST
 def copias(request):
-    form = ConfirmarCodigoForm(request.POST)
-    if not _codigo_valido(request, form):
-        messages.error(request, _("Código incorrecto."))
+    form = ConfirmarPasswordForm(request.POST)
+    if not _password_valida(request, form):
+        messages.error(request, _("Contraseña incorrecta."))
         return redirect("/ajustes/?seccion=datos")
     if request.POST.get("accion") == "crear":
         from .exportacion import copia_de_seguridad
@@ -198,8 +196,7 @@ def auditoria(request):
 
 # --- Tareas internas (cron → web service) ---------------------------------------------------
 
-# tareas_diarias: en el plan gratis (sin cron jobs) se puede disparar desde un cron externo.
-TAREAS_PERMITIDAS = {"limpiar_archivos", "copia_seguridad", "tareas_diarias"}
+TAREAS_PERMITIDAS = {"limpiar_archivos", "copia_seguridad"}
 
 
 @vista_publica

@@ -2,9 +2,10 @@
 
 Pensado para dos situaciones: recuperar el estudio en un servidor nuevo, o volver
 atrás tras un desastre. Sustituye TODOS los datos actuales por los de la copia,
-incluida la cuenta y su 2FA (se entra con las credenciales que había en la copia).
+incluidas las cuentas (se entra con el usuario y la contraseña que había en la copia).
 """
 
+import json
 import tempfile
 import zipfile
 from pathlib import Path, PurePosixPath
@@ -15,6 +16,29 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
 from apps.clientes.models import Cliente
+from apps.cuentas.servicios import usuario_desde_email
+
+# Modelos que existían en copias antiguas (2FA) y ya no están en la aplicación.
+MODELOS_RETIRADOS = {"otp_totp.totpdevice", "cuentas.dispositivorecuperacion", "cuentas.codigorecuperacion"}
+
+
+def adaptar_copia_antigua(objetos: list[dict]) -> list[dict]:
+    """Las copias anteriores al acceso por usuario traen 2FA y el email como identificador."""
+    ocupados = {
+        o["fields"]["usuario"] for o in objetos if o.get("model") == "cuentas.usuario" and "usuario" in o["fields"]
+    }
+    resultado = []
+    for obj in objetos:
+        modelo, campos = obj.get("model", ""), obj.get("fields", {})
+        if modelo in MODELOS_RETIRADOS:
+            continue
+        if modelo == "cuentas.usuario" and "usuario" not in campos:
+            campos["usuario"] = usuario_desde_email(campos.pop("email", ""), ocupados, f"usuaria{obj.get('pk', '')}")
+        elif modelo == "cuentas.intentoacceso" and "usuario" not in campos:
+            campos["usuario"] = (campos.pop("email", "") or "")[:150]
+            campos.pop("fase", None)
+        resultado.append(obj)
+    return resultado
 
 
 class Command(BaseCommand):
@@ -54,7 +78,8 @@ class Command(BaseCommand):
 
             with tempfile.TemporaryDirectory() as tmp:
                 datos = Path(tmp) / "datos.json"
-                datos.write_bytes(z.read("datos.json"))
+                objetos = adaptar_copia_antigua(json.loads(z.read("datos.json")))
+                datos.write_text(json.dumps(objetos, ensure_ascii=False), encoding="utf-8")
                 with transaction.atomic():
                     call_command("flush", interactive=False, verbosity=0)
                     call_command("loaddata", str(datos), verbosity=0)
@@ -70,6 +95,6 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS(
                 f"Copia restaurada: {Cliente.objects.count()} clientes y {len(archivos)} archivos. "
-                "Entra con la cuenta y el 2FA que había en la copia."
+                "Entra con el usuario y la contraseña que había en la copia."
             )
         )

@@ -1,7 +1,7 @@
 [project]
-name = "tinta-crm"
+name = "ink-mels-crm"
 version = "1.0.0"
-description = "CRM de gestión y fidelización para un estudio de tatuaje"
+description = "ink_mels · CRM de gestión y fidelización del estudio de tatuaje"
 requires-python = ">=3.12"
 
 [tool.pytest.ini_options]

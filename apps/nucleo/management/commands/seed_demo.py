@@ -194,13 +194,13 @@ class Command(BaseCommand):
 
     def _estudio(self):
         a = AjustesEstudio.obtener()
-        a.nombre = "Tinta Brava Studio"
+        a.nombre = "ink_mels"
         a.nombre_artista = "Vale Ríos"
         a.eslogan = "Fine line y blackwork en Orlando"
         a.telefono = "(407) 555-0150"
-        a.email = "hola@tintabrava.example"
+        a.email = "hola@inkmels.example"
         a.direccion = "123 Ejemplo St, Orlando, FL 32801"
-        a.instagram = "tintabrava.demo"
+        a.instagram = "ink_mels"
         a.flash_publico = True
         a.ia_ejemplos = (
             "¡Hola, Maru! Qué ganas de verte el jueves 🖤 Recuerda venir comida y con ropa cómoda.\n"

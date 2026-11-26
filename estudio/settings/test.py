@@ -23,5 +23,3 @@ COPIAS_ROOT = Path(tempfile.mkdtemp(prefix="estudio-copias-test-"))
 OPENAI_API_KEY = ""
 TAREAS_SECRETO = "secreto-de-tests"
 SITE_URL = "https://estudio.test"
-CORREOS_PERMITIDOS = ["vale@ejemplo.com", "ayu@ejemplo.com", "ana@ejemplo.com", "b@ejemplo.com", "a@b.com"]
-CODIGO_ALTA = "codigo-de-alta-de-tests-0123456789"
