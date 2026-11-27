@@ -7,9 +7,9 @@
     <div class="fila-entre"><strong>{{ d.titulo }}</strong>{% if d.precio %}<span class="numerico">{{ d.precio|dinero }}</span>{% endif %}</div>
     <span class="texto-peq texto-suave">{{ d.tamano|default:"" }}{% if d.repetible %} {% translate "· repetible" %}{% endif %}{% if not d.publico %} {% translate "· privado" %}{% endif %}{% if d.n_solicitudes %} {% blocktranslate count n=d.n_solicitudes %}· {{ n }} solicitud{% plural %}· {{ n }} solicitudes{% endblocktranslate %}{% endif %}</span>
     <form class="segmentos segmentos-peq" hx-post="{% url 'catalogo:estado' d.pk %}" hx-target="#flash-{{ d.pk }}" aria-label="{% blocktranslate with titulo=d.titulo %}Estado de {{ titulo }}{% endblocktranslate %}">
-      <button type="submit" name="estado" value="disponible" {% if d.estado == "disponible" %}aria-selected="true"{% endif %}>{% translate "Disponible" %}</button>
-      <button type="submit" name="estado" value="reservado" {% if d.estado == "reservado" %}aria-selected="true"{% endif %}>{% translate "Reservado" %}</button>
-      <button type="submit" name="estado" value="vendido" {% if d.estado == "vendido" %}aria-selected="true"{% endif %}>{% translate "Vendido" %}</button>
+      <button data-ayuda="{% translate "Se puede pedir." %}" type="submit" name="estado" value="disponible" {% if d.estado == "disponible" %}aria-selected="true"{% endif %}>{% translate "Disponible" %}</button>
+      <button data-ayuda="{% translate "Alguien lo ha apartado." %}" type="submit" name="estado" value="reservado" {% if d.estado == "reservado" %}aria-selected="true"{% endif %}>{% translate "Reservado" %}</button>
+      <button data-ayuda="{% translate "Ya está tatuado." %}" type="submit" name="estado" value="vendido" {% if d.estado == "vendido" %}aria-selected="true"{% endif %}>{% translate "Vendido" %}</button>
     </form>
   </div>
 </article>

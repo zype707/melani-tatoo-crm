@@ -7,8 +7,9 @@
     <h1>{% translate "Clientes" %}</h1>
   </div>
   <div class="acciones">
-    <a class="btn" href="{% url 'clientes:etiquetas' %}">{% icono "etiqueta" %} {% translate "Etiquetas" %}</a>
-    <a class="btn btn-primario" href="{% url 'clientes:nuevo' %}" data-atajo="nuevo-cliente">{% icono "plus" %} {% translate "Nuevo cliente" %}</a>
+    <a class="btn" href="{% url 'clientes:etiquetas' %}" data-ayuda="{% translate "Crea y borra las etiquetas con las que agrupas fichas (VIP, proyecto grande…)." %}">{% icono "etiqueta" %} {% translate "Etiquetas" %}</a>
+    {% if user.es_propietaria %}<a class="btn" href="{% url 'clientes:importar' %}" data-ayuda="{% translate "Trae de golpe a tus clientes de Excel, Google Sheets u otro programa con un archivo CSV." %}">{% icono "subir" %} {% translate "Importar CSV" %}</a>{% endif %}
+    <a class="btn btn-primario" href="{% url 'clientes:nuevo' %}" data-atajo="nuevo-cliente" data-ayuda="{% translate "Abre la ficha en blanco para dar de alta a una persona. Atajo: tecla c." %}">{% icono "plus" %} {% translate "Nuevo cliente" %}</a>
   </div>
 </header>
 
@@ -78,8 +79,12 @@
   {% elif q or filtro != "todos" or etiqueta %}
     {% include "componentes/vacio.html" with icono="buscar" titulo=_("Nadie coincide") texto=_("Prueba con otro nombre, un trozo del teléfono o quita los filtros.") %}
   {% else %}
-    {% url 'clientes:nuevo' as url_nuevo %}
-    {% include "componentes/vacio.html" with icono="clientes" titulo=_("Aún no hay clientes") texto=_("Añade tu primera clienta o espera a que lleguen solicitudes desde tu página de reservas.") url=url_nuevo accion=_("Añadir cliente") principal=True %}
+    {% url 'clientes:nuevo' as url_nuevo %}{% url 'clientes:importar' as url_importar %}{% url 'ayuda:inicio' as url_ayuda %}
+    {% if user.es_propietaria %}
+      {% include "componentes/vacio.html" with icono="clientes" titulo=_("Aún no hay clientes") texto=_("Si ya tienes una lista (Excel, Google Sheets, otro programa), impórtala de una vez. Si no, añade tu primera clienta o espera a que lleguen solicitudes desde tu página de reservas.") url=url_importar accion=_("Importar desde CSV") icono_accion="subir" principal=True url2=url_nuevo accion2=_("Añadir cliente") ayuda=url_ayuda|add:"#clientes" %}
+    {% else %}
+      {% include "componentes/vacio.html" with icono="clientes" titulo=_("Aún no hay clientes") texto=_("Añade tu primera clienta o espera a que lleguen solicitudes desde tu página de reservas.") url=url_nuevo accion=_("Añadir cliente") principal=True %}
+    {% endif %}
   {% endif %}
 </section>
 {% endpartialdef %}

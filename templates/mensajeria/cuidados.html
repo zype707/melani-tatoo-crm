@@ -27,7 +27,7 @@
       <div class="acciones-formulario">
         <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar" %}</button>
         {% if paso %}<a class="btn btn-fantasma" href="{% url 'mensajeria:cuidados' %}">{% translate "Cancelar" %}</a>
-        <button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="{% translate "¿Eliminar este paso?" %}">{% icono "basura" %}</button>{% endif %}
+        <button data-ayuda="{% translate "Borra este paso de la secuencia." %}" type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="{% translate "¿Eliminar este paso?" %}">{% icono "basura" %}</button>{% endif %}
       </div>
     </form>
     <p class="ayuda espacio-arriba">{% translate "El paso de retoque no se prepara si ya hubo retoque o si quedan sesiones de ese tatuaje." %}</p>

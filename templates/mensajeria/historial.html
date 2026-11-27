@@ -23,7 +23,7 @@
       <option value="">{% translate "Todos los canales" %}</option>
       {% for k, v in canales %}{% if k %}<option value="{{ k }}" {% if k == canal %}selected{% endif %}>{{ v }}</option>{% endif %}{% endfor %}
     </select>
-    <button class="btn btn-peq" type="submit">{% translate "Filtrar" %}</button>
+    <button data-ayuda="{% translate "Aplica la búsqueda y los filtros." %}" class="btn btn-peq" type="submit">{% translate "Filtrar" %}</button>
   </div>
 </form>
 

@@ -15,9 +15,9 @@
 <section class="bloque espacio-abajo" aria-labelledby="t-decidir">
   <div class="bloque-titulo"><h2 id="t-decidir">{% translate "¿Qué hacemos?" %}</h2></div>
   <div class="grupo-botones">
-    <form method="post" action="{% url 'solicitudes:convertir' s.pk %}">{% csrf_token %}<button class="btn btn-primario">{% icono "agenda" %} {% translate "Dar cita" %}</button></form>
-    {% if s.estado == "nueva" %}<form method="post" action="{% url 'solicitudes:aprobar' s.pk %}">{% csrf_token %}<button class="btn">{% icono "check" %} {% translate "Aceptar sin fecha" %}</button></form>{% endif %}
-    <button type="button" class="btn btn-peligro" data-abrir="dialogo-rechazo">{% translate "Rechazar" %}</button>
+    <form method="post" action="{% url 'solicitudes:convertir' s.pk %}">{% csrf_token %}<button data-ayuda="{% translate "Crea su ficha (o usa la existente) y abre una cita nueva." %}" class="btn btn-primario">{% icono "agenda" %} {% translate "Dar cita" %}</button></form>
+    {% if s.estado == "nueva" %}<form method="post" action="{% url 'solicitudes:aprobar' s.pk %}">{% csrf_token %}<button data-ayuda="{% translate "Crea su ficha y su proyecto, sin fecha todavía." %}" class="btn">{% icono "check" %} {% translate "Aceptar sin fecha" %}</button></form>{% endif %}
+    <button data-ayuda="{% translate "La rechaza (sus datos se borran solos en 30 días) o la marca como spam (se borra al momento)." %}" type="button" class="btn btn-peligro" data-abrir="dialogo-rechazo">{% translate "Rechazar" %}</button>
   </div>
   <p class="texto-peq texto-suave espacio-arriba">
     {% if existente %}{% translate "Ya existe la ficha de" %} <a href="{% url 'clientes:ficha' existente.pk %}">{{ existente.nombre_completo }}</a> {% translate "con ese teléfono o email: se usará esa." %}{% else %}{% translate "Al aceptar o dar cita se crea su ficha y el proyecto con las imágenes de referencia." %}{% endif %}

@@ -12,8 +12,8 @@
     </h1>
   </div>
   <div class="acciones">
-    <a class="btn" href="{% url 'agenda:lista_espera' %}">{% icono "lista" %} {% translate "Lista de espera" %}</a>
-    <a class="btn" href="{% url 'agenda:configuracion' %}">{% icono "ajustes" %} {% translate "Horario y tipos" %}</a>
+    <a data-ayuda="{% translate "Personas que quieren cita si se libera un hueco." %}" class="btn" href="{% url 'agenda:lista_espera' %}">{% icono "lista" %} {% translate "Lista de espera" %}</a>
+    <a data-ayuda="{% translate "Tu horario de trabajo, días libres y tipos de cita." %}" class="btn" href="{% url 'agenda:configuracion' %}">{% icono "ajustes" %} {% translate "Horario y tipos" %}</a>
   </div>
 </header>
 
@@ -31,13 +31,13 @@
       {% for clave, nombre in vistas.items %}<a href="?vista={{ clave }}&fecha={{ fecha|date:'Y-m-d' }}"{% if clave == vista %} aria-current="page"{% endif %}>{{ nombre }}</a>{% endfor %}
     </nav>
     <div class="fila">
-      <a class="btn btn-icono" href="?vista={{ vista }}&fecha={{ anterior|date:'Y-m-d' }}" aria-label="{% translate "Anterior" %}">{% icono "flecha-izq" %}</a>
-      <a class="btn" href="?vista={{ vista }}&fecha={{ hoy|date:'Y-m-d' }}">{% translate "Hoy" %}</a>
-      <a class="btn btn-icono" href="?vista={{ vista }}&fecha={{ siguiente|date:'Y-m-d' }}" aria-label="{% translate "Siguiente" %}">{% icono "flecha-der" %}</a>
+      <a data-ayuda="{% translate "Retrocede un día, una semana o un mes." %}" class="btn btn-icono" href="?vista={{ vista }}&fecha={{ anterior|date:'Y-m-d' }}" aria-label="{% translate "Anterior" %}">{% icono "flecha-izq" %}</a>
+      <a data-ayuda="{% translate "Vuelve a la fecha de hoy." %}" class="btn" href="?vista={{ vista }}&fecha={{ hoy|date:'Y-m-d' }}">{% translate "Hoy" %}</a>
+      <a data-ayuda="{% translate "Avanza un día, una semana o un mes." %}" class="btn btn-icono" href="?vista={{ vista }}&fecha={{ siguiente|date:'Y-m-d' }}" aria-label="{% translate "Siguiente" %}">{% icono "flecha-der" %}</a>
       <form method="get" class="fila">
         <input type="hidden" name="vista" value="{{ vista }}">
         <label for="ir-fecha" class="solo-lectores">{% translate "Ir a una fecha" %}</label>
-        <input type="date" id="ir-fecha" name="fecha" value="{{ fecha|date:'Y-m-d' }}" class="select-compacto" data-autoenviar>
+        <input data-ayuda="{% translate "Salta a cualquier fecha." %}" type="date" id="ir-fecha" name="fecha" value="{{ fecha|date:'Y-m-d' }}" class="select-compacto" data-autoenviar>
       </form>
     </div>
   </div>

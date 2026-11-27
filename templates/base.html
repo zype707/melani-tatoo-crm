@@ -24,7 +24,7 @@
     <aside class="barra-lateral" aria-label="{% translate "Navegación principal" %}">
       {% include "componentes/marca.html" %}
       {% if nav.url_nueva_cita %}
-        <a class="btn btn-primario btn-bloque" href="{{ nav.url_nueva_cita }}" data-atajo="nueva-cita">{% icono "plus" %} {% translate "Nueva cita" %}</a>
+        <a data-ayuda="{% translate "Apunta una cita nueva. Atajo: tecla n." %}" class="btn btn-primario btn-bloque" href="{{ nav.url_nueva_cita }}" data-atajo="nueva-cita">{% icono "plus" %} {% translate "Nueva cita" %}</a>
       {% endif %}
       <nav class="nav-lateral" aria-label="{% translate "Secciones" %}">
         {% for item in nav.items %}
@@ -35,19 +35,23 @@
         {% endfor %}
       </nav>
       <div class="lateral-pie">
+        <div class="lateral-ayuda">
+          <button type="button" class="btn btn-peq btn-bloque btn-ayuda" data-abrir="dialogo-ayuda" aria-haspopup="dialog" data-ayuda="{% translate "Qué hace cada botón de esta pantalla, consejos y atajos de teclado." %}">{% icono "ayuda" %} {% translate "Ayuda" %} <kbd>?</kbd></button>
+          <a class="nav-enlace" href="{% url 'ayuda:inicio' %}" {% nav_activo "ayuda" %}>{% icono "libro" %}<span>{% translate "Cómo usar" %}</span></a>
+        </div>
         <p class="lateral-usuaria">{{ user.nombre }}</p>
         <a class="nav-enlace" href="{% url 'cuentas:cuenta' %}" {% nav_activo "cuentas" %}>{% icono "usuario" %}<span>{% translate "Mi cuenta" %}</span></a>
         <form method="post" action="{% url 'cuentas:salir' %}">{% csrf_token %}
-          <button type="submit" class="nav-enlace btn-fantasma btn-bloque">{% icono "salir" %}<span>{% translate "Salir" %}</span></button>
+          <button data-ayuda="{% translate "Cierra la sesión en este dispositivo." %}" type="submit" class="nav-enlace btn-fantasma btn-bloque">{% icono "salir" %}<span>{% translate "Salir" %}</span></button>
         </form>
         {% include "componentes/idioma.html" %}
-        <button type="button" class="btn btn-fantasma btn-peq" data-abrir="dialogo-atajos">{% icono "teclado" %} {% translate "Atajos" %} <kbd>?</kbd></button>
       </div>
     </aside>
 
     <header class="barra-superior">
       {% include "componentes/marca.html" %}
       <div class="fila">
+        <button type="button" class="btn btn-peq btn-icono btn-ayuda" data-abrir="dialogo-ayuda" aria-haspopup="dialog" aria-label="{% translate "Ayuda de esta pantalla" %}">{% icono "ayuda" %}</button>
         {% if nav.url_nueva_cita %}
           <a class="btn btn-primario btn-peq" href="{{ nav.url_nueva_cita }}">{% icono "plus" %}<span>{% translate "Cita" %}</span></a>
         {% endif %}
@@ -55,6 +59,7 @@
     </header>
 
     <main id="principal" class="contenido" tabindex="-1">
+      {% include "componentes/pista.html" %}
       {% block contenido %}{% endblock %}
     </main>
   </div>
@@ -81,6 +86,7 @@
           {% if item.cuenta %}<span class="insignia">{{ item.cuenta }}</span>{% endif %}
         </a>
       {% endfor %}
+      <a class="nav-enlace" href="{% url 'ayuda:inicio' %}"{% if request.resolver_match.namespace == "ayuda" %} aria-current="page"{% endif %}>{% icono "libro" %}<span>{% translate "Cómo usar" %}</span></a>
       <a class="nav-enlace" href="{% url 'cuentas:cuenta' %}">{% icono "usuario" %}<span>{% translate "Mi cuenta" %}</span></a>
       {% include "componentes/idioma.html" %}
       <form method="post" action="{% url 'cuentas:salir' %}">{% csrf_token %}
@@ -99,6 +105,7 @@
   </div>
 
   {% include "componentes/dialogos.html" %}
+  {% include "componentes/ayuda.html" %}
   {% block final %}{% endblock %}
 </body>
 </html>

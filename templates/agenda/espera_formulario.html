@@ -18,7 +18,7 @@
   <div class="acciones-formulario">
     <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar" %}</button>
     <a class="btn btn-fantasma" href="{% url 'agenda:lista_espera' %}">{% translate "Cancelar" %}</a>
-    {% if entrada %}<button type="submit" name="quitar" value="1" class="btn btn-peligro empujar">{% translate "Quitar de la lista" %}</button>{% endif %}
+    {% if entrada %}<button data-ayuda="{% translate "La saca de la lista de espera." %}" type="submit" name="quitar" value="1" class="btn btn-peligro empujar">{% translate "Quitar de la lista" %}</button>{% endif %}
   </div>
 </form>
 {% endblock %}

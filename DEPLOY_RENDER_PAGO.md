@@ -115,6 +115,7 @@ Los enlaces ya enviados con la URL `.onrender.com` siguen funcionando.
 - **Reservas y textos** y **Consentimiento**: revisa los textos de partida (idealmente con asesoría legal).
 - **Solicitudes:** crea el enlace de reservas y ponlo en tu bio de Instagram.
 - Idioma: cada persona cambia la interfaz con **ES / EN**. Las clientas ven por defecto el idioma de su navegador.
+- **Cómo usar** (en el menú) tiene el tutorial completo y la lista de *Primeros pasos*. Si ya tienes clientas en una hoja de cálculo, impórtalas en **Clientes → Importar CSV** antes de empezar (haz antes una copia en *Ajustes → Datos y seguridad*).
 
 ---
 
@@ -137,6 +138,8 @@ Los enlaces ya enviados con la URL `.onrender.com` siguen funcionando.
 ### Despliegues
 
 Cada push a la rama redespliega. Con disco hay unos segundos sin servicio porque Render para la instancia vieja antes de arrancar la nueva, y el servicio no puede escalar a varias instancias.
+
+Las actualizaciones que traen migraciones (por ejemplo, la de la ayuda en pantalla y la importación CSV: `cuentas.0003` y `nucleo.0004`) se aplican solas en el **pre-deploy** (`migrate`). No hace falta sincronizar el Blueprint cuando `render.yaml` no cambia: basta con hacer push a la rama conectada (o *Manual Deploy → Deploy latest commit* si el auto-deploy está apagado). Si sincronizas el Blueprint igualmente, no se crea ni se modifica nada.
 
 ### Si ya tenías el CRM desplegado con la versión anterior
 

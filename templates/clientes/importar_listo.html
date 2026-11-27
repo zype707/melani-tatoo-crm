@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block titulo %}{% translate "Importación terminada" %}{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div>
+    <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'clientes:lista' %}">{% translate "Clientes" %}</a></nav>
+    <span class="antetitulo mono">{{ r.nombre }}</span>
+    <h1>{% translate "Importación terminada" %}</h1>
+  </div>
+</header>
+
+<ol class="pasos-linea espacio-abajo" aria-label="{% translate "Pasos" %}">
+  <li class="hecho"><span>{% icono "check" %}</span> {% translate "Sube el archivo" %}</li>
+  <li class="hecho"><span>{% icono "check" %}</span> {% translate "Revisa la vista previa" %}</li>
+  <li class="hecho" aria-current="step"><span>{% icono "check" %}</span> {% translate "Confirma" %}</li>
+</ol>
+
+<div class="rejilla-cifras">
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ r.creados }}</span><span class="cifra-etiqueta">{% translate "Fichas nuevas" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ r.completados }}</span><span class="cifra-etiqueta">{% translate "Completadas" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ r.omitidos }}</span><span class="cifra-etiqueta">{% translate "Ya existían" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq {% if r.errores %}cifra-critica{% endif %}">{{ r.errores }}</span><span class="cifra-etiqueta">{% translate "No entraron" %}</span></div>
+</div>
+
+<div class="grupo-botones espacio-arriba">
+  {% if etiqueta %}
+    <a class="btn btn-primario" href="{% url 'clientes:lista' %}?etiqueta={{ etiqueta.pk }}">{% icono "clientes" %} {% blocktranslate with nombre=etiqueta.nombre %}Ver las importadas («{{ nombre }}»){% endblocktranslate %}</a>
+  {% else %}
+    <a class="btn btn-primario" href="{% url 'clientes:lista' %}?orden=reciente">{% icono "clientes" %} {% translate "Ver clientes" %}</a>
+  {% endif %}
+  {% if r.errores_csv %}<a class="btn" href="{% url 'clientes:importar_errores' %}" data-ayuda="{% translate "Un CSV solo con las filas que fallaron y el motivo. Corrígelas y súbelas otra vez." %}">{% icono "descargar" %} {% translate "Descargar filas que no entraron" %}</a>{% endif %}
+  <a class="btn btn-fantasma" href="{% url 'clientes:importar' %}">{% icono "subir" %} {% translate "Importar otro archivo" %}</a>
+</div>
+
+<section class="bloque espacio-arriba ancho-texto" aria-labelledby="t-ahora">
+  <div class="bloque-titulo"><h2 id="t-ahora">{% translate "Y ahora…" %}</h2></div>
+  <ul class="lista-ideas">
+    {% if r.consentimientos %}<li>{% blocktranslate count n=r.consentimientos %}{{ n }} consentimiento de promociones quedó registrado con su origen.{% plural %}{{ n }} consentimientos de promociones quedaron registrados con su origen.{% endblocktranslate %}</li>{% endif %}
+    <li>{% translate "Desde mañana, la bandeja «Mensajes de hoy» incluirá sus cumpleaños y aniversarios (solo de quien acepta promociones)." %}</li>
+    <li>{% translate "Abre alguna ficha para añadir sus tatuajes, fotos y datos de salud cuando vuelva." %}</li>
+    <li>{% translate "¿Te equivocaste de archivo? Filtra por la etiqueta del lote para revisarlas juntas." %}</li>
+  </ul>
+</section>
+{% endblock %}

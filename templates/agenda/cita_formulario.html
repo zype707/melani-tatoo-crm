@@ -46,7 +46,7 @@
   </section>
 
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar cita" %}</button>
+    <button data-ayuda="{% translate "Guarda la cita. Si choca con otra o con un bloqueo, te avisará." %}" type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar cita" %}</button>
     <a class="btn btn-fantasma" href="{% if cita %}{% url 'agenda:detalle' cita.pk %}{% else %}{% url 'agenda:calendario' %}{% endif %}">{% translate "Cancelar" %}</a>
   </div>
 </form>

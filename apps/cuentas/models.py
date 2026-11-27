@@ -53,6 +53,13 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(_("Activa"), default=True)
     is_staff = models.BooleanField(default=False)
     fecha_alta = models.DateTimeField(default=timezone.now)
+    # Ayuda en pantalla: pistas de cada pantalla y lista de primeros pasos (ver apps/nucleo/ayuda.py)
+    ayudas_visibles = models.BooleanField(
+        _("Mostrar ayudas en pantalla"),
+        default=True,
+        help_text=_("Pistas cortas arriba de cada pantalla. Puedes cerrarlas una a una o todas a la vez."),
+    )
+    ayudas_cerradas = models.JSONField(default=list, blank=True, editable=False)
 
     objects = GestorUsuarios()
 
@@ -73,6 +80,19 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     @property
     def primer_nombre(self) -> str:
         return (self.nombre or self.usuario).split()[0]
+
+    def ayuda_cerrada(self, clave: str) -> bool:
+        return clave in (self.ayudas_cerradas or [])
+
+    def cerrar_ayuda(self, clave: str) -> None:
+        if not self.ayuda_cerrada(clave):
+            self.ayudas_cerradas = [*(self.ayudas_cerradas or []), clave][-200:]
+            self.save(update_fields=["ayudas_cerradas"])
+
+    def abrir_ayuda(self, clave: str) -> None:
+        if self.ayuda_cerrada(clave):
+            self.ayudas_cerradas = [c for c in self.ayudas_cerradas if c != clave]
+            self.save(update_fields=["ayudas_cerradas"])
 
 
 class IntentoAcceso(models.Model):

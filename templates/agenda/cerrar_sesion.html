@@ -20,12 +20,12 @@
     <label for="{{ form.notas_sesion.id_for_label }}">{{ form.notas_sesion.label }} <span class="requerido">{% translate "(opcional)" %}</span></label>
     {{ form.notas_sesion }}
     <p class="ayuda">{{ form.notas_sesion.help_text }}</p>
-    <button type="button" class="btn btn-peq btn-fantasma oculto" data-dictado-para="{{ form.notas_sesion.id_for_label }}">{% icono "mic" %} <span>{% translate "Dictar notas" %}</span></button>
+    <button data-ayuda="{% translate "Dicta las notas con la voz (si tu navegador lo permite)." %}" type="button" class="btn btn-peq btn-fantasma oculto" data-dictado-para="{{ form.notas_sesion.id_for_label }}">{% icono "mic" %} <span>{% translate "Dictar notas" %}</span></button>
   </div>
   {% if cita.tatuaje %}{{ form.terminado.as_field_group }}{% endif %}
   <div class="aviso">{% icono "gota" %}<p>{% translate "Al guardar, los mensajes de cuidados posteriores se prepararán automáticamente en su día." %}</p></div>
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Marcar como realizada" %}</button>
+    <button data-ayuda="{% translate "Guarda el cobro y las notas y marca la cita como hecha." %}" type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Marcar como realizada" %}</button>
     <a class="btn btn-fantasma" href="{% url 'agenda:detalle' cita.pk %}">{% translate "Volver" %}</a>
   </div>
 </form>

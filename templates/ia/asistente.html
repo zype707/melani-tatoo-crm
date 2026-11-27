@@ -24,7 +24,7 @@
       <div class="buscador">{% icono "buscar" %}<label for="q-ia" class="solo-lectores">{% translate "¿A quién buscas?" %}</label>
         <input type="search" id="q-ia" name="q" value="{{ q }}" placeholder="{% translate "Ej.: clientes con fine line en el antebrazo que no vienen desde hace 6 meses" %}" data-atajo-buscar>
       </div>
-      <div class="fila"><button type="submit" class="btn">{% icono "buscar" %} {% translate "Buscar" %}</button><span id="buscando" class="cargando htmx-indicator"><span></span></span></div>
+      <div class="fila"><button data-ayuda="{% translate "Busca clientes con una frase normal." %}" type="submit" class="btn">{% icono "buscar" %} {% translate "Buscar" %}</button><span id="buscando" class="cargando htmx-indicator"><span></span></span></div>
       <div class="sugerencias">
         <button type="button" class="etiqueta boton-variable" data-rellenar="#q-ia" data-texto="{% translate "VIP que cumplen en diciembre" %}">{% translate "VIP que cumplen en diciembre" %}</button>
         <button type="button" class="etiqueta boton-variable" data-rellenar="#q-ia" data-texto="{% translate "proyectos a medias de blackwork" %}">{% translate "proyectos a medias de blackwork" %}</button>
@@ -45,7 +45,7 @@
           <select id="cliente-resp" name="cliente"><option value="">{% translate "— Persona nueva —" %}</option>{% for c in clientes_recientes %}<option value="{{ c.pk }}">{{ c }}</option>{% endfor %}</select>
           <p class="ayuda">{% translate "Si es clienta, la IA tiene en cuenta sus tatuajes y visitas (nunca salud ni contacto)." %}</p>
         </div>
-        <div class="fila"><button type="submit" class="btn btn-primario">{% icono "ia" %} {% translate "Proponer respuesta" %}</button><span id="pensando" class="cargando htmx-indicator"><span></span></span></div>
+        <div class="fila"><button data-ayuda="{% translate "La IA redacta una respuesta con tu tono. Tú la revisas y la envías." %}" type="submit" class="btn btn-primario">{% icono "ia" %} {% translate "Proponer respuesta" %}</button><span id="pensando" class="cargando htmx-indicator"><span></span></span></div>
       </form>
       <div id="respuesta-ia" class="espacio-arriba"></div>
     {% else %}

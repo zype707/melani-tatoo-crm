@@ -17,7 +17,7 @@
   {% if cita.reprogramacion_pedida and not cita.reprogramacion_atendida %}
     <div class="alerta">{% icono "reloj" %}
       <div class="pila-p"><p>{% blocktranslate with reprogramacion_pedida_en=cita.reprogramacion_pedida_en|relativo reprogramacion_pedida=cita.reprogramacion_pedida %}Pide cambiar la fecha ({{ reprogramacion_pedida_en }}): «{{ reprogramacion_pedida }}»{% endblocktranslate %}</p>
-        <form method="post" action="{% url 'agenda:atender_cambio' cita.pk %}">{% csrf_token %}<button class="btn btn-peq btn-solido" type="submit">{% translate "Marcar como atendido" %}</button></form>
+        <form method="post" action="{% url 'agenda:atender_cambio' cita.pk %}">{% csrf_token %}<button data-ayuda="{% translate "Quita el aviso cuando ya hayas resuelto el cambio de fecha." %}" class="btn btn-peq btn-solido" type="submit">{% translate "Marcar como atendido" %}</button></form>
       </div>
     </div>
   {% endif %}
@@ -33,15 +33,15 @@
       <div class="grupo-botones">
         {% if cita.pendiente %}
           {% if cita.estado == "solicitada" %}
-            <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button class="btn btn-primario" name="estado" value="confirmada">{% icono "check" %} {% translate "Confirmar" %}</button></form>
+            <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button data-ayuda="{% translate "Pasa la cita de «por confirmar» a «confirmada»." %}" class="btn btn-primario" name="estado" value="confirmada">{% icono "check" %} {% translate "Confirmar" %}</button></form>
           {% endif %}
-          <a class="btn {% if cita.estado == 'confirmada' %}btn-primario{% endif %}" href="{% url 'agenda:cerrar_sesion' cita.pk %}">{% icono "check" %} {% translate "Marcar realizada" %}</a>
-          <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button class="btn" name="estado" value="no_show" data-confirmar="{% translate "¿Marcar que no vino? Contará en su historial." %}">{% icono "x" %} {% translate "No vino" %}</button></form>
-          <button type="button" class="btn btn-peligro" data-abrir="dialogo-cancelar">{% translate "Cancelar cita" %}</button>
-          <a class="btn btn-fantasma" href="{% url 'agenda:editar' cita.pk %}">{% icono "editar" %} {% translate "Editar / mover" %}</a>
+          <a data-ayuda="{% translate "Al terminar: apunta el cobro y las notas. Programa solos los mensajes de cuidados." %}" class="btn {% if cita.estado == 'confirmada' %}btn-primario{% endif %}" href="{% url 'agenda:cerrar_sesion' cita.pk %}">{% icono "check" %} {% translate "Marcar realizada" %}</a>
+          <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button data-ayuda="{% translate "Marca que no se presentó. Queda en su historial." %}" class="btn" name="estado" value="no_show" data-confirmar="{% translate "¿Marcar que no vino? Contará en su historial." %}">{% icono "x" %} {% translate "No vino" %}</button></form>
+          <button data-ayuda="{% translate "Cancela indicando quién y por qué. Después te sugiere a quién ofrecer el hueco." %}" type="button" class="btn btn-peligro" data-abrir="dialogo-cancelar">{% translate "Cancelar cita" %}</button>
+          <a data-ayuda="{% translate "Cambia fecha, hora, duración o tipo." %}" class="btn btn-fantasma" href="{% url 'agenda:editar' cita.pk %}">{% icono "editar" %} {% translate "Editar / mover" %}</a>
         {% else %}
-          <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button class="btn" name="estado" value="confirmada" data-confirmar="{% translate "La cita volverá a estar confirmada (si el hueco sigue libre)." %}">{% icono "refrescar" %} {% translate "Reactivar" %}</button></form>
-          <a class="btn btn-fantasma" href="{% url 'agenda:editar' cita.pk %}">{% icono "editar" %} {% translate "Editar" %}</a>
+          <form method="post" action="{% url 'agenda:estado' cita.pk %}">{% csrf_token %}<button data-ayuda="{% translate "Vuelve a poner la cita como confirmada si el hueco sigue libre." %}" class="btn" name="estado" value="confirmada" data-confirmar="{% translate "La cita volverá a estar confirmada (si el hueco sigue libre)." %}">{% icono "refrescar" %} {% translate "Reactivar" %}</button></form>
+          <a data-ayuda="{% translate "Cambia los datos de la cita." %}" class="btn btn-fantasma" href="{% url 'agenda:editar' cita.pk %}">{% icono "editar" %} {% translate "Editar" %}</a>
         {% endif %}
       </div>
     </section>
@@ -71,7 +71,7 @@
               <span class="fila-cuerpo"><span class="fila-titulo">{{ p.get_tipo_display }}{% if p.devuelto %} · <span class="estado estado-apagado">{% translate "Devuelto" %}</span>{% endif %}</span><span class="fila-sub">{{ p.fecha|date:"SHORT_DATE_FORMAT" }} · {{ p.get_metodo_display }}{% if p.notas %} · {{ p.notas }}{% endif %}</span></span>
               <span class="numerico">{{ p.importe|dinero }}</span>
               <form method="post" action="{% url 'agenda:pago_devolver' p.pk %}">{% csrf_token %}<button class="btn btn-peq btn-fantasma" type="submit" title="{% translate "Marcar devuelto" %}">{% if p.devuelto %}{% translate "Anular devolución" %}{% else %}{% translate "Devuelto" %}{% endif %}</button></form>
-              <form method="post" action="{% url 'agenda:pago_borrar' p.pk %}">{% csrf_token %}<button class="btn btn-icono btn-peq btn-fantasma" type="submit" aria-label="{% translate "Borrar pago" %}" data-confirmar="{% translate "¿Borrar este pago?" %}">{% icono "basura" %}</button></form>
+              <form method="post" action="{% url 'agenda:pago_borrar' p.pk %}">{% csrf_token %}<button data-ayuda="{% translate "Borra este pago (si lo apuntaste por error)." %}" class="btn btn-icono btn-peq btn-fantasma" type="submit" aria-label="{% translate "Borrar pago" %}" data-confirmar="{% translate "¿Borrar este pago?" %}">{% icono "basura" %}</button></form>
             </li>
           {% endfor %}
         </ul>
@@ -79,7 +79,7 @@
         <p class="texto-suave">{% translate "Sin señas ni pagos." %}{% if cita.tipo.deposito_sugerido %} {% blocktranslate with deposito_sugerido=cita.tipo.deposito_sugerido|dinero %}Seña sugerida: {{ deposito_sugerido }}.{% endblocktranslate %}{% endif %}</p>
       {% endif %}
       <details class="desplegable bloque-pie" {% if not pagos %}open{% endif %}>
-        <summary>{% icono "plus" %} {% translate "Registrar seña o pago" %}</summary>
+        <summary data-ayuda="{% translate "Apunta una seña o un pago con su método. Aparece en Finanzas." %}">{% icono "plus" %} {% translate "Registrar seña o pago" %}</summary>
         <form method="post" action="{% url 'agenda:pago_nuevo' cita.pk %}" class="formulario-2" novalidate>
           {% csrf_token %}
           {{ pago_form.tipo.as_field_group }}
@@ -115,7 +115,7 @@
       <div class="bloque-titulo"><h2 id="t-enlace">{% translate "Enlace para el cliente" %}</h2></div>
       <p class="texto-peq texto-suave">{% translate "Podrá confirmar, cancelar o pedir otra fecha sin crear cuenta. El enlace caduca tras la cita." %}</p>
       <div id="enlace-cita">
-        <button type="button" class="btn btn-peq" hx-post="{% url 'agenda:enlace' cita.pk %}" hx-target="#enlace-cita" hx-swap="innerHTML">{% icono "enlace" %} {% translate "Generar enlace" %}</button>
+        <button data-ayuda="{% translate "Crea un enlace privado para que la clienta confirme, cancele o pida otra fecha." %}" type="button" class="btn btn-peq" hx-post="{% url 'agenda:enlace' cita.pk %}" hx-target="#enlace-cita" hx-swap="innerHTML">{% icono "enlace" %} {% translate "Generar enlace" %}</button>
       </div>
     </section>
     {% endif %}

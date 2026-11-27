@@ -23,7 +23,7 @@
     <div class="bloque-titulo"><h2>{% translate "Logotipo" %}</h2></div>
     {% if ajustes_obj.logo %}<img class="logo-vista" src="{% url 'logo' %}" alt="{% translate "Logotipo actual" %}" width="160" height="160">{% else %}<span class="marca-sello logo-vista" aria-hidden="true">{{ ajustes_obj.nombre|iniciales }}</span>{% endif %}
     {{ logo_form }}
-    <div><button type="submit" class="btn">{% icono "subir" %} {% translate "Actualizar logotipo" %}</button></div>
+    <div><button data-ayuda="{% translate "Sube tu logotipo. Sale en la app y en tus páginas públicas." %}" type="submit" class="btn">{% icono "subir" %} {% translate "Actualizar logotipo" %}</button></div>
     <p class="ayuda">{% translate "Aparece en tu página de reservas, el catálogo y la app." %}</p>
   </form>
 </div>
@@ -35,7 +35,7 @@
     <p class="texto-peq">{% translate "Un .zip con todos los registros (JSON) y archivos: fotos, referencias, firmas y PDFs. No incluye contraseñas. Contiene datos de salud: guárdalo en un lugar seguro." %}</p>
     <form method="post" action="{% url 'nucleo:exportar' %}" class="formulario">
       {% csrf_token %}{{ confirmar }}
-      <button type="submit" class="btn btn-primario">{% icono "descargar" %} {% translate "Descargar exportación" %}</button>
+      <button data-ayuda="{% translate "Descarga un .zip con todos tus datos. Guárdalo en un lugar seguro." %}" type="submit" class="btn btn-primario">{% icono "descargar" %} {% translate "Descargar exportación" %}</button>
     </form>
   </section>
   <section class="bloque pila" aria-labelledby="t-copias">
@@ -43,11 +43,11 @@
     <p class="texto-peq">{% translate "Se crean solas cada noche en el disco del servidor (se conservan las últimas). Además, Render guarda copias de la base de datos." %}</p>
     {% if copias %}
       <ul class="lista">{% for c in copias %}<li class="fila-lista"><span class="fila-cuerpo"><span class="fila-titulo mono texto-peq">{{ c.nombre }}</span><span class="fila-sub">{{ c.fecha|fecha_corta }} {{ c.fecha|hora }} · {{ c.bytes|filesizeformat }}</span></span>
-        <form method="post" action="{% url 'nucleo:copias' %}" class="fila">{% csrf_token %}<input type="hidden" name="nombre" value="{{ c.nombre }}"><input type="password" name="password" autocomplete="current-password" placeholder="{% translate "Contraseña" %}" aria-label="{% translate "Tu contraseña" %}" class="select-compacto entrada-mini"><button class="btn btn-peq" type="submit">{% icono "descargar" %}</button></form></li>{% endfor %}</ul>
+        <form method="post" action="{% url 'nucleo:copias' %}" class="fila">{% csrf_token %}<input type="hidden" name="nombre" value="{{ c.nombre }}"><input type="password" name="password" autocomplete="current-password" placeholder="{% translate "Contraseña" %}" aria-label="{% translate "Tu contraseña" %}" class="select-compacto entrada-mini"><button data-ayuda="{% translate "Descarga esta copia (escribe tu contraseña al lado)." %}" class="btn btn-peq" type="submit">{% icono "descargar" %}</button></form></li>{% endfor %}</ul>
     {% else %}<p class="texto-suave">{% translate "Aún no hay copias." %}</p>{% endif %}
     <form method="post" action="{% url 'nucleo:copias' %}" class="fila bloque-pie">{% csrf_token %}<input type="hidden" name="accion" value="crear">
       <input type="password" name="password" autocomplete="current-password" placeholder="{% translate "Contraseña" %}" aria-label="{% translate "Tu contraseña" %}" class="select-compacto entrada-mini">
-      <button class="btn btn-peq" type="submit">{% icono "plus" %} {% translate "Crear copia ahora" %}</button>
+      <button data-ayuda="{% translate "Hace una copia de seguridad ahora mismo." %}" class="btn btn-peq" type="submit">{% icono "plus" %} {% translate "Crear copia ahora" %}</button>
     </form>
   </section>
   <section class="bloque" aria-labelledby="t-seg">

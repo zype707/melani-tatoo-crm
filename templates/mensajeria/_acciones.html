@@ -4,17 +4,17 @@
       <span>{% translate "¿Lo enviaste" %}{% if m.canal_usado and m.canal_usado != "copia" %} {% blocktranslate with get_canal_usado_display=m.get_canal_usado_display %}por {{ get_canal_usado_display }}{% endblocktranslate %}{% endif %}?</span>
       <form hx-post="{% url 'mensajeria:enviado' m.pk %}" hx-target="#mensaje-{{ m.pk }}">
         <input type="hidden" name="canal" value="{{ m.canal_usado }}">
-        <button type="submit" class="btn btn-primario btn-peq">{% icono "check" %} {% translate "Sí, enviado" %}</button>
+        <button data-ayuda="{% translate "Confirma que lo enviaste: sale de la bandeja y queda en el historial." %}" type="submit" class="btn btn-primario btn-peq">{% icono "check" %} {% translate "Sí, enviado" %}</button>
       </form>
     </div>
   {% endif %}
   <div class="grupo-botones mensaje-canales">
     {% for a in acciones %}
       {% if a.url %}
-        <a class="btn{% if a.principal and not m.abierto_en %} btn-primario{% endif %}" href="{{ a.url }}" target="_blank" rel="noopener noreferrer"
+        <a data-ayuda="{% translate "Abre la app con el texto ya escrito. Envíalo y vuelve para confirmarlo." %}" class="btn{% if a.principal and not m.abierto_en %} btn-primario{% endif %}" href="{{ a.url }}" target="_blank" rel="noopener noreferrer"
            data-abrir-canal="{% url 'mensajeria:abrir' m.pk %}" data-canal="{{ a.canal }}" data-base="{{ a.base }}" data-texto="#texto-{{ m.pk }}">{% icono a.icono %} {{ a.etiqueta }}</a>
       {% else %}
-        <button type="button" class="btn" data-copiar="#texto-{{ m.pk }}" data-copiado="{% translate "Texto copiado. Pégalo donde quieras enviarlo." %}"
+        <button data-ayuda="{% translate "Copia el texto para pegarlo donde quieras." %}" type="button" class="btn" data-copiar="#texto-{{ m.pk }}" data-copiado="{% translate "Texto copiado. Pégalo donde quieras enviarlo." %}"
                 data-abrir-canal="{% url 'mensajeria:abrir' m.pk %}" data-canal="copia" data-texto="#texto-{{ m.pk }}">{% icono "copiar" %} {% translate "Copiar" %}</button>
       {% endif %}
     {% endfor %}
@@ -23,19 +23,19 @@
     {% if not m.abierto_en %}
       <form hx-post="{% url 'mensajeria:enviado' m.pk %}" hx-target="#mensaje-{{ m.pk }}">
         <input type="hidden" name="canal" value="{{ preferido }}">
-        <button type="submit" class="btn btn-peq btn-fantasma">{% icono "check" %} {% translate "Marcar enviado" %}</button>
+        <button data-ayuda="{% translate "Márcalo como enviado sin abrir nada (por ejemplo, si se lo dijiste en persona)." %}" type="submit" class="btn btn-peq btn-fantasma">{% icono "check" %} {% translate "Marcar enviado" %}</button>
       </form>
     {% endif %}
     <details class="menu">
-      <summary class="btn btn-peq btn-fantasma">{% icono "posponer" %} {% translate "Posponer" %}</summary>
+      <summary data-ayuda="{% translate "Apártalo hasta mañana, dentro de 3 días o de una semana." %}" class="btn btn-peq btn-fantasma">{% icono "posponer" %} {% translate "Posponer" %}</summary>
       <div class="menu-opciones">
         <form hx-post="{% url 'mensajeria:posponer' m.pk %}" hx-target="#mensaje-{{ m.pk }}"><input type="hidden" name="dias" value="1"><button type="submit">{% translate "Mañana" %}</button></form>
         <form hx-post="{% url 'mensajeria:posponer' m.pk %}" hx-target="#mensaje-{{ m.pk }}"><input type="hidden" name="dias" value="3"><button type="submit">{% translate "En 3 días" %}</button></form>
         <form hx-post="{% url 'mensajeria:posponer' m.pk %}" hx-target="#mensaje-{{ m.pk }}"><input type="hidden" name="dias" value="7"><button type="submit">{% translate "En una semana" %}</button></form>
       </div>
     </details>
-    {% if ia_disponible %}<button type="button" class="btn btn-peq btn-fantasma" hx-post="{% url 'ia:reescribir' m.pk %}" hx-target="#mensaje-{{ m.pk }}" hx-disabled-elt="this">{% icono "ia" %} {% translate "Reescribir" %}</button>{% endif %}
-    <button type="button" class="btn btn-peq btn-fantasma" hx-post="{% url 'mensajeria:descartar' m.pk %}" hx-target="#mensaje-{{ m.pk }}"
+    {% if ia_disponible %}<button data-ayuda="{% translate "La IA propone otra versión del texto con tu tono." %}" type="button" class="btn btn-peq btn-fantasma" hx-post="{% url 'ia:reescribir' m.pk %}" hx-target="#mensaje-{{ m.pk }}" hx-disabled-elt="this">{% icono "ia" %} {% translate "Reescribir" %}</button>{% endif %}
+    <button data-ayuda="{% translate "No se enviará y no volverá a aparecer." %}" type="button" class="btn btn-peq btn-fantasma" hx-post="{% url 'mensajeria:descartar' m.pk %}" hx-target="#mensaje-{{ m.pk }}"
             hx-confirm="{% translate "¿Descartar este mensaje? No se enviará." %}" data-confirmar-si="{% translate "Descartar" %}">{% icono "x" %} {% translate "Descartar" %}</button>
   </div>
 </div>

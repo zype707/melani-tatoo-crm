@@ -16,7 +16,7 @@
     <p class="texto-suave texto-peq">{% translate "Activa el asistente de IA (OPENAI_API_KEY) para analizar solicitudes automáticamente." %}</p>
   {% endif %}
   {% if ia %}
-    <button type="button" class="btn btn-peq espacio-arriba" hx-post="{% url 'ia:triaje' s.pk %}" hx-target="#triaje" hx-disabled-elt="this">
+    <button data-ayuda="{% translate "La IA estima estilo, tamaño y sesiones y te dice qué falta preguntar." %}" type="button" class="btn btn-peq espacio-arriba" hx-post="{% url 'ia:triaje' s.pk %}" hx-target="#triaje" hx-disabled-elt="this">
       {% icono "ia" %} {% if s.triaje %}{% translate "Volver a analizar" %}{% else %}{% translate "Analizar con IA" %}{% endif %} <span class="cargando htmx-indicator"><span></span></span>
     </button>
   {% endif %}

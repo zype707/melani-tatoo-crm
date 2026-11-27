@@ -210,7 +210,7 @@
     if (document.querySelector("dialog[open]")) return;
     var accion = atajos[e.key];
     if (!accion) return;
-    if (accion === "ayuda") { var a = document.getElementById("dialogo-atajos"); if (a) { e.preventDefault(); a.showModal(); } return; }
+    if (accion === "ayuda") { var a = document.getElementById("dialogo-ayuda"); if (a) { e.preventDefault(); ocultarTip(); a.showModal(); } return; }
     if (accion === "buscar") {
       var campo = document.querySelector("[data-atajo-buscar]");
       if (campo) { e.preventDefault(); campo.focus(); return; }
@@ -218,6 +218,92 @@
     var destino = document.querySelector('[data-atajo="' + accion + '"]');
     if (destino && destino.href) { e.preventDefault(); window.location.href = destino.href; }
   });
+
+  /* ---------- Información sobre herramientas (data-ayuda) ----------
+     Explicación corta de un botón al dejar el ratón encima o al llegar con el teclado.
+     En pantallas táctiles no se muestra: allí está el panel «Ayuda» (botón ?). */
+  var tip = null, tipObjetivo = null, tipPendiente = null, tipTemporizador = null;
+  var conRaton = !!(window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+
+  function ocultarTip() {
+    clearTimeout(tipTemporizador);
+    tipPendiente = null;
+    if (tip) tip.hidden = true;
+    if (tipObjetivo) tipObjetivo.removeAttribute("aria-describedby");
+    tipObjetivo = null;
+  }
+
+  function mostrarTip(el) {
+    tip = tip || document.getElementById("tip");
+    if (!tip || !el.dataset.ayuda || !document.body.contains(el)) return;
+    tip.textContent = el.dataset.ayuda;
+    tip.hidden = false;
+    var r = el.getBoundingClientRect(), t = tip.getBoundingClientRect(), m = 8;
+    var arriba = r.bottom + m;
+    if (arriba + t.height > window.innerHeight - m) arriba = Math.max(m, r.top - t.height - m);
+    var izquierda = Math.min(Math.max(m, r.left + r.width / 2 - t.width / 2), window.innerWidth - t.width - m);
+    tip.style.top = arriba + "px";
+    tip.style.left = izquierda + "px";
+    el.setAttribute("aria-describedby", "tip");
+    tipObjetivo = el;
+  }
+
+  function programarTip(el, ms) {
+    ocultarTip();
+    tipPendiente = el;
+    tipTemporizador = setTimeout(function () { tipPendiente = null; mostrarTip(el); }, ms);
+  }
+
+  document.addEventListener("mouseover", function (e) {
+    if (!conRaton) return;
+    var el = e.target.closest("[data-ayuda]");
+    if (el && (el === tipObjetivo || el === tipPendiente)) return;
+    if (!el) { if (tipObjetivo || tipPendiente) ocultarTip(); return; }
+    programarTip(el, 450);
+  });
+  document.addEventListener("focusin", function (e) {
+    var el = e.target.closest ? e.target.closest("[data-ayuda]") : null;
+    if (el && el.matches(":focus-visible")) programarTip(el, 150); else ocultarTip();
+  });
+  document.addEventListener("focusout", ocultarTip);
+  document.addEventListener("scroll", ocultarTip, true);
+  document.addEventListener("click", ocultarTip, true);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") ocultarTip(); });
+
+  // Lectores de pantalla: la misma explicación como descripción accesible
+  function describir(raiz) {
+    (raiz || document).querySelectorAll("[data-ayuda]:not([aria-description])").forEach(function (el) {
+      el.setAttribute("aria-description", el.dataset.ayuda);
+    });
+  }
+
+  /* ---------- Buscador del tutorial ---------- */
+  function normalizar(t) { return (t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+  document.addEventListener("input", function (e) {
+    var campo = e.target.closest ? e.target.closest("[data-filtrar-ayuda]") : null;
+    if (!campo) return;
+    var q = normalizar(campo.value.trim());
+    var visibles = 0;
+    document.querySelectorAll("[data-ayuda-item]").forEach(function (el) {
+      var coincide = !q || normalizar(el.dataset.texto || el.textContent).indexOf(q) !== -1;
+      el.classList.toggle("no-coincide", !coincide);
+      if (coincide) visibles++;
+      if (el.tagName === "DETAILS") el.open = !!q && coincide;
+    });
+    var vacio = document.querySelector("[data-ayuda-sin-resultados]");
+    if (vacio) vacio.hidden = visibles > 0;
+  });
+
+  // Enlaces a una pantalla de la referencia: abren su desplegable
+  function abrirReferencia(id) {
+    var d = id ? document.getElementById(id) : null;
+    if (d && d.tagName === "DETAILS") d.open = true;
+  }
+  document.addEventListener("click", function (e) {
+    var enlace = e.target.closest("a[data-abrir-referencia]");
+    if (enlace) abrirReferencia(enlace.hash.slice(1));
+  });
+  window.addEventListener("hashchange", function () { abrirReferencia(location.hash.slice(1)); });
 
   /* ---------- HTMX ---------- */
   document.addEventListener("htmx:responseError", function (e) {
@@ -227,7 +313,7 @@
     else if (s !== 401) avisar("Algo ha fallado. Vuelve a intentarlo.", "error");
   });
   document.addEventListener("htmx:sendError", function () { avisar(gettext("Sin conexión. Revisa tu red e inténtalo otra vez."), "error"); });
-  document.addEventListener("htmx:afterSwap", function (e) { iniciarAvisos(e.detail.target); });
+  document.addEventListener("htmx:afterSwap", function (e) { iniciarAvisos(e.detail.target); describir(e.detail.target); ocultarTip(); });
   // Avisos enviados por el servidor en la cabecera HX-Trigger: {"aviso": {"texto": "...", "tipo": "success"}}
   document.addEventListener("aviso", function (e) { if (e.detail && e.detail.texto) avisar(e.detail.texto, e.detail.tipo); });
 
@@ -235,6 +321,8 @@
   function iniciar() {
     prepararDialogo();
     iniciarAvisos();
+    describir();
+    if (location.hash) abrirReferencia(location.hash.slice(1));
     if ("serviceWorker" in navigator && document.body.dataset.sw) {
       navigator.serviceWorker.register(document.body.dataset.sw, { scope: "/" }).catch(function () {});
     }

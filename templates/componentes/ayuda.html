@@ -1,0 +1,59 @@
+{# Panel «Ayuda» de la pantalla actual (botón ? y tecla ?). Contenido: apps/nucleo/ayuda.py #}
+{% with p=ayuda_ctx.pantalla %}
+<dialog id="dialogo-ayuda" class="panel-ayuda" aria-labelledby="dialogo-ayuda-titulo">
+  <div class="panel-ayuda-cuerpo">
+    <div class="panel-ayuda-cabecera">
+      <div>
+        <span class="antetitulo">{% translate "Ayuda" %}</span>
+        <h2 id="dialogo-ayuda-titulo">{% if p %}{{ p.titulo }}{% else %}{% translate "¿Cómo funciona?" %}{% endif %}</h2>
+      </div>
+      <button type="button" class="btn btn-icono btn-fantasma" data-cerrar aria-label="{% translate "Cerrar" %}">{% icono "x" %}</button>
+    </div>
+
+    {% if p %}
+      <p>{{ p.resumen }}</p>
+      {% if ayuda_ctx.botones %}
+      <section aria-labelledby="ayuda-botones">
+        <h3 id="ayuda-botones" class="titulo-seccion">{% translate "Qué hace cada botón" %}</h3>
+        <ul class="ayuda-acciones">
+          {% for b in ayuda_ctx.botones %}<li>{{ b.muestra }}<p>{{ b.texto }}</p></li>{% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+      {% if p.consejos %}
+      <section aria-labelledby="ayuda-consejos">
+        <h3 id="ayuda-consejos" class="titulo-seccion">{% translate "Consejos" %}</h3>
+        <ul class="lista-ideas">{% for c in p.consejos %}<li>{{ c }}</li>{% endfor %}</ul>
+      </section>
+      {% endif %}
+    {% else %}
+      <p>{% translate "Esta pantalla no tiene ayuda propia. En el tutorial tienes todas las secciones explicadas paso a paso." %}</p>
+    {% endif %}
+
+    <div class="grupo-botones">
+      {% if p and p.capitulo %}<a class="btn btn-solido" href="{% url 'ayuda:inicio' %}#{{ p.capitulo }}">{% icono "libro" %} {% translate "Leer en el tutorial" %}</a>{% endif %}
+      <a class="btn" href="{% url 'ayuda:inicio' %}">{% if p and p.capitulo %}{% translate "Tutorial completo" %}{% else %}{% icono "libro" %} {% translate "Abrir el tutorial" %}{% endif %}</a>
+    </div>
+
+    <details class="desplegable">
+      <summary>{% icono "teclado" %} {% translate "Atajos de teclado" %}</summary>
+      <table class="tabla">
+        <tbody>{% for tecla, texto in ayuda_ctx.atajos %}<tr><td><kbd>{{ tecla }}</kbd></td><td>{{ texto }}</td></tr>{% endfor %}</tbody>
+      </table>
+    </details>
+
+    <form method="post" action="{% url 'ayuda:preferencias' %}" class="fila">
+      {% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
+      {% if ayuda_ctx.visibles %}
+        <input type="hidden" name="mostrar" value="0">
+        <button type="submit" class="btn btn-peq btn-fantasma">{% icono "bombilla" %} {% translate "Ocultar las pistas de todas las pantallas" %}</button>
+      {% else %}
+        <input type="hidden" name="mostrar" value="1">
+        <button type="submit" class="btn btn-peq">{% icono "bombilla" %} {% translate "Volver a mostrar las pistas" %}</button>
+      {% endif %}
+    </form>
+  </div>
+</dialog>
+{% endwith %}
+<div id="tip" class="tip" role="tooltip" hidden></div>
+{% if nav.url_nuevo_cliente %}<a class="oculto" href="{{ nav.url_nuevo_cliente }}" data-atajo="nuevo-cliente" tabindex="-1" aria-hidden="true">{% translate "Nuevo cliente" %}</a>{% endif %}

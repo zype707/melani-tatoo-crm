@@ -3,7 +3,7 @@
 {% block contenido %}
 <header class="cabecera-pagina">
   <div><span class="antetitulo">{% translate "Catálogo" %}</span><h1>{% translate "Flash" %}</h1></div>
-  <div class="acciones"><a class="btn btn-primario" href="{% url 'catalogo:nuevo' %}">{% icono "plus" %} {% translate "Nuevo diseño" %}</a></div>
+  <div class="acciones"><a data-ayuda="{% translate "Sube un diseño con su precio y tamaño." %}" class="btn btn-primario" href="{% url 'catalogo:nuevo' %}">{% icono "plus" %} {% translate "Nuevo diseño" %}</a></div>
 </header>
 
 <section class="bloque espacio-abajo" aria-labelledby="t-pub">
@@ -11,18 +11,18 @@
   {% if ajustes.flash_publico and url_publica %}
     <div class="fila enlace-fila">
       <input type="text" id="url-flash" class="mono" value="{{ url_publica }}" readonly aria-label="{% translate "Enlace del catálogo" %}">
-      <button type="button" class="btn" data-copiar="#url-flash" data-copiado="{% translate "Enlace copiado." %}">{% icono "copiar" %} {% translate "Copiar" %}</button>
-      <a class="btn btn-fantasma" href="{{ url_publica }}" target="_blank" rel="noopener">{% icono "externo" %} {% translate "Ver" %}</a>
+      <button data-ayuda="{% translate "Copia el enlace del catálogo público." %}" type="button" class="btn" data-copiar="#url-flash" data-copiado="{% translate "Enlace copiado." %}">{% icono "copiar" %} {% translate "Copiar" %}</button>
+      <a data-ayuda="{% translate "Abre el catálogo como lo ven tus clientas." %}" class="btn btn-fantasma" href="{{ url_publica }}" target="_blank" rel="noopener">{% icono "externo" %} {% translate "Ver" %}</a>
     </div>
   {% else %}
     <p class="texto-suave">{% translate "Publica una página con tus diseños disponibles; cada uno lleva a tu formulario de reserva con el diseño ya elegido." %}</p>
   {% endif %}
   <form method="post" action="{% url 'catalogo:enlace' %}" class="grupo-botones bloque-pie">{% csrf_token %}
     {% if ajustes.flash_publico %}
-      <button type="submit" name="accion" value="ocultar" class="btn btn-peq btn-fantasma">{% translate "Ocultar catálogo" %}</button>
-      <button type="submit" name="accion" value="renovar" class="btn btn-peq btn-fantasma" data-confirmar="{% translate "El enlace actual dejará de funcionar." %}">{% icono "refrescar" %} {% translate "Renovar enlace" %}</button>
+      <button data-ayuda="{% translate "La página pública deja de verse (no se borra nada)." %}" type="submit" name="accion" value="ocultar" class="btn btn-peq btn-fantasma">{% translate "Ocultar catálogo" %}</button>
+      <button data-ayuda="{% translate "Crea un enlace nuevo y anula el anterior." %}" type="submit" name="accion" value="renovar" class="btn btn-peq btn-fantasma" data-confirmar="{% translate "El enlace actual dejará de funcionar." %}">{% icono "refrescar" %} {% translate "Renovar enlace" %}</button>
     {% else %}
-      <button type="submit" name="accion" value="publicar" class="btn btn-peq">{% icono "externo" %} {% translate "Publicar catálogo" %}</button>
+      <button data-ayuda="{% translate "Crea una página pública con tus diseños disponibles." %}" type="submit" name="accion" value="publicar" class="btn btn-peq">{% icono "externo" %} {% translate "Publicar catálogo" %}</button>
     {% endif %}
   </form>
 </section>

@@ -105,6 +105,7 @@ class RegistroAuditoria(models.Model):
         LOGOUT = "logout", _("Cierre de sesión")
         PASSWORD_CAMBIADA = "password_cambiada", _("Contraseña cambiada")
         EXPORTACION = "exportacion", _("Exportación de datos")
+        IMPORTACION = "importacion", _("Importación de datos")
         BORRADO = "borrado", _("Borrado")
         ANONIMIZACION = "anonimizacion", _("Anonimización")
         ACCESO_DOCUMENTO = "acceso_documento", _("Acceso a documento sensible")

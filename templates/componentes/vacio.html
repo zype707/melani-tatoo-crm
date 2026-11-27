@@ -2,5 +2,11 @@
   {% icono icono|default:"caja" "icono-xl" %}
   <h3>{{ titulo }}</h3>
   {% if texto %}<p>{{ texto }}</p>{% endif %}
-  {% if url %}<a class="btn {% if principal %}btn-primario{% endif %}" href="{{ url }}">{% icono "plus" %} {{ accion }}</a>{% endif %}
+  {% if url or url2 %}
+    <div class="grupo-botones">
+      {% if url %}<a class="btn {% if principal %}btn-primario{% endif %}" href="{{ url }}">{% icono icono_accion|default:"plus" %} {{ accion }}</a>{% endif %}
+      {% if url2 %}<a class="btn" href="{{ url2 }}">{% icono icono2|default:"plus" %} {{ accion2 }}</a>{% endif %}
+    </div>
+  {% endif %}
+  {% if ayuda %}<a class="texto-peq" href="{{ ayuda }}">{% icono "libro" %} {% translate "Cómo funciona esta sección" %}</a>{% endif %}
 </div>

@@ -3,7 +3,7 @@
 {% block contenido %}
 <header class="cabecera-pagina">
   <div><span class="antetitulo">{% translate "Mensajería" %}</span><h1>{% translate "Fechas destacadas" %}</h1></div>
-  <div class="acciones"><a class="btn btn-primario" href="{% url 'mensajeria:fecha_nueva' %}">{% icono "plus" %} {% translate "Nueva fecha" %}</a></div>
+  <div class="acciones"><a data-ayuda="{% translate "Añade un día especial que prepare su campaña sola." %}" class="btn btn-primario" href="{% url 'mensajeria:fecha_nueva' %}">{% icono "plus" %} {% translate "Nueva fecha" %}</a></div>
 </header>
 {% include "mensajeria/_subnav.html" with seccion="fechas" %}
 <p class="texto-suave espacio-abajo ancho-texto">{% translate "Unos días antes de cada fecha se prepara una campaña repartida en esos días, solo para clientes que aceptaron promociones." %}</p>

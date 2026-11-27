@@ -2,16 +2,16 @@
 <section class="bloque" aria-labelledby="t-ret">
   <div class="bloque-titulo"><h2 id="t-ret">{% icono "ia" %} {% translate "Que vuelva" %}</h2></div>
   <div id="retencion-ia"><p class="texto-peq texto-suave">{% translate "Ideas y un mensaje para retomar el contacto." %}</p></div>
-  <button type="button" class="btn btn-peq espacio-arriba" hx-post="{% url 'ia:retencion' cliente.pk %}" hx-target="#retencion-ia" hx-swap="innerHTML" hx-disabled-elt="this">{% icono "ia" %} {% translate "Pedir ideas" %} <span class="cargando htmx-indicator"><span></span></span></button>
+  <button data-ayuda="{% translate "La IA sugiere cómo retomar el contacto." %}" type="button" class="btn btn-peq espacio-arriba" hx-post="{% url 'ia:retencion' cliente.pk %}" hx-target="#retencion-ia" hx-swap="innerHTML" hx-disabled-elt="this">{% icono "ia" %} {% translate "Pedir ideas" %} <span class="cargando htmx-indicator"><span></span></span></button>
 </section>
 {% endif %}
 <section class="bloque" aria-labelledby="t-priv">
   <div class="bloque-titulo"><h2 id="t-priv">{% translate "Privacidad" %}</h2></div>
   <div class="pila-p">
-    <a class="btn btn-peq btn-bloque" href="{% url 'clientes:exportar' cliente.pk %}">{% icono "descargar" %} {% translate "Exportar sus datos" %}</a>
+    <a data-ayuda="{% translate "Descarga un .zip con todos sus datos, fotos y PDFs." %}" class="btn btn-peq btn-bloque" href="{% url 'clientes:exportar' cliente.pk %}">{% icono "descargar" %} {% translate "Exportar sus datos" %}</a>
     {% if user.es_propietaria %}
-      <button type="button" class="btn btn-peq btn-peligro btn-bloque" data-abrir="dialogo-anonimizar">{% translate "Anonimizar" %}</button>
-      <button type="button" class="btn btn-peq btn-peligro btn-bloque" data-abrir="dialogo-eliminar">{% translate "Eliminar definitivamente" %}</button>
+      <button data-ayuda="{% translate "Borra sus datos personales y conserva importes y consentimientos el plazo legal." %}" type="button" class="btn btn-peq btn-peligro btn-bloque" data-abrir="dialogo-anonimizar">{% translate "Anonimizar" %}</button>
+      <button data-ayuda="{% translate "Borra la ficha entera. Solo si no hay consentimientos que conservar." %}" type="button" class="btn btn-peq btn-peligro btn-bloque" data-abrir="dialogo-eliminar">{% translate "Eliminar definitivamente" %}</button>
     {% endif %}
   </div>
 </section>

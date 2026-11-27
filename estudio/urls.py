@@ -16,6 +16,7 @@ urlpatterns = [
     path("flash/", include("apps.catalogo.urls")),
     path("asistente/", include("apps.ia.urls")),
     path("ajustes/", include("apps.nucleo.urls")),
+    path("ayuda/", include("apps.nucleo.urls_ayuda")),
     # Páginas públicas (protegidas con token)
     path("c/<str:token>/", agenda.publica, name="cita_publica"),
     path("r/<str:token>/", reservas.reserva_publica, name="reserva_publica"),

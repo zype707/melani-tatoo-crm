@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block titulo %}{% translate "Revisar importación" %}{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div>
+    <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'clientes:lista' %}">{% translate "Clientes" %}</a><span>/</span><a href="{% url 'clientes:importar' %}">{% translate "Importar" %}</a></nav>
+    <span class="antetitulo mono">{{ datos.nombre }}</span>
+    <h1>{% translate "Revisa antes de importar" %}</h1>
+  </div>
+</header>
+
+<ol class="pasos-linea espacio-abajo" aria-label="{% translate "Pasos" %}">
+  <li class="hecho"><span>{% icono "check" %}</span> {% translate "Sube el archivo" %}</li>
+  <li aria-current="step"><span>2</span> {% translate "Revisa la vista previa" %}</li>
+  <li><span>3</span> {% translate "Confirma" %}</li>
+</ol>
+
+<div class="rejilla-cifras">
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ a.nuevas|length }}</span><span class="cifra-etiqueta">{% translate "Nuevas" %}</span><span class="texto-peq texto-suave">{% translate "Se crearán sus fichas" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ a.existentes|length }}</span><span class="cifra-etiqueta">{% translate "Ya existen" %}</span><span class="texto-peq texto-suave">{% if completar %}{% translate "Se completarán sus datos vacíos" %}{% else %}{% translate "Se dejan como están" %}{% endif %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq {% if a.con_error %}cifra-critica{% endif %}">{{ a.con_error|length }}</span><span class="cifra-etiqueta">{% translate "Con errores" %}</span><span class="texto-peq texto-suave">{% translate "No se importan" %}</span></div>
+  <div class="bloque bloque-plano"><span class="cifra cifra-peq">{{ a.filas|length }}</span><span class="cifra-etiqueta">{% translate "Filas leídas" %}</span><span class="texto-peq texto-suave">{% blocktranslate with sep=a.delimitador|default:"," %}Separador «{{ sep }}»{% endblocktranslate %}</span></div>
+</div>
+
+<div class="pila espacio-arriba">
+  {% if a.con_error %}
+    <div class="aviso">{% icono "alerta" %}
+      <div class="pila-p">
+        <p>{% blocktranslate count n=a.con_error|length %}{{ n }} fila tiene errores y no se importará. Puedes importar el resto ahora y corregirla después.{% plural %}{{ n }} filas tienen errores y no se importarán. Puedes importar el resto ahora y corregirlas después.{% endblocktranslate %}</p>
+        <p><a class="btn btn-peq" href="{% url 'clientes:importar_errores' %}" data-ayuda="{% translate "Un CSV solo con las filas que fallan y el motivo. Corrígelas y súbelas otra vez." %}">{% icono "descargar" %} {% translate "Descargar filas con error" %}</a></p>
+      </div>
+    </div>
+  {% endif %}
+  {% if sin_antiguedad %}
+    <div class="aviso">{% icono "reloj" %}<p class="texto-peq">{% translate "El archivo no trae la columna «cliente_desde»: estas fichas contarán como «Nuevos del mes» durante este mes (también en el segmento de campañas del mismo nombre). Si quieres conservar su antigüedad, añade esa columna con la fecha de su primera visita." %}</p></div>
+  {% endif %}
+  {% if a.ignoradas %}
+    <div class="aviso">{% icono "ojo" %}<p class="texto-peq">{% translate "Columnas que no reconozco y se ignoran:" %} {% for c in a.ignoradas %}<code>{{ c|default:"—" }}</code>{% if not forloop.last %}, {% endif %}{% endfor %}.</p></div>
+  {% endif %}
+</div>
+
+<details class="desplegable espacio-arriba">
+  <summary>{% icono "plus" %} {% translate "Columnas detectadas" %}</summary>
+  <div class="tabla-envoltura">
+    <table class="tabla">
+      <thead><tr><th>{% translate "En tu archivo" %}</th><th>{% translate "Se guarda como" %}</th></tr></thead>
+      <tbody>{% for col, campo in mapa %}<tr><td>{{ col }}</td><td><code>{{ campo }}</code></td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
+</details>
+
+{% if errores %}
+<section class="espacio-arriba" aria-labelledby="t-errores">
+  <h2 id="t-errores" class="titulo-seccion">{% blocktranslate count n=a.con_error|length %}{{ n }} con errores{% plural %}{{ n }} con errores{% endblocktranslate %}</h2>
+  <div class="tabla-envoltura">
+    <table class="tabla tabla-importacion">
+      <thead><tr><th class="num">{% translate "Fila" %}</th><th>{% translate "Nombre" %}</th><th>{% translate "Qué pasa" %}</th></tr></thead>
+      <tbody>
+        {% for f in errores %}
+          <tr><td class="num">{{ f.numero }}</td><td>{{ f.nombre_completo|default:"—" }}</td><td><ul class="errorlist">{% for e in f.errores %}<li>{{ e }}</li>{% endfor %}</ul></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if a.con_error|length > limite %}<p class="ayuda espacio-arriba">{% blocktranslate with limite=limite %}Se muestran las primeras {{ limite }}. El CSV de errores las incluye todas.{% endblocktranslate %}</p>{% endif %}
+</section>
+{% endif %}
+
+{% if nuevas %}
+<section class="espacio-arriba" aria-labelledby="t-nuevas">
+  <h2 id="t-nuevas" class="titulo-seccion">{% blocktranslate count n=a.nuevas|length %}{{ n }} nueva{% plural %}{{ n }} nuevas{% endblocktranslate %}</h2>
+  <div class="tabla-envoltura">
+    <table class="tabla tabla-importacion">
+      <thead><tr><th class="num">{% translate "Fila" %}</th><th>{% translate "Nombre" %}</th><th>{% translate "Contacto" %}</th><th>{% translate "Detalles" %}</th></tr></thead>
+      <tbody>
+        {% for f in nuevas %}
+          <tr>
+            <td class="num">{{ f.numero }}</td>
+            <td><strong>{{ f.nombre_completo }}</strong>{% for e in f.datos.etiquetas %} <span class="etiqueta etiqueta-mini">{{ e }}</span>{% endfor %}</td>
+            <td class="texto-peq">{{ f.datos.telefono|telefono }}{% if f.datos.telefono and f.datos.email %}<br>{% endif %}{{ f.datos.email }}{% if f.datos.instagram %}<br>@{{ f.datos.instagram }}{% endif %}</td>
+            <td class="texto-peq">
+              {% if f.datos.fecha_nacimiento %}<span class="texto-suave">{% translate "Nace" %}</span> {{ f.datos.fecha_nacimiento|fecha_corta }}<br>{% endif %}
+              {% if f.datos.acepta_promociones %}<span class="etiqueta etiqueta-mini">{% translate "Promo: sí" %}</span> {% endif %}
+              {% if f.datos.no_contactar %}<span class="etiqueta etiqueta-mini">{% translate "No contactar" %}</span> {% endif %}
+              {% for av in f.avisos %}<span class="texto-suave">▲ {{ av }}</span><br>{% endfor %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if a.nuevas|length > limite %}<p class="ayuda espacio-arriba">{% blocktranslate with limite=limite %}Se muestran las primeras {{ limite }}; se importarán todas.{% endblocktranslate %}</p>{% endif %}
+</section>
+{% endif %}
+
+{% if existentes %}
+<section class="espacio-arriba" aria-labelledby="t-existen">
+  <h2 id="t-existen" class="titulo-seccion">{% blocktranslate count n=a.existentes|length %}{{ n }} ya existe{% plural %}{{ n }} ya existen{% endblocktranslate %}</h2>
+  <div class="tabla-envoltura">
+    <table class="tabla tabla-importacion">
+      <thead><tr><th class="num">{% translate "Fila" %}</th><th>{% translate "En el archivo" %}</th><th>{% translate "Ficha que ya tienes" %}</th></tr></thead>
+      <tbody>
+        {% for f in existentes %}
+          <tr><td class="num">{{ f.numero }}</td><td>{{ f.nombre_completo }}</td><td><a href="{% url 'clientes:ficha' f.existente_id %}" target="_blank" rel="noopener">{{ f.existente_nombre }}</a></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+<form method="post" class="bloque espacio-arriba formulario confirmar-importacion" novalidate>
+  {% csrf_token %}
+  <div class="bloque-titulo"><h2>{% translate "¿Importamos?" %}</h2></div>
+  {% if a.con_promociones %}
+    <p class="texto-peq">{% blocktranslate count n=a.con_promociones %}{{ n }} persona del archivo dice que acepta promociones.{% plural %}{{ n }} personas del archivo dicen que aceptan promociones.{% endblocktranslate %}</p>
+    {{ form.origen_consentimiento.as_field_group }}
+  {% endif %}
+  {% if a_importar %}
+    <p class="texto-peq texto-suave">{% translate "Se guarda todo de una vez. Si algo falla a mitad, no se guarda nada." %}</p>
+  {% else %}
+    <p class="aviso">{% icono "alerta" %} {% translate "No queda ninguna fila que importar. Corrige el archivo y súbelo de nuevo." %}</p>
+  {% endif %}
+  <div class="acciones-formulario">
+    {% if a_importar %}
+      <button type="submit" name="confirmar" value="1" class="btn btn-primario" data-ayuda="{% translate "Crea las fichas nuevas ahora. Las filas con error se quedan fuera." %}">{% icono "check" %} {% blocktranslate count n=a_importar %}Importar {{ n }} cliente{% plural %}Importar {{ n }} clientes{% endblocktranslate %}</button>
+    {% else %}
+      <a class="btn btn-primario" href="{% url 'clientes:importar' %}">{% icono "subir" %} {% translate "Subir otro archivo" %}</a>
+    {% endif %}
+    <button type="submit" name="cancelar" value="1" class="btn btn-fantasma" data-ayuda="{% translate "Descarta este archivo sin guardar nada." %}">{% translate "Cancelar" %}</button>
+  </div>
+</form>
+{% endblock %}

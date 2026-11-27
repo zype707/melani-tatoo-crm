@@ -14,6 +14,7 @@ def estudio(request):
     if user is not None and user.is_authenticated:
         datos["nav"] = SimpleLazyObject(lambda: contadores(request))
         datos["ia_disponible"] = SimpleLazyObject(_ia_disponible)
+        datos["ayuda_ctx"] = SimpleLazyObject(lambda: _ayuda(request))
     return datos
 
 
@@ -21,3 +22,9 @@ def _ia_disponible():
     from apps.ia.servicios import disponible
 
     return disponible()
+
+
+def _ayuda(request):
+    from .ayuda import contexto
+
+    return contexto(request)

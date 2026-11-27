@@ -15,9 +15,9 @@
     </div>
   </div>
   <div class="grupo-botones">
-    {% if nav.url_nueva_cita %}<a class="btn btn-primario" href="{% url 'agenda:nueva' %}?cliente={{ cliente.pk }}">{% icono "plus" %} {% translate "Nueva cita" %}</a>{% endif %}
-    <a class="btn" href="{% url 'mensajeria:nuevo' %}?cliente={{ cliente.pk }}">{% icono "mensajes" %} {% translate "Escribir mensaje" %}</a>
-    <a class="btn" href="{% url 'clientes:editar' cliente.pk %}">{% icono "editar" %} {% translate "Editar" %}</a>
+    {% if nav.url_nueva_cita %}<a data-ayuda="{% translate "Apunta una cita para esta persona." %}" class="btn btn-primario" href="{% url 'agenda:nueva' %}?cliente={{ cliente.pk }}">{% icono "plus" %} {% translate "Nueva cita" %}</a>{% endif %}
+    <a data-ayuda="{% translate "Escríbele un mensaje suelto por WhatsApp o SMS." %}" class="btn" href="{% url 'mensajeria:nuevo' %}?cliente={{ cliente.pk }}">{% icono "mensajes" %} {% translate "Escribir mensaje" %}</a>
+    <a data-ayuda="{% translate "Cambia sus datos, etiquetas o notas privadas." %}" class="btn" href="{% url 'clientes:editar' cliente.pk %}">{% icono "editar" %} {% translate "Editar" %}</a>
   </div>
 </header>
 
@@ -58,7 +58,7 @@
     </section>
 
     <section class="bloque" aria-labelledby="t-tatuajes">
-      <div class="bloque-titulo"><h2 id="t-tatuajes">{% translate "Tatuajes" %}</h2><a href="{% url 'clientes:tatuaje_nuevo' cliente.pk %}">{% icono "plus" %} {% translate "Añadir" %}</a></div>
+      <div class="bloque-titulo"><h2 id="t-tatuajes">{% translate "Tatuajes" %}</h2><a data-ayuda="{% translate "Registra un tatuaje para guardar fotos, sesiones y su aniversario." %}" href="{% url 'clientes:tatuaje_nuevo' cliente.pk %}">{% icono "plus" %} {% translate "Añadir" %}</a></div>
       {% if cliente.tatuajes.all %}
         <div class="rejilla-tatuajes">
           {% for t in cliente.tatuajes.all %}
@@ -90,8 +90,8 @@
           {{ nota_form.texto }}
         </div>
         <div class="grupo-botones">
-          <button type="submit" class="btn btn-peq">{% icono "plus" %} {% translate "Guardar nota" %}</button>
-          <button type="button" class="btn btn-peq btn-fantasma oculto" data-dictado-para="{{ nota_form.texto.id_for_label }}" data-dictado-origen="#{{ nota_form.origen.id_for_label }}">{% icono "mic" %} <span>{% translate "Dictar" %}</span></button>
+          <button data-ayuda="{% translate "Añade la nota a su historial." %}" type="submit" class="btn btn-peq">{% icono "plus" %} {% translate "Guardar nota" %}</button>
+          <button data-ayuda="{% translate "Dicta la nota con la voz (si tu navegador lo permite)." %}" type="button" class="btn btn-peq btn-fantasma oculto" data-dictado-para="{{ nota_form.texto.id_for_label }}" data-dictado-origen="#{{ nota_form.origen.id_for_label }}">{% icono "mic" %} <span>{% translate "Dictar" %}</span></button>
         </div>
       </form>
       {% if linea %}
@@ -134,7 +134,7 @@
         {% csrf_token %}
         {% if cliente.marketing_consentimiento %}
           <input type="hidden" name="accion" value="baja"><input type="hidden" name="origen" value="peticion_baja">
-          <button type="submit" class="btn btn-peq btn-peligro" data-confirmar="{% translate "Dejará de recibir felicitaciones y promociones. Los mensajes promocionales pendientes se descartarán." %}">{% translate "Registrar baja" %}</button>
+          <button data-ayuda="{% translate "Deja de enviarle promociones. Sus mensajes promocionales pendientes se descartan." %}" type="submit" class="btn btn-peq btn-peligro" data-confirmar="{% translate "Dejará de recibir felicitaciones y promociones. Los mensajes promocionales pendientes se descartarán." %}">{% translate "Registrar baja" %}</button>
         {% else %}
           <input type="hidden" name="accion" value="alta">
           <div class="campo">
@@ -143,7 +143,7 @@
               <option value="presencial">{% translate "En persona" %}</option><option value="verbal">{% translate "De palabra / llamada" %}</option><option value="mensaje">{% translate "Por mensaje" %}</option><option value="formulario">{% translate "Formulario de reserva" %}</option>
             </select>
           </div>
-          <button type="submit" class="btn btn-peq">{% translate "Registrar consentimiento" %}</button>
+          <button data-ayuda="{% translate "Apunta que acepta promociones y cómo lo dijo (queda registrado)." %}" type="submit" class="btn btn-peq">{% translate "Registrar consentimiento" %}</button>
         {% endif %}
       </form>
     </section>
@@ -165,7 +165,7 @@
       {% for e in espera %}
         <p><a href="{% url 'agenda:espera_editar' e.pk %}">{{ e.tipo|default:"Cualquier cita" }}</a> · {{ e.dias_legibles }} · {{ e.get_franja_display|lower }}</p>
       {% empty %}
-        <a class="btn btn-peq" href="{% url 'agenda:espera_nueva' %}?cliente={{ cliente.pk }}">{% icono "plus" %} {% translate "Añadir a la lista" %}</a>
+        <a data-ayuda="{% translate "La apunta en la lista de espera." %}" class="btn btn-peq" href="{% url 'agenda:espera_nueva' %}?cliente={{ cliente.pk }}">{% icono "plus" %} {% translate "Añadir a la lista" %}</a>
       {% endfor %}
     </section>
 

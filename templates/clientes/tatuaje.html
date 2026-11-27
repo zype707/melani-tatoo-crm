@@ -8,8 +8,8 @@
     <p class="texto-suave">{{ tatuaje.get_zona_display|default:"Zona sin indicar" }}{% if tatuaje.estilo %} · {{ tatuaje.get_estilo_display }}{% endif %}{% if tatuaje.tamano %} · {{ tatuaje.get_tamano_display }}{% endif %}{% if tatuaje.medidas %} · {{ tatuaje.medidas }}{% endif %}</p>
   </div>
   <div class="acciones">
-    {% if nav.url_nueva_cita %}<a class="btn btn-primario" href="{% url 'agenda:nueva' %}?cliente={{ cliente.pk }}&tatuaje={{ tatuaje.pk }}">{% icono "plus" %} {% translate "Nueva sesión" %}</a>{% endif %}
-    <a class="btn" href="{% url 'clientes:tatuaje_editar' tatuaje.pk %}">{% icono "editar" %} {% translate "Editar" %}</a>
+    {% if nav.url_nueva_cita %}<a data-ayuda="{% translate "Apunta otra cita para este tatuaje." %}" class="btn btn-primario" href="{% url 'agenda:nueva' %}?cliente={{ cliente.pk }}&tatuaje={{ tatuaje.pk }}">{% icono "plus" %} {% translate "Nueva sesión" %}</a>{% endif %}
+    <a data-ayuda="{% translate "Cambia los datos o márcalo como terminado." %}" class="btn" href="{% url 'clientes:tatuaje_editar' tatuaje.pk %}">{% icono "editar" %} {% translate "Editar" %}</a>
   </div>
 </header>
 
@@ -29,7 +29,7 @@
           <a href="{% url 'clientes:foto' f.pk %}" target="_blank" rel="noopener"><img src="{% url 'clientes:foto_mini' f.pk %}" alt="{% blocktranslate with get_tipo_display=f.get_tipo_display titulo=tatuaje.titulo %}{{ get_tipo_display }} de {{ titulo }}{% endblocktranslate %}" loading="lazy" width="240" height="240"></a>
           <figcaption class="fila-entre">
             <span><span class="etiqueta etiqueta-mini">{{ f.get_tipo_display }}</span> <span class="texto-peq texto-suave">{{ f.creado_en|date:"SHORT_DATE_FORMAT" }}</span></span>
-            <form method="post" action="{% url 'clientes:borrar_foto' f.pk %}">{% csrf_token %}<button type="submit" class="btn btn-icono btn-fantasma btn-peq" aria-label="{% translate "Borrar foto" %}" data-confirmar="{% translate "¿Borrar esta foto? No se puede deshacer." %}">{% icono "basura" %}</button></form>
+            <form method="post" action="{% url 'clientes:borrar_foto' f.pk %}">{% csrf_token %}<button data-ayuda="{% translate "Borra esta foto." %}" type="submit" class="btn btn-icono btn-fantasma btn-peq" aria-label="{% translate "Borrar foto" %}" data-confirmar="{% translate "¿Borrar esta foto? No se puede deshacer." %}">{% icono "basura" %}</button></form>
           </figcaption>
           {% if f.nota %}<p class="texto-peq">{{ f.nota }}</p>{% endif %}
         </figure>
@@ -45,7 +45,7 @@
       {{ fotos_form.tipo.as_field_group }}
       {{ fotos_form.nota.as_field_group }}
     </div>
-    <div><button type="submit" class="btn">{% icono "subir" %} {% translate "Subir fotos" %}</button></div>
+    <div><button data-ayuda="{% translate "Sube una o varias fotos. Se les quita la ubicación GPS." %}" type="submit" class="btn">{% icono "subir" %} {% translate "Subir fotos" %}</button></div>
   </form>
 </section>
 

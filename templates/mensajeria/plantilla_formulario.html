@@ -28,7 +28,7 @@
     <div class="acciones-formulario">
       <button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar" %}</button>
       <a class="btn btn-fantasma" href="{% url 'mensajeria:plantillas' %}">{% translate "Cancelar" %}</a>
-      {% if plantilla %}<button type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="{% translate "¿Eliminar esta plantilla?" %}">{% icono "basura" %} {% translate "Eliminar" %}</button>{% endif %}
+      {% if plantilla %}<button data-ayuda="{% translate "Borra esta plantilla." %}" type="submit" name="borrar" value="1" class="btn btn-peligro empujar" data-confirmar="{% translate "¿Eliminar esta plantilla?" %}">{% icono "basura" %} {% translate "Eliminar" %}</button>{% endif %}
     </div>
   </section>
   <aside class="pila">

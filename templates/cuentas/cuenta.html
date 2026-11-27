@@ -29,5 +29,20 @@
       <div class="acciones-formulario"><button type="submit" class="btn">{% translate "Cambiar contraseña" %}</button></div>
     </form>
   </section>
+
+  <section class="bloque" aria-labelledby="t-ayuda">
+    <div class="bloque-titulo"><h2 id="t-ayuda">{% translate "Ayuda" %}</h2><a href="{% url 'ayuda:inicio' %}">{% icono "libro" %} {% translate "Cómo usar" %}</a></div>
+    <form method="post" action="{% url 'ayuda:preferencias' %}" class="formulario">
+      {% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <p class="texto-peq">{% if user.ayudas_visibles %}{% translate "Ahora ves una pista corta arriba de cada pantalla hasta que pulsas «Entendido»." %}{% else %}{% translate "Las pistas de cada pantalla están ocultas. La ayuda sigue en el botón ? de cada pantalla." %}{% endif %}</p>
+      {% if user.ayudas_visibles %}
+        <input type="hidden" name="mostrar" value="0">
+        <div class="acciones-formulario"><button type="submit" class="btn">{% icono "bombilla" %} {% translate "Ocultar las pistas" %}</button></div>
+      {% else %}
+        <input type="hidden" name="mostrar" value="1">
+        <div class="acciones-formulario"><button type="submit" class="btn">{% icono "bombilla" %} {% translate "Mostrar ayudas en pantalla" %}</button></div>
+      {% endif %}
+    </form>
+  </section>
 </div>
 {% endblock %}

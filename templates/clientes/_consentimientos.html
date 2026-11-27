@@ -6,7 +6,7 @@
         {% for c in ultimos %}
           <li class="fila-lista">
             <span class="fila-cuerpo"><span class="fila-titulo">{{ c.firmado_en|date:"SHORT_DATE_FORMAT" }}</span><span class="fila-sub">{% blocktranslate with version_texto=c.version_texto %}Versión {{ version_texto }}{% endblocktranslate %}{% if c.cita %} · {{ c.cita.tipo }}{% endif %}</span></span>
-            <a class="btn btn-peq" href="{% url 'clientes:consentimiento_pdf' c.pk %}" target="_blank" rel="noopener">{% icono "documento" %} PDF</a>
+            <a data-ayuda="{% translate "Abre el consentimiento firmado." %}" class="btn btn-peq" href="{% url 'clientes:consentimiento_pdf' c.pk %}" target="_blank" rel="noopener">{% icono "documento" %} PDF</a>
           </li>
         {% endfor %}
       </ul>

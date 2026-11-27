@@ -10,7 +10,7 @@
   {% if m.estado == "enviado" %}
     <div class="mensaje-enviado">
       <span>{% icono "check" %} {% blocktranslate with get_canal_usado_display=m.get_canal_usado_display enviado_en=m.enviado_en|hora %}Enviado por {{ get_canal_usado_display }} · {{ enviado_en }}{% endblocktranslate %}</span>
-      <button type="button" class="btn btn-peq btn-fantasma" hx-post="{% url 'mensajeria:deshacer' m.pk %}" hx-target="#mensaje-{{ m.pk }}">{% translate "Deshacer" %}</button>
+      <button data-ayuda="{% translate "Devuelve el mensaje a pendiente." %}" type="button" class="btn btn-peq btn-fantasma" hx-post="{% url 'mensajeria:deshacer' m.pk %}" hx-target="#mensaje-{{ m.pk }}">{% translate "Deshacer" %}</button>
     </div>
   {% elif m.estado == "pendiente" %}
     <label class="solo-lectores" for="texto-{{ m.pk }}">{% blocktranslate with nombre=m.cliente.nombre %}Mensaje para {{ nombre }}{% endblocktranslate %}</label>

@@ -253,3 +253,64 @@ class ConsentimientoForm(forms.Form):
 
     def salud(self) -> dict:
         return {c: self.cleaned_data.get(c) for c in self.CAMPOS_SALUD}
+
+
+# --- Importación por CSV ------------------------------------------------------------------------
+
+
+class ImportarClientesForm(forms.Form):
+    archivo = forms.FileField(
+        label=_("Archivo CSV"),
+        help_text=_("Máx. 2 MB y 5.000 clientes. En Excel: «Guardar como» → «CSV UTF-8»."),
+        widget=forms.FileInput(attrs={"accept": ".csv,.txt,text/csv,text/plain"}),
+    )
+    formato_fecha = forms.ChoiceField(
+        label=_("¿Cómo están escritas las fechas?"),
+        choices=[("mdy", _("Mes/día/año · 12/31/1990")), ("dmy", _("Día/mes/año · 31/12/1990"))],
+        widget=forms.RadioSelect,
+        help_text=_("Las fechas tipo 1990-12-31 se entienden siempre."),
+    )
+    si_existe = forms.ChoiceField(
+        label=_("Si alguien ya está en el CRM (mismo teléfono o email)"),
+        choices=[
+            ("omitir", _("Dejar su ficha como está")),
+            ("completar", _("Completar solo los datos que le falten")),
+        ],
+        widget=forms.RadioSelect,
+        initial="omitir",
+    )
+    etiqueta_lote = forms.CharField(
+        label=_("Etiqueta para este lote"),
+        max_length=40,
+        required=False,
+        help_text=_("Se añade a todas las fichas importadas para encontrarlas después. Ej.: importadas"),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["formato_fecha"].initial = "mdy" if settings.REGION_TELEFONO == "US" else "dmy"
+        self.texto = ""
+
+    def clean_archivo(self):
+        from .importacion import LIMITE_BYTES, ArchivoInvalido, leer
+
+        archivo = self.cleaned_data["archivo"]
+        if archivo.size > LIMITE_BYTES:
+            raise forms.ValidationError(
+                _("El archivo pesa más de %(mb)s MB. Divídelo en varios archivos más pequeños.")
+                % {"mb": LIMITE_BYTES // (1024 * 1024)}
+            )
+        try:
+            self.texto = leer(archivo.read())
+        except ArchivoInvalido as exc:
+            raise forms.ValidationError(str(exc)) from exc
+        return archivo
+
+
+class ConfirmarImportacionForm(forms.Form):
+    origen_consentimiento = forms.ChoiceField(
+        label=_("¿Cómo aceptaron las promociones quienes tienen «sí»?"),
+        choices=[("", _("No lo sé: importarlas sin consentimiento")), *ORIGENES_ALTA],
+        required=False,
+        help_text=_("Queda registrado en su historial. Sin consentimiento solo recibirán mensajes de servicio."),
+    )

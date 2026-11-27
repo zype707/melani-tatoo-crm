@@ -22,9 +22,10 @@ Settings: `estudio.settings.{dev,test,prod}`; pytest usa `test`. Todo lo variabl
 estudio/settings/   base.py (env, i18n, CSP, auth), prod.py, test.py
 apps/<app>/         models · forms · views (finas) · servicios.py (lógica, lo que testean) · urls · tests/
   cuentas/          usuario + contraseña (ModelBackend), bloqueo por intentos, crear_cuenta [--desde-entorno]
-  nucleo/           ajustes, auditoría, tokens, imágenes, archivos privados, idioma.py, templatetags/ui.py
+  nucleo/           ajustes, auditoría, tokens, imágenes, archivos privados, idioma.py, templatetags/ui.py,
+                    ayuda.py (tutorial /ayuda/, ayuda de cada pantalla, primeros pasos), views_ayuda.py
   mensajeria/       plantillas, variables.py, generadores (bandeja diaria), canales, predeterminados(_en).py
-  agenda/ clientes/ finanzas/ catalogo/ ia/ panel/
+  agenda/ clientes/ finanzas/ catalogo/ ia/ panel/   (clientes/importacion.py: importación CSV)
 templates/          parciales HTMX con {% partialdef %}; componentes/ (campo, vacio, idioma…)
 static/js/          sin build, enganchado por data-*; textos con gettext()
 locale/en/          django.po (msgid = español) + .mo compilados (se commitean: Render no tiene gettext)
@@ -41,6 +42,8 @@ render.yaml         producción en Render, plan de pago (disco + cron + pre-depl
 - Archivos privados en `MEDIA_ROOT`, servidos solo por vistas autenticadas; nunca bajo `static/`.
 - Mensajes: nunca se envía nada solo; la idempotencia depende de `MensajePreparado.clave`.
 - Migraciones: `python manage.py makemigrations --check` debe decir "No changes".
+- **Ayuda**: toda pantalla o botón nuevo se documenta en `apps/nucleo/ayuda.py` (pantalla por nombre de vista, `BOTONES`, capítulos) y los botones no evidentes llevan `data-ayuda="{% translate "…" %}"` (tooltip + descripción accesible). En los textos de ayuda, `[[clave]]` dibuja el botón de `BOTONES` y `**texto**` va en negrita. `test_ayuda.py` exige que esté todo traducido.
+- La ayuda (pistas, panel, tutorial) no usa el amarillo salvo en las muestras de botones principales: el acento es solo para acciones clave y datos críticos.
 
 ## Ahorro de contexto
 - No leas `locale/**/*.po` (≈6000 líneas): usa `scripts/i18n.py`.

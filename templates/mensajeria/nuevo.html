@@ -21,7 +21,7 @@
     {% include "mensajeria/_ia_redactar.html" %}
   </section>
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "flecha-der" %} {% translate "Preparar envío" %}</button>
+    <button data-ayuda="{% translate "Prepara el mensaje con los botones de WhatsApp, SMS y Copiar." %}" type="submit" class="btn btn-primario">{% icono "flecha-der" %} {% translate "Preparar envío" %}</button>
     <a class="btn btn-fantasma" href="{% url 'mensajeria:bandeja' %}">{% translate "Cancelar" %}</a>
   </div>
 </form>

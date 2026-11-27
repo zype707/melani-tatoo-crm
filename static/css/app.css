@@ -395,7 +395,7 @@ hr { border: 0; border-top: var(--borde-duro); margin: var(--e5) 0; }
   text-transform: uppercase; letter-spacing: 0.08em; color: var(--texto-suave);
   margin: var(--e6) 0 var(--e3);
 }
-.oculto { display: none !important; }
+.oculto, [hidden] { display: none !important; }
 .ancho-texto { max-width: 40rem; }
 .ancho-estrecho { max-width: 28rem; margin-inline: auto; }
 
@@ -1026,3 +1026,179 @@ code { font-family: var(--fuente-mono); font-size: 0.9em; background: var(--petr
   .publico-cabecera .selector-idioma { position: absolute; right: var(--e4); }
 }
 .hoja-cuerpo .selector-idioma { padding: var(--e2) 0; }
+
+/* ==========================================================================
+   Fase G · ayuda, tutorial e importación
+   La ayuda nunca usa el amarillo: es información, no una acción clave.
+   ========================================================================== */
+
+/* Pasos numerados (tutorial, importación) */
+.pasos { list-style: none; padding: 0; counter-reset: paso; display: grid; gap: var(--e4); }
+.pasos > li { counter-increment: paso; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: var(--e3); align-items: start; max-width: none; }
+.pasos > li::before {
+  content: counter(paso); display: grid; place-items: center; width: 2.25rem; height: 2.25rem;
+  background: var(--hueso); color: var(--tinta); border: 2px solid var(--tinta);
+  font-family: var(--fuente-titulo); font-weight: 900; font-size: 1rem;
+}
+.pasos > li > div { padding-top: 0.2rem; }
+
+/* Indicador de pasos en línea (1 · 2 · 3) */
+.pasos-linea { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--e2) var(--e4); font-size: 0.875rem; font-weight: 700; color: var(--texto-suave); }
+.pasos-linea li { display: inline-flex; align-items: center; gap: var(--e2); max-width: none; }
+.pasos-linea li + li::before { content: ""; width: 1.5rem; border-top: 2px solid var(--linea); margin-right: var(--e2); }
+.pasos-linea span { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; border: 2px solid var(--linea); font-family: var(--fuente-titulo); font-weight: 900; }
+.pasos-linea .icono { width: 1rem; height: 1rem; }
+.pasos-linea [aria-current="step"] { color: var(--texto); }
+.pasos-linea [aria-current="step"] span, .pasos-linea .hecho span { background: var(--hueso); color: var(--tinta); border-color: var(--hueso); }
+
+.tabla-importacion td { vertical-align: top; }
+.tabla-importacion .errorlist { font-size: 0.875rem; }
+.confirmar-importacion { max-width: 44rem; }
+
+/* Pista de la pantalla (se puede cerrar) */
+.pista {
+  display: flex; gap: var(--e3); align-items: flex-start;
+  margin-bottom: var(--e5); padding: var(--e3) var(--e4);
+  border: 2px dashed var(--niebla); background: var(--petroleo-950);
+  font-size: 0.9375rem;
+}
+.pista > .icono { color: var(--hueso); margin-top: 2px; }
+.pista-cuerpo { flex: 1; min-width: 0; display: grid; gap: var(--e1); }
+.pista-cuerpo strong { font-family: var(--fuente-titulo); font-weight: 800; }
+.pista-cuerpo p { color: var(--texto-suave); }
+.pista-acciones { display: flex; flex-wrap: wrap; gap: var(--e1) var(--e4); align-items: center; margin-top: var(--e1); }
+.pista-acciones button, .pista-acciones a { background: none; border: 0; padding: 0; color: var(--texto); font-weight: 700; font-size: 0.875rem; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; cursor: pointer; }
+.pista-cerrar { flex: none; }
+
+/* Información sobre herramientas (data-ayuda). Solo en dispositivos con ratón. */
+.tip {
+  position: fixed; z-index: 80; max-width: min(19rem, calc(100vw - 1rem));
+  padding: var(--e2) var(--e3);
+  background: var(--hueso); color: var(--tinta);
+  border: 2px solid var(--tinta); box-shadow: 3px 3px 0 var(--tinta);
+  font-family: var(--fuente-texto); font-size: 0.875rem; font-weight: 400; line-height: 1.4; text-transform: none; letter-spacing: 0;
+  pointer-events: none;
+}
+.tip[hidden] { display: none; }
+
+/* Botón de ayuda */
+.btn-ayuda .icono { width: 1.25rem; height: 1.25rem; }
+.lateral-ayuda { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; padding-top: var(--e3); border-top: 2px solid var(--petroleo-800); }
+.lateral-ayuda .btn { justify-content: flex-start; padding-inline: var(--e3); }
+.lateral-ayuda .btn kbd { margin-left: auto; }
+
+/* Panel de ayuda: hoja lateral en escritorio, hoja inferior en móvil */
+dialog.panel-ayuda {
+  width: 100%; max-width: 100%; max-height: 88dvh; margin: auto 0 0; padding: 0;
+  background: var(--petroleo-900); color: var(--texto);
+  border: 0; border-top: var(--borde-duro); overflow-y: auto;
+}
+dialog.panel-ayuda::backdrop { background: rgb(1 22 27 / 0.82); }
+@media (min-width: 48rem) {
+  dialog.panel-ayuda {
+    width: min(32rem, 100%); height: 100dvh; max-height: 100dvh; margin: 0 0 0 auto;
+    border-top: 0; border-left: var(--borde-duro); box-shadow: -10px 0 0 var(--tinta);
+  }
+}
+.panel-ayuda-cuerpo { display: grid; gap: var(--e5); padding: var(--e5) var(--e4) calc(var(--e6) + env(safe-area-inset-bottom)); }
+@media (min-width: 48rem) { .panel-ayuda-cuerpo { padding: var(--e6) var(--e5); } }
+.panel-ayuda-cabecera { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--e3); }
+.panel-ayuda-cabecera h2 { font-size: 1.75rem; }
+.panel-ayuda .titulo-seccion { margin: 0 0 var(--e3); }
+
+/* Lista «qué hace cada botón» */
+.ayuda-acciones { list-style: none; padding: 0; display: grid; }
+.ayuda-acciones > li { display: grid; gap: var(--e2); padding: var(--e3) 0; border-top: 2px solid var(--linea); max-width: none; }
+.ayuda-acciones > li:first-child { border-top: 0; padding-top: 0; }
+.ayuda-acciones p { font-size: 0.9375rem; color: var(--texto-suave); }
+
+/* Muestra de botón (para reconocerlo en la pantalla) */
+.muestra {
+  display: inline-flex; align-items: center; gap: var(--e1); justify-self: start;
+  min-height: 2rem; padding: 0 var(--e3); vertical-align: middle;
+  border: 2px solid var(--hueso); background: transparent; color: var(--texto);
+  font-family: var(--fuente-titulo); font-weight: 800; font-size: 0.8125rem; line-height: 1.2; white-space: nowrap;
+}
+.muestra .icono { width: 1rem; height: 1rem; }
+.muestra-primario { background: var(--amarillo); color: var(--tinta); border-color: var(--tinta); box-shadow: 2px 2px 0 var(--tinta); }
+.muestra-peligro { border-style: dashed; }
+.muestra-fantasma { border-color: transparent; padding-inline: var(--e1); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.muestra-pestana { border-width: 0 0 3px; padding-inline: var(--e1); }
+.muestra-icono { width: 2rem; padding: 0; justify-content: center; }
+.muestra-con-nombre { display: inline-flex; align-items: center; gap: var(--e2); justify-self: start; }
+.muestra-tarjeta { border-color: var(--niebla); border-style: dotted; background: var(--bloque); }
+
+/* Tutorial */
+.tutorial-cabecera p { color: var(--texto-suave); max-width: 46rem; margin-top: var(--e3); font-size: 1.0625rem; }
+.buscador-ayuda { max-width: 34rem; margin-bottom: var(--e6); }
+.tutorial-indice { display: grid; gap: var(--e3); grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr)); list-style: none; padding: 0; }
+.tutorial-indice li { max-width: none; }
+.tarjeta-capitulo {
+  display: grid; grid-template-columns: auto 1fr; gap: var(--e1) var(--e3); align-items: center; height: 100%;
+  padding: var(--e4); border: var(--borde-control); text-decoration: none; background: var(--petroleo-900);
+}
+.tarjeta-capitulo:hover { background: var(--hueso); color: var(--tinta); }
+.tarjeta-capitulo:hover .texto-suave { color: var(--tinta); }
+.tarjeta-capitulo .icono { grid-row: span 2; width: 1.75rem; height: 1.75rem; }
+.tarjeta-capitulo strong { font-family: var(--fuente-titulo); font-weight: 800; }
+
+.capitulo { scroll-margin-top: 4.5rem; padding-top: var(--e6); margin-top: var(--e6); border-top: var(--borde-duro); }
+.capitulo-cabecera { display: flex; align-items: center; gap: var(--e4); margin-bottom: var(--e4); }
+.capitulo-numero {
+  display: grid; place-items: center; flex: none; width: 3.25rem; height: 3.25rem;
+  background: var(--hueso); color: var(--tinta); border: var(--borde-duro); box-shadow: var(--sombra-boton);
+  font-family: var(--fuente-titulo); font-weight: 900; font-size: 1.5rem;
+}
+.capitulo-intro { color: var(--texto-suave); max-width: 46rem; margin-bottom: var(--e5); }
+.capitulo .pasos { max-width: 52rem; }
+.consejo { display: flex; gap: var(--e3); align-items: flex-start; max-width: 52rem; margin-top: var(--e5); padding: var(--e3) var(--e4); border-left: 4px solid var(--hueso); background: var(--petroleo-950); }
+.consejo p { font-size: 0.9375rem; }
+.referencia-pantalla { border: var(--borde-control); background: var(--petroleo-950); max-width: 52rem; }
+.referencia-pantalla + .referencia-pantalla { margin-top: var(--e2); }
+.referencia-pantalla > summary { display: flex; align-items: center; gap: var(--e3); min-height: var(--toque); padding: var(--e2) var(--e4); font-family: var(--fuente-titulo); font-weight: 800; list-style: none; }
+.referencia-pantalla > summary::-webkit-details-marker { display: none; }
+.referencia-pantalla > summary::after { content: "+"; margin-left: auto; font-size: 1.25rem; }
+.referencia-pantalla[open] > summary::after { content: "−"; }
+.referencia-pantalla > div { padding: 0 var(--e4) var(--e4); display: grid; gap: var(--e3); }
+.glosario { display: grid; grid-template-columns: minmax(8rem, max-content) 1fr; gap: var(--e3) var(--e5); max-width: 52rem; }
+.glosario dt { font-family: var(--fuente-titulo); font-weight: 800; }
+.glosario dd { margin: 0; color: var(--texto-suave); }
+@media (max-width: 39.99rem) { .glosario { grid-template-columns: 1fr; gap: var(--e1); } .glosario dd { margin-bottom: var(--e3); } }
+.preguntas details { border-top: 2px solid var(--linea); max-width: 52rem; }
+.preguntas details:last-child { border-bottom: 2px solid var(--linea); }
+.preguntas summary { display: flex; align-items: center; gap: var(--e3); min-height: var(--toque); padding: var(--e3) 0; font-weight: 700; list-style: none; }
+.preguntas summary::-webkit-details-marker { display: none; }
+.preguntas summary::after { content: "+"; margin-left: auto; font-family: var(--fuente-titulo); font-size: 1.25rem; }
+.preguntas details[open] summary::after { content: "−"; }
+.preguntas details > p { padding: 0 0 var(--e4); color: var(--texto-suave); }
+[data-ayuda-item].no-coincide { display: none; }
+
+/* Primeros pasos */
+.primeros-pasos .bloque-titulo > .fila { flex-wrap: nowrap; }
+.primeros-pasos .barra-progreso { flex: 0 0 8rem; height: 0.875rem; }
+.checklist { list-style: none; padding: 0; display: grid; }
+.checklist > li { display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; gap: var(--e3); align-items: center; padding: var(--e3) 0; border-top: 2px solid var(--linea); max-width: none; }
+.checklist > li:first-child { border-top: 0; }
+.check-caja { display: grid; place-items: center; width: 2rem; height: 2rem; border: 2px solid var(--hueso); }
+.checklist .hecho .check-caja { background: var(--hueso); color: var(--tinta); }
+.checklist .hecho .fila-titulo { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--texto-suave); }
+.checklist .icono { width: 1.125rem; height: 1.125rem; }
+.checklist-acciones { display: flex; flex-wrap: wrap; gap: var(--e2); justify-content: flex-end; }
+@media (max-width: 39.99rem) {
+  .checklist > li { grid-template-columns: 2rem minmax(0, 1fr); }
+  .checklist-acciones { grid-column: 2; justify-content: flex-start; }
+}
+.fila-sub-libre { white-space: normal; }
+.glosario > div { display: contents; }
+.primeros-pasos .bloque-titulo h2 .icono { margin-right: var(--e1); vertical-align: -3px; }
+.capitulo-numero .icono { width: 1.5rem; height: 1.5rem; }
+
+.pista-acciones button { text-align: left; }
+@media (max-width: 47.99rem) {
+  .pista { padding: var(--e3); }
+  .pista-cerrar .btn { width: 2.5rem; padding: 0; }
+  .pista-cerrar-texto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  /* Cabeceras con varias acciones: la principal primero y a todo el ancho */
+  .cabecera-pagina .acciones:has(> .btn + .btn) { width: 100%; }
+  .cabecera-pagina .acciones:has(> .btn + .btn) > .btn-primario { order: -1; flex: 1 1 100%; }
+}

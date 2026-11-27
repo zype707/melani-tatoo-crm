@@ -7,7 +7,7 @@
     <h1>{% blocktranslate with primer_nombre=user.primer_nombre %}Hola, {{ primer_nombre }}{% endblocktranslate %}</h1>
   </div>
   {% if siguiente %}
-    <a class="siguiente-cita" href="{% url 'agenda:detalle' siguiente.pk %}">
+    <a data-ayuda="{% translate "Abre la próxima cita de hoy." %}" class="siguiente-cita" href="{% url 'agenda:detalle' siguiente.pk %}">
       <span class="texto-suave texto-peq">{% translate "Siguiente" %}</span>
       <strong>{{ siguiente.inicio|hora }} · {{ siguiente.cliente.nombre }}</strong>
     </a>
@@ -15,20 +15,20 @@
 </header>
 
 <div class="rejilla-cifras panel-cifras">
-  <a class="bloque cifra-enlace" href="{% url 'agenda:calendario' %}?vista=dia">
+  <a data-ayuda="{% translate "Abre la agenda en vista de día." %}" class="bloque cifra-enlace" href="{% url 'agenda:calendario' %}?vista=dia">
     <span class="cifra">{{ citas_hoy|length }}</span><span class="cifra-etiqueta">{% translate "Citas hoy" %}</span>
     <span class="texto-peq texto-suave">{% blocktranslate %}{{ citas_semana }} esta semana · {{ horas_semana }} h{% endblocktranslate %}</span>
   </a>
-  <a class="bloque cifra-enlace" href="{% url 'mensajeria:bandeja' %}">
+  <a data-ayuda="{% translate "Abre «Mensajes de hoy» para revisarlos y enviarlos." %}" class="bloque cifra-enlace" href="{% url 'mensajeria:bandeja' %}">
     <span class="cifra {% if mensajes %}cifra-critica{% endif %}">{{ mensajes }}</span><span class="cifra-etiqueta">{% translate "Mensajes por enviar" %}</span>
     <span class="texto-peq texto-suave">{% if mensajes %}{% translate "Prepara tu café y dale ↗" %}{% else %}{% translate "Todo al día" %}{% endif %}</span>
   </a>
-  <a class="bloque cifra-enlace" href="{% url 'solicitudes:lista' %}">
+  <a data-ayuda="{% translate "Revisa las peticiones de cita que llegaron desde tu página de reservas." %}" class="bloque cifra-enlace" href="{% url 'solicitudes:lista' %}">
     <span class="cifra {% if solicitudes %}cifra-critica{% endif %}">{{ solicitudes }}</span><span class="cifra-etiqueta">{% translate "Solicitudes nuevas" %}</span>
     <span class="texto-peq texto-suave">{% if por_confirmar %}{% blocktranslate count n=por_confirmar %}{{ n }} cita por confirmar{% plural %}{{ n }} citas por confirmar{% endblocktranslate %}{% else %}{% translate "Citas confirmadas" %}{% endif %}</span>
   </a>
   {% if user.es_propietaria %}
-  <a class="bloque cifra-enlace" href="{% url 'finanzas:resumen' %}">
+  <a data-ayuda="{% translate "Abre el resumen de ingresos y gastos." %}" class="bloque cifra-enlace" href="{% url 'finanzas:resumen' %}">
     <span class="cifra">{{ ingresos_mes|dinero }}</span><span class="cifra-etiqueta">{% translate "Ingresos del mes" %}</span>
     <span class="texto-peq texto-suave">{% if variacion is not None %}{% if variacion >= 0 %}▲{% else %}▼{% endif %} {% blocktranslate with variacion=variacion|porcentaje %}{{ variacion }} vs. mismo tramo del mes pasado{% endblocktranslate %}{% else %}{% translate "Sin datos del mes pasado" %}{% endif %}</span>
   </a>
@@ -42,6 +42,23 @@
       <span>{% if c.estado == "cancelada" %}<strong>{{ c.cliente.nombre }}</strong> {% blocktranslate with inicio=c.inicio|fecha_corta %}canceló su cita del {{ inicio }}. Hay hueco que ofrecer.{% endblocktranslate %}{% else %}<strong>{{ c.cliente.nombre }}</strong> {% blocktranslate with inicio=c.inicio|fecha_corta reprogramacion_pedida=c.reprogramacion_pedida|truncatechars:80 %}pide cambiar su cita del {{ inicio }}: «{{ reprogramacion_pedida }}»{% endblocktranslate %}{% endif %}</span>
     </a>
   {% endfor %}
+</section>
+{% endif %}
+
+{% if primeros_pasos %}
+<section id="primeros-pasos" class="bloque primeros-pasos espacio-arriba" aria-labelledby="t-primeros">
+  <div class="bloque-titulo">
+    <h2 id="t-primeros">{% icono "bombilla" %} {% translate "Primeros pasos" %}</h2>
+    <span class="fila"><span class="barra-progreso" role="img" aria-label="{% blocktranslate with hechos=primeros_pasos.hechos total=primeros_pasos.total %}{{ hechos }} de {{ total }}{% endblocktranslate %}"><span style="width: {% widthratio primeros_pasos.hechos primeros_pasos.total 100 %}%"></span></span><strong class="numerico">{{ primeros_pasos.hechos }}/{{ primeros_pasos.total }}</strong></span>
+  </div>
+  {% include "nucleo/_primeros_pasos.html" with pasos=primeros_pasos.pasos %}
+  <div class="fila-entre bloque-pie">
+    <a class="texto-peq" href="{% url 'ayuda:inicio' %}">{% icono "libro" %} {% translate "Ver todos los pasos y el tutorial" %}</a>
+    <form method="post" action="{% url 'ayuda:pista' %}" hx-post="{% url 'ayuda:pista' %}" hx-target="#primeros-pasos" hx-swap="delete">
+      {% csrf_token %}<input type="hidden" name="clave" value="primeros_pasos"><input type="hidden" name="next" value="{{ request.path }}">
+      <button type="submit" class="btn btn-peq btn-fantasma" data-ayuda="{% translate "Quita esta lista de Hoy. La tienes siempre en «Cómo usar»." %}">{% icono "x" %} {% translate "Ocultar" %}</button>
+    </form>
+  </div>
 </section>
 {% endif %}
 
@@ -70,7 +87,7 @@
       {% if huecos %}
         <ul class="huecos">
           {% for h in huecos %}
-            <li><a href="{% url 'agenda:nueva' %}?inicio={{ h.inicio|date:'Y-m-d\TH:i' }}">
+            <li><a data-ayuda="{% translate "Crea una cita en este hueco libre." %}" href="{% url 'agenda:nueva' %}?inicio={{ h.inicio|date:'Y-m-d\TH:i' }}">
               <strong>{{ h.inicio|fecha_corta }}</strong>
               <span class="numerico">{{ h.inicio|hora }}–{{ h.fin|hora }}</span>
               <span class="texto-peq texto-suave">{{ h.minutos|duracion }}</span>
@@ -110,7 +127,7 @@
             </a></li>
           {% endfor %}
         </ul>
-        <a class="btn btn-peq espacio-arriba" href="{% url 'mensajeria:campana_nueva' %}?segmento=inactivos">{% icono "enviar" %} {% translate "Campaña de reactivación" %}</a>
+        <a data-ayuda="{% translate "Prepara mensajes para quien lleva meses sin volver (solo si acepta promociones)." %}" class="btn btn-peq espacio-arriba" href="{% url 'mensajeria:campana_nueva' %}?segmento=inactivos">{% icono "enviar" %} {% translate "Campaña de reactivación" %}</a>
       {% else %}
         <p class="texto-suave">{% translate "Nadie fiel se está alejando. 🖤" %}</p>
       {% endif %}
@@ -141,6 +158,12 @@
   </aside>
 </div>
 {% if clientes_total == 0 %}
-  <div class="espacio-arriba">{% url 'clientes:nuevo' as u %}{% include "componentes/vacio.html" with icono="clientes" titulo=_("Empieza por tus clientes") texto=_("Añade a tus clientas habituales o comparte tu enlace de reservas desde Solicitudes.") url=u accion=_("Añadir cliente") principal=True %}</div>
+  <div class="espacio-arriba">{% url 'clientes:nuevo' as u %}{% url 'clientes:importar' as ui %}{% url 'ayuda:inicio' as ua %}
+    {% if user.es_propietaria %}
+      {% include "componentes/vacio.html" with icono="clientes" titulo=_("Empieza por tus clientes") texto=_("Importa tu lista de clientes desde un CSV, añádelas a mano o comparte tu enlace de reservas desde Solicitudes.") url=ui accion=_("Importar desde CSV") icono_accion="subir" principal=True url2=u accion2=_("Añadir cliente") ayuda=ua %}
+    {% else %}
+      {% include "componentes/vacio.html" with icono="clientes" titulo=_("Empieza por tus clientes") texto=_("Añade a tus clientas habituales o comparte tu enlace de reservas desde Solicitudes.") url=u accion=_("Añadir cliente") principal=True ayuda=ua %}
+    {% endif %}
+  </div>
 {% endif %}
 {% endblock %}

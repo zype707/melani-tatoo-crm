@@ -48,7 +48,8 @@ Más capturas en [`docs/capturas/`](docs/capturas/). Todos los datos que aparece
 | **Seguridad** | Acceso con usuario y contraseña (sin registro público), Argon2, bloqueo de accesos, CSP estricta sin scripts inline |
 | **Integraciones** | Solo la API de OpenAI, para el asistente (opcional) |
 | **Mensajes** | Enlaces `wa.me` y `sms:`, o copiar. Cada envío queda registrado. |
-| **Calidad** | 242 pruebas (pytest), ruff sin avisos, contraste WCAG AA verificado por script |
+| **Ayuda** | Tutorial «Cómo usar» integrado, ayuda de cada pantalla (botón **?**), explicación de cada botón y lista de primeros pasos |
+| **Calidad** | 322 pruebas (pytest), ruff sin avisos, contraste WCAG AA verificado por script |
 
 ## 2. Mapa de pantallas
 
@@ -69,6 +70,7 @@ Acceso (usuario + contraseña, la guarda el navegador)
 │   ├─ Cuidados              secuencia día 1 · día 3 · semana 2 · retoque (~30 días)
 │   └─ Plantillas            variables, vista previa en vivo
 ├─ Clientes
+│   ├─ Importar CSV          subir → vista previa fila a fila → confirmar (solo propietaria)
 │   ├─ Ficha                 contacto, salud, promociones, tatuajes, línea de tiempo, notas, consentimientos
 │   ├─ Tatuaje               fotos (referencia / resultado / cicatrizado), sesiones, retoque
 │   ├─ Consentimiento        modo quiosco: la clienta firma con el dedo → PDF
@@ -77,7 +79,8 @@ Acceso (usuario + contraseña, la guarda el navegador)
 ├─ Flash                     catálogo de diseños (disponible / reservado / vendido)
 ├─ Finanzas                  ingresos, gastos, balance mensual, CSV
 ├─ Asistente IA              búsqueda en lenguaje natural, ideas de retención
-└─ Ajustes                   estudio, reservas, textos legales, retención, IA, datos y copias, auditoría
+├─ Ajustes                   estudio, reservas, textos legales, retención, IA, datos y copias, auditoría
+└─ Cómo usar                 tutorial, primeros pasos, qué hace cada botón, preguntas frecuentes, glosario
 
 Páginas públicas (sin cuenta, con token):
   /c/<token>/   la clienta confirma, cancela o pide cambiar su cita
@@ -85,9 +88,9 @@ Páginas públicas (sin cuenta, con token):
   /f/<token>/   catálogo flash público (opcional)
 ```
 
-En **móvil** hay una barra inferior (Hoy · Agenda · Mensajes · Clientes · Más). En **escritorio** hay una barra lateral.
+En **móvil** hay una barra inferior (Hoy · Agenda · Mensajes · Clientes · Más) y el botón **?** arriba. En **escritorio** hay una barra lateral con **Ayuda** y **Cómo usar** abajo.
 
-Atajos de teclado: <kbd>/</kbd> buscar · <kbd>n</kbd> nueva cita · <kbd>c</kbd> nuevo cliente · <kbd>h</kbd> Hoy · <kbd>a</kbd> agenda · <kbd>m</kbd> mensajes · <kbd>?</kbd> ayuda.
+Atajos de teclado: <kbd>/</kbd> buscar · <kbd>n</kbd> nueva cita · <kbd>c</kbd> nuevo cliente · <kbd>h</kbd> Hoy · <kbd>a</kbd> agenda · <kbd>m</kbd> mensajes · <kbd>?</kbd> ayuda de la pantalla.
 
 ## 3. Funcionalidades
 
@@ -121,6 +124,13 @@ Atajos de teclado: <kbd>/</kbd> buscar · <kbd>n</kbd> nueva cita · <kbd>c</kbd
   - Anonimizar: conserva las finanzas y los consentimientos retenidos por ley.
   - Eliminar: se bloquea si hay consentimientos que la ley obliga a conservar.
   - Anonimizar y eliminar son solo para la propietaria y piden escribir el nombre completo para confirmar.
+- **Importación por lotes desde CSV** (*Clientes → Importar CSV*, solo propietaria), pensada para traer todas las clientas existentes antes de empezar:
+  - Acepta lo que exportan Excel, Google Sheets, Numbers u otro CRM: UTF-8 (con o sin BOM) o Windows-1252, separador `,` `;` tabulador o `|` (se detecta solo) y títulos de columna en español o inglés, con o sin tildes (`Teléfono`, `phone`, `móvil`…). Hay una **plantilla descargable** en el idioma de la interfaz.
+  - Columnas: `nombre` (o `nombre_completo`), `apellidos`, `telefono`, `email`, `instagram`, `fecha_nacimiento`, `canal_preferido`, `origen`, `etiquetas`, `notas`, `acepta_promociones`, `no_contactar` y `cliente_desde` (conserva la antigüedad). Solo son obligatorios el nombre y un dato de contacto.
+  - **Nada se guarda sin confirmar:** primero se ve una vista previa fila a fila (nuevas, ya existentes y con errores, con el motivo). Las filas con error se descargan en un CSV para corregirlas y volver a subirlas.
+  - **Sin duplicados:** quien ya existe (mismo teléfono normalizado o email) se omite o, si se elige, solo se completan sus datos vacíos. También se detectan repeticiones dentro del archivo.
+  - **Consentimiento con origen:** un «sí» en `acepta_promociones` solo se registra si se indica cómo se obtuvo (queda en su historial); si no, se importan sin promociones.
+  - Todo en una transacción (5.000 fichas en ~1 s), con etiqueta opcional para el lote y registro en la auditoría. Límites: 2 MB y 5.000 filas por archivo.
 
 ### Mensajería
 - **Plantillas** con variables (`{nombre}`, `{fecha_cita}`, `{hora_cita}`, `{enlace_cita}`, `{enlace_reserva}`, `{tatuaje}`, `{aniversario}`, `{estudio}`, `{artista}`…). Las variables se validan, hay vista previa en vivo y una plantilla predeterminada por categoría. Vienen 21 plantillas de serie.
@@ -160,6 +170,19 @@ Atajos de teclado: <kbd>/</kbd> buscar · <kbd>n</kbd> nueva cita · <kbd>c</kbd
 - **Flash:**
   - Catálogo con imagen, precio, tamaño, zona sugerida y estado (disponible, reservado o vendido). Los diseños pueden ser repetibles.
   - La página pública es opcional y tiene su propio token. Desde un diseño se puede pedir cita, lo que rellena la solicitud.
+
+### Ayuda integrada
+Pensada para que alguien sin experiencia pueda usar la app desde el primer día, sin manual aparte:
+- **Cómo usar** (`/ayuda/`): tutorial por capítulos (lo básico, el día a día en 5 minutos, preparar el estudio, clientes e importación, agenda, mensajes, fidelización, reservas, consentimiento, flash, finanzas, IA y copias), con buscador, preguntas frecuentes, glosario y atajos. Los botones citados se dibujan igual que en pantalla para reconocerlos.
+- **Primeros pasos:** lista de configuración inicial con progreso, en el tutorial y en *Hoy* hasta completarla u ocultarla. Lo que la app puede comprobar (clientes, primera cita, enlace de reservas, primer mensaje…) se marca solo; el resto se marca a mano.
+- **Ayuda de cada pantalla:** el botón **?** (o la tecla <kbd>?</kbd>) abre un panel con qué hace cada botón de esa pantalla, consejos y atajos.
+- **Explicación de cada botón** al pasar el ratón o llegar con el teclado (`data-ayuda`; también como descripción accesible para lectores de pantalla).
+- **Pistas** cortas arriba de cada pantalla que se cierran con «Entendido» o se apagan todas desde *Mi cuenta*; se pueden volver a mostrar.
+| Tutorial «Cómo usar» | Importación CSV (vista previa) | Ayuda de una pantalla |
+|---|---|---|
+| ![Tutorial](docs/capturas/escritorio-tutorial.png) | ![Importar clientes](docs/capturas/escritorio-importar.png) | ![Ayuda en móvil](docs/capturas/movil-ayuda.png) |
+
+- Una sola fuente: `apps/nucleo/ayuda.py`. Las pruebas comprueban que las pantallas principales tienen ayuda, que los botones citados existen y que todo está traducido al inglés. La ayudante no ve lo que es solo de la propietaria.
 
 ### Extras
 - **Dictado por voz** en las notas y los textos largos (Web Speech API del navegador, `es-US`).
@@ -473,6 +496,9 @@ Se entra con **usuario y contraseña**. No hay registro, alta ni segundo factor.
 
 ## 13. Uso diario
 
+> La guía completa está dentro de la app: **Cómo usar** en el menú y el botón **?** en cada pantalla.
+
+0. **El primer día:** sigue la lista de *Primeros pasos* de *Hoy*. Si ya tenías clientas en una hoja de cálculo, ve a *Clientes → Importar CSV*, descarga la plantilla (o usa tu archivo tal cual), revisa la vista previa y confirma.
 1. **Por la mañana, abre «Mensajes».** Revisa cada mensaje, ajusta el texto si quieres y pulsa **WhatsApp** o **SMS**. Se abre la app con el texto escrito. Envíalo y vuelve: el mensaje se marca como enviado. Si lo envías por otra vía, usa *Copiar* y después *Marcar enviado*. *Posponer* lo mueve a mañana y *Descartar* lo quita.
 2. **«Hoy»** te da la siguiente cita, los avisos (cambios pedidos, citas por confirmar, solicitudes) y las cifras del mes.
 3. **Antes de una sesión**, abre la cita:
@@ -575,7 +601,7 @@ Todo ocurre en el servidor. La clave nunca llega al navegador. **La IA propone y
 ## 18. Pruebas y calidad
 
 ```bash
-pytest                    # 242 pruebas · ~20 s (usa PostgreSQL: crea una BD de pruebas)
+pytest                    # 322 pruebas · ~20 s (usa PostgreSQL: crea una BD de pruebas)
 ruff check . && ruff format --check .
 python scripts/contraste.py
 python manage.py check --deploy --settings=estudio.settings.prod   # con las variables de prod
@@ -587,7 +613,8 @@ Las pruebas cubren los caminos críticos:
 - **Subidas:** bombas de descompresión, falsos tipos y EXIF.
 - **Agenda:** solapes a nivel de base de datos.
 - **Reservas públicas:** honeypot y sello de tiempo.
-- **Clientes:** consentimiento firmado y PDF, anonimización y eliminación con retención.
+- **Clientes:** consentimiento firmado y PDF, anonimización y eliminación con retención, importación CSV (codificaciones, separadores, alias de columnas, fechas, duplicados, consentimiento y flujo completo).
+- **Ayuda:** registro completo y traducido, panel por pantalla, pistas, preferencias y primeros pasos.
 - **Mensajería:** consentimiento en las tres comprobaciones, idempotencia de cada generador, campañas escalonadas, canales y variables.
 - **Finanzas:** CSV seguro.
 - **IA:** con proveedor simulado, incluidas la privacidad y la validación de la búsqueda.

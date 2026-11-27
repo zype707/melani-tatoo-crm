@@ -7,10 +7,10 @@
     <h1>{{ mes|date:"F Y"|capfirst }}</h1>
   </div>
   <div class="acciones">
-    <a class="btn btn-icono" href="?mes={{ mes_anterior|date:'Y-m' }}" aria-label="{% translate "Mes anterior" %}">{% icono "flecha-izq" %}</a>
-    {% if mes_siguiente %}<a class="btn btn-icono" href="?mes={{ mes_siguiente|date:'Y-m' }}" aria-label="{% translate "Mes siguiente" %}">{% icono "flecha-der" %}</a>{% endif %}
-    <a class="btn" href="{% url 'finanzas:pago_nuevo' %}">{% icono "plus" %} {% translate "Ingreso" %}</a>
-    <a class="btn btn-primario" href="{% url 'finanzas:gasto_nuevo' %}">{% icono "plus" %} {% translate "Gasto" %}</a>
+    <a data-ayuda="{% translate "Ve al mes anterior." %}" class="btn btn-icono" href="?mes={{ mes_anterior|date:'Y-m' }}" aria-label="{% translate "Mes anterior" %}">{% icono "flecha-izq" %}</a>
+    {% if mes_siguiente %}<a data-ayuda="{% translate "Ve al mes siguiente." %}" class="btn btn-icono" href="?mes={{ mes_siguiente|date:'Y-m' }}" aria-label="{% translate "Mes siguiente" %}">{% icono "flecha-der" %}</a>{% endif %}
+    <a data-ayuda="{% translate "Apunta un ingreso que no viene de una cita (flash, merch…)." %}" class="btn" href="{% url 'finanzas:pago_nuevo' %}">{% icono "plus" %} {% translate "Ingreso" %}</a>
+    <a data-ayuda="{% translate "Apunta un gasto: tintas, agujas, alquiler…" %}" class="btn btn-primario" href="{% url 'finanzas:gasto_nuevo' %}">{% icono "plus" %} {% translate "Gasto" %}</a>
   </div>
 </header>
 
@@ -52,7 +52,7 @@
       {% csrf_token %}
       <label class="solo-lectores" for="{{ exportar.desde.id_for_label }}">{% translate "Desde" %}</label>{{ exportar.desde }}
       <label class="solo-lectores" for="{{ exportar.hasta.id_for_label }}">{% translate "Hasta" %}</label>{{ exportar.hasta }}
-      <button type="submit" class="btn btn-peq">{% icono "descargar" %} {% translate "Exportar CSV" %}</button>
+      <button data-ayuda="{% translate "Descarga los movimientos de estas fechas para tu contable." %}" type="submit" class="btn btn-peq">{% icono "descargar" %} {% translate "Exportar CSV" %}</button>
     </form>
   </div>
   {% if movimientos %}

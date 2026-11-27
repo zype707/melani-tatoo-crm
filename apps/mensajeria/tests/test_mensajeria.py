@@ -105,6 +105,7 @@ class TestIdempotencia:
         assert MensajePreparado.objects.filter(tipo=Categoria.CUMPLEANOS).count() == 1
 
     def test_descartado_no_reaparece(self, sesion):
+        FechaDestacada.objects.update(activa=False)  # que una fecha real de hoy (p. ej. Thanksgiving) no interfiera
         cliente(consentimiento=True, fecha_nacimiento=hoy().replace(year=1985))
         generadores.ejecutar_diario()
         servicios.descartar(MensajePreparado.objects.get())
@@ -254,6 +255,7 @@ class TestAniversariosYReactivacion:
 
 class TestFechasYCampanas:
     def test_fecha_destacada_reparte_en_la_ventana(self, estudio):
+        FechaDestacada.objects.update(activa=False)  # solo cuenta la fecha de prueba, sea cual sea el día de hoy
         for i in range(6):
             cliente(f"C{i}", consentimiento=True, telefono=f"+1407555014{i}")
         dentro_de_dos = hoy() + timedelta(days=2)

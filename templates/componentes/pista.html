@@ -1,0 +1,18 @@
+{# Pista de la pantalla actual: se cierra con «Entendido» y no vuelve a salir (ver apps/nucleo/ayuda.py) #}
+{% if ayuda_ctx.pista and not primeros_pasos %}{% with p=ayuda_ctx.pantalla %}
+<aside class="pista" aria-label="{% translate "Pista" %}">
+  {% icono "bombilla" %}
+  <div class="pista-cuerpo">
+    <strong>{{ p.titulo }}</strong>
+    <p>{{ p.resumen }}</p>
+    <div class="pista-acciones">
+      <button type="button" data-abrir="dialogo-ayuda">{% translate "Ver qué hace cada botón" %}</button>
+      <form method="post" action="{% url 'ayuda:preferencias' %}">{% csrf_token %}<input type="hidden" name="mostrar" value="0"><input type="hidden" name="next" value="{{ request.get_full_path }}"><button type="submit">{% translate "No mostrar más pistas" %}</button></form>
+    </div>
+  </div>
+  <form method="post" action="{% url 'ayuda:pista' %}" class="pista-cerrar" hx-post="{% url 'ayuda:pista' %}" hx-target="closest .pista" hx-swap="delete">
+    {% csrf_token %}<input type="hidden" name="clave" value="{{ p.clave }}"><input type="hidden" name="next" value="{{ request.get_full_path }}">
+    <button type="submit" class="btn btn-peq btn-fantasma" data-ayuda="{% translate "Oculta esta pista. Siempre tendrás la ayuda en el botón ?" %}">{% icono "x" %}<span class="pista-cerrar-texto">{% translate "Entendido" %}</span></button>
+  </form>
+</aside>
+{% endwith %}{% endif %}

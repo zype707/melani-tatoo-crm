@@ -17,8 +17,8 @@
   </div>
   <p class="ayuda espacio-arriba">{% translate "Sin horas = días completos." %}</p>
   <div class="acciones-formulario">
-    <button type="submit" class="btn btn-primario">{% icono "candado" %} {% translate "Bloquear" %}</button>
-    {% if form.necesita_confirmar %}<button type="submit" name="confirmar" value="1" class="btn">{% translate "Bloquear igualmente" %}</button>{% endif %}
+    <button data-ayuda="{% translate "Guarda el bloqueo: esos días no se podrán reservar." %}" type="submit" class="btn btn-primario">{% icono "candado" %} {% translate "Bloquear" %}</button>
+    {% if form.necesita_confirmar %}<button data-ayuda="{% translate "Bloquea aunque haya citas en esas fechas (no se cancelan solas)." %}" type="submit" name="confirmar" value="1" class="btn">{% translate "Bloquear igualmente" %}</button>{% endif %}
     <a class="btn btn-fantasma" href="{% url 'agenda:configuracion' %}">{% translate "Cancelar" %}</a>
   </div>
 </form>

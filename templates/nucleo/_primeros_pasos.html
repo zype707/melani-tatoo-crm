@@ -1,0 +1,20 @@
+<ul class="checklist">
+  {% for p in pasos %}
+    <li{% if p.hecho %} class="hecho"{% endif %}>
+      <span class="check-caja" aria-hidden="true">{% if p.hecho %}{% icono "check" %}{% endif %}</span>
+      <span class="fila-cuerpo">
+        <span class="fila-titulo">{{ p.titulo }}<span class="solo-lectores"> · {% if p.hecho %}{% translate "hecho" %}{% else %}{% translate "pendiente" %}{% endif %}</span></span>
+        <span class="fila-sub fila-sub-libre">{{ p.texto }}</span>
+      </span>
+      <span class="checklist-acciones">
+        {% if not p.hecho and p.url %}<a class="btn btn-peq" href="{{ p.url }}">{{ p.accion }} {% icono "flecha-der" %}</a>{% endif %}
+        {% if p.manual %}
+          <form method="post" action="{% url 'ayuda:paso' %}">
+            {% csrf_token %}<input type="hidden" name="paso" value="{{ p.clave }}"><input type="hidden" name="hecho" value="{% if p.hecho %}0{% else %}1{% endif %}"><input type="hidden" name="next" value="{{ request.path }}#primeros-pasos">
+            <button type="submit" class="btn btn-peq btn-fantasma" data-ayuda="{% if p.hecho %}{% translate "Vuelve a marcarlo como pendiente." %}{% else %}{% translate "La app no puede comprobar este paso sola: márcalo cuando lo hayas hecho." %}{% endif %}">{% if p.hecho %}{% translate "Desmarcar" %}{% else %}{% icono "check" %} {% translate "Ya está" %}{% endif %}</button>
+          </form>
+        {% endif %}
+      </span>
+    </li>
+  {% endfor %}
+</ul>

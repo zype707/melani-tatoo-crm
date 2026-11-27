@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST
 from apps.agenda.models import Cita, EstadoCita
 from apps.nucleo.archivos import borrar_archivo, servir
 from apps.nucleo.auditoria import Accion, registrar
+from apps.nucleo.decoradores import solo_propietaria
 from apps.nucleo.red import es_htmx
 
 from . import servicios
@@ -388,8 +389,6 @@ def _nombre_confirmado(request, cliente) -> bool:
 
 @require_POST
 def anonimizar(request, pk):
-    from apps.nucleo.decoradores import solo_propietaria
-
     from . import rgpd
 
     @solo_propietaria
@@ -411,8 +410,6 @@ def anonimizar(request, pk):
 
 @require_POST
 def eliminar(request, pk):
-    from apps.nucleo.decoradores import solo_propietaria
-
     from . import rgpd
 
     @solo_propietaria
@@ -435,3 +432,166 @@ def eliminar(request, pk):
         return redirect("clientes:lista")
 
     return _accion(request)
+
+
+# --- Importación por lotes (CSV) ---------------------------------------------------------------
+
+SESION_IMPORTACION = "importacion_clientes"
+SESION_RESULTADO = "importacion_clientes_resultado"
+
+
+def _columnas_importacion():
+    from .importacion import ALIAS, DESCRIPCION_COLUMNAS
+
+    return [
+        {"campo": campo, "obligatoria": obligatoria, "texto": texto, "alias": ALIAS[campo][:4]}
+        for campo, obligatoria, texto in DESCRIPCION_COLUMNAS
+    ]
+
+
+def _respuesta_csv(contenido: str, nombre: str):
+    from django.http import HttpResponse
+
+    respuesta = HttpResponse(contenido, content_type="text/csv; charset=utf-8")
+    respuesta["Content-Disposition"] = f'attachment; filename="{nombre}"'
+    respuesta["Cache-Control"] = "private, no-store"
+    return respuesta
+
+
+@solo_propietaria
+def importar(request):
+    """Paso 1: subir el CSV. Se analiza sin guardar nada y se pasa a la revisión."""
+    from . import importacion
+    from .forms import ImportarClientesForm
+
+    form = ImportarClientesForm(request.POST or None, request.FILES or None)
+    if request.method == "POST" and form.is_valid():
+        try:
+            importacion.analizar(form.texto, formato_fecha=form.cleaned_data["formato_fecha"])
+        except importacion.ArchivoInvalido as exc:
+            form.add_error("archivo", str(exc))
+        else:
+            request.session[SESION_IMPORTACION] = {
+                "texto": form.texto,
+                "nombre": form.cleaned_data["archivo"].name[:120],
+                "formato_fecha": form.cleaned_data["formato_fecha"],
+                "si_existe": form.cleaned_data["si_existe"],
+                "etiqueta_lote": form.cleaned_data["etiqueta_lote"],
+            }
+            request.session.pop(SESION_RESULTADO, None)
+            return redirect("clientes:importar_revisar")
+    return render(
+        request,
+        "clientes/importar.html",
+        {"form": form, "columnas": _columnas_importacion(), "total": Cliente.objects.activos().count()},
+    )
+
+
+@solo_propietaria
+def importar_revisar(request):
+    """Paso 2: vista previa fila a fila. Nada se guarda hasta pulsar «Importar»."""
+    from . import importacion
+    from .forms import ConfirmarImportacionForm
+
+    datos = request.session.get(SESION_IMPORTACION)
+    if not datos:
+        return redirect("clientes:importar")
+    try:
+        analisis = importacion.analizar(datos["texto"], formato_fecha=datos["formato_fecha"])
+    except importacion.ArchivoInvalido as exc:
+        request.session.pop(SESION_IMPORTACION, None)
+        messages.error(request, str(exc))
+        return redirect("clientes:importar")
+
+    completar = datos["si_existe"] == "completar"
+    form = ConfirmarImportacionForm(request.POST or None)
+    if request.method == "POST":
+        if "cancelar" in request.POST:
+            request.session.pop(SESION_IMPORTACION, None)
+            messages.info(request, _("Importación cancelada. No se ha guardado nada."))
+            return redirect("clientes:importar")
+        if form.is_valid():
+            if not analisis.nuevas and not (completar and analisis.existentes):
+                messages.error(request, _("No hay ninguna fila que importar. Corrige el archivo y vuelve a subirlo."))
+                return redirect("clientes:importar_revisar")
+            resumen = importacion.importar(
+                analisis,
+                si_existe=datos["si_existe"],
+                origen_consentimiento=form.cleaned_data["origen_consentimiento"],
+                etiqueta_lote=datos["etiqueta_lote"],
+                usuario=request.user,
+            )
+            registrar(
+                request,
+                Accion.IMPORTACION,
+                f"Importación CSV «{datos['nombre']}»: {resumen['creados']} clientes nuevos",
+                **resumen,
+            )
+            request.session[SESION_RESULTADO] = {
+                **resumen,
+                "nombre": datos["nombre"],
+                "etiqueta_lote": datos["etiqueta_lote"],
+                "errores_csv": importacion.csv_errores(analisis) if analisis.con_error else "",
+            }
+            request.session.pop(SESION_IMPORTACION, None)
+            return redirect("clientes:importar_listo")
+
+    limite = 200
+    return render(
+        request,
+        "clientes/importar_revisar.html",
+        {
+            "form": form,
+            "a": analisis,
+            "datos": datos,
+            "completar": completar,
+            "a_importar": len(analisis.nuevas) + (len(analisis.existentes) if completar else 0),
+            "limite": limite,
+            "errores": analisis.con_error[:limite],
+            "nuevas": analisis.nuevas[:limite],
+            "existentes": analisis.existentes[:limite],
+            "mapa": [(col, analisis.mapa[col]) for col in analisis.columnas if col in analisis.mapa],
+            "sin_antiguedad": "cliente_desde" not in analisis.campos,
+        },
+    )
+
+
+@solo_propietaria
+def importar_listo(request):
+    """Paso 3: resumen de lo importado."""
+    resultado = request.session.get(SESION_RESULTADO)
+    if not resultado:
+        return redirect("clientes:importar")
+    etiqueta = None
+    if resultado.get("etiqueta_lote"):
+        etiqueta = Etiqueta.objects.filter(nombre__iexact=resultado["etiqueta_lote"]).first()
+    return render(request, "clientes/importar_listo.html", {"r": resultado, "etiqueta": etiqueta})
+
+
+@solo_propietaria
+def importar_plantilla(request):
+    from django.utils.translation import get_language
+
+    from .importacion import plantilla_csv
+
+    return _respuesta_csv(plantilla_csv(get_language()), "plantilla-clientes.csv")
+
+
+@solo_propietaria
+def importar_errores(request):
+    """Las filas que no entran, con el motivo, para corregirlas y volver a subirlas."""
+    from django.http import Http404
+
+    from . import importacion
+
+    datos = request.session.get(SESION_IMPORTACION)
+    if datos:
+        try:
+            analisis = importacion.analizar(datos["texto"], formato_fecha=datos["formato_fecha"])
+        except importacion.ArchivoInvalido as exc:
+            raise Http404 from exc
+        return _respuesta_csv(importacion.csv_errores(analisis), "clientes-con-errores.csv")
+    resultado = request.session.get(SESION_RESULTADO) or {}
+    if not resultado.get("errores_csv"):
+        raise Http404
+    return _respuesta_csv(resultado["errores_csv"], "clientes-con-errores.csv")

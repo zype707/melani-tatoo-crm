@@ -69,6 +69,8 @@ def aplicar(tsv: Path):
                 if "fuzzy" in e.flags:
                     e.flags.remove("fuzzy")
                 e.previous_msgid = None
+                e.previous_msgid_plural = None
+                e.previous_msgctxt = None
                 hechos += 1
         po.save()
     manage("compilemessages", "-v0")

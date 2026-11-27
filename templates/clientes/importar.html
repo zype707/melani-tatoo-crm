@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block titulo %}{% translate "Importar clientes" %}{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina">
+  <div>
+    <nav class="migas" aria-label="{% translate "Migas" %}"><a href="{% url 'clientes:lista' %}">{% translate "Clientes" %}</a></nav>
+    <span class="antetitulo">{% translate "Desde un archivo CSV" %}</span>
+    <h1>{% translate "Importar clientes" %}</h1>
+  </div>
+  <div class="acciones">
+    <a class="btn" href="{% url 'clientes:importar_plantilla' %}" data-ayuda="{% translate "Un CSV de ejemplo con todas las columnas. Ábrelo con Excel o Google Sheets y rellénalo." %}">{% icono "descargar" %} {% translate "Descargar plantilla" %}</a>
+  </div>
+</header>
+
+<ol class="pasos-linea espacio-abajo" aria-label="{% translate "Pasos" %}">
+  <li aria-current="step"><span>1</span> {% translate "Sube el archivo" %}</li>
+  <li><span>2</span> {% translate "Revisa la vista previa" %}</li>
+  <li><span>3</span> {% translate "Confirma" %}</li>
+</ol>
+
+<div class="rejilla-ficha">
+  <form method="post" enctype="multipart/form-data" class="bloque formulario" novalidate>
+    {% csrf_token %}
+    <div class="bloque-titulo"><h2>{% translate "Tu archivo" %}</h2></div>
+    {% if form.non_field_errors %}<div class="alerta" role="alert">{% icono "alerta" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div></div>{% endif %}
+    {{ form.archivo.as_field_group }}
+    {{ form.formato_fecha.as_field_group }}
+    {{ form.si_existe.as_field_group }}
+    {{ form.etiqueta_lote.as_field_group }}
+    <div class="acciones-formulario">
+      <button type="submit" class="btn btn-primario" data-ayuda="{% translate "Lee el archivo y te enseña qué se va a importar. Todavía no guarda nada." %}">{% icono "ojo" %} {% translate "Revisar archivo" %}</button>
+      <a class="btn btn-fantasma" href="{% url 'clientes:lista' %}">{% translate "Cancelar" %}</a>
+    </div>
+    <p class="ayuda">{% translate "Todavía no se guarda nada: primero verás fila por fila qué entra, qué ya existe y qué tiene errores." %}</p>
+  </form>
+
+  <aside class="pila-g">
+    <section class="bloque" aria-labelledby="t-preparar">
+      <div class="bloque-titulo"><h2 id="t-preparar">{% translate "Cómo preparar el archivo" %}</h2></div>
+      <ol class="pasos">
+        <li><div><strong>{% translate "Una fila por cliente." %}</strong> {% translate "La primera fila lleva los títulos de las columnas (nombre, telefono, email…)." %}</div></li>
+        <li><div><strong>{% translate "Expórtalo como CSV." %}</strong> {% translate "Excel: Archivo › Guardar como › CSV UTF-8. Google Sheets: Archivo › Descargar › CSV. Numbers: Archivo › Exportar a › CSV." %}</div></li>
+        <li><div><strong>{% translate "No hace falta que esté perfecto." %}</strong> {% translate "Los teléfonos se normalizan solos y las filas con problemas se apartan para que las corrijas." %}</div></li>
+      </ol>
+      <p class="ayuda espacio-arriba">{% blocktranslate count n=total %}Ahora tienes {{ n }} cliente. Los que ya estén (mismo teléfono o email) no se duplican.{% plural %}Ahora tienes {{ n }} clientes. Los que ya estén (mismo teléfono o email) no se duplican.{% endblocktranslate %}</p>
+    </section>
+  </aside>
+</div>
+
+<section class="espacio-arriba" aria-labelledby="t-columnas">
+  <h2 id="t-columnas" class="titulo-seccion">{% translate "Columnas que entiende" %}</h2>
+  <p class="texto-suave texto-peq espacio-abajo">{% translate "Solo el nombre y un dato de contacto (teléfono, email o Instagram) son imprescindibles. Los títulos pueden ir en español o en inglés, con o sin tildes. Las columnas que no reconozca se ignoran." %}</p>
+  <div class="tabla-envoltura">
+    <table class="tabla">
+      <thead><tr><th>{% translate "Columna" %}</th><th>{% translate "Qué poner" %}</th><th>{% translate "También vale" %}</th></tr></thead>
+      <tbody>
+        {% for c in columnas %}
+          <tr>
+            <td><code>{{ c.campo }}</code>{% if c.obligatoria %} <span class="estado estado-atencion">{% translate "Obligatoria" %}</span>{% endif %}</td>
+            <td>{{ c.texto }}</td>
+            <td class="texto-suave texto-peq">{% for a in c.alias %}{% if a != c.campo %}<code>{{ a }}</code> {% endif %}{% endfor %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

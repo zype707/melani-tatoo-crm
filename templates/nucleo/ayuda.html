@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block titulo %}{% translate "Cómo usar" %}{% endblock %}
+{% block contenido %}
+<header class="cabecera-pagina tutorial-cabecera">
+  <div>
+    <span class="antetitulo">{% translate "Tutorial" %}</span>
+    <h1>{% blocktranslate with nombre=ajustes.nombre %}Cómo usar {{ nombre }}{% endblocktranslate %}</h1>
+    <p>{% translate "Todo lo que necesitas para manejar la app desde cero. Empieza por «Primeros pasos» y vuelve a cualquier capítulo cuando lo necesites. En cada pantalla tienes además el botón ? con la explicación de todos sus botones." %}</p>
+  </div>
+  <form method="post" action="{% url 'ayuda:preferencias' %}" class="acciones">
+    {% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
+    {% if user.ayudas_visibles %}
+      <input type="hidden" name="mostrar" value="0">
+      <button type="submit" class="btn btn-fantasma" data-ayuda="{% translate "Quita las pistas de bombilla de arriba de cada pantalla." %}">{% icono "bombilla" %} {% translate "Ocultar pistas" %}</button>
+    {% else %}
+      <input type="hidden" name="mostrar" value="1">
+      <button type="submit" class="btn" data-ayuda="{% translate "Vuelve a mostrar la pista de bombilla arriba de cada pantalla, también las que cerraste." %}">{% icono "bombilla" %} {% translate "Mostrar pistas" %}</button>
+    {% endif %}
+  </form>
+</header>
+
+<div class="buscador buscador-ayuda" role="search">
+  {% icono "buscar" %}
+  <label for="buscar-ayuda" class="solo-lectores">{% translate "Buscar en la ayuda" %}</label>
+  <input type="search" id="buscar-ayuda" placeholder="{% translate "Busca en la ayuda: seña, importar, cancelar, WhatsApp…" %}" autocomplete="off" data-filtrar-ayuda data-atajo-buscar>
+</div>
+<p class="aviso espacio-abajo" data-ayuda-sin-resultados hidden>{% icono "buscar" %} {% translate "Nada coincide. Prueba con otra palabra o pulsa ? en la pantalla donde tengas la duda." %}</p>
+
+<section id="primeros-pasos" class="bloque primeros-pasos" aria-labelledby="t-primeros" data-ayuda-item data-texto="{% for p in pasos %}{{ p.titulo }} {{ p.texto }} {% endfor %}{% translate "Primeros pasos" %}">
+  <div class="bloque-titulo">
+    <h2 id="t-primeros">{% translate "Primeros pasos" %}</h2>
+    <span class="fila"><span class="barra-progreso" role="img" aria-label="{% blocktranslate with hechos=hechos total=pasos|length %}{{ hechos }} de {{ total }}{% endblocktranslate %}"><span style="width: {% widthratio hechos pasos|length 100 %}%"></span></span><strong class="numerico">{{ hechos }}/{{ pasos|length }}</strong></span>
+  </div>
+  <p class="texto-suave texto-peq espacio-abajo">{% translate "Lo que conviene dejar listo antes de empezar. Lo que la app puede comprobar se marca solo; el resto, márcalo tú." %}</p>
+  {% include "nucleo/_primeros_pasos.html" %}
+</section>
+
+<nav class="espacio-arriba" aria-labelledby="t-indice">
+  <h2 id="t-indice" class="titulo-seccion">{% translate "Capítulos" %}</h2>
+  <ul class="tutorial-indice">
+    {% for item in capitulos %}
+      <li data-ayuda-item data-texto="{{ item.c.texto_busqueda }}"><a class="tarjeta-capitulo" href="#{{ item.c.clave }}">{% icono item.c.icono %}<strong>{{ item.numero }}. {{ item.c.titulo }}</strong><span class="texto-peq texto-suave">{{ item.c.resumen }}</span></a></li>
+    {% endfor %}
+    <li><a class="tarjeta-capitulo" href="#botones">{% icono "ayuda" %}<strong>{% translate "Qué hace cada botón" %}</strong><span class="texto-peq texto-suave">{% translate "Todas las pantallas, botón por botón." %}</span></a></li>
+    <li><a class="tarjeta-capitulo" href="#preguntas">{% icono "mensajes" %}<strong>{% translate "Preguntas frecuentes" %}</strong><span class="texto-peq texto-suave">{% translate "Dudas típicas resueltas." %}</span></a></li>
+    <li><a class="tarjeta-capitulo" href="#glosario">{% icono "lista" %}<strong>{% translate "Glosario" %}</strong><span class="texto-peq texto-suave">{% translate "Qué significa cada palabra." %}</span></a></li>
+  </ul>
+</nav>
+
+{% for item in capitulos %}{% with c=item.c %}
+<section id="{{ c.clave }}" class="capitulo" aria-labelledby="t-{{ c.clave }}" data-ayuda-item data-texto="{{ c.texto_busqueda }}">
+  <div class="capitulo-cabecera">
+    <span class="capitulo-numero" aria-hidden="true">{{ item.numero }}</span>
+    <div><h2 id="t-{{ c.clave }}">{{ c.titulo }}</h2><p class="texto-suave">{{ c.resumen }}</p></div>
+  </div>
+  <p class="capitulo-intro">{{ c.intro|ayuda_marcado }}</p>
+  <ol class="pasos">{% for paso in item.pasos %}<li><div>{{ paso|ayuda_marcado }}</div></li>{% endfor %}</ol>
+  {% if c.consejo %}<div class="consejo">{% icono "bombilla" %}<p>{{ c.consejo|ayuda_marcado }}</p></div>{% endif %}
+  {% if item.pantallas %}
+    <p class="texto-peq espacio-arriba"><span class="texto-suave">{% translate "Botones de estas pantallas:" %}</span>
+      {% for p in item.pantallas %}<a href="#pantalla-{{ p.clave }}" data-abrir-referencia>{{ p.titulo }}</a>{% if not forloop.last %} · {% endif %}{% endfor %}
+    </p>
+  {% endif %}
+</section>
+{% endwith %}{% endfor %}
+
+<section id="botones" class="capitulo" aria-labelledby="t-botones">
+  <div class="capitulo-cabecera">
+    <span class="capitulo-numero" aria-hidden="true">{% icono "ayuda" %}</span>
+    <div><h2 id="t-botones">{% translate "Qué hace cada botón" %}</h2><p class="texto-suave">{% translate "Es lo mismo que ves al pulsar ? en cada pantalla." %}</p></div>
+  </div>
+  {% for item in pantallas %}{% with p=item.p %}
+    <details id="pantalla-{{ p.clave }}" class="referencia-pantalla" data-ayuda-item data-texto="{{ p.texto_busqueda }}">
+      <summary>{{ p.titulo }}</summary>
+      <div>
+        <p class="texto-suave">{{ p.resumen }}</p>
+        <ul class="ayuda-acciones">{% for b in item.botones %}<li>{{ b.muestra }}<p>{{ b.texto }}</p></li>{% endfor %}</ul>
+        {% if p.consejos %}<ul class="lista-ideas">{% for consejo in p.consejos %}<li>{{ consejo }}</li>{% endfor %}</ul>{% endif %}
+      </div>
+    </details>
+  {% endwith %}{% endfor %}
+</section>
+
+<section id="preguntas" class="capitulo preguntas" aria-labelledby="t-preguntas">
+  <div class="capitulo-cabecera">
+    <span class="capitulo-numero" aria-hidden="true">?</span>
+    <div><h2 id="t-preguntas">{% translate "Preguntas frecuentes" %}</h2></div>
+  </div>
+  {% for pregunta, respuesta in preguntas %}
+    <details data-ayuda-item><summary>{{ pregunta }}</summary><p>{{ respuesta }}</p></details>
+  {% endfor %}
+</section>
+
+<section id="glosario" class="capitulo" aria-labelledby="t-glosario">
+  <div class="capitulo-cabecera">
+    <span class="capitulo-numero" aria-hidden="true">{% icono "lista" %}</span>
+    <div><h2 id="t-glosario">{% translate "Glosario" %}</h2></div>
+  </div>
+  <dl class="glosario">
+    {% for termino, definicion in glosario %}<div data-ayuda-item><dt>{{ termino }}</dt><dd>{{ definicion }}</dd></div>{% endfor %}
+  </dl>
+</section>
+
+<section id="atajos" class="capitulo" aria-labelledby="t-atajos">
+  <div class="capitulo-cabecera">
+    <span class="capitulo-numero" aria-hidden="true">{% icono "teclado" %}</span>
+    <div><h2 id="t-atajos">{% translate "Atajos de teclado" %}</h2><p class="texto-suave">{% translate "En el ordenador, desde cualquier pantalla (fuera de un campo de texto)." %}</p></div>
+  </div>
+  <div class="tabla-envoltura ancho-texto">
+    <table class="tabla"><tbody>{% for tecla, texto in atajos %}<tr><td><kbd>{{ tecla }}</kbd></td><td>{{ texto }}</td></tr>{% endfor %}</tbody></table>
+  </div>
+</section>
+{% endblock %}

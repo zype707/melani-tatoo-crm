@@ -3,7 +3,7 @@
 {% block contenido %}
 <header class="cabecera-pagina">
   <div><nav class="migas"><a href="{% url 'agenda:calendario' %}">{% translate "Agenda" %}</a></nav><h1>{% translate "Lista de espera" %}</h1></div>
-  <div class="acciones"><a class="btn btn-primario" href="{% url 'agenda:espera_nueva' %}">{% icono "plus" %} {% translate "Añadir" %}</a></div>
+  <div class="acciones"><a data-ayuda="{% translate "Apunta a alguien en la lista de espera." %}" class="btn btn-primario" href="{% url 'agenda:espera_nueva' %}">{% icono "plus" %} {% translate "Añadir" %}</a></div>
 </header>
 <p class="texto-suave espacio-abajo">{% translate "Cuando se cancele una cita, te sugeriremos a quién ofrecer el hueco según sus días, franja y tipo de cita." %}</p>
 {% if entradas %}

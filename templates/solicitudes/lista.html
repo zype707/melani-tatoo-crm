@@ -13,8 +13,8 @@
   {% if url_publica %}
     <div class="fila enlace-fila">
       <input type="text" id="url-reservas" class="mono" value="{{ url_publica }}" readonly aria-label="{% translate "Enlace de reservas" %}">
-      <button type="button" class="btn" data-copiar="#url-reservas" data-copiado="{% translate "Enlace copiado. Pégalo en tu bio de Instagram." %}">{% icono "copiar" %} {% translate "Copiar" %}</button>
-      <a class="btn btn-fantasma" href="{{ url_publica }}" target="_blank" rel="noopener">{% icono "externo" %} {% translate "Ver" %}</a>
+      <button data-ayuda="{% translate "Copia tu enlace de reservas para pegarlo en tu bio de Instagram." %}" type="button" class="btn" data-copiar="#url-reservas" data-copiado="{% translate "Enlace copiado. Pégalo en tu bio de Instagram." %}">{% icono "copiar" %} {% translate "Copiar" %}</button>
+      <a data-ayuda="{% translate "Abre tu página de reservas como la ven tus clientas." %}" class="btn btn-fantasma" href="{{ url_publica }}" target="_blank" rel="noopener">{% icono "externo" %} {% translate "Ver" %}</a>
     </div>
     <p class="texto-peq texto-suave">{% blocktranslate with caduca_en=enlace.caduca_en|date:"SHORT_DATE_FORMAT" count n=enlace.usos %}Caduca el {{ caduca_en }} · {{ n }} visita.{% plural %}Caduca el {{ caduca_en }} · {{ n }} visitas.{% endblocktranslate %}</p>
   {% else %}
@@ -23,14 +23,14 @@
   <form method="post" action="{% url 'solicitudes:enlace' %}" class="grupo-botones bloque-pie">
     {% csrf_token %}
     {% if url_publica %}
-      <button type="submit" name="accion" value="renovar" class="btn btn-peq" data-confirmar="{% translate "El enlace actual dejará de funcionar. Tendrás que cambiarlo en tu Instagram." %}">{% icono "refrescar" %} {% translate "Renovar enlace" %}</button>
+      <button data-ayuda="{% translate "Crea un enlace nuevo y anula el anterior." %}" type="submit" name="accion" value="renovar" class="btn btn-peq" data-confirmar="{% translate "El enlace actual dejará de funcionar. Tendrás que cambiarlo en tu Instagram." %}">{% icono "refrescar" %} {% translate "Renovar enlace" %}</button>
     {% else %}
-      <button type="submit" name="accion" value="crear" class="btn btn-primario btn-peq">{% icono "enlace" %} {% translate "Crear enlace" %}</button>
+      <button data-ayuda="{% translate "Crea tu página pública de reservas." %}" type="submit" name="accion" value="crear" class="btn btn-primario btn-peq">{% icono "enlace" %} {% translate "Crear enlace" %}</button>
     {% endif %}
     {% if ajustes.reservas_activas %}
-      <button type="submit" name="accion" value="cerrar" class="btn btn-peq btn-fantasma">{% icono "candado" %} {% translate "Cerrar agenda" %}</button>
+      <button data-ayuda="{% translate "Deja de aceptar solicitudes hasta que la vuelvas a abrir." %}" type="submit" name="accion" value="cerrar" class="btn btn-peq btn-fantasma">{% icono "candado" %} {% translate "Cerrar agenda" %}</button>
     {% else %}
-      <button type="submit" name="accion" value="abrir" class="btn btn-peq btn-primario">{% translate "Abrir agenda" %}</button>
+      <button data-ayuda="{% translate "Vuelve a aceptar solicitudes de reserva." %}" type="submit" name="accion" value="abrir" class="btn btn-peq btn-primario">{% translate "Abrir agenda" %}</button>
     {% endif %}
   </form>
 </section>

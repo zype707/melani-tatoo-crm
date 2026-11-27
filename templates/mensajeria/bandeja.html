@@ -8,7 +8,7 @@
     <h1>{% translate "Mensajes de hoy" %}</h1>
   </div>
   <div class="acciones">
-    <a class="btn" href="{% url 'mensajeria:nuevo' %}">{% icono "editar" %} {% translate "Escribir mensaje" %}</a>
+    <a data-ayuda="{% translate "Escribe a cualquier clienta, desde cero o con una plantilla." %}" class="btn" href="{% url 'mensajeria:nuevo' %}">{% icono "editar" %} {% translate "Escribir mensaje" %}</a>
   </div>
 </header>
 {% include "mensajeria/_subnav.html" with seccion="bandeja" %}
@@ -42,7 +42,7 @@
 
 <form method="post" action="{% url 'mensajeria:generar' %}" class="espacio-arriba fila">
   {% csrf_token %}
-  <button type="submit" class="btn btn-peq btn-fantasma">{% icono "refrescar" %} {% translate "Volver a revisar hoy" %}</button>
+  <button data-ayuda="{% translate "Comprueba si falta algún mensaje de hoy. Nunca duplica." %}" type="submit" class="btn btn-peq btn-fantasma">{% icono "refrescar" %} {% translate "Volver a revisar hoy" %}</button>
   <span class="texto-peq texto-suave">{% translate "La bandeja se prepara sola cada mañana. Esto solo comprueba si falta algo (no duplica)." %}</span>
 </form>
 {% endblock %}

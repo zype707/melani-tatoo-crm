@@ -25,7 +25,7 @@
           {% endfor %}
         </tbody>
       </table>
-      <div class="acciones-formulario"><button type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar horario" %}</button></div>
+      <div class="acciones-formulario"><button data-ayuda="{% translate "Guarda tu horario semanal." %}" type="submit" class="btn btn-primario">{% icono "check" %} {% translate "Guardar horario" %}</button></div>
     </form>
   </section>
 
@@ -48,7 +48,7 @@
         {% for b in bloqueos %}
           <li class="fila-lista">
             <span class="fila-cuerpo"><span class="fila-titulo">{{ b }}</span><span class="fila-sub">{{ b.inicio|fecha_corta }} {{ b.inicio|hora }} → {{ b.fin|fecha_corta }} {{ b.fin|hora }}</span></span>
-            <form method="post" action="{% url 'agenda:bloqueo_borrar' b.pk %}">{% csrf_token %}<button class="btn btn-icono btn-fantasma btn-peq" aria-label="{% translate "Eliminar bloqueo" %}" data-confirmar="{% translate "¿Eliminar este bloqueo?" %}">{% icono "basura" %}</button></form>
+            <form method="post" action="{% url 'agenda:bloqueo_borrar' b.pk %}">{% csrf_token %}<button data-ayuda="{% translate "Elimina este bloqueo: esos días vuelven a estar libres." %}" class="btn btn-icono btn-fantasma btn-peq" aria-label="{% translate "Eliminar bloqueo" %}" data-confirmar="{% translate "¿Eliminar este bloqueo?" %}">{% icono "basura" %}</button></form>
           </li>
         {% empty %}<li class="texto-suave">{% translate "Sin bloqueos próximos." %}</li>{% endfor %}
       </ul>

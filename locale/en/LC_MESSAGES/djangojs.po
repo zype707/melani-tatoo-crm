@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-25 15:25-0500\n"
+"POT-Creation-Date: 2026-11-26 14:06-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "Yes, continue"
 msgid "No se pudo copiar. Selecciona el texto y cópialo a mano."
 msgstr "Couldn't copy. Select the text and copy it by hand."
 
-#: static/js/app.js:229
+#: static/js/app.js:315
 msgid "Sin conexión. Revisa tu red e inténtalo otra vez."
 msgstr "No connection. Check your network and try again."
 

@@ -7,7 +7,7 @@
   <section class="bloque formulario" hx-get="{% url 'mensajeria:recuento' %}" hx-trigger="change from:#id_segmento, input from:#id_por_dia delay:300ms" hx-target="#recuento" hx-include="#id_segmento, #id_por_dia">
     {{ form }}
     <div class="acciones-formulario">
-      <button type="submit" class="btn btn-primario" data-confirmar="{% translate "Se prepararán los mensajes en tu bandeja, repartidos por días. ¿Lanzar campaña?" %}" data-confirmar-si="{% translate "Lanzar" %}">{% icono "enviar" %} {% translate "Lanzar campaña" %}</button>
+      <button data-ayuda="{% translate "Prepara los mensajes en tu bandeja, repartidos por días. Los envías tú." %}" type="submit" class="btn btn-primario" data-confirmar="{% translate "Se prepararán los mensajes en tu bandeja, repartidos por días. ¿Lanzar campaña?" %}" data-confirmar-si="{% translate "Lanzar" %}">{% icono "enviar" %} {% translate "Lanzar campaña" %}</button>
       <a class="btn btn-fantasma" href="{% url 'mensajeria:campanas' %}">{% translate "Cancelar" %}</a>
     </div>
   </section>

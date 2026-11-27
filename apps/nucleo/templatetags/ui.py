@@ -207,3 +207,14 @@ def obtener(diccionario, clave):
         return diccionario.get(clave)
     except AttributeError:
         return None
+
+
+# --- Ayuda ------------------------------------------------------------------------------
+
+
+@register.filter
+def ayuda_marcado(texto):
+    """Texto de ayuda con [[boton]] dibujado como el botón real y **negritas** (ver apps/nucleo/ayuda.py)."""
+    from apps.nucleo.ayuda import marcado
+
+    return marcado(texto)
